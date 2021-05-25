@@ -25,14 +25,16 @@ import (
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/sets"
 	csilibplugins "k8s.io/csi-translation-lib/plugins"
 	"k8s.io/kubernetes/pkg/scheduler/framework"
 	fakeframework "k8s.io/kubernetes/pkg/scheduler/framework/fake"
 	utilpointer "k8s.io/utils/pointer"
 )
 
-func TestAzureDiskLimits(t *testing.T) {
-	oneVolPod := &v1.Pod{
+var (
+	oneVolPodVolumeIDs = sets.NewString("ovp")
+	oneVolPod          = &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
 				{
@@ -43,7 +45,8 @@ func TestAzureDiskLimits(t *testing.T) {
 			},
 		},
 	}
-	twoVolPod := &v1.Pod{
+	twoVolPodVolumeIDs = sets.NewString("tvp1", "tvp2")
+	twoVolPod          = &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
 				{
@@ -59,7 +62,8 @@ func TestAzureDiskLimits(t *testing.T) {
 			},
 		},
 	}
-	splitVolsPod := &v1.Pod{
+	splitVolsPodVolumeIDs = sets.NewString("svp")
+	splitVolsPod          = &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
 				{
@@ -75,7 +79,7 @@ func TestAzureDiskLimits(t *testing.T) {
 			},
 		},
 	}
-	nonApplicablePod := &v1.Pod{
+	nonApplicablePod = &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
 				{
@@ -86,7 +90,7 @@ func TestAzureDiskLimits(t *testing.T) {
 			},
 		},
 	}
-	deletedPVCPod := &v1.Pod{
+	deletedPVCPod = &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
 				{
@@ -99,7 +103,7 @@ func TestAzureDiskLimits(t *testing.T) {
 			},
 		},
 	}
-	twoDeletedPVCPod := &v1.Pod{
+	twoDeletedPVCPod = &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
 				{
@@ -119,7 +123,7 @@ func TestAzureDiskLimits(t *testing.T) {
 			},
 		},
 	}
-	deletedPVPod := &v1.Pod{
+	deletedPVPod = &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
 				{
@@ -133,7 +137,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 	}
 	// deletedPVPod2 is a different pod than deletedPVPod but using the same PVC
-	deletedPVPod2 := &v1.Pod{
+	deletedPVPod2 = &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
 				{
@@ -147,7 +151,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 	}
 	// anotherDeletedPVPod is a different pod than deletedPVPod and uses another PVC
-	anotherDeletedPVPod := &v1.Pod{
+	anotherDeletedPVPod = &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
 				{
@@ -160,10 +164,10 @@ func TestAzureDiskLimits(t *testing.T) {
 			},
 		},
 	}
-	emptyPod := &v1.Pod{
+	emptyPod = &v1.Pod{
 		Spec: v1.PodSpec{},
 	}
-	unboundPVCPod := &v1.Pod{
+	unboundPVCPod = &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
 				{
@@ -177,7 +181,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 	}
 	// Different pod than unboundPVCPod, but using the same unbound PVC
-	unboundPVCPod2 := &v1.Pod{
+	unboundPVCPod2 = &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
 				{
@@ -192,7 +196,7 @@ func TestAzureDiskLimits(t *testing.T) {
 	}
 
 	// pod with unbound PVC that's different to unboundPVC
-	anotherUnboundPVCPod := &v1.Pod{
+	anotherUnboundPVCPod = &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
 				{
@@ -205,9 +209,12 @@ func TestAzureDiskLimits(t *testing.T) {
 			},
 		},
 	}
+)
 
+func TestAzureDiskLimits(t *testing.T) {
 	tests := []struct {
 		newPod       *v1.Pod
+		newVolumes   sets.String
 		existingPods []*v1.Pod
 		filterName   string
 		driverName   string
@@ -217,6 +224,7 @@ func TestAzureDiskLimits(t *testing.T) {
 	}{
 		{
 			newPod:       oneVolPod,
+			newVolumes:   oneVolPodVolumeIDs,
 			existingPods: []*v1.Pod{twoVolPod, oneVolPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      4,
@@ -224,6 +232,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       twoVolPod,
+			newVolumes:   twoVolPodVolumeIDs,
 			existingPods: []*v1.Pod{oneVolPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      2,
@@ -231,6 +240,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       splitVolsPod,
+			newVolumes:   splitVolsPodVolumeIDs,
 			existingPods: []*v1.Pod{twoVolPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      3,
@@ -238,6 +248,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       twoVolPod,
+			newVolumes:   twoVolPodVolumeIDs,
 			existingPods: []*v1.Pod{splitVolsPod, nonApplicablePod, emptyPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      3,
@@ -245,6 +256,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(azureDiskVolumeFilterType),
+			newVolumes:   onePVCPodVolume(azureDiskVolumeFilterType),
 			existingPods: []*v1.Pod{splitVolsPod, nonApplicablePod, emptyPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      3,
@@ -252,6 +264,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       splitPVCPod(azureDiskVolumeFilterType),
+			newVolumes:   onePVCPodVolume(azureDiskVolumeFilterType),
 			existingPods: []*v1.Pod{splitVolsPod, oneVolPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      3,
@@ -259,6 +272,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       twoVolPod,
+			newVolumes:   twoVolPodVolumeIDs,
 			existingPods: []*v1.Pod{oneVolPod, onePVCPod(azureDiskVolumeFilterType)},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      3,
@@ -266,6 +280,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       twoVolPod,
+			newVolumes:   twoVolPodVolumeIDs,
 			existingPods: []*v1.Pod{oneVolPod, twoVolPod, onePVCPod(azureDiskVolumeFilterType)},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      4,
@@ -273,6 +288,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       splitVolsPod,
+			newVolumes:   splitVolsPodVolumeIDs,
 			existingPods: []*v1.Pod{oneVolPod, oneVolPod, onePVCPod(azureDiskVolumeFilterType)},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      3,
@@ -280,6 +296,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(azureDiskVolumeFilterType),
+			newVolumes:   onePVCPodVolume(azureDiskVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, deletedPVCPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      2,
@@ -287,6 +304,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(azureDiskVolumeFilterType),
+			newVolumes:   onePVCPodVolume(azureDiskVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, deletedPVCPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      3,
@@ -294,6 +312,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(azureDiskVolumeFilterType),
+			newVolumes:   onePVCPodVolume(azureDiskVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, twoDeletedPVCPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      3,
@@ -301,6 +320,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(azureDiskVolumeFilterType),
+			newVolumes:   onePVCPodVolume(azureDiskVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, deletedPVPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      2,
@@ -308,6 +328,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(azureDiskVolumeFilterType),
+			newVolumes:   onePVCPodVolume(azureDiskVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, deletedPVPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      3,
@@ -315,6 +336,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       deletedPVPod2,
+			newVolumes:   sets.NewString(),
 			existingPods: []*v1.Pod{oneVolPod, deletedPVPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      2,
@@ -322,6 +344,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       anotherDeletedPVPod,
+			newVolumes:   sets.NewString(),
 			existingPods: []*v1.Pod{oneVolPod, deletedPVPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      2,
@@ -329,6 +352,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(azureDiskVolumeFilterType),
+			newVolumes:   onePVCPodVolume(azureDiskVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, unboundPVCPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      2,
@@ -336,6 +360,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(azureDiskVolumeFilterType),
+			newVolumes:   onePVCPodVolume(azureDiskVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, unboundPVCPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      3,
@@ -343,6 +368,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       unboundPVCPod2,
+			newVolumes:   sets.NewString(),
 			existingPods: []*v1.Pod{oneVolPod, unboundPVCPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      2,
@@ -350,6 +376,7 @@ func TestAzureDiskLimits(t *testing.T) {
 		},
 		{
 			newPod:       anotherUnboundPVCPod,
+			newVolumes:   sets.NewString(),
 			existingPods: []*v1.Pod{oneVolPod, unboundPVCPod},
 			filterName:   azureDiskVolumeFilterType,
 			maxVols:      2,
@@ -360,8 +387,12 @@ func TestAzureDiskLimits(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.test, func(t *testing.T) {
 			node, csiNode := getNodeWithPodAndVolumeLimits("node", test.existingPods, int64(test.maxVols), test.filterName)
-			p := newNonCSILimits(test.filterName, getFakeCSINodeLister(csiNode), getFakeCSIStorageClassLister(test.filterName, test.driverName), getFakePVLister(test.filterName), getFakePVCLister(test.filterName)).(framework.FilterPlugin)
-			gotStatus := p.Filter(context.Background(), nil, test.newPod, node)
+			p := newNonCSILimits(test.filterName, getFakeCSINodeLister(csiNode), getFakeCSIStorageClassLister(test.filterName, test.driverName), getFakePVLister(test.filterName), getFakePVCLister(test.filterName))
+
+			state := framework.NewCycleState()
+			p.(framework.PreFilterPlugin).PreFilter(context.Background(), state, test.newPod)
+
+			gotStatus := p.(framework.FilterPlugin).Filter(context.Background(), state, test.newPod, node)
 			if !reflect.DeepEqual(gotStatus, test.wantStatus) {
 				t.Errorf("status does not match: %v, want: %v", gotStatus, test.wantStatus)
 			}
@@ -386,6 +417,7 @@ func TestCinderLimits(t *testing.T) {
 			},
 		},
 	}
+	oneVolCinderPodVolumeIDs := sets.NewString("ovp")
 	oneVolCinderPod := &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
@@ -400,6 +432,7 @@ func TestCinderLimits(t *testing.T) {
 
 	tests := []struct {
 		newPod       *v1.Pod
+		newVolumes   sets.String
 		existingPods []*v1.Pod
 		filterName   string
 		driverName   string
@@ -409,6 +442,7 @@ func TestCinderLimits(t *testing.T) {
 	}{
 		{
 			newPod:       oneVolCinderPod,
+			newVolumes:   oneVolCinderPodVolumeIDs,
 			existingPods: []*v1.Pod{twoVolCinderPod},
 			filterName:   cinderVolumeFilterType,
 			maxVols:      4,
@@ -416,6 +450,7 @@ func TestCinderLimits(t *testing.T) {
 		},
 		{
 			newPod:       oneVolCinderPod,
+			newVolumes:   oneVolCinderPodVolumeIDs,
 			existingPods: []*v1.Pod{twoVolCinderPod},
 			filterName:   cinderVolumeFilterType,
 			maxVols:      2,
@@ -427,8 +462,12 @@ func TestCinderLimits(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.test, func(t *testing.T) {
 			node, csiNode := getNodeWithPodAndVolumeLimits("node", test.existingPods, int64(test.maxVols), test.filterName)
-			p := newNonCSILimits(test.filterName, getFakeCSINodeLister(csiNode), getFakeCSIStorageClassLister(test.filterName, test.driverName), getFakePVLister(test.filterName), getFakePVCLister(test.filterName)).(framework.FilterPlugin)
-			gotStatus := p.Filter(context.Background(), nil, test.newPod, node)
+			p := newNonCSILimits(test.filterName, getFakeCSINodeLister(csiNode), getFakeCSIStorageClassLister(test.filterName, test.driverName), getFakePVLister(test.filterName), getFakePVCLister(test.filterName))
+
+			state := framework.NewCycleState()
+			p.(framework.PreFilterPlugin).PreFilter(context.Background(), state, test.newPod)
+
+			gotStatus := p.(framework.FilterPlugin).Filter(context.Background(), state, test.newPod, node)
 			if !reflect.DeepEqual(gotStatus, test.wantStatus) {
 				t.Errorf("status does not match: %v, want: %v", gotStatus, test.wantStatus)
 			}
@@ -436,33 +475,6 @@ func TestCinderLimits(t *testing.T) {
 	}
 }
 func TestEBSLimits(t *testing.T) {
-	oneVolPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						AWSElasticBlockStore: &v1.AWSElasticBlockStoreVolumeSource{VolumeID: "ovp"},
-					},
-				},
-			},
-		},
-	}
-	twoVolPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						AWSElasticBlockStore: &v1.AWSElasticBlockStoreVolumeSource{VolumeID: "tvp1"},
-					},
-				},
-				{
-					VolumeSource: v1.VolumeSource{
-						AWSElasticBlockStore: &v1.AWSElasticBlockStoreVolumeSource{VolumeID: "tvp2"},
-					},
-				},
-			},
-		},
-	}
 	unboundPVCwithInvalidSCPod := &v1.Pod{
 		Spec: v1.PodSpec{
 			Volumes: []v1.Volume{
@@ -483,152 +495,6 @@ func TestEBSLimits(t *testing.T) {
 					VolumeSource: v1.VolumeSource{
 						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
 							ClaimName: "unboundPVCwithDefaultSCPod",
-						},
-					},
-				},
-			},
-		},
-	}
-	splitVolsPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						HostPath: &v1.HostPathVolumeSource{},
-					},
-				},
-				{
-					VolumeSource: v1.VolumeSource{
-						AWSElasticBlockStore: &v1.AWSElasticBlockStoreVolumeSource{VolumeID: "svp"},
-					},
-				},
-			},
-		},
-	}
-	nonApplicablePod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						HostPath: &v1.HostPathVolumeSource{},
-					},
-				},
-			},
-		},
-	}
-	deletedPVCPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "deletedPVC",
-						},
-					},
-				},
-			},
-		},
-	}
-	twoDeletedPVCPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "deletedPVC",
-						},
-					},
-				},
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "anotherDeletedPVC",
-						},
-					},
-				},
-			},
-		},
-	}
-	deletedPVPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "pvcWithDeletedPV",
-						},
-					},
-				},
-			},
-		},
-	}
-	// deletedPVPod2 is a different pod than deletedPVPod but using the same PVC
-	deletedPVPod2 := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "pvcWithDeletedPV",
-						},
-					},
-				},
-			},
-		},
-	}
-	// anotherDeletedPVPod is a different pod than deletedPVPod and uses another PVC
-	anotherDeletedPVPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "anotherPVCWithDeletedPV",
-						},
-					},
-				},
-			},
-		},
-	}
-	emptyPod := &v1.Pod{
-		Spec: v1.PodSpec{},
-	}
-	unboundPVCPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "unboundPVC",
-						},
-					},
-				},
-			},
-		},
-	}
-	// Different pod than unboundPVCPod, but using the same unbound PVC
-	unboundPVCPod2 := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "unboundPVC",
-						},
-					},
-				},
-			},
-		},
-	}
-
-	// pod with unbound PVC that's different to unboundPVC
-	anotherUnboundPVCPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "anotherUnboundPVC",
 						},
 					},
 				},
@@ -834,8 +700,12 @@ func TestEBSLimits(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.test, func(t *testing.T) {
 			node, csiNode := getNodeWithPodAndVolumeLimits("node", test.existingPods, int64(test.maxVols), test.filterName)
-			p := newNonCSILimits(test.filterName, getFakeCSINodeLister(csiNode), getFakeCSIStorageClassLister(test.filterName, test.driverName), getFakePVLister(test.filterName), getFakePVCLister(test.filterName)).(framework.FilterPlugin)
-			gotStatus := p.Filter(context.Background(), nil, test.newPod, node)
+			p := newNonCSILimits(test.filterName, getFakeCSINodeLister(csiNode), getFakeCSIStorageClassLister(test.filterName, test.driverName), getFakePVLister(test.filterName), getFakePVCLister(test.filterName))
+
+			state := framework.NewCycleState()
+			p.(framework.PreFilterPlugin).PreFilter(context.Background(), state, test.newPod)
+
+			gotStatus := p.(framework.FilterPlugin).Filter(context.Background(), state, test.newPod, node)
 			if !reflect.DeepEqual(gotStatus, test.wantStatus) {
 				t.Errorf("status does not match: %v, want: %v", gotStatus, test.wantStatus)
 			}
@@ -844,182 +714,9 @@ func TestEBSLimits(t *testing.T) {
 }
 
 func TestGCEPDLimits(t *testing.T) {
-	oneVolPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						AWSElasticBlockStore: &v1.AWSElasticBlockStoreVolumeSource{VolumeID: "ovp"},
-					},
-				},
-			},
-		},
-	}
-	twoVolPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						AWSElasticBlockStore: &v1.AWSElasticBlockStoreVolumeSource{VolumeID: "tvp1"},
-					},
-				},
-				{
-					VolumeSource: v1.VolumeSource{
-						AWSElasticBlockStore: &v1.AWSElasticBlockStoreVolumeSource{VolumeID: "tvp2"},
-					},
-				},
-			},
-		},
-	}
-	splitVolsPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						HostPath: &v1.HostPathVolumeSource{},
-					},
-				},
-				{
-					VolumeSource: v1.VolumeSource{
-						AWSElasticBlockStore: &v1.AWSElasticBlockStoreVolumeSource{VolumeID: "svp"},
-					},
-				},
-			},
-		},
-	}
-	nonApplicablePod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						HostPath: &v1.HostPathVolumeSource{},
-					},
-				},
-			},
-		},
-	}
-	deletedPVCPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "deletedPVC",
-						},
-					},
-				},
-			},
-		},
-	}
-	twoDeletedPVCPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "deletedPVC",
-						},
-					},
-				},
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "anotherDeletedPVC",
-						},
-					},
-				},
-			},
-		},
-	}
-	deletedPVPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "pvcWithDeletedPV",
-						},
-					},
-				},
-			},
-		},
-	}
-	// deletedPVPod2 is a different pod than deletedPVPod but using the same PVC
-	deletedPVPod2 := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "pvcWithDeletedPV",
-						},
-					},
-				},
-			},
-		},
-	}
-	// anotherDeletedPVPod is a different pod than deletedPVPod and uses another PVC
-	anotherDeletedPVPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "anotherPVCWithDeletedPV",
-						},
-					},
-				},
-			},
-		},
-	}
-	emptyPod := &v1.Pod{
-		Spec: v1.PodSpec{},
-	}
-	unboundPVCPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "unboundPVC",
-						},
-					},
-				},
-			},
-		},
-	}
-	// Different pod than unboundPVCPod, but using the same unbound PVC
-	unboundPVCPod2 := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "unboundPVC",
-						},
-					},
-				},
-			},
-		},
-	}
-
-	// pod with unbound PVC that's different to unboundPVC
-	anotherUnboundPVCPod := &v1.Pod{
-		Spec: v1.PodSpec{
-			Volumes: []v1.Volume{
-				{
-					VolumeSource: v1.VolumeSource{
-						PersistentVolumeClaim: &v1.PersistentVolumeClaimVolumeSource{
-							ClaimName: "anotherUnboundPVC",
-						},
-					},
-				},
-			},
-		},
-	}
-
 	tests := []struct {
 		newPod       *v1.Pod
+		newVolumes   sets.String
 		existingPods []*v1.Pod
 		filterName   string
 		driverName   string
@@ -1029,6 +726,7 @@ func TestGCEPDLimits(t *testing.T) {
 	}{
 		{
 			newPod:       oneVolPod,
+			newVolumes:   oneVolPodVolumeIDs,
 			existingPods: []*v1.Pod{twoVolPod, oneVolPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      4,
@@ -1036,6 +734,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       twoVolPod,
+			newVolumes:   twoVolPodVolumeIDs,
 			existingPods: []*v1.Pod{oneVolPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      2,
@@ -1043,6 +742,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       splitVolsPod,
+			newVolumes:   splitVolsPodVolumeIDs,
 			existingPods: []*v1.Pod{twoVolPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      3,
@@ -1050,6 +750,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       twoVolPod,
+			newVolumes:   twoVolPodVolumeIDs,
 			existingPods: []*v1.Pod{splitVolsPod, nonApplicablePod, emptyPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      3,
@@ -1057,6 +758,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(gcePDVolumeFilterType),
+			newVolumes:   onePVCPodVolume(gcePDVolumeFilterType),
 			existingPods: []*v1.Pod{splitVolsPod, nonApplicablePod, emptyPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      3,
@@ -1064,6 +766,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       splitPVCPod(gcePDVolumeFilterType),
+			newVolumes:   sets.NewString(),
 			existingPods: []*v1.Pod{splitVolsPod, oneVolPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      3,
@@ -1071,6 +774,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       twoVolPod,
+			newVolumes:   twoVolPodVolumeIDs,
 			existingPods: []*v1.Pod{oneVolPod, onePVCPod(gcePDVolumeFilterType)},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      3,
@@ -1078,6 +782,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       twoVolPod,
+			newVolumes:   twoVolPodVolumeIDs,
 			existingPods: []*v1.Pod{oneVolPod, twoVolPod, onePVCPod(gcePDVolumeFilterType)},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      4,
@@ -1085,6 +790,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       splitVolsPod,
+			newVolumes:   splitVolsPodVolumeIDs,
 			existingPods: []*v1.Pod{oneVolPod, oneVolPod, onePVCPod(gcePDVolumeFilterType)},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      3,
@@ -1092,6 +798,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(gcePDVolumeFilterType),
+			newVolumes:   onePVCPodVolume(gcePDVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, deletedPVCPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      2,
@@ -1099,6 +806,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(gcePDVolumeFilterType),
+			newVolumes:   onePVCPodVolume(gcePDVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, deletedPVCPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      3,
@@ -1106,6 +814,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(gcePDVolumeFilterType),
+			newVolumes:   onePVCPodVolume(gcePDVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, twoDeletedPVCPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      3,
@@ -1113,6 +822,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(gcePDVolumeFilterType),
+			newVolumes:   onePVCPodVolume(gcePDVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, deletedPVPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      2,
@@ -1120,6 +830,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(gcePDVolumeFilterType),
+			newVolumes:   onePVCPodVolume(gcePDVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, deletedPVPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      3,
@@ -1127,6 +838,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       deletedPVPod2,
+			newVolumes:   sets.NewString(),
 			existingPods: []*v1.Pod{oneVolPod, deletedPVPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      2,
@@ -1134,6 +846,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       anotherDeletedPVPod,
+			newVolumes:   sets.NewString(),
 			existingPods: []*v1.Pod{oneVolPod, deletedPVPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      2,
@@ -1141,6 +854,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(gcePDVolumeFilterType),
+			newVolumes:   onePVCPodVolume(gcePDVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, unboundPVCPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      2,
@@ -1148,6 +862,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       onePVCPod(gcePDVolumeFilterType),
+			newVolumes:   onePVCPodVolume(gcePDVolumeFilterType),
 			existingPods: []*v1.Pod{oneVolPod, unboundPVCPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      3,
@@ -1155,6 +870,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       unboundPVCPod2,
+			newVolumes:   sets.NewString(),
 			existingPods: []*v1.Pod{oneVolPod, unboundPVCPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      2,
@@ -1162,6 +878,7 @@ func TestGCEPDLimits(t *testing.T) {
 		},
 		{
 			newPod:       anotherUnboundPVCPod,
+			newVolumes:   sets.NewString(),
 			existingPods: []*v1.Pod{oneVolPod, unboundPVCPod},
 			filterName:   gcePDVolumeFilterType,
 			maxVols:      2,
@@ -1172,8 +889,12 @@ func TestGCEPDLimits(t *testing.T) {
 	for _, test := range tests {
 		t.Run(test.test, func(t *testing.T) {
 			node, csiNode := getNodeWithPodAndVolumeLimits("node", test.existingPods, int64(test.maxVols), test.filterName)
-			p := newNonCSILimits(test.filterName, getFakeCSINodeLister(csiNode), getFakeCSIStorageClassLister(test.filterName, test.driverName), getFakePVLister(test.filterName), getFakePVCLister(test.filterName)).(framework.FilterPlugin)
-			gotStatus := p.Filter(context.Background(), nil, test.newPod, node)
+			p := newNonCSILimits(test.filterName, getFakeCSINodeLister(csiNode), getFakeCSIStorageClassLister(test.filterName, test.driverName), getFakePVLister(test.filterName), getFakePVCLister(test.filterName))
+
+			state := framework.NewCycleState()
+			p.(framework.PreFilterPlugin).PreFilter(context.Background(), state, test.newPod)
+
+			gotStatus := p.(framework.FilterPlugin).Filter(context.Background(), state, test.newPod, node)
 			if !reflect.DeepEqual(gotStatus, test.wantStatus) {
 				t.Errorf("status does not match: %v, want: %v", gotStatus, test.wantStatus)
 			}
@@ -1316,6 +1037,26 @@ func onePVCPod(filterName string) *v1.Pod {
 			},
 		},
 	}
+}
+
+func onePVCPodVolume(filterName string) sets.String {
+	var filter VolumeFilter
+	switch filterName {
+	case ebsVolumeFilterType:
+		filter = ebsVolumeFilter
+	case gcePDVolumeFilterType:
+		filter = gcePDVolumeFilter
+	case azureDiskVolumeFilterType:
+		filter = azureDiskVolumeFilter
+	case cinderVolumeFilterType:
+		filter = cinderVolumeFilter
+	default:
+		return sets.NewString()
+	}
+	if v, ok := filter.FilterVolume(&onePVCPod(filterName).Spec.Volumes[0]); ok {
+		return sets.NewString(v)
+	}
+	return sets.NewString()
 }
 
 func splitPVCPod(filterName string) *v1.Pod {
