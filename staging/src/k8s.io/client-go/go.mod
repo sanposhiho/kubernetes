@@ -5,7 +5,7 @@ module k8s.io/client-go
 go 1.16
 
 require (
-	cloud.google.com/go v0.54.0 // indirect
+	cloud.google.com/go v0.60.0 // indirect
 	github.com/Azure/go-autorest/autorest v0.11.17
 	github.com/Azure/go-autorest/autorest/adal v0.9.10
 	github.com/davecgh/go-spew v1.1.1
@@ -13,17 +13,18 @@ require (
 	github.com/gogo/protobuf v1.3.2
 	github.com/golang/groupcache v0.0.0-20200121045136-8c9f03a8e57e
 	github.com/golang/protobuf v1.4.3
+	github.com/google/btree v1.0.0 // indirect
 	github.com/google/go-cmp v0.5.4
 	github.com/google/gofuzz v1.1.0
 	github.com/google/uuid v1.1.2
 	github.com/googleapis/gnostic v0.5.1
-	github.com/gregjones/httpcache v0.0.0-20180305231024-9cad4c3443a7
-	github.com/imdario/mergo v0.3.5
+	github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79
+	github.com/imdario/mergo v0.3.8
 	github.com/peterbourgon/diskv v2.0.1+incompatible
 	github.com/spf13/pflag v1.0.5
 	github.com/stretchr/testify v1.7.0
-	golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83 // indirect
-	golang.org/x/net v0.0.0-20210224082022-3d97a244fca7
+	golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 // indirect
+	golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4
 	golang.org/x/oauth2 v0.0.0-20200107190931-bf48bf16ab8d
 	golang.org/x/term v0.0.0-20210220032956-6a3ed077a48d
 	golang.org/x/time v0.0.0-20210220033141-f8bda1e9f3ba
@@ -37,6 +38,12 @@ require (
 )
 
 replace (
+	cloud.google.com/go => cloud.google.com/go v0.54.0
+	github.com/gregjones/httpcache => github.com/gregjones/httpcache v0.0.0-20180305231024-9cad4c3443a7
+	github.com/imdario/mergo => github.com/imdario/mergo v0.3.5
+	github.com/nxadm/tail => github.com/nxadm/tail v1.4.4
+	golang.org/x/crypto => golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83
+	golang.org/x/net => golang.org/x/net v0.0.0-20210224082022-3d97a244fca7
 	k8s.io/api => ../api
 	k8s.io/apimachinery => ../apimachinery
 	k8s.io/client-go => ../client-go

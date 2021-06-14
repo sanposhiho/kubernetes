@@ -1,7 +1,7 @@
 # bitbucket.org/bertimus9/systemstat v0.0.0-20180207000608-0eeff89b0690 => bitbucket.org/bertimus9/systemstat v0.0.0-20180207000608-0eeff89b0690
 ## explicit
 bitbucket.org/bertimus9/systemstat
-# cloud.google.com/go v0.54.0 => cloud.google.com/go v0.54.0
+# cloud.google.com/go v0.60.0 => cloud.google.com/go v0.54.0
 cloud.google.com/go/compute/metadata
 # github.com/Azure/azure-sdk-for-go v53.1.0+incompatible => github.com/Azure/azure-sdk-for-go v53.1.0+incompatible
 ## explicit
@@ -466,14 +466,14 @@ github.com/gophercloud/gophercloud/openstack/utils
 github.com/gophercloud/gophercloud/pagination
 # github.com/gorilla/websocket v1.4.2 => github.com/gorilla/websocket v1.4.2
 github.com/gorilla/websocket
-# github.com/gregjones/httpcache v0.0.0-20180305231024-9cad4c3443a7 => github.com/gregjones/httpcache v0.0.0-20180305231024-9cad4c3443a7
+# github.com/gregjones/httpcache v0.0.0-20190611155906-901d90724c79 => github.com/gregjones/httpcache v0.0.0-20180305231024-9cad4c3443a7
 github.com/gregjones/httpcache
 github.com/gregjones/httpcache/diskcache
-# github.com/grpc-ecosystem/go-grpc-middleware v1.0.1-0.20190118093823-f849b5445de4 => github.com/grpc-ecosystem/go-grpc-middleware v1.0.1-0.20190118093823-f849b5445de4
+# github.com/grpc-ecosystem/go-grpc-middleware v1.2.2 => github.com/grpc-ecosystem/go-grpc-middleware v1.0.1-0.20190118093823-f849b5445de4
 github.com/grpc-ecosystem/go-grpc-middleware
 # github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0 => github.com/grpc-ecosystem/go-grpc-prometheus v1.2.0
 github.com/grpc-ecosystem/go-grpc-prometheus
-# github.com/grpc-ecosystem/grpc-gateway v1.9.5 => github.com/grpc-ecosystem/grpc-gateway v1.9.5
+# github.com/grpc-ecosystem/grpc-gateway v1.12.1 => github.com/grpc-ecosystem/grpc-gateway v1.9.5
 github.com/grpc-ecosystem/grpc-gateway/internal
 github.com/grpc-ecosystem/grpc-gateway/runtime
 github.com/grpc-ecosystem/grpc-gateway/utilities
@@ -499,7 +499,7 @@ github.com/heketi/heketi/pkg/glusterfs/api
 github.com/heketi/heketi/pkg/utils
 # github.com/heketi/tests v0.0.0-20151005000721-f3775cbcefd6 => github.com/heketi/tests v0.0.0-20151005000721-f3775cbcefd6
 ## explicit
-# github.com/imdario/mergo v0.3.5 => github.com/imdario/mergo v0.3.5
+# github.com/imdario/mergo v0.3.8 => github.com/imdario/mergo v0.3.5
 github.com/imdario/mergo
 # github.com/inconshreveable/mousetrap v1.0.0 => github.com/inconshreveable/mousetrap v1.0.0
 github.com/inconshreveable/mousetrap
@@ -508,13 +508,23 @@ github.com/inconshreveable/mousetrap
 github.com/ishidawataru/sctp
 # github.com/jmespath/go-jmespath v0.4.0 => github.com/jmespath/go-jmespath v0.4.0
 github.com/jmespath/go-jmespath
-# github.com/jonboulle/clockwork v0.1.0 => github.com/jonboulle/clockwork v0.1.0
+# github.com/jonboulle/clockwork v0.2.0 => github.com/jonboulle/clockwork v0.1.0
 github.com/jonboulle/clockwork
 # github.com/json-iterator/go v1.1.10 => github.com/json-iterator/go v1.1.10
 ## explicit
 github.com/json-iterator/go
 # github.com/karrick/godirwalk v1.16.1 => github.com/karrick/godirwalk v1.16.1
 github.com/karrick/godirwalk
+# github.com/labstack/echo/v4 v4.3.0 => github.com/labstack/echo/v4 v4.3.0
+## explicit
+github.com/labstack/echo/v4
+github.com/labstack/echo/v4/middleware
+# github.com/labstack/gommon v0.3.0 => github.com/labstack/gommon v0.3.0
+## explicit
+github.com/labstack/gommon/bytes
+github.com/labstack/gommon/color
+github.com/labstack/gommon/log
+github.com/labstack/gommon/random
 # github.com/libopenstorage/openstorage v1.0.0 => github.com/libopenstorage/openstorage v1.0.0
 ## explicit
 github.com/libopenstorage/openstorage/api
@@ -537,6 +547,10 @@ github.com/magiconair/properties
 github.com/mailru/easyjson/buffer
 github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
+# github.com/mattn/go-colorable v0.1.8 => github.com/mattn/go-colorable v0.0.9
+github.com/mattn/go-colorable
+# github.com/mattn/go-isatty v0.0.9 => github.com/mattn/go-isatty v0.0.4
+github.com/mattn/go-isatty
 # github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 => github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369
 github.com/matttproud/golang_protobuf_extensions/pbutil
 # github.com/miekg/dns v1.1.35 => github.com/miekg/dns v1.1.35
@@ -583,7 +597,7 @@ github.com/munnerz/goautoneg
 github.com/mvdan/xurls
 # github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f => github.com/mxk/go-flowrate v0.0.0-20140419014527-cca7078d478f
 github.com/mxk/go-flowrate/flowrate
-# github.com/nxadm/tail v1.4.4 => github.com/nxadm/tail v1.4.4
+# github.com/nxadm/tail v1.4.8 => github.com/nxadm/tail v1.4.4
 github.com/nxadm/tail
 github.com/nxadm/tail/ratelimiter
 github.com/nxadm/tail/util
@@ -721,7 +735,7 @@ github.com/russross/blackfriday/v2
 github.com/seccomp/libseccomp-golang
 # github.com/shurcooL/sanitized_anchor_name v1.0.0 => github.com/shurcooL/sanitized_anchor_name v1.0.0
 github.com/shurcooL/sanitized_anchor_name
-# github.com/sirupsen/logrus v1.7.0 => github.com/sirupsen/logrus v1.7.0
+# github.com/sirupsen/logrus v1.8.1 => github.com/sirupsen/logrus v1.7.0
 github.com/sirupsen/logrus
 # github.com/soheilhy/cmux v0.1.4 => github.com/soheilhy/cmux v0.1.4
 github.com/soheilhy/cmux
@@ -761,10 +775,14 @@ github.com/stretchr/testify/require
 github.com/subosito/gotenv
 # github.com/syndtr/gocapability v0.0.0-20200815063812-42c35b437635 => github.com/syndtr/gocapability v0.0.0-20200815063812-42c35b437635
 github.com/syndtr/gocapability/capability
-# github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5 => github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5
+# github.com/tmc/grpc-websocket-proxy v0.0.0-20200427203606-3cfed13b9966 => github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5
 github.com/tmc/grpc-websocket-proxy/wsproxy
 # github.com/urfave/negroni v1.0.0 => github.com/urfave/negroni v1.0.0
 ## explicit
+# github.com/valyala/bytebufferpool v1.0.0 => github.com/valyala/bytebufferpool v1.0.0
+github.com/valyala/bytebufferpool
+# github.com/valyala/fasttemplate v1.2.1 => github.com/valyala/fasttemplate v1.2.1
+github.com/valyala/fasttemplate
 # github.com/vishvananda/netlink v1.1.0 => github.com/vishvananda/netlink v1.1.0
 ## explicit
 github.com/vishvananda/netlink
@@ -899,7 +917,7 @@ go.etcd.io/etcd/raft/tracker
 go.etcd.io/etcd/version
 go.etcd.io/etcd/wal
 go.etcd.io/etcd/wal/walpb
-# go.opencensus.io v0.22.3 => go.opencensus.io v0.22.3
+# go.opencensus.io v0.22.4 => go.opencensus.io v0.22.3
 go.opencensus.io
 go.opencensus.io/internal
 go.opencensus.io/internal/tagencoding
@@ -934,8 +952,10 @@ go.uber.org/zap/internal/bufferpool
 go.uber.org/zap/internal/color
 go.uber.org/zap/internal/exit
 go.uber.org/zap/zapcore
-# golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83 => golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83
+# golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 => golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83
 ## explicit
+golang.org/x/crypto/acme
+golang.org/x/crypto/acme/autocert
 golang.org/x/crypto/bcrypt
 golang.org/x/crypto/blowfish
 golang.org/x/crypto/chacha20
@@ -958,7 +978,7 @@ golang.org/x/crypto/ssh/internal/bcrypt_pbkdf
 # golang.org/x/mod v0.3.1-0.20200828183125-ce943fd02449 => golang.org/x/mod v0.3.1-0.20200828183125-ce943fd02449
 golang.org/x/mod/module
 golang.org/x/mod/semver
-# golang.org/x/net v0.0.0-20210224082022-3d97a244fca7 => golang.org/x/net v0.0.0-20210224082022-3d97a244fca7
+# golang.org/x/net v0.0.0-20210405180319-a5a99cb37ef4 => golang.org/x/net v0.0.0-20210224082022-3d97a244fca7
 ## explicit
 golang.org/x/net/bpf
 golang.org/x/net/context
@@ -968,6 +988,7 @@ golang.org/x/net/html/atom
 golang.org/x/net/html/charset
 golang.org/x/net/http/httpguts
 golang.org/x/net/http2
+golang.org/x/net/http2/h2c
 golang.org/x/net/http2/hpack
 golang.org/x/net/idna
 golang.org/x/net/internal/iana
@@ -986,7 +1007,7 @@ golang.org/x/oauth2/google
 golang.org/x/oauth2/internal
 golang.org/x/oauth2/jws
 golang.org/x/oauth2/jwt
-# golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9 => golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
+# golang.org/x/sync v0.0.0-20210220032951-036812b2e83c => golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
 golang.org/x/sync/singleflight
 # golang.org/x/sys v0.0.0-20210426230700-d19ff857e887 => golang.org/x/sys v0.0.0-20210426230700-d19ff857e887
 ## explicit
@@ -1048,6 +1069,7 @@ golang.org/x/tools/internal/imports
 golang.org/x/tools/internal/packagesinternal
 golang.org/x/tools/internal/typesinternal
 # golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 => golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
+## explicit
 golang.org/x/xerrors
 golang.org/x/xerrors/internal
 # gonum.org/v1/gonum v0.6.2 => gonum.org/v1/gonum v0.6.2
@@ -1216,7 +1238,7 @@ gopkg.in/square/go-jose.v2/json
 gopkg.in/square/go-jose.v2/jwt
 # gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 => gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7
 gopkg.in/tomb.v1
-# gopkg.in/warnings.v0 v0.1.1 => gopkg.in/warnings.v0 v0.1.1
+# gopkg.in/warnings.v0 v0.1.2 => gopkg.in/warnings.v0 v0.1.1
 gopkg.in/warnings.v0
 # gopkg.in/yaml.v2 v2.4.0 => gopkg.in/yaml.v2 v2.4.0
 ## explicit
@@ -2507,6 +2529,8 @@ sigs.k8s.io/yaml
 # github.com/kr/pretty => github.com/kr/pretty v0.2.1
 # github.com/kr/text => github.com/kr/text v0.2.0
 # github.com/kylelemons/godebug => github.com/kylelemons/godebug v0.0.0-20170820004349-d65d576e9348
+# github.com/labstack/echo/v4 => github.com/labstack/echo/v4 v4.3.0
+# github.com/labstack/gommon => github.com/labstack/gommon v0.3.0
 # github.com/libopenstorage/openstorage => github.com/libopenstorage/openstorage v1.0.0
 # github.com/liggitt/tabwriter => github.com/liggitt/tabwriter v0.0.0-20181228230101-89fcab3d43de
 # github.com/lithammer/dedent => github.com/lithammer/dedent v1.1.0
@@ -2602,6 +2626,8 @@ sigs.k8s.io/yaml
 # github.com/tmc/grpc-websocket-proxy => github.com/tmc/grpc-websocket-proxy v0.0.0-20190109142713-0ad062ec5ee5
 # github.com/urfave/cli => github.com/urfave/cli v1.22.2
 # github.com/urfave/negroni => github.com/urfave/negroni v1.0.0
+# github.com/valyala/bytebufferpool => github.com/valyala/bytebufferpool v1.0.0
+# github.com/valyala/fasttemplate => github.com/valyala/fasttemplate v1.2.1
 # github.com/vishvananda/netlink => github.com/vishvananda/netlink v1.1.0
 # github.com/vishvananda/netns => github.com/vishvananda/netns v0.0.0-20200728191858-db3c7e526aae
 # github.com/vmware/govmomi => github.com/vmware/govmomi v0.20.3
