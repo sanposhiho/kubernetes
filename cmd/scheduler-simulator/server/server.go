@@ -29,12 +29,17 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 
 	// initialize each handler
 	nodeHandler := handler.NewNodeHandler(dic.NodeService())
+	podHandler := handler.NewPodHandler(dic.PodService())
 
 	// register apis
 	v1 := e.Group("/api/v1")
-	// TODO: fixme
+	// FIXME: create nodes with POST
 	v1.GET("/nodes/create", nodeHandler.CreateNode)
 	v1.GET("/nodes", nodeHandler.ListNode)
+
+	// FIXME: create pods with POST
+	v1.GET("/pods/create", podHandler.CreatePod)
+	v1.GET("/pods", podHandler.ListPod)
 
 	// initialize SimulatorServer.
 	s := &SimulatorServer{e: e}

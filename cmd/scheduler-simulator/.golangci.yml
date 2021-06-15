@@ -16,7 +16,6 @@ linters:
     - bodyclose
     - cyclop
     - dogsled
-    - dupl
     - durationcheck
     - errorlint
     - exportloopref

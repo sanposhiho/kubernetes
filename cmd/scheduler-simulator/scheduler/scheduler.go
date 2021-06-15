@@ -31,12 +31,12 @@ func SetupScheduler() (clientset.Interface, coreinformers.PodInformer, shutdownf
 		Burst:         5000,
 	}
 
-	client := clientset.NewForConfigOrDie(cfg)
-
 	schedCfg, err := defaultComponentConfig()
 	if err != nil {
 		return nil, nil, nil, xerrors.Errorf("get default component config: %w", err)
 	}
+
+	client := clientset.NewForConfigOrDie(cfg)
 
 	podInformer, schedulerShutdown, err := startScheduler(client, cfg, schedCfg)
 	if err != nil {

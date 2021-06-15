@@ -26,13 +26,13 @@ func startSimulator() int {
 	}
 
 	// start kube-apiserver and kube-scheduler
-	clientset, _, shutdownFn1, err := scheduler.SetupScheduler()
+	clientset, podInformer, shutdownFn1, err := scheduler.SetupScheduler()
 	if err != nil {
 		log.Printf("failed to start scheduler: %v", err)
 		return 1
 	}
 
-	dic := di.NewDIContainer(clientset)
+	dic := di.NewDIContainer(clientset, podInformer)
 
 	// start simulator server
 	s := server.NewSimulatorServer(cfg, dic)
