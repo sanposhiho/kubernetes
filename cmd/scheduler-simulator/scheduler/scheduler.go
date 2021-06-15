@@ -10,8 +10,8 @@ import (
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/events"
 	"k8s.io/klog/v2"
-
 	"k8s.io/kube-scheduler/config/v1beta1"
+
 	"k8s.io/kubernetes/cmd/scheduler-simulator/shutdownfn"
 	"k8s.io/kubernetes/pkg/scheduler"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
@@ -20,7 +20,7 @@ import (
 	"k8s.io/kubernetes/test/integration/util"
 )
 
-func SetupScheduler() (coreinformers.PodInformer, shutdownfn.Shutdownfn, error) {
+func SetupScheduler() (clientset.Interface, coreinformers.PodInformer, shutdownfn.Shutdownfn, error) {
 	// Note: This function die when a error happen.
 	apiURL, apiShutdown := util.StartApiserver()
 
@@ -35,12 +35,12 @@ func SetupScheduler() (coreinformers.PodInformer, shutdownfn.Shutdownfn, error) 
 
 	schedCfg, err := defaultComponentConfig()
 	if err != nil {
-		return nil, nil, xerrors.Errorf("get default component config: %w", err)
+		return nil, nil, nil, xerrors.Errorf("get default component config: %w", err)
 	}
 
 	podInformer, schedulerShutdown, err := startScheduler(client, cfg, schedCfg)
 	if err != nil {
-		return nil, nil, xerrors.Errorf("start scheduler: %w", err)
+		return nil, nil, nil, xerrors.Errorf("start scheduler: %w", err)
 	}
 	fakePVControllerShutdown := util.StartFakePVController(client)
 
@@ -50,7 +50,7 @@ func SetupScheduler() (coreinformers.PodInformer, shutdownfn.Shutdownfn, error) 
 		apiShutdown()
 	}
 
-	return podInformer, shutdownFunc, nil
+	return client, podInformer, shutdownFunc, nil
 }
 
 // defaultComponentConfig create KubeSchedulerConfiguration default configuration.

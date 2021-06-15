@@ -3,18 +3,21 @@ package main
 import (
 	"log"
 
-	"k8s.io/kubernetes/test/integration/framework"
-
 	"k8s.io/kubernetes/cmd/scheduler-simulator/config"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/shutdownfn"
+	"k8s.io/kubernetes/test/integration/framework"
 )
 
 func main() {
+	// start etcd and then start simulator and needed k8s components.
 	framework.EtcdMain(startSimulator)
 }
 
+// startSimulator starts simulator and needed k8s components.
+// It will return exit code.
 func startSimulator() int {
 	cfg, err := config.NewConfig()
 	if err != nil {
@@ -23,14 +26,16 @@ func startSimulator() int {
 	}
 
 	// start kube-apiserver and kube-scheduler
-	_, shutdownFn1, err := scheduler.SetupScheduler()
+	clientset, _, shutdownFn1, err := scheduler.SetupScheduler()
 	if err != nil {
 		log.Printf("failed to start scheduler: %v", err)
 		return 1
 	}
 
+	dic := di.NewDIContainer(clientset)
+
 	// start simulator server
-	s := server.NewSimulatorServer(cfg)
+	s := server.NewSimulatorServer(cfg, dic)
 	shutdownFn2, err := s.Start(cfg.Port)
 	if err != nil {
 		shutdownfn.WaitShutdown(shutdownFn1)

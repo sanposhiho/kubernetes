@@ -9,8 +9,12 @@ import (
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
+	"golang.org/x/xerrors"
+
 	"k8s.io/kubernetes/cmd/scheduler-simulator/config"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/config/env"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/server/handler"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/shutdownfn"
 )
 
@@ -18,15 +22,21 @@ type SimulatorServer struct {
 	e *echo.Echo
 }
 
-func NewSimulatorServer(cfg *config.Config) *SimulatorServer {
+func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer {
 	e := echo.New()
 
 	e.Use(middleware.Logger())
 
-	_ = e.Group("/api/v1")
+	// initialize each handler
+	nodeHandler := handler.NewNodeHandler(dic.NodeService())
 
 	// register apis
+	v1 := e.Group("/api/v1")
+	// TODO: fixme
+	v1.GET("/nodes/create", nodeHandler.CreateNode)
+	v1.GET("/nodes", nodeHandler.ListNode)
 
+	// initialize SimulatorServer.
 	s := &SimulatorServer{e: e}
 	s.setLogLevel(cfg.Env)
 
@@ -47,7 +57,7 @@ func (s *SimulatorServer) Start(port int) (shutdownfn.Shutdownfn, error) {
 	e := s.e
 
 	go func() {
-		if err := e.Start(":" + strconv.Itoa(port)); err != nil && err != http.ErrServerClosed {
+		if err := e.Start(":" + strconv.Itoa(port)); err != nil && !xerrors.Is(err, http.ErrServerClosed) {
 			e.Logger.Fatalf("failed to start server successfully: %v", err)
 		}
 	}()
