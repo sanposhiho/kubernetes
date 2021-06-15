@@ -3,18 +3,15 @@ package server
 import (
 	"context"
 	"net/http"
-	"os"
-	"os/signal"
 	"strconv"
 	"time"
 
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
-	"golang.org/x/xerrors"
-
 	"k8s.io/kubernetes/cmd/scheduler-simulator/config"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/config/env"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/shutdownfn"
 )
 
 type SimulatorServer struct {
@@ -46,22 +43,22 @@ func (s *SimulatorServer) setLogLevel(e env.Env) {
 }
 
 // Start starts SimulatorServer.
-func (s *SimulatorServer) Start(port int) {
+func (s *SimulatorServer) Start(port int) (shutdownfn.Shutdownfn, error) {
 	e := s.e
 
 	go func() {
-		if err := e.Start(":" + strconv.Itoa(port)); err != nil && !xerrors.Is(err, http.ErrServerClosed) {
-			e.Logger.Fatal("shutting down the server")
+		if err := e.Start(":" + strconv.Itoa(port)); err != nil && err != http.ErrServerClosed {
+			e.Logger.Fatalf("failed to start server successfully: %v", err)
 		}
 	}()
 
-	quit := make(chan os.Signal, 1)
-	signal.Notify(quit, os.Interrupt)
-	<-quit
-
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
-	defer cancel()
-	if err := e.Shutdown(ctx); err != nil {
-		e.Logger.Fatal(err)
+	shutdownFn := func() {
+		ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+		defer cancel()
+		if err := e.Shutdown(ctx); err != nil {
+			e.Logger.Warnf("failed to shutdown simulator server successfully: %v", err)
+		}
 	}
+
+	return shutdownFn, nil
 }

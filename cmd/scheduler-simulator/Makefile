@@ -13,3 +13,8 @@ format:
 .PHONY: test
 test:
 	go test ./...
+
+.PHONY: serve
+serve:
+	go build -o ./bin/simulator ./simulator.go
+	./hack/start_simulator.sh
