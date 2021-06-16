@@ -36,10 +36,16 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 	// FIXME: create nodes with POST
 	v1.GET("/nodes/create", nodeHandler.CreateNode)
 	v1.GET("/nodes", nodeHandler.ListNode)
+	v1.GET("/nodes/:name", nodeHandler.GetNode)
+	// FIXME: delete nodes with DELETE
+	v1.GET("/nodes/delete/:name", nodeHandler.DeleteNode)
 
 	// FIXME: create pods with POST
 	v1.GET("/pods/create", podHandler.CreatePod)
 	v1.GET("/pods", podHandler.ListPod)
+	v1.GET("/pods/:name", podHandler.GetPod)
+	// FIXME: delete pods with DELETE
+	v1.GET("/pods/delete/:name", podHandler.DeletePod)
 
 	// initialize SimulatorServer.
 	s := &SimulatorServer{e: e}

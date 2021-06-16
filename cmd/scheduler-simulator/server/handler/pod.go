@@ -27,6 +27,20 @@ func (h *PodHandler) CreatePod(c echo.Context) error {
 	return c.JSON(http.StatusOK, p)
 }
 
+func (h *PodHandler) GetPod(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	name := c.Param("name")
+
+	p, err := h.service.Get(ctx, name)
+	if err != nil {
+		log.Println(err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	return c.JSON(http.StatusOK, p)
+}
+
 func (h *PodHandler) ListPod(c echo.Context) error {
 	ctx := c.Request().Context()
 
@@ -37,4 +51,17 @@ func (h *PodHandler) ListPod(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, ps)
+}
+
+func (h *PodHandler) DeletePod(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	name := c.Param("name")
+
+	if err := h.service.Delete(ctx, name); err != nil {
+		log.Println(err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	return c.NoContent(http.StatusOK)
 }

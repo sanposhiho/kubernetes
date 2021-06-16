@@ -27,6 +27,20 @@ func (h *NodeHandler) CreateNode(c echo.Context) error {
 	return c.JSON(http.StatusOK, n)
 }
 
+func (h *NodeHandler) GetNode(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	name := c.Param("name")
+
+	n, err := h.service.Get(ctx, name)
+	if err != nil {
+		log.Println(err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	return c.JSON(http.StatusOK, n)
+}
+
 func (h *NodeHandler) ListNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
@@ -37,4 +51,17 @@ func (h *NodeHandler) ListNode(c echo.Context) error {
 	}
 
 	return c.JSON(http.StatusOK, ns)
+}
+
+func (h *NodeHandler) DeleteNode(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	name := c.Param("name")
+
+	if err := h.service.Delete(ctx, name); err != nil {
+		log.Println(err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	return c.NoContent(http.StatusOK)
 }

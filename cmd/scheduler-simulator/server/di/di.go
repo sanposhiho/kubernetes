@@ -18,8 +18,8 @@ func NewDIContainer(client clientset.Interface, podInformer coreinformers.PodInf
 	c := &Container{}
 
 	// initialize each service
-	c.nodeService = node.NewNodeService(client)
 	c.podService = pod.NewPodService(client, podInformer)
+	c.nodeService = node.NewNodeService(client, c.podService)
 
 	return c
 }
