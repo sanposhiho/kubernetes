@@ -3,7 +3,7 @@
 KUBE_ROOT=$(dirname "${BASH_SOURCE[0]}")/../../..
 
 source "${KUBE_ROOT}/hack/lib/init.sh"
-export PATH="/Users/kenseinakada/go/1.16.0/src/k8s.io/kubernetes/third_party/etcd:${PATH}"
+export PATH="${KUBE_ROOT}/third_party/etcd:${PATH}"
 
 checkEtcdOnPath() {
   kube::log::status "Checking etcd is on PATH"

@@ -3,6 +3,8 @@ package pod
 import (
 	"context"
 
+	"k8s.io/apimachinery/pkg/api/resource"
+
 	"golang.org/x/xerrors"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -31,17 +33,17 @@ func (s *Service) Create(ctx context.Context) (*v1.Pod, error) {
 			Containers: []v1.Container{{
 				Name:  "pause",
 				Image: "k8s.gcr.io/pause:3.5",
-				//              Ports: []v1.ContainerPort{{ContainerPort: 80}},
-				//				Resources: v1.ResourceRequirements{
-				//					Limits: v1.ResourceList{
-				//						v1.ResourceCPU:    resource.MustParse("100m"),
-				//						v1.ResourceMemory: resource.MustParse("500Mi"),
-				//					},
-				//					Requests: v1.ResourceList{
-				//						v1.ResourceCPU:    resource.MustParse("100m"),
-				//						v1.ResourceMemory: resource.MustParse("500Mi"),
-				//					},
-				//			},
+				Ports: []v1.ContainerPort{{ContainerPort: 80}},
+				Resources: v1.ResourceRequirements{
+					Limits: v1.ResourceList{
+						v1.ResourceCPU:    resource.MustParse("100m"),
+						v1.ResourceMemory: resource.MustParse("500Mi"),
+					},
+					Requests: v1.ResourceList{
+						v1.ResourceCPU:    resource.MustParse("100m"),
+						v1.ResourceMemory: resource.MustParse("500Mi"),
+					},
+				},
 			}},
 		},
 	}

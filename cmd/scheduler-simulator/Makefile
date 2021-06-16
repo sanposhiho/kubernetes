@@ -1,6 +1,7 @@
 .PHONY: tools
 tools:
-	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.40.1
+	cd ./tools; \
+	cat tools.go | grep "_" | awk -F'"' '{print $$2}' | xargs -tI % go install %
 
 .PHONY: lint
 lint:
