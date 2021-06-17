@@ -33,6 +33,7 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 
 	// register apis
 	v1 := e.Group("/api/v1")
+
 	// FIXME: create nodes with POST
 	v1.GET("/nodes/create", nodeHandler.CreateNode)
 	v1.GET("/nodes", nodeHandler.ListNode)

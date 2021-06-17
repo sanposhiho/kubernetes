@@ -3,9 +3,9 @@ package di
 import (
 	coreinformers "k8s.io/client-go/informers/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
+	node2 "k8s.io/kubernetes/cmd/scheduler-simulator/service/node"
+	pod2 "k8s.io/kubernetes/cmd/scheduler-simulator/service/pod"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/node"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/pod"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server/handler"
 )
 
@@ -18,8 +18,8 @@ func NewDIContainer(client clientset.Interface, podInformer coreinformers.PodInf
 	c := &Container{}
 
 	// initialize each service
-	c.podService = pod.NewPodService(client, podInformer)
-	c.nodeService = node.NewNodeService(client, c.podService)
+	c.podService = pod2.NewPodService(client, podInformer)
+	c.nodeService = node2.NewNodeService(client, c.podService)
 
 	return c
 }
