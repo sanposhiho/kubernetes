@@ -30,6 +30,21 @@ func (h *PodHandler) CreatePod(c echo.Context) error {
 	return c.JSON(http.StatusOK, p)
 }
 
+// UpdatePod handles the endpoint for updating pod.
+func (h *PodHandler) UpdatePod(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	name := c.Param("name")
+
+	p, err := h.service.Update(ctx, name)
+	if err != nil {
+		log.Println(err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	return c.JSON(http.StatusOK, p)
+}
+
 // GetPod handles the endpoint for getting pod.
 func (h *PodHandler) GetPod(c echo.Context) error {
 	ctx := c.Request().Context()

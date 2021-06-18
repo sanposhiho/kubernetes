@@ -30,6 +30,21 @@ func (h *NodeHandler) CreateNode(c echo.Context) error {
 	return c.JSON(http.StatusOK, n)
 }
 
+// UpdateNode handles the endpoint for updating node.
+func (h *NodeHandler) UpdateNode(c echo.Context) error {
+	ctx := c.Request().Context()
+
+	name := c.Param("name")
+
+	n, err := h.service.Update(ctx, name)
+	if err != nil {
+		log.Println(err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
+	return c.JSON(http.StatusOK, n)
+}
+
 // GetNode handles the endpoint for getting node.
 func (h *NodeHandler) GetNode(c echo.Context) error {
 	ctx := c.Request().Context()

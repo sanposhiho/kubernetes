@@ -77,6 +77,25 @@ func (s *Service) Create(ctx context.Context) (*v1.Pod, error) {
 	return pod, nil
 }
 
+// Update creates a pod.
+func (s *Service) Update(ctx context.Context, name string) (*v1.Pod, error) {
+	pod, err := s.Get(ctx, name)
+	if err != nil {
+		return nil, xerrors.Errorf("get old pod: %w", err)
+	}
+
+	pod.Labels = map[string]string{
+		"edited": "true",
+	}
+
+	newPod, err := s.client.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
+	// TODO: do retry?
+	if err != nil {
+		return nil, xerrors.Errorf("update pod: %w", err)
+	}
+	return newPod, nil
+}
+
 // Delete deletes the pod has given name.
 func (s *Service) Delete(ctx context.Context, name string) error {
 	noGrace := int64(0)

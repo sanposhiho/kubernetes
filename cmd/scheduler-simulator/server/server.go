@@ -37,6 +37,8 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 	v1 := e.Group("/api/v1")
 	// FIXME: create nodes with POST
 	v1.GET("/nodes/create", nodeHandler.CreateNode)
+	// FIXME: update nodes with PUT
+	v1.GET("/nodes/update/:name", nodeHandler.UpdateNode)
 	v1.GET("/nodes", nodeHandler.ListNode)
 	v1.GET("/nodes/:name", nodeHandler.GetNode)
 	// FIXME: delete nodes with DELETE
@@ -44,6 +46,8 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 
 	// FIXME: create pods with POST
 	v1.GET("/pods/create", podHandler.CreatePod)
+	// FIXME: update pods with PUT
+	v1.GET("/pods/update/:name", podHandler.UpdatePod)
 	v1.GET("/pods", podHandler.ListPod)
 	v1.GET("/pods/:name", podHandler.GetPod)
 	// FIXME: delete pods with DELETE

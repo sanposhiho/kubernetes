@@ -81,6 +81,25 @@ func (s *Service) Create(ctx context.Context) (*v1.Node, error) {
 	return node, nil
 }
 
+// Update updates a node.
+func (s *Service) Update(ctx context.Context, name string) (*v1.Node, error) {
+	node, err := s.Get(ctx, name)
+	if err != nil {
+		return nil, xerrors.Errorf("get old node: %w", err)
+	}
+
+	node.Labels = map[string]string{
+		"edited": "true",
+	}
+
+	newNode, err := s.client.CoreV1().Nodes().Update(ctx, node, metav1.UpdateOptions{})
+	if err != nil {
+		return nil, xerrors.Errorf("update node: %w", err)
+	}
+
+	return newNode, nil
+}
+
 // Delete deletes the node has given name.
 func (s *Service) Delete(ctx context.Context, name string) error {
 	pl, err := s.podService.List(ctx)
