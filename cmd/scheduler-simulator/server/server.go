@@ -18,10 +18,12 @@ import (
 	"k8s.io/kubernetes/cmd/scheduler-simulator/shutdownfn"
 )
 
+// SimulatorServer is server for simulator.
 type SimulatorServer struct {
 	e *echo.Echo
 }
 
+// NewSimulatorServer initialize SimulatorServer.
 func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer {
 	e := echo.New()
 

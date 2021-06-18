@@ -1,5 +1,6 @@
 package env
 
+// Env represents the system environment.
 type Env int
 
 const (

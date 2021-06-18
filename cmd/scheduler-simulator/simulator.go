@@ -11,6 +11,7 @@ import (
 	"k8s.io/kubernetes/test/integration/framework"
 )
 
+// entry point.
 func main() {
 	// start etcd and then start simulator and needed k8s components.
 	framework.EtcdMain(startSimulator)

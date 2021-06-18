@@ -9,11 +9,13 @@ import (
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server/handler"
 )
 
+// Container saves dependencies for handler.
 type Container struct {
 	nodeService handler.NodeService
 	podService  handler.PodService
 }
 
+// NewDIContainer initializes Container.
 func NewDIContainer(client clientset.Interface, podInformer coreinformers.PodInformer) *Container {
 	c := &Container{}
 
@@ -24,10 +26,12 @@ func NewDIContainer(client clientset.Interface, podInformer coreinformers.PodInf
 	return c
 }
 
+// NodeService returns handler.NodeService.
 func (c *Container) NodeService() handler.NodeService {
 	return c.nodeService
 }
 
+// PodService returns handler.PodService.
 func (c *Container) PodService() handler.PodService {
 	return c.podService
 }

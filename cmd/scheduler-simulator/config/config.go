@@ -17,6 +17,7 @@ var (
 	ErrInvalidEnv = errors.New("invalid env")
 )
 
+// Config is configuration for simulator.
 type Config struct {
 	Env  env.Env
 	Port int

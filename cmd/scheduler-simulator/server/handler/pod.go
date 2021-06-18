@@ -7,14 +7,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// PodHandler is handler for manage pod.
 type PodHandler struct {
 	service PodService
 }
 
+// NewPodHandler initializes PodHandler.
 func NewPodHandler(s PodService) *PodHandler {
 	return &PodHandler{service: s}
 }
 
+// CreatePod handles the endpoint for creating pod.
 func (h *PodHandler) CreatePod(c echo.Context) error {
 	ctx := c.Request().Context()
 
@@ -27,6 +30,7 @@ func (h *PodHandler) CreatePod(c echo.Context) error {
 	return c.JSON(http.StatusOK, p)
 }
 
+// GetPod handles the endpoint for getting pod.
 func (h *PodHandler) GetPod(c echo.Context) error {
 	ctx := c.Request().Context()
 
@@ -41,6 +45,7 @@ func (h *PodHandler) GetPod(c echo.Context) error {
 	return c.JSON(http.StatusOK, p)
 }
 
+// ListPod handles the endpoint for listing pod.
 func (h *PodHandler) ListPod(c echo.Context) error {
 	ctx := c.Request().Context()
 
@@ -53,6 +58,7 @@ func (h *PodHandler) ListPod(c echo.Context) error {
 	return c.JSON(http.StatusOK, ps)
 }
 
+// DeletePod handles the endpoint for deleting pod.
 func (h *PodHandler) DeletePod(c echo.Context) error {
 	ctx := c.Request().Context()
 

@@ -20,6 +20,7 @@ import (
 	"k8s.io/kubernetes/test/integration/util"
 )
 
+// SetupScheduler starts k8s-apiserver and scheduler.
 func SetupScheduler() (clientset.Interface, coreinformers.PodInformer, shutdownfn.Shutdownfn, error) {
 	// Note: This function die when a error happen.
 	apiURL, apiShutdown := util.StartApiserver()
@@ -53,7 +54,7 @@ func SetupScheduler() (clientset.Interface, coreinformers.PodInformer, shutdownf
 	return client, podInformer, shutdownFunc, nil
 }
 
-// defaultComponentConfig create KubeSchedulerConfiguration default configuration.
+// defaultComponentConfig creates KubeSchedulerConfiguration default configuration.
 func defaultComponentConfig() (*config.KubeSchedulerConfiguration, error) {
 	gvk := v1beta1.SchemeGroupVersion.WithKind("KubeSchedulerConfiguration")
 	cfg := config.KubeSchedulerConfiguration{}
@@ -64,6 +65,7 @@ func defaultComponentConfig() (*config.KubeSchedulerConfiguration, error) {
 	return &cfg, nil
 }
 
+// startScheduler starts scheduler.
 func startScheduler(
 	clientSet clientset.Interface,
 	kubeConfig *restclient.Config,

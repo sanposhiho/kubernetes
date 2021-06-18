@@ -15,16 +15,19 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 )
 
+// Service manages node
 type Service struct {
 	client     clientset.Interface
 	podService PodService
 }
 
+// PodService represents service for manage Pods.
 type PodService interface {
 	List(ctx context.Context) (*v1.PodList, error)
 	Delete(ctx context.Context, name string) error
 }
 
+// NewNodeService initializes Service.
 func NewNodeService(client clientset.Interface, ps PodService) *Service {
 	return &Service{
 		client:     client,
@@ -32,6 +35,7 @@ func NewNodeService(client clientset.Interface, ps PodService) *Service {
 	}
 }
 
+// Get returns the node has given name.
 func (s *Service) Get(ctx context.Context, name string) (*v1.Node, error) {
 	n, err := s.client.CoreV1().Nodes().Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
@@ -40,6 +44,7 @@ func (s *Service) Get(ctx context.Context, name string) (*v1.Node, error) {
 	return n, nil
 }
 
+// List lists all nodes.
 func (s *Service) List(ctx context.Context) (*v1.NodeList, error) {
 	nl, err := s.client.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
 	if err != nil {
@@ -48,6 +53,7 @@ func (s *Service) List(ctx context.Context) (*v1.NodeList, error) {
 	return nl, nil
 }
 
+// Create creates a node.
 func (s *Service) Create(ctx context.Context) (*v1.Node, error) {
 	// TODO: users specify specs.
 	baseNode := &v1.Node{
@@ -75,6 +81,7 @@ func (s *Service) Create(ctx context.Context) (*v1.Node, error) {
 	return node, nil
 }
 
+// Delete deletes the node has given name.
 func (s *Service) Delete(ctx context.Context, name string) error {
 	pl, err := s.podService.List(ctx)
 	if err != nil {

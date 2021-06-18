@@ -11,11 +11,13 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 )
 
+// Service manages pods.
 type Service struct {
 	client      clientset.Interface
 	podInformer coreinformers.PodInformer
 }
 
+// NewPodService initializes Service.
 func NewPodService(client clientset.Interface, podInformer coreinformers.PodInformer) *Service {
 	return &Service{
 		client:      client,
@@ -23,6 +25,7 @@ func NewPodService(client clientset.Interface, podInformer coreinformers.PodInfo
 	}
 }
 
+// Get returns the pod has given name.
 func (s *Service) Get(ctx context.Context, name string) (*v1.Pod, error) {
 	n, err := s.client.CoreV1().Pods("default").Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
@@ -31,6 +34,7 @@ func (s *Service) Get(ctx context.Context, name string) (*v1.Pod, error) {
 	return n, nil
 }
 
+// List list all pods.
 func (s *Service) List(ctx context.Context) (*v1.PodList, error) {
 	pl, err := s.client.CoreV1().Pods("default").List(ctx, metav1.ListOptions{})
 	if err != nil {
@@ -39,6 +43,7 @@ func (s *Service) List(ctx context.Context) (*v1.PodList, error) {
 	return pl, nil
 }
 
+// Create creates a pod.
 func (s *Service) Create(ctx context.Context) (*v1.Pod, error) {
 	// TODO: users specify specs.
 	basePod := &v1.Pod{
@@ -72,6 +77,7 @@ func (s *Service) Create(ctx context.Context) (*v1.Pod, error) {
 	return pod, nil
 }
 
+// Delete deletes the pod has given name.
 func (s *Service) Delete(ctx context.Context, name string) error {
 	noGrace := int64(0)
 	if err := s.client.CoreV1().Pods("default").Delete(ctx, name, metav1.DeleteOptions{

@@ -7,14 +7,17 @@ import (
 	"github.com/labstack/echo/v4"
 )
 
+// NodeHandler is handler for manage nodes.
 type NodeHandler struct {
 	service NodeService
 }
 
+// NewNodeHandler initializes NodeHandler.
 func NewNodeHandler(s NodeService) *NodeHandler {
 	return &NodeHandler{service: s}
 }
 
+// CreateNode handles the endpoint for creating node.
 func (h *NodeHandler) CreateNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
@@ -27,6 +30,7 @@ func (h *NodeHandler) CreateNode(c echo.Context) error {
 	return c.JSON(http.StatusOK, n)
 }
 
+// GetNode handles the endpoint for getting node.
 func (h *NodeHandler) GetNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
@@ -41,6 +45,7 @@ func (h *NodeHandler) GetNode(c echo.Context) error {
 	return c.JSON(http.StatusOK, n)
 }
 
+// ListNode handles the endpoint for listing node.
 func (h *NodeHandler) ListNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
@@ -53,6 +58,7 @@ func (h *NodeHandler) ListNode(c echo.Context) error {
 	return c.JSON(http.StatusOK, ns)
 }
 
+// DeleteNode handles the endpoint for deleting node.
 func (h *NodeHandler) DeleteNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
