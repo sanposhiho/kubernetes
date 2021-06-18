@@ -1,5 +1,9 @@
 package node
 
+//go:generate mockgen -destination=./mock_$GOPACKAGE/$GOFILE --build_flags=--mod=mod . PodService
+//go:generate mockgen -destination=./mock_clientset/clientset.go --build_flags=--mod=mod k8s.io/client-go/kubernetes Interface
+// --build_flags is need for https://github.com/golang/mock#reflect-vendoring-error
+
 import (
 	"context"
 
@@ -78,7 +82,7 @@ func (s *Service) Delete(ctx context.Context, name string) error {
 	}
 
 	// delete pods on node
-	eg := errgroup.Group{}
+	var eg errgroup.Group
 	for i := range pl.Items {
 		pod := pl.Items[i]
 		if name != pod.Spec.NodeName {
