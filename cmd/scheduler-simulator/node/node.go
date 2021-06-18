@@ -15,7 +15,7 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 )
 
-// Service manages node
+// Service manages node.
 type Service struct {
 	client     clientset.Interface
 	podService PodService
