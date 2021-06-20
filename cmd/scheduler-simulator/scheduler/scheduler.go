@@ -2,6 +2,10 @@ package scheduler
 
 import (
 	"context"
+	"net/http"
+	"net/http/httptest"
+
+	"k8s.io/kubernetes/test/integration/framework"
 
 	"golang.org/x/xerrors"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -20,10 +24,9 @@ import (
 	"k8s.io/kubernetes/test/integration/util"
 )
 
-// SetupScheduler starts k8s-apiserver and scheduler.
-func SetupScheduler() (clientset.Interface, coreinformers.PodInformer, shutdownfn.Shutdownfn, error) {
-	// Note: This function die when a error happen.
-	apiURL, apiShutdown := util.StartApiserver()
+// SetupSchedulerOrDie starts k8s-apiserver and scheduler.
+func SetupSchedulerOrDie() (clientset.Interface, coreinformers.PodInformer, shutdownfn.Shutdownfn, error) {
+	apiURL, apiShutdown := startAPIServerOrDie()
 
 	cfg := &restclient.Config{
 		Host:          apiURL,
@@ -52,6 +55,29 @@ func SetupScheduler() (clientset.Interface, coreinformers.PodInformer, shutdownf
 	}
 
 	return client, podInformer, shutdownFunc, nil
+}
+
+// startAPIServerOrDie starts API server, and it make panic when a error happen.
+func startAPIServerOrDie() (string, shutdownfn.Shutdownfn) {
+	h := &framework.APIServerHolder{Initialized: make(chan struct{})}
+	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
+		<-h.Initialized
+		h.M.GenericAPIServer.Handler.ServeHTTP(w, req)
+	}))
+
+	c := framework.NewIntegrationTestControlPlaneConfig()
+	c.GenericConfig.OpenAPIConfig = framework.DefaultOpenAPIConfig()
+
+	// Note: This function die when a error happen.
+	_, _, closeFn := framework.RunAnAPIServerUsingServer(c, s, h)
+
+	shutdownFunc := func() {
+		klog.Infof("destroying API server")
+		closeFn()
+		s.Close()
+		klog.Infof("destroyed API server")
+	}
+	return s.URL, shutdownFunc
 }
 
 // defaultComponentConfig creates KubeSchedulerConfiguration default configuration.

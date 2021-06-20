@@ -9,9 +9,9 @@ import (
 
 	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
-	v1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/api/resource"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
 )
 
@@ -23,7 +23,7 @@ type Service struct {
 
 // PodService represents service for manage Pods.
 type PodService interface {
-	List(ctx context.Context) (*v1.PodList, error)
+	List(ctx context.Context) (*corev1.PodList, error)
 	Delete(ctx context.Context, name string) error
 }
 
@@ -36,7 +36,7 @@ func NewNodeService(client clientset.Interface, ps PodService) *Service {
 }
 
 // Get returns the node has given name.
-func (s *Service) Get(ctx context.Context, name string) (*v1.Node, error) {
+func (s *Service) Get(ctx context.Context, name string) (*corev1.Node, error) {
 	n, err := s.client.CoreV1().Nodes().Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("get nodes: %w", err)
@@ -45,7 +45,7 @@ func (s *Service) Get(ctx context.Context, name string) (*v1.Node, error) {
 }
 
 // List lists all nodes.
-func (s *Service) List(ctx context.Context) (*v1.NodeList, error) {
+func (s *Service) List(ctx context.Context) (*corev1.NodeList, error) {
 	nl, err := s.client.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("list nodes: %w", err)
@@ -53,48 +53,11 @@ func (s *Service) List(ctx context.Context) (*v1.NodeList, error) {
 	return nl, nil
 }
 
-// Create creates a node.
-func (s *Service) Create(ctx context.Context) (*v1.Node, error) {
-	// TODO: users specify specs.
-	baseNode := &v1.Node{
-		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: "sample-node-",
-		},
-		Status: v1.NodeStatus{
-			Capacity: v1.ResourceList{
-				v1.ResourcePods:   *resource.NewQuantity(110, resource.DecimalSI),
-				v1.ResourceCPU:    resource.MustParse("4"),
-				v1.ResourceMemory: resource.MustParse("32Gi"),
-			},
-			Phase: v1.NodeRunning,
-			Conditions: []v1.NodeCondition{
-				{Type: v1.NodeReady, Status: v1.ConditionTrue},
-			},
-		},
-	}
-
-	node, err := s.client.CoreV1().Nodes().Create(ctx, baseNode, metav1.CreateOptions{})
+// Apply applies nodes.
+func (s *Service) Apply(ctx context.Context, nac *v1.NodeApplyConfiguration) (*corev1.Node, error) {
+	newNode, err := s.client.CoreV1().Nodes().Apply(ctx, nac, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
 	if err != nil {
-		return nil, xerrors.Errorf("create node: %w", err)
-	}
-
-	return node, nil
-}
-
-// Update updates a node.
-func (s *Service) Update(ctx context.Context, name string) (*v1.Node, error) {
-	node, err := s.Get(ctx, name)
-	if err != nil {
-		return nil, xerrors.Errorf("get old node: %w", err)
-	}
-
-	node.Labels = map[string]string{
-		"edited": "true",
-	}
-
-	newNode, err := s.client.CoreV1().Nodes().Update(ctx, node, metav1.UpdateOptions{})
-	if err != nil {
-		return nil, xerrors.Errorf("update node: %w", err)
+		return nil, xerrors.Errorf("apply node: %w", err)
 	}
 
 	return newNode, nil

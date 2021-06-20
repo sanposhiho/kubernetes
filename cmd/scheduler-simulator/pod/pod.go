@@ -3,13 +3,16 @@ package pod
 import (
 	"context"
 
+	v1 "k8s.io/client-go/applyconfigurations/core/v1"
+
 	"golang.org/x/xerrors"
-	v1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/api/resource"
+	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	coreinformers "k8s.io/client-go/informers/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
 )
+
+const defaultNameSpace = "default"
 
 // Service manages pods.
 type Service struct {
@@ -26,8 +29,8 @@ func NewPodService(client clientset.Interface, podInformer coreinformers.PodInfo
 }
 
 // Get returns the pod has given name.
-func (s *Service) Get(ctx context.Context, name string) (*v1.Pod, error) {
-	n, err := s.client.CoreV1().Pods("default").Get(ctx, name, metav1.GetOptions{})
+func (s *Service) Get(ctx context.Context, name string) (*corev1.Pod, error) {
+	n, err := s.client.CoreV1().Pods(defaultNameSpace).Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("get pod: %w", err)
 	}
@@ -35,71 +38,27 @@ func (s *Service) Get(ctx context.Context, name string) (*v1.Pod, error) {
 }
 
 // List list all pods.
-func (s *Service) List(ctx context.Context) (*v1.PodList, error) {
-	pl, err := s.client.CoreV1().Pods("default").List(ctx, metav1.ListOptions{})
+func (s *Service) List(ctx context.Context) (*corev1.PodList, error) {
+	pl, err := s.client.CoreV1().Pods(defaultNameSpace).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("list pods: %w", err)
 	}
 	return pl, nil
 }
 
-// Create creates a pod.
-func (s *Service) Create(ctx context.Context) (*v1.Pod, error) {
-	// TODO: users specify specs.
-	basePod := &v1.Pod{
-		ObjectMeta: metav1.ObjectMeta{
-			GenerateName: "sample-pod-",
-		},
-		Spec: v1.PodSpec{
-			Containers: []v1.Container{{
-				Name:  "pause",
-				Image: "k8s.gcr.io/pause:3.5",
-				Ports: []v1.ContainerPort{{ContainerPort: 80}},
-				Resources: v1.ResourceRequirements{
-					Limits: v1.ResourceList{
-						v1.ResourceCPU:    resource.MustParse("100m"),
-						v1.ResourceMemory: resource.MustParse("16Gi"),
-					},
-					Requests: v1.ResourceList{
-						v1.ResourceCPU:    resource.MustParse("100m"),
-						v1.ResourceMemory: resource.MustParse("16Gi"),
-					},
-				},
-			}},
-		},
-	}
-
-	pod, err := s.client.CoreV1().Pods("default").Create(context.TODO(), basePod, metav1.CreateOptions{})
-	// TODO: do retry?
+func (s *Service) Apply(ctx context.Context, pod *v1.PodApplyConfiguration) (*corev1.Pod, error) {
+	newPod, err := s.client.CoreV1().Pods(defaultNameSpace).Apply(ctx, pod, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
 	if err != nil {
-		return nil, xerrors.Errorf("create pod: %w", err)
-	}
-	return pod, nil
-}
-
-// Update creates a pod.
-func (s *Service) Update(ctx context.Context, name string) (*v1.Pod, error) {
-	pod, err := s.Get(ctx, name)
-	if err != nil {
-		return nil, xerrors.Errorf("get old pod: %w", err)
+		return nil, xerrors.Errorf("apply pods: %w", err)
 	}
 
-	pod.Labels = map[string]string{
-		"edited": "true",
-	}
-
-	newPod, err := s.client.CoreV1().Pods("default").Update(context.TODO(), pod, metav1.UpdateOptions{})
-	// TODO: do retry?
-	if err != nil {
-		return nil, xerrors.Errorf("update pod: %w", err)
-	}
 	return newPod, nil
 }
 
 // Delete deletes the pod has given name.
 func (s *Service) Delete(ctx context.Context, name string) error {
 	noGrace := int64(0)
-	if err := s.client.CoreV1().Pods("default").Delete(ctx, name, metav1.DeleteOptions{
+	if err := s.client.CoreV1().Pods(defaultNameSpace).Delete(ctx, name, metav1.DeleteOptions{
 		GracePeriodSeconds: &noGrace,
 	}); err != nil {
 		return xerrors.Errorf("delete pod: %w", err)
