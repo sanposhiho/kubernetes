@@ -1,7 +1,12 @@
 <template>
-  <v-app dark>
-    <v-app-bar app>
-      <v-toolbar-title v-text="title" />
+  <v-app :style="{ background: $vuetify.theme.themes.light.background }">
+    <v-app-bar color="primary" app>
+      <v-toolbar-title
+        v-text="title"
+        class="white--text"
+        @click="onClick"
+        :style="{ cursor: 'pointer' }"
+      />
     </v-app-bar>
     <v-main>
       <v-container>
@@ -15,11 +20,23 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from "@nuxtjs/composition-api";
+
+export default defineComponent({
+  setup(_, context) {
+    const router = context.root.$router;
+
+    const onClick = () => {
+      router.push(`/`);
+    };
+    return {
+      onClick,
+    };
+  },
   data() {
     return {
       title: "Kubernetes scheduler simulator",
     };
   },
-};
+});
 </script>

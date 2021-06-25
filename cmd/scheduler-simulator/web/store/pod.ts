@@ -1,9 +1,10 @@
 import { reactive } from "@nuxtjs/composition-api";
-import { createPod, listPod } from "~/api/v1/pod";
+import { applyPod, listPod } from "~/api/v1/pod";
 import { V1Pod, V1PodList } from "@kubernetes/client-node";
 
 type stateType = {
   count: number;
+  selectedPod: V1Pod | null;
   pods: {
     [key: string]: Array<V1Pod>;
   };
@@ -12,6 +13,7 @@ type stateType = {
 export default function podStore() {
   const state: stateType = reactive({
     count: 0,
+    selectedPod: null,
     pods: { unscheduled: [] },
   });
 
@@ -21,8 +23,11 @@ export default function podStore() {
     },
 
     get pods() {
-      console.log(state.pods);
       return state.pods;
+    },
+
+    get selectedPod() {
+      return state.selectedPod;
     },
 
     increment() {
@@ -31,6 +36,10 @@ export default function podStore() {
 
     decrement() {
       state.count -= 1;
+    },
+
+    selectPod(p: V1Pod | null) {
+      state.selectedPod = p;
     },
 
     async getPods() {
@@ -53,12 +62,16 @@ export default function podStore() {
       state.pods = result;
     },
 
-    async createNewPod(name: string) {
-      await createPod({
+    async createPod(name: string) {
+      await applyPod({
         metadata: {
           name: name,
         },
       });
+      await this.getPods();
+    },
+    async editPod(p: V1Pod) {
+      await applyPod(p);
       await this.getPods();
     },
   };

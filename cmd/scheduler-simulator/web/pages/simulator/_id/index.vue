@@ -1,6 +1,7 @@
 <template>
   <PodStoreProvider>
     <NodeStoreProvider>
+      <ResourceDetailInfomationBar />
       <NodeList />
       <NodeAddButton />
       <PodAddButton />
@@ -15,6 +16,7 @@ import NodeList from "~/components/NodeList.vue";
 import NodeAddButton from "~/components/NodeAddButton.vue";
 import PodStoreProvider from "~/components/PodStoreProvider.vue";
 import PodAddButton from "~/components/PodAddButton.vue";
+import ResourceDetailInfomationBar from "~/components/ResourceDetailInfomationBar.vue";
 
 export default defineComponent({
   components: {
@@ -23,6 +25,7 @@ export default defineComponent({
     NodeAddButton,
     PodStoreProvider,
     PodAddButton,
+    ResourceDetailInfomationBar,
   },
   setup() {
     return {};

@@ -1,10 +1,11 @@
 import { V1Node, V1NodeList, V1Pod, V1PodList } from "@kubernetes/client-node";
 import { instance } from "@/api/v1/index";
 
-export const createNode = async (req: V1Node) => {
+export const applyNode = async (req: V1Node) => {
   const res = await instance.post<V1Node>("/nodes", {
     metadata: {
       name: req.metadata?.name,
+      labels: req.metadata?.labels,
     },
   });
   return res.data;

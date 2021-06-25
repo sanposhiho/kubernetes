@@ -14,7 +14,7 @@ export default defineComponent({
     }
 
     const createNode = async () => {
-      await store.createNewNode("sample-node-" + store.count);
+      await store.createNode("sample-node-" + store.count);
       store.increment();
     };
 

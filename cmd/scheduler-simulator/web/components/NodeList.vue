@@ -1,34 +1,34 @@
 <template>
-<v-container>
-  <v-row>
-          <v-col >
-    <v-card>
-      <v-card-title> Nodes </v-card-title>
-      <v-row no-gutters>
-        <template v-for="(n, i) in nodes">
-          <v-col tile :key="i">
-            <v-card class="pa-2" outlined>
-              <v-card-title v-text="n.metadata.name"> </v-card-title>
-              <PodList :nodeName="n.metadata.name" />
-            </v-card>
-          </v-col>
-          <v-responsive
-            v-if="(i % 3) ==2"
-            :key="`width-${n}`"
-            width="100%"
-          ></v-responsive>
-        </template>
-      </v-row>
-    </v-card>
-    <v-col class="mx-auto" tile>
-      <v-card>
-        <v-card-title> Unscheduled Pods </v-card-title>
-        <PodList nodeName="unscheduled" />
-      </v-card>
-    </v-col>
-    </v-col>
-  </v-row>
-</v-container>
+  <v-container>
+    <v-row>
+      <v-col>
+        <v-col>
+          <v-card-title class="text-h5 mb-1"> Nodes </v-card-title>
+          <v-row no-gutters>
+            <template v-for="(n, i) in nodes">
+              <v-col tile :key="i" cols="auto">
+                <v-card class="ma-2" outlined @click="onClick(n)">
+                  <v-card-title v-text="n.metadata.name" class="mb-1">
+                  </v-card-title>
+                  <PodList :nodeName="n.metadata.name" />
+                </v-card>
+              </v-col>
+            </template>
+          </v-row>
+        </v-col>
+        <v-col>
+          <v-card-title class="text-h5 mb-1"> Unscheduled Pods </v-card-title>
+          <v-row no-gutters>
+            <v-col>
+              <v-card class="ma-2" outlined>
+                <PodList nodeName="unscheduled" />
+              </v-card>
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script lang="ts">
@@ -40,6 +40,7 @@ import {
 } from "@nuxtjs/composition-api";
 import NodeStoreKey from "./node-store-key";
 import PodList from "~/components/PodList.vue";
+import { V1Node } from "@kubernetes/client-node";
 
 export default defineComponent({
   components: { PodList },
@@ -57,8 +58,13 @@ export default defineComponent({
 
     const nodes = computed(() => store.nodes);
 
+    const onClick = (node: V1Node) => {
+      store.selectNode(node);
+    };
+
     return {
       nodes,
+      onClick,
     };
   },
 });

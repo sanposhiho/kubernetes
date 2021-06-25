@@ -14,7 +14,7 @@ export default defineComponent({
     }
 
     const createPod = async () => {
-      await store.createNewPod("sample-pod-" + store.count);
+      await store.createPod("sample-pod-" + store.count);
       store.increment();
     };
 
