@@ -1,25 +1,25 @@
 import { reactive } from "@nuxtjs/composition-api";
-import { applyNode, listNode } from "~/api/v1/node";
+import { applyNode, deleteNode, listNode } from "~/api/v1/node";
 import { V1Node, V1NodeList, V1Pod, V1PodList } from "@kubernetes/client-node";
 
 type stateType = {
-  count: number;
-  selectedNode: V1Node | null;
+  selectedNode: selectedNode | null;
   nodes: V1Node[];
+};
+
+type selectedNode = {
+  // isNew represents whether this Pod is a new Node or not.
+  isNew: boolean;
+  node: V1Node;
 };
 
 export default function nodeStore() {
   const state: stateType = reactive({
-    count: 0,
     selectedNode: null,
     nodes: [],
   });
 
   return {
-    get count() {
-      return state.count;
-    },
-
     get nodes() {
       return state.nodes;
     },
@@ -28,34 +28,29 @@ export default function nodeStore() {
       return state.selectedNode;
     },
 
-    increment() {
-      state.count += 1;
+    selectNode(n: V1Node | null, isNew: boolean) {
+      if (n !== null) {
+        state.selectedNode = {
+          isNew: isNew,
+          node: n,
+        };
+      } else {
+        state.selectedNode = null;
+      }
     },
 
-    decrement() {
-      state.count -= 1;
+    async listNode() {
+      state.nodes = (await listNode()).items;
     },
 
-    selectNode(n: V1Node | null) {
-      state.selectedNode = n;
-    },
-
-    async getNodes() {
-      state.nodes = (await listNode({})).items;
-    },
-
-    async createNode(name: string) {
-      await applyNode({
-        metadata: {
-          name: name,
-        },
-      });
-      await this.getNodes();
-    },
-
-    async editNode(n: V1Node) {
+    async applyNode(n: V1Node) {
       await applyNode(n);
-      await this.getNodes();
+      await this.listNode();
+    },
+
+    async deleteNode(name: string) {
+      await deleteNode(name);
+      await this.listNode();
     },
   };
 }

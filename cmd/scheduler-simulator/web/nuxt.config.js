@@ -1,4 +1,5 @@
 import colors from "vuetify/es5/util/colors";
+import fs from "fs";
 
 export default {
   // Global page headers: https://go.nuxtjs.dev/config-head
@@ -58,8 +59,15 @@ export default {
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build
-  build: {},
   env: {
     BASE_URL: process.env.BASE_URL || "http://localhost:1212",
+    POD_TEMPLATE: fs.readFileSync(
+      "./components/lib/templates/pod.yaml",
+      "utf8"
+    ),
+    NODE_TEMPLATE: fs.readFileSync(
+      "./components/lib/templates/node.yaml",
+      "utf8"
+    ),
   },
 };

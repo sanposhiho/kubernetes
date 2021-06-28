@@ -43,10 +43,10 @@ export default defineComponent({
       throw new Error(`${PodStoreKey} is not provided`);
     }
     const getPodList = async () => {
-      await store.getPods();
+      await store.listPod();
     };
     const onClick = (pod: V1Pod) => {
-      store.selectPod(pod);
+      store.selectPod(pod, false);
     };
     onMounted(getPodList);
     const pods = computed(() => store.pods);

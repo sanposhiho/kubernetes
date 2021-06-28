@@ -41,28 +41,36 @@ import {
 import NodeStoreKey from "./node-store-key";
 import PodList from "~/components/PodList.vue";
 import { V1Node } from "@kubernetes/client-node";
+import PodStoreKey from "./pod-store-key";
 
 export default defineComponent({
   components: { PodList },
   setup() {
-    const store = inject(NodeStoreKey);
-    if (!store) {
+    const pstore = inject(PodStoreKey);
+    if (!pstore) {
+      throw new Error(`${PodStoreKey} is not provided`);
+    }
+
+    const nstore = inject(NodeStoreKey);
+    if (!nstore) {
       throw new Error(`${NodeStoreKey} is not provided`);
     }
 
     const getNodeList = async () => {
-      await store.getNodes();
+      await nstore.listNode();
     };
 
     onMounted(getNodeList);
 
-    const nodes = computed(() => store.nodes);
+    const nodes = computed(() => nstore.nodes);
+    const pods = computed(() => pstore.pods);
 
     const onClick = (node: V1Node) => {
-      store.selectNode(node);
+      nstore.selectNode(node, false);
     };
 
     return {
+      pods,
       nodes,
       onClick,
     };
