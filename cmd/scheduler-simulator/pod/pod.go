@@ -47,6 +47,8 @@ func (s *Service) List(ctx context.Context) (*corev1.PodList, error) {
 }
 
 func (s *Service) Apply(ctx context.Context, pod *v1.PodApplyConfiguration) (*corev1.Pod, error) {
+	pod.WithKind("Pod")
+	pod.WithAPIVersion("v1")
 	newPod, err := s.client.CoreV1().Pods(defaultNameSpace).Apply(ctx, pod, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
 	if err != nil {
 		return nil, xerrors.Errorf("apply pods: %w", err)

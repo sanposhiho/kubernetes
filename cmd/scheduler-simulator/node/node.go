@@ -55,6 +55,8 @@ func (s *Service) List(ctx context.Context) (*corev1.NodeList, error) {
 
 // Apply applies nodes.
 func (s *Service) Apply(ctx context.Context, nac *v1.NodeApplyConfiguration) (*corev1.Node, error) {
+	nac.WithAPIVersion("v1")
+	nac.WithKind("Node")
 	newNode, err := s.client.CoreV1().Nodes().Apply(ctx, nac, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
 	if err != nil {
 		return nil, xerrors.Errorf("apply node: %w", err)

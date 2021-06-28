@@ -4,8 +4,6 @@ import (
 	"log"
 	"net/http"
 
-	corev1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 
 	"github.com/labstack/echo/v4"
@@ -25,32 +23,14 @@ func NewNodeHandler(s NodeService) *NodeHandler {
 func (h *NodeHandler) ApplyNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	node := new(v1.NodeApplyConfiguration)
+	reqNode := new(v1.NodeApplyConfiguration)
 	// TODO: Allow only certain fields and make sure that no disallowed fields are requested.
-	if err := c.Bind(node); err != nil {
+	if err := c.Bind(reqNode); err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
-	// FIXME: delete this
-	name := "sample-node"
-	phase := corev1.NodeRunning
-	ready := corev1.NodeReady
-	conditionTrue := corev1.ConditionTrue
-	node = v1.Node(name)
-	node.Status = &v1.NodeStatusApplyConfiguration{
-		Capacity: &corev1.ResourceList{
-			corev1.ResourcePods:   *resource.NewQuantity(110, resource.DecimalSI),
-			corev1.ResourceCPU:    resource.MustParse("4"),
-			corev1.ResourceMemory: resource.MustParse("32Gi"),
-		},
-		Phase: &phase,
-		Conditions: []v1.NodeConditionApplyConfiguration{
-			{Type: &ready, Status: &conditionTrue},
-		},
-	}
-
-	n, err := h.service.Apply(ctx, node)
+	n, err := h.service.Apply(ctx, reqNode)
 	if err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)

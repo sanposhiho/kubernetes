@@ -5,8 +5,6 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	corev1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/api/resource"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 )
 
@@ -29,28 +27,6 @@ func (h *PodHandler) ApplyPod(c echo.Context) error {
 	if err := c.Bind(pod); err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
-	}
-
-	// FIXME: delete this
-	name := "sample-pod"
-	containerName := "pause"
-	containerImage := "k8s.gcr.io/pause:3.5"
-	pod = v1.Pod(name, "default")
-	pod.Spec = &v1.PodSpecApplyConfiguration{
-		Containers: []v1.ContainerApplyConfiguration{{
-			Name:  &containerName,
-			Image: &containerImage,
-			Resources: &v1.ResourceRequirementsApplyConfiguration{
-				Limits: &corev1.ResourceList{
-					corev1.ResourceCPU:    resource.MustParse("100m"),
-					corev1.ResourceMemory: resource.MustParse("16Gi"),
-				},
-				Requests: &corev1.ResourceList{
-					corev1.ResourceCPU:    resource.MustParse("100m"),
-					corev1.ResourceMemory: resource.MustParse("16Gi"),
-				},
-			},
-		}},
 	}
 
 	n, err := h.service.Apply(ctx, pod)
