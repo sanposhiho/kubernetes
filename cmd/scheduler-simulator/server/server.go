@@ -28,22 +28,30 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 	e := echo.New()
 
 	e.Use(middleware.Logger())
+	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowCredentials: true,
+	}))
 
 	// initialize each handler
 	nodeHandler := handler.NewNodeHandler(dic.NodeService())
 	podHandler := handler.NewPodHandler(dic.PodService())
+	namespaceHandler := handler.NewNamespaceHandler(dic.NamespaceService())
 
 	// register apis
 	v1 := e.Group("/api/v1")
-	v1.GET("/nodes", nodeHandler.ListNode)
-	v1.POST("/nodes", nodeHandler.ApplyNode)
-	v1.GET("/nodes/:name", nodeHandler.GetNode)
-	v1.DELETE("/nodes/:name", nodeHandler.DeleteNode)
+	v1.POST("/namespaces", namespaceHandler.ApplyNamespace)
 
-	v1.GET("/pods", podHandler.ListPod)
-	v1.POST("/pods", podHandler.ApplyPod)
-	v1.GET("/pods/:name", podHandler.GetPod)
-	v1.DELETE("/pods/:name", podHandler.DeletePod)
+	v1simulator := v1.Group("/simulators/:simulatorID")
+	v1simulator.GET("/nodes", nodeHandler.ListNode)
+	v1simulator.POST("/nodes", nodeHandler.ApplyNode)
+	v1simulator.GET("/nodes/:name", nodeHandler.GetNode)
+	v1simulator.DELETE("/nodes/:name", nodeHandler.DeleteNode)
+
+	v1simulator.GET("/pods", podHandler.ListPod)
+	v1simulator.POST("/pods", podHandler.ApplyPod)
+	v1simulator.GET("/pods/:name", podHandler.GetPod)
+	v1simulator.DELETE("/pods/:name", podHandler.DeletePod)
 
 	// initialize SimulatorServer.
 	s := &SimulatorServer{e: e}

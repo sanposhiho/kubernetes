@@ -36,30 +36,30 @@ func (m *MockPodService) EXPECT() *MockPodServiceMockRecorder {
 }
 
 // Delete mocks base method.
-func (m *MockPodService) Delete(arg0 context.Context, arg1 string) error {
+func (m *MockPodService) Delete(arg0 context.Context, arg1, arg2 string) error {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "Delete", arg0, arg1)
+	ret := m.ctrl.Call(m, "Delete", arg0, arg1, arg2)
 	ret0, _ := ret[0].(error)
 	return ret0
 }
 
 // Delete indicates an expected call of Delete.
-func (mr *MockPodServiceMockRecorder) Delete(arg0, arg1 interface{}) *gomock.Call {
+func (mr *MockPodServiceMockRecorder) Delete(arg0, arg1, arg2 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockPodService)(nil).Delete), arg0, arg1)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Delete", reflect.TypeOf((*MockPodService)(nil).Delete), arg0, arg1, arg2)
 }
 
 // List mocks base method.
-func (m *MockPodService) List(arg0 context.Context) (*v1.PodList, error) {
+func (m *MockPodService) List(arg0 context.Context, arg1 string) (*v1.PodList, error) {
 	m.ctrl.T.Helper()
-	ret := m.ctrl.Call(m, "List", arg0)
+	ret := m.ctrl.Call(m, "List", arg0, arg1)
 	ret0, _ := ret[0].(*v1.PodList)
 	ret1, _ := ret[1].(error)
 	return ret0, ret1
 }
 
 // List indicates an expected call of List.
-func (mr *MockPodServiceMockRecorder) List(arg0 interface{}) *gomock.Call {
+func (mr *MockPodServiceMockRecorder) List(arg0, arg1 interface{}) *gomock.Call {
 	mr.mock.ctrl.T.Helper()
-	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockPodService)(nil).List), arg0)
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockPodService)(nil).List), arg0, arg1)
 }

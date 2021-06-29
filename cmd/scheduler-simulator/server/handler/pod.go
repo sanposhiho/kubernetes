@@ -22,20 +22,20 @@ func NewPodHandler(s PodService) *PodHandler {
 func (h *PodHandler) ApplyPod(c echo.Context) error {
 	ctx := c.Request().Context()
 
+	id := c.Param("simulatorID")
+
 	pod := new(v1.PodApplyConfiguration)
-	// TODO: Allow only certain fields and make sure that no disallowed fields are requested.
 	if err := c.Bind(pod); err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
-	n, err := h.service.Apply(ctx, pod)
-	if err != nil {
+	if err := h.service.Apply(ctx, id, pod); err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
-	return c.JSON(http.StatusOK, n)
+	return c.NoContent(http.StatusOK)
 }
 
 // GetPod handles the endpoint for getting pod.
@@ -43,8 +43,9 @@ func (h *PodHandler) GetPod(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	name := c.Param("name")
+	id := c.Param("simulatorID")
 
-	p, err := h.service.Get(ctx, name)
+	p, err := h.service.Get(ctx, name, id)
 	if err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
@@ -57,7 +58,9 @@ func (h *PodHandler) GetPod(c echo.Context) error {
 func (h *PodHandler) ListPod(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	ps, err := h.service.List(ctx)
+	id := c.Param("simulatorID")
+
+	ps, err := h.service.List(ctx, id)
 	if err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
@@ -71,8 +74,9 @@ func (h *PodHandler) DeletePod(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	name := c.Param("name")
+	id := c.Param("simulatorID")
 
-	if err := h.service.Delete(ctx, name); err != nil {
+	if err := h.service.Delete(ctx, name, id); err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}

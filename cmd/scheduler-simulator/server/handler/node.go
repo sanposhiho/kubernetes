@@ -4,9 +4,8 @@ import (
 	"log"
 	"net/http"
 
-	v1 "k8s.io/client-go/applyconfigurations/core/v1"
-
 	"github.com/labstack/echo/v4"
+	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 )
 
 // NodeHandler is handler for manage nodes.
@@ -23,20 +22,20 @@ func NewNodeHandler(s NodeService) *NodeHandler {
 func (h *NodeHandler) ApplyNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
+	simulatorID := c.Param("simulatorID")
+
 	reqNode := new(v1.NodeApplyConfiguration)
-	// TODO: Allow only certain fields and make sure that no disallowed fields are requested.
 	if err := c.Bind(reqNode); err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
-	n, err := h.service.Apply(ctx, reqNode)
-	if err != nil {
+	if err := h.service.Apply(ctx, simulatorID, reqNode); err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
-	return c.JSON(http.StatusOK, n)
+	return c.NoContent(http.StatusOK)
 }
 
 // GetNode handles the endpoint for getting node.
@@ -44,8 +43,9 @@ func (h *NodeHandler) GetNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	name := c.Param("name")
+	simulatorID := c.Param("simulatorID")
 
-	n, err := h.service.Get(ctx, name)
+	n, err := h.service.Get(ctx, name, simulatorID)
 	if err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
@@ -58,7 +58,9 @@ func (h *NodeHandler) GetNode(c echo.Context) error {
 func (h *NodeHandler) ListNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	ns, err := h.service.List(ctx)
+	simulatorID := c.Param("simulatorID")
+
+	ns, err := h.service.List(ctx, simulatorID)
 	if err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
@@ -72,8 +74,9 @@ func (h *NodeHandler) DeleteNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	name := c.Param("name")
+	simulatorID := c.Param("simulatorID")
 
-	if err := h.service.Delete(ctx, name); err != nil {
+	if err := h.service.Delete(ctx, name, simulatorID); err != nil {
 		log.Println(err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}

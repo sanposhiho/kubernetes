@@ -5,8 +5,6 @@ import (
 	"net/http"
 	"net/http/httptest"
 
-	"k8s.io/kubernetes/test/integration/framework"
-
 	"golang.org/x/xerrors"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	coreinformers "k8s.io/client-go/informers/core/v1"
@@ -21,6 +19,7 @@ import (
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
 	kubeschedulerscheme "k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
 	"k8s.io/kubernetes/pkg/scheduler/profile"
+	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/kubernetes/test/integration/util"
 )
 

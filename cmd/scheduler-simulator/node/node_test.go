@@ -20,15 +20,17 @@ func TestService_Delete(t *testing.T) {
 	tests := []struct {
 		name                    string
 		nodeName                string
+		simulatorID             string
 		preparePodServiceMockFn func(m *mock_node.MockPodService)
 		prepareClientSetMockFn  func(m *mock_kubernetes.MockInterface)
 		wantErr                 bool
 	}{
 		{
-			name:     "delete node and pods on node",
-			nodeName: "node1",
+			name:        "delete node and pods on node",
+			nodeName:    "node1",
+			simulatorID: "simuid",
 			preparePodServiceMockFn: func(m *mock_node.MockPodService) {
-				m.EXPECT().List(gomock.Any()).Return(&v1.PodList{
+				m.EXPECT().List(gomock.Any(), "simuid").Return(&v1.PodList{
 					Items: []v1.Pod{
 						{
 							ObjectMeta: metav1.ObjectMeta{
@@ -56,8 +58,8 @@ func TestService_Delete(t *testing.T) {
 						},
 					},
 				}, nil)
-				m.EXPECT().Delete(gomock.Any(), "pod1").Return(nil)
-				m.EXPECT().Delete(gomock.Any(), "pod2").Return(nil)
+				m.EXPECT().Delete(gomock.Any(), "pod1", "simuid").Return(nil)
+				m.EXPECT().Delete(gomock.Any(), "pod2", "simuid").Return(nil)
 			},
 			prepareClientSetMockFn: func(m *mock_kubernetes.MockInterface) {
 				m.EXPECT().CoreV1().Times(1).Return((&fake.Clientset{}).CoreV1())
@@ -65,10 +67,11 @@ func TestService_Delete(t *testing.T) {
 			wantErr: false,
 		},
 		{
-			name:     "one of deleting pods fail",
-			nodeName: "node1",
+			name:        "one of deleting pods fail",
+			nodeName:    "node1",
+			simulatorID: "simuid",
 			preparePodServiceMockFn: func(m *mock_node.MockPodService) {
-				m.EXPECT().List(gomock.Any()).Return(&v1.PodList{
+				m.EXPECT().List(gomock.Any(), "simuid").Return(&v1.PodList{
 					Items: []v1.Pod{
 						{
 							ObjectMeta: metav1.ObjectMeta{
@@ -96,17 +99,18 @@ func TestService_Delete(t *testing.T) {
 						},
 					},
 				}, nil)
-				m.EXPECT().Delete(gomock.Any(), "pod1").Return(nil)
-				m.EXPECT().Delete(gomock.Any(), "pod2").Return(errors.New("error"))
+				m.EXPECT().Delete(gomock.Any(), "pod1", "simuid").Return(nil)
+				m.EXPECT().Delete(gomock.Any(), "pod2", "simuid").Return(errors.New("error"))
 			},
 			prepareClientSetMockFn: func(m *mock_kubernetes.MockInterface) {},
 			wantErr:                true,
 		},
 		{
-			name:     "delete node with no pods",
-			nodeName: "node1",
+			name:        "delete node with no pods",
+			nodeName:    "node1",
+			simulatorID: "simuid",
 			preparePodServiceMockFn: func(m *mock_node.MockPodService) {
-				m.EXPECT().List(gomock.Any()).Return(&v1.PodList{Items: []v1.Pod{}}, nil)
+				m.EXPECT().List(gomock.Any(), "simuid").Return(&v1.PodList{Items: []v1.Pod{}}, nil)
 			},
 			prepareClientSetMockFn: func(m *mock_kubernetes.MockInterface) {
 				m.EXPECT().CoreV1().Times(1).Return((&fake.Clientset{}).CoreV1())
@@ -127,7 +131,7 @@ func TestService_Delete(t *testing.T) {
 			tt.prepareClientSetMockFn(mockClientSet)
 
 			s := node.NewNodeService(mockClientSet, mockPodService)
-			if err := s.Delete(context.Background(), tt.nodeName); (err != nil) != tt.wantErr {
+			if err := s.Delete(context.Background(), tt.nodeName, tt.simulatorID); (err != nil) != tt.wantErr {
 				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

@@ -6,8 +6,8 @@ package node
 
 import (
 	"context"
+	"strings"
 
-	"golang.org/x/sync/errgroup"
 	"golang.org/x/xerrors"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -23,8 +23,8 @@ type Service struct {
 
 // PodService represents service for manage Pods.
 type PodService interface {
-	List(ctx context.Context) (*corev1.PodList, error)
-	Delete(ctx context.Context, name string) error
+	List(ctx context.Context, simulatorID string) (*corev1.PodList, error)
+	Delete(ctx context.Context, name string, simulatorID string) error
 }
 
 // NewNodeService initializes Service.
@@ -36,58 +36,60 @@ func NewNodeService(client clientset.Interface, ps PodService) *Service {
 }
 
 // Get returns the node has given name.
-func (s *Service) Get(ctx context.Context, name string) (*corev1.Node, error) {
+func (s *Service) Get(ctx context.Context, name string, simulatorID string) (*corev1.Node, error) {
 	n, err := s.client.CoreV1().Nodes().Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("get nodes: %w", err)
 	}
+
 	return n, nil
 }
 
 // List lists all nodes.
-func (s *Service) List(ctx context.Context) (*corev1.NodeList, error) {
-	nl, err := s.client.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
+func (s *Service) List(ctx context.Context, simulatorID string) (*corev1.NodeList, error) {
+	labelSelector := simulatorIDLabelSelector(simulatorID)
+	nl, err := s.client.CoreV1().Nodes().List(ctx, metav1.ListOptions{LabelSelector: metav1.FormatLabelSelector(labelSelector)})
 	if err != nil {
 		return nil, xerrors.Errorf("list nodes: %w", err)
 	}
+
 	return nl, nil
 }
 
-// Apply applies nodes.
-func (s *Service) Apply(ctx context.Context, nac *v1.NodeApplyConfiguration) (*corev1.Node, error) {
+// Apply a unique node by using the simulator ID.
+func (s *Service) Apply(ctx context.Context, simulatorID string, nac *v1.NodeApplyConfiguration) error {
 	nac.WithAPIVersion("v1")
 	nac.WithKind("Node")
-	newNode, err := s.client.CoreV1().Nodes().Apply(ctx, nac, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
+
+	// add information for manage all user's node.
+	addSimulatorIDLabel(nac, simulatorID)
+	addNameSuffix(nac, simulatorID)
+
+	_, err := s.client.CoreV1().Nodes().Apply(ctx, nac, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
 	if err != nil {
-		return nil, xerrors.Errorf("apply node: %w", err)
+		return xerrors.Errorf("apply node: %w", err)
 	}
 
-	return newNode, nil
+	return nil
 }
 
 // Delete deletes the node has given name.
-func (s *Service) Delete(ctx context.Context, name string) error {
-	pl, err := s.podService.List(ctx)
+func (s *Service) Delete(ctx context.Context, name string, simulatorID string) error {
+	pl, err := s.podService.List(ctx, simulatorID)
 	if err != nil {
 		return xerrors.Errorf("list pods: %w", err)
 	}
 
 	// delete pods on node
-	var eg errgroup.Group
 	for i := range pl.Items {
 		pod := pl.Items[i]
 		if name != pod.Spec.NodeName {
 			continue
 		}
-		eg.Go(func() error {
-			if err := s.podService.Delete(ctx, pod.Name); err != nil {
-				return xerrors.Errorf("delete pod: %w", err)
-			}
-			return nil
-		})
-	}
-	if err := eg.Wait(); err != nil {
-		return xerrors.Errorf("delete pods on node: %w", err)
+
+		if err := s.podService.Delete(ctx, pod.Name, simulatorID); err != nil {
+			return xerrors.Errorf("delete pod: %w", err)
+		}
 	}
 
 	// delete node
@@ -95,4 +97,39 @@ func (s *Service) Delete(ctx context.Context, name string) error {
 		return xerrors.Errorf("delete node: %w", err)
 	}
 	return nil
+}
+
+// addNameSuffix adds suffix to nac.Name
+// Make Node names unique by using simulatorID as a suffix.
+func addNameSuffix(nac *v1.NodeApplyConfiguration, suffix string) *v1.NodeApplyConfiguration {
+	if nac == nil || nac.Name == nil {
+		return nac
+	}
+	if strings.HasSuffix(*nac.Name, suffix) {
+		return nac
+	}
+
+	// Add the suffix to the name only if the name don't have the suffix.
+	newName := *nac.Name + suffix[0:7]
+	nac.Name = &newName
+	return nac
+}
+
+const simulatorIDLabelKey = "simulatorID"
+
+// addSimulatorIDLabel adds simulatorID to label.
+func addSimulatorIDLabel(nac *v1.NodeApplyConfiguration, simulatorID string) *v1.NodeApplyConfiguration {
+	if nac == nil {
+		return nac
+	}
+	nac.Labels[simulatorIDLabelKey] = simulatorID
+	return nac
+}
+
+func simulatorIDLabelSelector(simulatorID string) *metav1.LabelSelector {
+	return &metav1.LabelSelector{
+		MatchLabels: map[string]string{
+			simulatorIDLabelKey: simulatorID,
+		},
+	}
 }

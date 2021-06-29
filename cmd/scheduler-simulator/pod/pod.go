@@ -2,17 +2,20 @@ package pod
 
 import (
 	"context"
+	"fmt"
+	"time"
 
-	v1 "k8s.io/client-go/applyconfigurations/core/v1"
+	"k8s.io/apimachinery/pkg/util/wait"
+
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 
 	"golang.org/x/xerrors"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	coreinformers "k8s.io/client-go/informers/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
 )
-
-const defaultNameSpace = "default"
 
 // Service manages pods.
 type Service struct {
@@ -29,8 +32,9 @@ func NewPodService(client clientset.Interface, podInformer coreinformers.PodInfo
 }
 
 // Get returns the pod has given name.
-func (s *Service) Get(ctx context.Context, name string) (*corev1.Pod, error) {
-	n, err := s.client.CoreV1().Pods(defaultNameSpace).Get(ctx, name, metav1.GetOptions{})
+// use simulatorID as namespace.
+func (s *Service) Get(ctx context.Context, name string, simulatorID string) (*corev1.Pod, error) {
+	n, err := s.client.CoreV1().Pods(simulatorID).Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("get pod: %w", err)
 	}
@@ -38,32 +42,76 @@ func (s *Service) Get(ctx context.Context, name string) (*corev1.Pod, error) {
 }
 
 // List list all pods.
-func (s *Service) List(ctx context.Context) (*corev1.PodList, error) {
-	pl, err := s.client.CoreV1().Pods(defaultNameSpace).List(ctx, metav1.ListOptions{})
+// use simulatorID as namespace.
+func (s *Service) List(ctx context.Context, simulatorID string) (*corev1.PodList, error) {
+	pl, err := s.client.CoreV1().Pods(simulatorID).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("list pods: %w", err)
 	}
 	return pl, nil
 }
 
-func (s *Service) Apply(ctx context.Context, pod *v1.PodApplyConfiguration) (*corev1.Pod, error) {
+// Apply applies the pod.
+// use simulatorID as namespace.
+func (s *Service) Apply(ctx context.Context, simulatorID string, pod *v1.PodApplyConfiguration) error {
 	pod.WithKind("Pod")
 	pod.WithAPIVersion("v1")
-	newPod, err := s.client.CoreV1().Pods(defaultNameSpace).Apply(ctx, pod, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
-	if err != nil {
-		return nil, xerrors.Errorf("apply pods: %w", err)
+
+	applyFunc := func() (bool, error) {
+		_, err := s.client.CoreV1().Pods(simulatorID).Apply(ctx, pod, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
+		if err == nil || apierrors.IsAlreadyExists(err) {
+			return true, nil
+		}
+		return false, xerrors.Errorf("apply pod: %v", err)
 	}
 
-	return newPod, nil
+	if err := RetryWithExponentialBackOff(applyFunc); err != nil {
+		return xerrors.Errorf("apply pod with retry: %w", err)
+	}
+
+	return nil
 }
 
 // Delete deletes the pod has given name.
-func (s *Service) Delete(ctx context.Context, name string) error {
+// use simulatorID as namespace.
+func (s *Service) Delete(ctx context.Context, name string, simulatorID string) error {
 	noGrace := int64(0)
-	if err := s.client.CoreV1().Pods(defaultNameSpace).Delete(ctx, name, metav1.DeleteOptions{
-		GracePeriodSeconds: &noGrace,
-	}); err != nil {
-		return xerrors.Errorf("delete pod: %w", err)
+	deleteFunc := func() (bool, error) {
+		err := s.client.CoreV1().Pods(simulatorID).Delete(ctx, name, metav1.DeleteOptions{
+			// need to use noGrace to avoid waiting kubelet checking.
+			// > When a force deletion is performed, the API server does not wait for confirmation from the kubelet that
+			//   the Pod has been terminated on the node it was running on.
+			// https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-termination-forced
+			GracePeriodSeconds: &noGrace,
+		})
+		if err == nil || apierrors.IsNotFound(err) {
+			return true, nil
+		}
+		return false, fmt.Errorf("delete pod: %v", err)
 	}
+
+	if err := RetryWithExponentialBackOff(deleteFunc); err != nil {
+		return xerrors.Errorf("delete pod with retry: %w", err)
+	}
+
 	return nil
+}
+
+const (
+	// Parameters for retrying with exponential backoff.
+	retryBackoffInitialDuration = 100 * time.Millisecond
+	retryBackoffFactor          = 3
+	retryBackoffJitter          = 0
+	retryBackoffSteps           = 6
+)
+
+// RetryWithExponentialBackOff is the utility for retrying the given function with exponential backoff.
+func RetryWithExponentialBackOff(fn wait.ConditionFunc) error {
+	backoff := wait.Backoff{
+		Duration: retryBackoffInitialDuration,
+		Factor:   retryBackoffFactor,
+		Jitter:   retryBackoffJitter,
+		Steps:    retryBackoffSteps,
+	}
+	return wait.ExponentialBackoff(backoff, fn)
 }
