@@ -10,7 +10,7 @@
       large
       label
     >
-      <img src="/pod.png" height="40" alt="p.metadata.name" />
+      <img src="/pod.svg" height="40" alt="p.metadata.name" class="mr-2" />
       {{ p.metadata.name }}
     </v-chip>
   </v-card-actions>
@@ -26,10 +26,8 @@ import {
   PropType,
   defineComponent,
 } from "@nuxtjs/composition-api";
+import { getSimulatorIDFromPath } from "./lib/util";
 import PodStoreKey from "./pod-store-key";
-type Props = {
-  nodeName: string;
-};
 export default defineComponent({
   props: {
     nodeName: {
@@ -37,13 +35,15 @@ export default defineComponent({
       required: true,
     },
   },
-  setup(props: Props) {
+  setup(_, context) {
     const store = inject(PodStoreKey);
     if (!store) {
       throw new Error(`${PodStoreKey} is not provided`);
     }
+
     const getPodList = async () => {
-      await store.listPod();
+      const route = context.root.$route;
+      await store.listPod(getSimulatorIDFromPath(route.path));
     };
     const onClick = (pod: V1Pod) => {
       store.selectPod(pod, false);

@@ -1,9 +1,11 @@
 import { V1Node, V1Pod } from "@kubernetes/client-node";
 import yaml from "js-yaml";
 
-export const podTemplate = (): V1Pod => {
+export const podTemplate = (simulatorID: string): V1Pod => {
   if (process.env.POD_TEMPLATE !== undefined) {
-    return yaml.load(process.env.POD_TEMPLATE);
+    const temp = yaml.load(process.env.POD_TEMPLATE);
+    temp.metadata.namespace = simulatorID;
+    return temp;
   }
   return {};
 };

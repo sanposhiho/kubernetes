@@ -26,3 +26,8 @@ export const objectToTreeViewData = (ent: Object | null): Array<object> => {
   }
   return data;
 };
+
+export const getSimulatorIDFromPath = (path: string): string => {
+  const result = path.split("/");
+  return result[1];
+};

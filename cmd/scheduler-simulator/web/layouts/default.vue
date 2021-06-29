@@ -1,12 +1,19 @@
 <template>
   <v-app :style="{ background: $vuetify.theme.themes.light.background }">
     <v-app-bar color="primary" app>
-      <v-toolbar-title
-        v-text="title"
-        class="white--text"
-        @click="onClick"
-        :style="{ cursor: 'pointer' }"
-      />
+      <template @click="onClick">
+        <img
+          src="/kubernetes-logo_with_border.svg"
+          height="40"
+          alt="p.metadata.name"
+          class="mx-2"
+        />
+        <v-toolbar-title
+          v-text="title"
+          class="white--text"
+          :style="{ cursor: 'pointer' }"
+        />
+      </template>
     </v-app-bar>
     <v-main>
       <v-container>

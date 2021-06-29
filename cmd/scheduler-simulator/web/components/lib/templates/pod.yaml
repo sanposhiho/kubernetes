@@ -1,5 +1,5 @@
 metadata:
-  name: sample-pod-1
+  name: sample-pod
   namespace: default
   labels: {}
 spec:

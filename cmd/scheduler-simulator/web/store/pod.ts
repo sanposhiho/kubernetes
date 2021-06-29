@@ -3,13 +3,13 @@ import { applyPod, deletePod, listPod } from "~/api/v1/pod";
 import { V1Pod, V1PodList } from "@kubernetes/client-node";
 
 type stateType = {
-  selectedPod: selectedPod | null;
+  selectedPod: SelectedPod | null;
   pods: {
     [key: string]: Array<V1Pod>;
   };
 };
 
-type selectedPod = {
+export type SelectedPod = {
   // isNew represents whether this Pod is a new Pod or not.
   isNew: boolean;
   pod: V1Pod;
@@ -36,13 +36,15 @@ export default function podStore() {
           isNew: isNew,
           pod: p,
         };
-      } else {
-        state.selectedPod = null;
       }
     },
 
-    async listPod() {
-      const pods = (await listPod()).items;
+    resetSelectPod() {
+      state.selectedPod = null;
+    },
+
+    async listPod(simulatorID: string) {
+      const pods = (await listPod(simulatorID)).items;
       var result: { [key: string]: Array<V1Pod> } = { unscheduled: [] };
       pods.forEach((p) => {
         if (!p.spec) {
@@ -62,14 +64,14 @@ export default function podStore() {
       state.pods = result;
     },
 
-    async applyPod(p: V1Pod) {
-      await applyPod(p);
-      await this.listPod();
+    async applyPod(p: V1Pod, simulatorID: string) {
+      await applyPod(p, simulatorID);
+      await this.listPod(simulatorID);
     },
 
-    async deletePod(name: string) {
-      await deletePod(name);
-      await this.listPod();
+    async deletePod(name: string, simulatorID: string) {
+      await deletePod(name, simulatorID);
+      await this.listPod(simulatorID);
     },
   };
 }

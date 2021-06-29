@@ -1,9 +1,7 @@
 <template>
   <v-dialog v-model="dialog" width="500">
     <template v-slot:activator="{ on, attrs }">
-      <v-btn color="primary" dark v-bind="attrs" v-on="on">
-        Create New Node
-      </v-btn>
+      <v-btn color="primary" v-bind="attrs" v-on="on"> Create New Node </v-btn>
     </template>
 
     <v-card>
@@ -13,6 +11,10 @@
       <v-divider></v-divider>
       <v-divider></v-divider>
       <v-card-subtitle> Choose the option below to create. </v-card-subtitle>
+      <v-card-text>
+        Note: Since the name of the node needs to be unique, including other
+        users, it will be automatically given a suffix.</v-card-text
+      >
 
       <template>
         <v-btn @click="createNode" block class="pa-2"

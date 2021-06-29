@@ -34,10 +34,11 @@ import {
   defineComponent,
 } from "@nuxtjs/composition-api";
 import { podTemplate } from "./lib/template";
+import { getSimulatorIDFromPath } from "./lib/util";
 import PodStoreKey from "./pod-store-key";
 
 export default defineComponent({
-  setup() {
+  setup(_, context) {
     const store = inject(PodStoreKey);
     if (!store) {
       throw new Error(`${PodStoreKey} is not provided`);
@@ -46,7 +47,8 @@ export default defineComponent({
     const dialog = ref(false);
 
     const createPod = async () => {
-      store.selectPod(podTemplate(), true);
+      const route = context.root.$route;
+      store.selectPod(podTemplate(getSimulatorIDFromPath(route.path)), true);
       dialog.value = false;
     };
 

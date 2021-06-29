@@ -9,14 +9,16 @@ import {
   reactive,
   watchEffect,
 } from "@nuxtjs/composition-api";
+import { applyNamespace } from "~/api/v1/namespace";
 
 export default defineComponent({
   setup(_, context) {
     const router = context.root.$router;
 
-    const onClick = () => {
-      let id: string = UUID.generate();
-      router.push(`/simulator/${id}`);
+    const onClick = async () => {
+      let name: string = UUID.generate();
+      await applyNamespace({ metadata: { name: name } });
+      router.push(`/${name}`);
     };
     return {
       onClick,

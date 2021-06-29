@@ -1,5 +1,5 @@
 metadata:
-  name: sample-node-1
+  name: sample-node
   labels: {}
 spec: {}
 status:
