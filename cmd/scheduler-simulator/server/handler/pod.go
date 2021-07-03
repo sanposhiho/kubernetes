@@ -1,11 +1,11 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
+	"k8s.io/klog/v2"
 )
 
 // PodHandler is handler for manage pod.
@@ -26,12 +26,12 @@ func (h *PodHandler) ApplyPod(c echo.Context) error {
 
 	pod := new(v1.PodApplyConfiguration)
 	if err := c.Bind(pod); err != nil {
-		log.Println(err)
+		klog.Errorf("failed to bind apply pod request: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
 	if err := h.service.Apply(ctx, id, pod); err != nil {
-		log.Println(err)
+		klog.Errorf("failed to apply pod: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
@@ -47,7 +47,7 @@ func (h *PodHandler) GetPod(c echo.Context) error {
 
 	p, err := h.service.Get(ctx, name, id)
 	if err != nil {
-		log.Println(err)
+		klog.Errorf("failed to get pod: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
@@ -62,7 +62,7 @@ func (h *PodHandler) ListPod(c echo.Context) error {
 
 	ps, err := h.service.List(ctx, id)
 	if err != nil {
-		log.Println(err)
+		klog.Errorf("failed to list pods: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
@@ -77,7 +77,7 @@ func (h *PodHandler) DeletePod(c echo.Context) error {
 	id := c.Param("simulatorID")
 
 	if err := h.service.Delete(ctx, name, id); err != nil {
-		log.Println(err)
+		klog.Errorf("failed to delete pod: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 

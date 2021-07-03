@@ -1,11 +1,12 @@
 package shutdownfn
 
 import (
-	"log"
 	"os"
 	"os/signal"
 	"sync"
 	"syscall"
+
+	"k8s.io/klog/v2"
 )
 
 // Shutdownfn represents the function handle to be called, typically in a defer handler, to shutdown a running module.
@@ -27,5 +28,5 @@ func WaitShutdown(shutdownFns ...Shutdownfn) {
 		}()
 	}
 	wg.Wait()
-	log.Println("finish shutdown successfully")
+	klog.Info("finish shutdown successfully")
 }

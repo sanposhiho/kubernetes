@@ -1,11 +1,12 @@
 package handler
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
+	"k8s.io/klog/v2"
 )
 
 // NodeHandler is handler for manage nodes.
@@ -26,12 +27,12 @@ func (h *NodeHandler) ApplyNode(c echo.Context) error {
 
 	reqNode := new(v1.NodeApplyConfiguration)
 	if err := c.Bind(reqNode); err != nil {
-		log.Println(err)
+		klog.Errorf("failed to bind apply node request: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
 	if err := h.service.Apply(ctx, simulatorID, reqNode); err != nil {
-		log.Println(err)
+		klog.Errorf("failed to apply node: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
@@ -47,7 +48,10 @@ func (h *NodeHandler) GetNode(c echo.Context) error {
 
 	n, err := h.service.Get(ctx, name, simulatorID)
 	if err != nil {
-		log.Println(err)
+		if apierrors.IsNotFound(err) {
+			return echo.NewHTTPError(http.StatusNotFound)
+		}
+		klog.Errorf("failed to get node: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
@@ -62,7 +66,7 @@ func (h *NodeHandler) ListNode(c echo.Context) error {
 
 	ns, err := h.service.List(ctx, simulatorID)
 	if err != nil {
-		log.Println(err)
+		klog.Errorf("failed to list nodes: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
@@ -77,7 +81,7 @@ func (h *NodeHandler) DeleteNode(c echo.Context) error {
 	simulatorID := c.Param("simulatorID")
 
 	if err := h.service.Delete(ctx, name, simulatorID); err != nil {
-		log.Println(err)
+		klog.Errorf("failed to delete node: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
