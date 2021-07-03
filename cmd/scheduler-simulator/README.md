@@ -1,6 +1,6 @@
 # Web-based Kubernetes scheduler simulator
 
-Under developing...  (issue: [web-based simulator for scheduler behaviour #99605](https://github.com/kubernetes/kubernetes/issues/99605))
+Under developing... (issue: [web-based simulator for scheduler behaviour #99605](https://github.com/kubernetes/kubernetes/issues/99605))
 
 ## Contributing
 
@@ -23,7 +23,6 @@ make format
 
 see [Makefile](Makefile) for more details.
 
-## Others 
+## Others
 
 - [API Specification](docs/api.md)
-

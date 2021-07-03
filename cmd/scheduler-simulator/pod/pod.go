@@ -5,13 +5,11 @@ import (
 	"fmt"
 	"time"
 
-	"k8s.io/apimachinery/pkg/util/wait"
-
-	apierrors "k8s.io/apimachinery/pkg/api/errors"
-
 	"golang.org/x/xerrors"
 	corev1 "k8s.io/api/core/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/util/wait"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	coreinformers "k8s.io/client-go/informers/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
@@ -62,7 +60,7 @@ func (s *Service) Apply(ctx context.Context, simulatorID string, pod *v1.PodAppl
 		if err == nil || apierrors.IsAlreadyExists(err) {
 			return true, nil
 		}
-		return false, xerrors.Errorf("apply pod: %v", err)
+		return false, xerrors.Errorf("apply pod: %w", err)
 	}
 
 	if err := RetryWithExponentialBackOff(applyFunc); err != nil {
@@ -87,7 +85,7 @@ func (s *Service) Delete(ctx context.Context, name string, simulatorID string) e
 		if err == nil || apierrors.IsNotFound(err) {
 			return true, nil
 		}
-		return false, fmt.Errorf("delete pod: %v", err)
+		return false, fmt.Errorf("delete pod: %w", err)
 	}
 
 	if err := RetryWithExponentialBackOff(deleteFunc); err != nil {
