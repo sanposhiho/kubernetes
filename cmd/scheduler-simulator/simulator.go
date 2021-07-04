@@ -1,7 +1,7 @@
 package main
 
 import (
-	"log"
+	"k8s.io/klog/v2"
 
 	"k8s.io/kubernetes/cmd/scheduler-simulator/config"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
@@ -22,14 +22,14 @@ func main() {
 func startSimulator() int {
 	cfg, err := config.NewConfig()
 	if err != nil {
-		log.Printf("failed to get config: %v", err)
+		klog.Errorf("failed to get config: %v", err)
 		return 1
 	}
 
 	// start kube-apiserver and kube-scheduler
 	clientset, podInformer, shutdownFn1, err := scheduler.SetupSchedulerOrDie()
 	if err != nil {
-		log.Printf("failed to start scheduler: %v", err)
+		klog.Errorf("failed to start scheduler: %v", err)
 		return 1
 	}
 
@@ -39,8 +39,8 @@ func startSimulator() int {
 	s := server.NewSimulatorServer(cfg, dic)
 	shutdownFn2, err := s.Start(cfg.Port)
 	if err != nil {
+		klog.Errorf("failed to start simulator server: %v", err)
 		shutdownfn.WaitShutdown(shutdownFn1)
-		log.Printf("failed to start simulator server: %v", err)
 		return 1
 	}
 
