@@ -25,7 +25,10 @@
               <v-btn class="ma-5 mb-0" @click="applyOnClick"> Apply </v-btn>
             </v-col>
             <v-col>
-              <ResourceDeleteButton @deleteOnClick="deleteOnClick" v-if="!isNew" />
+              <ResourceDeleteButton
+                @deleteOnClick="deleteOnClick"
+                v-if="selected && !selected.isNew"
+              />
             </v-col>
           </v-row>
         </v-list-item-content>
@@ -56,29 +59,76 @@ import {
   defineComponent,
 } from "@nuxtjs/composition-api";
 import yaml from "js-yaml";
-import PodStoreKey from "./pod-store-key";
+import PodStoreKey from "./PodStoreKey";
 import { getSimulatorIDFromPath, objectToTreeViewData } from "./lib/util";
-import NodeStoreKey from "./node-store-key";
+import NodeStoreKey from "./NodeStoreKey";
+import PersistentVolumeStoreKey from "./PVStoreKey";
+import PersistentVolumeClaimStoreKey from "./PVCStoreKey";
+import StorageClassStoreKey from "./StorageClassStoreKey";
 import ResourceDeleteButton from "~/components/ResourceDeleteButton.vue";
+import {
+  V1Node,
+  V1PersistentVolumeClaim,
+  V1PersistentVolume,
+  V1Pod,
+  V1StorageClass,
+} from "@kubernetes/client-node";
+
+type Resource =
+  | V1Pod
+  | V1Node
+  | V1PersistentVolumeClaim
+  | V1PersistentVolume
+  | V1StorageClass;
+
+interface Store {
+  readonly selected: object | null;
+  resetSelected(): void;
+  apply(r: Resource, simulatorID: string): Promise<void>;
+  delete(name: string, simulatorID: string): Promise<void>;
+}
+
+interface SelectedItem {
+  isNew: boolean;
+  item: Resource;
+}
 
 export default defineComponent({
   components: {
     ResourceDeleteButton,
   },
   setup(_, context) {
-    const pstore = inject(PodStoreKey);
-    if (!pstore) {
+    var store: Store | null = null;
+
+    const podstore = inject(PodStoreKey);
+    if (!podstore) {
       throw new Error(`${PodStoreKey} is not provided`);
     }
 
-    const nstore = inject(NodeStoreKey);
-    if (!nstore) {
+    const nodestore = inject(NodeStoreKey);
+    if (!nodestore) {
       throw new Error(`${NodeStoreKey} is not provided`);
     }
 
+    const pvstore = inject(PersistentVolumeStoreKey);
+    if (!pvstore) {
+      throw new Error(`${pvstore} is not provided`);
+    }
+
+    const pvcstore = inject(PersistentVolumeClaimStoreKey);
+    if (!pvcstore) {
+      throw new Error(`${pvcstore} is not provided`);
+    }
+
+    const storageclassstore = inject(StorageClassStoreKey);
+    if (!storageclassstore) {
+      throw new Error(`${StorageClassStoreKey} is not provided`);
+    }
+
+    const selected = ref(null as SelectedItem | null);
+
     const formData = ref("");
 
-    // value for the treeview
     const tree: any = ref(null);
     const treeData = ref(objectToTreeViewData(null));
 
@@ -86,28 +136,42 @@ export default defineComponent({
     const editmode = ref(false);
     const dialog = ref(false);
 
-    const pod = computed(() => pstore.selectedPod);
-    const node = computed(() => nstore.selectedNode);
-
-    const isNew = ref(false);
-
+    const pod = computed(() => podstore.selected);
     watch(pod, () => {
-      if (pod.value !== null) {
-        editmode.value = pod.value.isNew;
-        isNew.value = pod.value.isNew;
-
-        formData.value = yaml.dump(pod.value.pod);
-        treeData.value = objectToTreeViewData(pod.value.pod);
-      }
+      store = podstore;
+      selected.value = pod.value;
     });
 
+    const node = computed(() => nodestore.selected);
     watch(node, () => {
-      if (node.value !== null) {
-        editmode.value = node.value.isNew;
-        isNew.value = node.value.isNew;
+      store = nodestore;
+      selected.value = node.value;
+    });
 
-        formData.value = yaml.dump(node.value.node);
-        treeData.value = objectToTreeViewData(node.value.node);
+    const pv = computed(() => pvstore.selected);
+    watch(pv, () => {
+      store = pvstore;
+      selected.value = pv.value;
+    });
+
+    const pvc = computed(() => pvcstore.selected);
+    watch(pvc, () => {
+      store = pvcstore;
+      selected.value = pvc.value;
+    });
+
+    const sc = computed(() => storageclassstore.selected);
+    watch(sc, () => {
+      store = storageclassstore;
+      selected.value = sc.value;
+    });
+
+    watch(selected, () => {
+      if (selected.value) {
+        editmode.value = selected.value.isNew;
+
+        formData.value = yaml.dump(selected.value.item);
+        treeData.value = objectToTreeViewData(selected.value.item);
       }
     });
 
@@ -120,8 +184,11 @@ export default defineComponent({
       if (!newValue) {
         // reset editmode.
         editmode.value = false;
-        nstore.resetSelectNode();
-        pstore.resetSelectPod();
+        if (store) {
+          store.resetSelected();
+        }
+        store = null;
+        selected.value = null;
       } else {
         // open all tree when sidebar be visible.
         if (tree.value) {
@@ -133,13 +200,8 @@ export default defineComponent({
     const route = context.root.$route;
 
     const applyOnClick = () => {
-      if (pod.value !== null) {
-        pstore.applyPod(
-          yaml.load(formData.value),
-          getSimulatorIDFromPath(route.path)
-        );
-      } else if (node.value !== null) {
-        nstore.applyNode(
+      if (store) {
+        store.apply(
           yaml.load(formData.value),
           getSimulatorIDFromPath(route.path)
         );
@@ -148,31 +210,13 @@ export default defineComponent({
     };
 
     const deleteOnClick = () => {
-      if (pod.value !== null) {
-        podDeleteOnClick();
-      } else if (node.value !== null) {
-        nodeDeleteOnClick();
-      }
-    };
-
-    const podDeleteOnClick = () => {
-      if (pod.value?.pod.metadata?.name) {
-        pstore.deletePod(
-          pod.value.pod.metadata.name,
+      if (selected.value?.item.metadata?.name && store) {
+        store.delete(
+          selected.value.item.metadata.name,
           getSimulatorIDFromPath(route.path)
         );
-        drawer.value = false;
       }
-    };
-
-    const nodeDeleteOnClick = () => {
-      if (node.value?.node.metadata?.name) {
-        nstore.deleteNode(
-          node.value.node.metadata.name,
-          getSimulatorIDFromPath(route.path)
-        );
-        drawer.value = false;
-      }
+      drawer.value = false;
     };
 
     return {
@@ -180,9 +224,7 @@ export default defineComponent({
       editmode,
       dialog,
       tree,
-      pod,
-      node,
-      isNew,
+      selected,
       formData,
       treeData,
       applyOnClick,

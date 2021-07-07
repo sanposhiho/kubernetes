@@ -37,6 +37,9 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 	nodeHandler := handler.NewNodeHandler(dic.NodeService())
 	podHandler := handler.NewPodHandler(dic.PodService())
 	namespaceHandler := handler.NewNamespaceHandler(dic.NamespaceService())
+	pvHandler := handler.NewPersistentVolumeHandler(dic.PersistentVolumeService())
+	pvcHandler := handler.NewPersistentVolumeClaimHandler(dic.PersistentVolumeClaimService())
+	storageClassHandler := handler.NewStorageClassHandler(dic.StorageClassService())
 
 	// register apis
 	v1 := e.Group("/api/v1")
@@ -52,6 +55,21 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 	v1simulator.POST("/pods", podHandler.ApplyPod)
 	v1simulator.GET("/pods/:name", podHandler.GetPod)
 	v1simulator.DELETE("/pods/:name", podHandler.DeletePod)
+
+	v1simulator.GET("/persistentvolumes", pvHandler.ListPersistentVolume)
+	v1simulator.POST("/persistentvolumes", pvHandler.ApplyPersistentVolume)
+	v1simulator.GET("/persistentvolumes/:name", pvHandler.GetPersistentVolume)
+	v1simulator.DELETE("/persistentvolumes/:name", pvHandler.DeletePersistentVolume)
+
+	v1simulator.GET("/persistentvolumeclaims", pvcHandler.ListPersistentVolumeClaim)
+	v1simulator.POST("/persistentvolumeclaims", pvcHandler.ApplyPersistentVolumeClaim)
+	v1simulator.GET("/persistentvolumeclaims/:name", pvcHandler.GetPersistentVolumeClaim)
+	v1simulator.DELETE("/persistentvolumeclaims/:name", pvcHandler.DeletePersistentVolumeClaim)
+
+	v1simulator.GET("/storageclasses", storageClassHandler.ListStorageClass)
+	v1simulator.POST("/storageclasses", storageClassHandler.ApplyStorageClass)
+	v1simulator.GET("/storageclasses/:name", storageClassHandler.GetStorageClass)
+	v1simulator.DELETE("/storageclasses/:name", storageClassHandler.DeleteStorageClass)
 
 	// initialize SimulatorServer.
 	s := &SimulatorServer{e: e}

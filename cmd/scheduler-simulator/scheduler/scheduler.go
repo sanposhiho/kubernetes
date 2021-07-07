@@ -2,8 +2,18 @@ package scheduler
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"net/http/httptest"
+	"time"
+
+	"k8s.io/kubernetes/pkg/volume"
+	"k8s.io/kubernetes/pkg/volume/hostpath"
+
+	"k8s.io/kubernetes/pkg/volume/local"
+
+	"k8s.io/client-go/informers"
+	"k8s.io/kubernetes/pkg/controller/volume/persistentvolume"
 
 	"golang.org/x/xerrors"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -20,7 +30,6 @@ import (
 	kubeschedulerscheme "k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
 	"k8s.io/kubernetes/pkg/scheduler/profile"
 	"k8s.io/kubernetes/test/integration/framework"
-	"k8s.io/kubernetes/test/integration/util"
 )
 
 // SetupSchedulerOrDie starts k8s-apiserver and scheduler.
@@ -41,15 +50,23 @@ func SetupSchedulerOrDie() (clientset.Interface, coreinformers.PodInformer, shut
 
 	client := clientset.NewForConfigOrDie(cfg)
 
-	podInformer, schedulerShutdown, err := startScheduler(client, cfg, schedCfg)
+	ctx, cancel := context.WithCancel(context.Background())
+
+	podInformer, err := startScheduler(ctx, client, cfg, schedCfg)
 	if err != nil {
+		cancel()
 		return nil, nil, nil, xerrors.Errorf("start scheduler: %w", err)
 	}
-	fakePVControllerShutdown := util.StartFakePVController(client)
+	//	fakePVControllerShutdown := util.StartFakePVController(client)
+
+	if err := startPersistentVolumeController(ctx, client); err != nil {
+		cancel()
+		return nil, nil, nil, xerrors.Errorf("start pv controller: %w", err)
+	}
 
 	shutdownFunc := func() {
-		fakePVControllerShutdown()
-		schedulerShutdown()
+		//		fakePVControllerShutdown()
+		cancel()
 		apiShutdown()
 	}
 
@@ -92,12 +109,11 @@ func defaultComponentConfig() (*config.KubeSchedulerConfiguration, error) {
 
 // startScheduler starts scheduler.
 func startScheduler(
+	ctx context.Context,
 	clientSet clientset.Interface,
 	kubeConfig *restclient.Config,
 	cfg *config.KubeSchedulerConfiguration,
-) (coreinformers.PodInformer, shutdownfn.Shutdownfn, error) {
-	ctx, cancel := context.WithCancel(context.Background())
-
+) (coreinformers.PodInformer, error) {
 	informerFactory := scheduler.NewInformerFactory(clientSet, 0)
 	evtBroadcaster := events.NewBroadcaster(&events.EventSinkImpl{
 		Interface: clientSet.EventsV1(),
@@ -120,8 +136,7 @@ func startScheduler(
 		scheduler.WithParallelism(cfg.Parallelism),
 	)
 	if err != nil {
-		cancel()
-		return nil, nil, xerrors.Errorf("create scheduler: %w", err)
+		return nil, xerrors.Errorf("create scheduler: %w", err)
 	}
 
 	informerFactory.Start(ctx.Done())
@@ -129,10 +144,30 @@ func startScheduler(
 
 	go sched.Run(ctx)
 
-	shutdownFunc := func() {
-		klog.Infof("destroying scheduler")
-		cancel()
-		klog.Infof("destroyed scheduler")
+	return informerFactory.Core().V1().Pods(), nil
+}
+
+func startPersistentVolumeController(ctx context.Context, client clientset.Interface) error {
+	informerFactory := informers.NewSharedInformerFactory(client, 0)
+	params := persistentvolume.ControllerParameters{
+		KubeClient:                client,
+		SyncPeriod:                1 * time.Second,
+		VolumePlugins:             append(local.ProbeVolumePlugins(), hostpath.ProbeVolumePlugins(volume.VolumeConfig{})...),
+		VolumeInformer:            informerFactory.Core().V1().PersistentVolumes(),
+		ClaimInformer:             informerFactory.Core().V1().PersistentVolumeClaims(),
+		ClassInformer:             informerFactory.Storage().V1().StorageClasses(),
+		PodInformer:               informerFactory.Core().V1().Pods(),
+		NodeInformer:              informerFactory.Core().V1().Nodes(),
+		EnableDynamicProvisioning: true,
 	}
-	return informerFactory.Core().V1().Pods(), shutdownFunc, nil
+	volumeController, err := persistentvolume.NewController(params)
+	if err != nil {
+		return fmt.Errorf("failed to construct persistentvolume controller: %v", err)
+	}
+
+	go volumeController.Run(ctx.Done())
+	informerFactory.Start(ctx.Done())
+	informerFactory.WaitForCacheSync(ctx.Done())
+
+	return nil
 }

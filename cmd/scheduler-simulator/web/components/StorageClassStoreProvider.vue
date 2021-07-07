@@ -6,12 +6,12 @@
 
 <script lang="ts">
 import { defineComponent, provide } from "@nuxtjs/composition-api";
-import podStore from "../store/pod";
-import PodStoreKey from "./PodStoreKey";
+import storageClassStore from "../store/storageclass";
+import StorageClassStoreKey from "./StorageClassStoreKey";
 
 export default defineComponent({
   setup() {
-    provide(PodStoreKey, podStore());
+    provide(StorageClassStoreKey, storageClassStore());
     return {};
   },
 });

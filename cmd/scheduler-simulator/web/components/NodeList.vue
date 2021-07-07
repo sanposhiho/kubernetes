@@ -1,34 +1,22 @@
 <template>
-  <v-container>
-    <v-row>
-      <v-col>
-        <v-col>
-          <v-card-title class="text-h5 mb-1"> Nodes </v-card-title>
-          <v-row no-gutters>
-            <template v-for="(n, i) in nodes">
-              <v-col tile :key="i" cols="auto">
-                <v-card class="ma-2" outlined @click="onClick(n)">
-                  <v-card-title v-text="n.metadata.name" class="mb-1">
-                  </v-card-title>
-                  <PodList :nodeName="n.metadata.name" />
-                </v-card>
-              </v-col>
-            </template>
-          </v-row>
-        </v-col>
-        <v-col>
-          <v-card-title class="text-h5 mb-1"> Unscheduled Pods </v-card-title>
-          <v-row no-gutters>
-            <v-col>
-              <v-card class="ma-2" outlined>
-                <PodList nodeName="unscheduled" />
-              </v-card>
-            </v-col>
-          </v-row>
-        </v-col>
-      </v-col>
-    </v-row>
-  </v-container>
+  <v-card class="ma-2" outlined v-if="nodes.length !== 0">
+    <v-card-title class="mb-1"> Nodes </v-card-title>
+    <v-container>
+      <template>
+        <v-row no-gutters>
+          <v-col tile v-for="(n, i) in nodes" :key="i" cols="auto">
+            <v-card class="ma-2" outlined @click="onClick(n)">
+              <v-card-title >
+                  <img src="/node.svg" height="40" alt="p.metadata.name" class="mr-2" />
+                  {{ n.metadata.name }}
+              </v-card-title>
+              <PodList :nodeName="n.metadata.name" />
+            </v-card>
+          </v-col>
+        </v-row>
+      </template>
+    </v-container>
+  </v-card>
 </template>
 
 <script lang="ts">
@@ -38,10 +26,10 @@ import {
   onMounted,
   defineComponent,
 } from "@nuxtjs/composition-api";
-import NodeStoreKey from "./node-store-key";
+import NodeStoreKey from "./NodeStoreKey";
 import PodList from "~/components/PodList.vue";
 import { V1Node } from "@kubernetes/client-node";
-import PodStoreKey from "./pod-store-key";
+import PodStoreKey from "./PodStoreKey";
 import { getSimulatorIDFromPath } from "./lib/util";
 
 export default defineComponent({
@@ -60,7 +48,7 @@ export default defineComponent({
     const route = context.root.$route;
 
     const getNodeList = async () => {
-      await nstore.listNode(getSimulatorIDFromPath(route.path));
+      await nstore.list(getSimulatorIDFromPath(route.path));
     };
 
     onMounted(getNodeList);
@@ -69,7 +57,7 @@ export default defineComponent({
     const pods = computed(() => pstore.pods);
 
     const onClick = (node: V1Node) => {
-      nstore.selectNode(node, false);
+      nstore.select(node, false);
     };
 
     return {

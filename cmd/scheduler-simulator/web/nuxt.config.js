@@ -69,5 +69,8 @@ export default {
       "./components/lib/templates/node.yaml",
       "utf8"
     ),
+    PV_TEMPLATE: fs.readFileSync("./components/lib/templates/pv.yaml", "utf8"),
+    PVC_TEMPLATE: fs.readFileSync("./components/lib/templates/pvc.yaml", "utf8"),
+    SC_TEMPLATE: fs.readFileSync("./components/lib/templates/storageclass.yaml", "utf8"),
   },
 };

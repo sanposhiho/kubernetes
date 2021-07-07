@@ -7,7 +7,7 @@
 <script lang="ts">
 import { provide, defineComponent } from "@nuxtjs/composition-api";
 import nodeStore from "../store/node";
-import NodeStoreKey from "./node-store-key";
+import NodeStoreKey from "./NodeStoreKey";
 
 export default defineComponent({
   setup() {

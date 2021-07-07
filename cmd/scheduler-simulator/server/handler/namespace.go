@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	"k8s.io/klog/v2"
 )
@@ -11,6 +13,11 @@ import (
 // NamespaceHandler is handler for manage namespace.
 type NamespaceHandler struct {
 	service NamespaceService
+}
+
+// NamespaceService represents service for manage Namespaces.
+type NamespaceService interface {
+	Apply(ctx context.Context, namespace *v1.NamespaceApplyConfiguration) (*corev1.Namespace, error)
 }
 
 // NewNamespaceHandler initializes NamespaceHandler.

@@ -5,6 +5,8 @@ import (
 	"fmt"
 	"time"
 
+	"k8s.io/kubernetes/cmd/scheduler-simulator/node"
+
 	"golang.org/x/xerrors"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -54,6 +56,8 @@ func (s *Service) List(ctx context.Context, simulatorID string) (*corev1.PodList
 func (s *Service) Apply(ctx context.Context, simulatorID string, pod *v1.PodApplyConfiguration) error {
 	pod.WithKind("Pod")
 	pod.WithAPIVersion("v1")
+
+	addSimulatorIDNodeSelector(pod, simulatorID)
 
 	applyFunc := func() (bool, error) {
 		_, err := s.client.CoreV1().Pods(simulatorID).Apply(ctx, pod, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
@@ -112,4 +116,10 @@ func RetryWithExponentialBackOff(fn wait.ConditionFunc) error {
 		Steps:    retryBackoffSteps,
 	}
 	return wait.ExponentialBackoff(backoff, fn)
+}
+
+func addSimulatorIDNodeSelector(pac *v1.PodApplyConfiguration, simulatorID string) {
+	pac.Spec.NodeSelector = map[string]string{
+		node.SimulatorIDLabelKey: simulatorID,
+	}
 }

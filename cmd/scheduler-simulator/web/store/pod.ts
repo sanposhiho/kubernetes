@@ -12,7 +12,7 @@ type stateType = {
 export type SelectedPod = {
   // isNew represents whether this Pod is a new Pod or not.
   isNew: boolean;
-  pod: V1Pod;
+  item: V1Pod;
 };
 
 export default function podStore() {
@@ -26,31 +26,29 @@ export default function podStore() {
       return state.pods;
     },
 
-    get selectedPod() {
+    get selected() {
       return state.selectedPod;
     },
 
-    selectPod(p: V1Pod | null, isNew: boolean) {
+    select(p: V1Pod | null, isNew: boolean) {
       if (p !== null) {
         state.selectedPod = {
           isNew: isNew,
-          pod: p,
+          item: p,
         };
       }
     },
 
-    resetSelectPod() {
+    resetSelected() {
       state.selectedPod = null;
     },
 
-    async listPod(simulatorID: string) {
+    async list(simulatorID: string) {
       const pods = (await listPod(simulatorID)).items;
-      var result: { [key: string]: Array<V1Pod> } = { unscheduled: [] };
+      var result: { [key: string]: Array<V1Pod> } = {};
+      result["unscheduled"] = []
       pods.forEach((p) => {
-        if (!p.spec) {
-          return;
-        } else {
-          if (p.spec?.nodeName == null) {
+          if (!p.spec?.nodeName) {
             // unscheduled pod
             result["unscheduled"].push(p);
           } else if (!result[p.spec?.nodeName as string]) {
@@ -59,19 +57,18 @@ export default function podStore() {
           } else {
             result[p.spec?.nodeName as string].push(p);
           }
-        }
       });
       state.pods = result;
     },
 
-    async applyPod(p: V1Pod, simulatorID: string) {
+    async apply(p: V1Pod, simulatorID: string) {
       await applyPod(p, simulatorID);
-      await this.listPod(simulatorID);
+      await this.list(simulatorID);
     },
 
-    async deletePod(name: string, simulatorID: string) {
+    async delete(name: string, simulatorID: string) {
       await deletePod(name, simulatorID);
-      await this.listPod(simulatorID);
+      await this.list(simulatorID);
     },
   };
 }

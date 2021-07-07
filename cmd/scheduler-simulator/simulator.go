@@ -18,7 +18,7 @@ func main() {
 }
 
 // startSimulator starts simulator and needed k8s components.
-// It will return exit code.
+// It returns exit code.
 func startSimulator() int {
 	cfg, err := config.NewConfig()
 	if err != nil {

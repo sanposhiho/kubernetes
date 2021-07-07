@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	"k8s.io/klog/v2"
@@ -12,6 +14,14 @@ import (
 // NodeHandler is handler for manage nodes.
 type NodeHandler struct {
 	service NodeService
+}
+
+// NodeService represents service for manage Nodes.
+type NodeService interface {
+	Get(ctx context.Context, name string, simulatorID string) (*corev1.Node, error)
+	List(ctx context.Context, simulatorID string) (*corev1.NodeList, error)
+	Apply(ctx context.Context, simulatorID string, node *v1.NodeApplyConfiguration) error
+	Delete(ctx context.Context, name string, simulatorID string) error
 }
 
 // NewNodeHandler initializes NodeHandler.

@@ -1,9 +1,11 @@
 package handler
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	"k8s.io/klog/v2"
 )
@@ -11,6 +13,14 @@ import (
 // PodHandler is handler for manage pod.
 type PodHandler struct {
 	service PodService
+}
+
+// PodService represents service for manage Pods.
+type PodService interface {
+	Get(ctx context.Context, name string, simulatorID string) (*corev1.Pod, error)
+	List(ctx context.Context, simulatorID string) (*corev1.PodList, error)
+	Apply(ctx context.Context, simulatorID string, pod *v1.PodApplyConfiguration) error
+	Delete(ctx context.Context, name string, simulatorID string) error
 }
 
 // NewPodHandler initializes PodHandler.

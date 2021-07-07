@@ -10,7 +10,7 @@ type stateType = {
 type selectedNode = {
   // isNew represents whether this Pod is a new Node or not.
   isNew: boolean;
-  node: V1Node;
+  item: V1Node;
 };
 
 export default function nodeStore() {
@@ -24,35 +24,35 @@ export default function nodeStore() {
       return state.nodes;
     },
 
-    get selectedNode() {
+    get selected() {
       return state.selectedNode;
     },
 
-    selectNode(n: V1Node | null, isNew: boolean) {
+    select(n: V1Node | null, isNew: boolean) {
       if (n !== null) {
         state.selectedNode = {
           isNew: isNew,
-          node: n,
+          item: n,
         };
       }
     },
 
-    resetSelectNode() {
+    resetSelected() {
       state.selectedNode = null;
     },
 
-    async listNode(simulatorID: string) {
+    async list(simulatorID: string) {
       state.nodes = (await listNode(simulatorID)).items;
     },
 
-    async applyNode(n: V1Node, simulatorID: string) {
+    async apply(n: V1Node, simulatorID: string) {
       await applyNode(n, simulatorID);
-      await this.listNode(simulatorID);
+      await this.list(simulatorID);
     },
 
-    async deleteNode(name: string, simulatorID: string) {
+    async delete(name: string, simulatorID: string) {
       await deleteNode(name, simulatorID);
-      await this.listNode(simulatorID);
+      await this.list(simulatorID);
     },
   };
 }

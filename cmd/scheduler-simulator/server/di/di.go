@@ -6,15 +6,21 @@ import (
 
 	"k8s.io/kubernetes/cmd/scheduler-simulator/namespace"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/node"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/persistentvolume"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/persistentvolumeclaim"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/pod"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server/handler"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/storageclass"
 )
 
 // Container saves dependencies for handler.
 type Container struct {
-	nodeService      handler.NodeService
-	podService       handler.PodService
-	namespaceService handler.NamespaceService
+	nodeService         handler.NodeService
+	podService          handler.PodService
+	pvService           handler.PersistentVolumeService
+	pvcService          handler.PersistentVolumeClaimService
+	storageClassService handler.StorageClassService
+	namespaceService    handler.NamespaceService
 }
 
 // NewDIContainer initializes Container.
@@ -25,6 +31,9 @@ func NewDIContainer(client clientset.Interface, podInformer coreinformers.PodInf
 	c.podService = pod.NewPodService(client, podInformer)
 	c.nodeService = node.NewNodeService(client, c.podService)
 	c.namespaceService = namespace.NewNamespaceService(client)
+	c.pvService = persistentvolume.NewPersistentVolumeService(client)
+	c.pvcService = persistentvolumeclaim.NewPersistentVolumeClaimService(client)
+	c.storageClassService = storageclass.NewStorageClassService(client)
 
 	return c
 }
@@ -42,4 +51,19 @@ func (c *Container) PodService() handler.PodService {
 // NamespaceService returns handler.NamespaceService.
 func (c *Container) NamespaceService() handler.NamespaceService {
 	return c.namespaceService
+}
+
+// StorageClassService returns handler.StorageClassService.
+func (c *Container) StorageClassService() handler.StorageClassService {
+	return c.storageClassService
+}
+
+// PersistentVolumeService returns handler.PersistentVolumeService.
+func (c *Container) PersistentVolumeService() handler.PersistentVolumeService {
+	return c.pvService
+}
+
+// PersistentVolumeClaimService returns handler.PersistentVolumeClaimService.
+func (c *Container) PersistentVolumeClaimService() handler.PersistentVolumeClaimService {
+	return c.pvcService
 }

@@ -101,35 +101,36 @@ func (s *Service) Delete(ctx context.Context, name string, simulatorID string) e
 
 // addNameSuffix adds suffix to nac.Name
 // Make Node names unique by using simulatorID as a suffix.
-func addNameSuffix(nac *v1.NodeApplyConfiguration, suffix string) *v1.NodeApplyConfiguration {
+func addNameSuffix(nac *v1.NodeApplyConfiguration, suffix string) {
 	if nac == nil || nac.Name == nil {
-		return nac
+		return
 	}
-	if strings.HasSuffix(*nac.Name, suffix) {
-		return nac
+	if strings.HasSuffix(*nac.Name, suffix[0:7]) {
+		return
 	}
 
 	// Add the suffix to the name only if the name don't have the suffix.
-	newName := *nac.Name + suffix[0:7]
+	newName := *nac.Name + "-" + suffix[0:7]
 	nac.Name = &newName
-	return nac
 }
 
-const simulatorIDLabelKey = "simulatorID"
+const SimulatorIDLabelKey = "simulatorID"
 
 // addSimulatorIDLabel adds simulatorID to label.
-func addSimulatorIDLabel(nac *v1.NodeApplyConfiguration, simulatorID string) *v1.NodeApplyConfiguration {
+func addSimulatorIDLabel(nac *v1.NodeApplyConfiguration, simulatorID string) {
 	if nac == nil {
-		return nac
+		return
 	}
-	nac.Labels[simulatorIDLabelKey] = simulatorID
-	return nac
+	if nac.Labels == nil {
+		nac.Labels = map[string]string{}
+	}
+	nac.Labels[SimulatorIDLabelKey] = simulatorID
 }
 
 func simulatorIDLabelSelector(simulatorID string) *metav1.LabelSelector {
 	return &metav1.LabelSelector{
 		MatchLabels: map[string]string{
-			simulatorIDLabelKey: simulatorID,
+			SimulatorIDLabelKey: simulatorID,
 		},
 	}
 }
