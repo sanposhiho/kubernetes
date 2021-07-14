@@ -5,12 +5,12 @@
         <PVCStoreProvider>
           <StorageClassStoreProvider>
             <ResourceBar />
+            <ResourceAddButton />
             <NodeList />
             <UnscheduledPodList />
             <PVList />
             <PVCList />
             <StorageClassList />
-            <ResourceAddButton />
           </StorageClassStoreProvider>
         </PVCStoreProvider>
       </PVStoreProvider>

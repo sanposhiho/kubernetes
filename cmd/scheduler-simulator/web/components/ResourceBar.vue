@@ -41,6 +41,43 @@
       <v-textarea filled auto-grow v-model="formData"></v-textarea>
     </template>
 
+    <template v-if="!editmode">
+    <template v-if="podFilterResultTreeData.length != 0 ">
+    <v-card-title>Filter</v-card-title>
+    <v-treeview
+      dense
+      v-if="!editmode"
+      :items="podFilterResultTreeData"
+    ></v-treeview>
+
+    <v-divider></v-divider>
+    </template>
+
+
+    <template v-if="podScoringResultTreeData.length != 0">
+    <v-card-title>Score</v-card-title>
+    <v-treeview
+      dense
+      v-if="!editmode"
+      :items="podScoringResultTreeData"
+    ></v-treeview>
+
+    <v-divider></v-divider>
+    </template>
+
+    <template v-if="podNormalizedScoringResultTreeData.length != 0">
+    <v-card-title>Normalize Score</v-card-title>
+    <v-treeview
+      dense
+      v-if="!editmode"
+      :items="podNormalizedScoringResultTreeData"
+    ></v-treeview>
+
+    <v-divider></v-divider>
+    </template>
+
+
+    <v-card-title>Resource Definition</v-card-title>
     <v-treeview
       dense
       open-all
@@ -48,6 +85,7 @@
       v-if="!editmode"
       :items="treeData"
     ></v-treeview>
+    </template>
   </v-navigation-drawer>
 </template>
 <script lang="ts">
@@ -131,6 +169,9 @@ export default defineComponent({
 
     const tree: any = ref(null);
     const treeData = ref(objectToTreeViewData(null));
+    const podScoringResultTreeData = ref(objectToTreeViewData(null));
+    const podNormalizedScoringResultTreeData = ref(objectToTreeViewData(null));
+    const podFilterResultTreeData = ref(objectToTreeViewData(null));
 
     const drawer = ref(false);
     const editmode = ref(false);
@@ -140,6 +181,18 @@ export default defineComponent({
     watch(pod, () => {
       store = podstore;
       selected.value = pod.value;
+      if (pod.value?.item.metadata?.annotations) {
+        var score = JSON.parse(pod.value?.item.metadata?.annotations["scheduler-simulator/score-result"])
+        var nscore = JSON.parse(pod.value?.item.metadata?.annotations["scheduler-simulator/normalizedscore-result"])
+        var filter = JSON.parse(pod.value?.item.metadata?.annotations["scheduler-simulator/filter-result"])
+        podScoringResultTreeData.value = objectToTreeViewData(score);
+        podNormalizedScoringResultTreeData.value = objectToTreeViewData(nscore);
+        podFilterResultTreeData.value = objectToTreeViewData(filter);
+      } else {
+        podScoringResultTreeData.value = objectToTreeViewData(null);
+        podNormalizedScoringResultTreeData.value = objectToTreeViewData(null);
+        podFilterResultTreeData.value = objectToTreeViewData(null);
+      }
     });
 
     const node = computed(() => nodestore.selected);
@@ -228,6 +281,9 @@ export default defineComponent({
       formData,
       treeData,
       applyOnClick,
+      podScoringResultTreeData,
+      podFilterResultTreeData,
+      podNormalizedScoringResultTreeData,
       deleteOnClick,
     };
   },

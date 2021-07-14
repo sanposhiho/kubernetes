@@ -7,16 +7,10 @@ import (
 	"net/http/httptest"
 	"time"
 
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/hostpath"
-
-	"k8s.io/kubernetes/pkg/volume/local"
-
-	"k8s.io/client-go/informers"
-	"k8s.io/kubernetes/pkg/controller/volume/persistentvolume"
-
 	"golang.org/x/xerrors"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/client-go/informers"
 	coreinformers "k8s.io/client-go/informers/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
@@ -24,11 +18,16 @@ import (
 	"k8s.io/klog/v2"
 	"k8s.io/kube-scheduler/config/v1beta1"
 
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugins"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/shutdownfn"
+	"k8s.io/kubernetes/pkg/controller/volume/persistentvolume"
 	"k8s.io/kubernetes/pkg/scheduler"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
 	kubeschedulerscheme "k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
 	"k8s.io/kubernetes/pkg/scheduler/profile"
+	"k8s.io/kubernetes/pkg/volume"
+	"k8s.io/kubernetes/pkg/volume/hostpath"
+	"k8s.io/kubernetes/pkg/volume/local"
 	"k8s.io/kubernetes/test/integration/framework"
 )
 
@@ -43,7 +42,7 @@ func SetupSchedulerOrDie() (clientset.Interface, coreinformers.PodInformer, shut
 		Burst:         5000,
 	}
 
-	schedCfg, err := defaultComponentConfig()
+	schedCfg, err := schedulerConfig()
 	if err != nil {
 		return nil, nil, nil, xerrors.Errorf("get default component config: %w", err)
 	}
@@ -57,7 +56,6 @@ func SetupSchedulerOrDie() (clientset.Interface, coreinformers.PodInformer, shut
 		cancel()
 		return nil, nil, nil, xerrors.Errorf("start scheduler: %w", err)
 	}
-	//	fakePVControllerShutdown := util.StartFakePVController(client)
 
 	if err := startPersistentVolumeController(ctx, client); err != nil {
 		cancel()
@@ -65,7 +63,6 @@ func SetupSchedulerOrDie() (clientset.Interface, coreinformers.PodInformer, shut
 	}
 
 	shutdownFunc := func() {
-		//		fakePVControllerShutdown()
 		cancel()
 		apiShutdown()
 	}
@@ -96,13 +93,26 @@ func startAPIServerOrDie() (string, shutdownfn.Shutdownfn) {
 	return s.URL, shutdownFunc
 }
 
-// defaultComponentConfig creates KubeSchedulerConfiguration default configuration.
-func defaultComponentConfig() (*config.KubeSchedulerConfiguration, error) {
+// schedulerConfig creates KubeSchedulerConfiguration default configuration.
+func schedulerConfig() (*config.KubeSchedulerConfiguration, error) {
 	gvk := v1beta1.SchemeGroupVersion.WithKind("KubeSchedulerConfiguration")
 	cfg := config.KubeSchedulerConfiguration{}
 	_, _, err := kubeschedulerscheme.Codecs.UniversalDecoder().Decode(nil, &gvk, &cfg)
 	if err != nil {
-		return nil, err
+		return nil, xerrors.Errorf("decode config: %w", err)
+	}
+
+	pc, err := plugins.NewPluginConfig()
+	if err != nil {
+		return nil, xerrors.Errorf("get plugin configs: %w", err)
+	}
+
+	cfg.Profiles = []config.KubeSchedulerProfile{
+		{
+			SchedulerName: v1.DefaultSchedulerName,
+			Plugins:       plugins.NewPlugin(),
+			PluginConfig:  pc,
+		},
 	}
 	return &cfg, nil
 }
@@ -134,6 +144,7 @@ func startScheduler(
 		scheduler.WithPodInitialBackoffSeconds(cfg.PodInitialBackoffSeconds),
 		scheduler.WithExtenders(cfg.Extenders...),
 		scheduler.WithParallelism(cfg.Parallelism),
+		scheduler.WithFrameworkOutOfTreeRegistry(plugins.NewRegistry(informerFactory, clientSet)),
 	)
 	if err != nil {
 		return nil, xerrors.Errorf("create scheduler: %w", err)
@@ -162,7 +173,7 @@ func startPersistentVolumeController(ctx context.Context, client clientset.Inter
 	}
 	volumeController, err := persistentvolume.NewController(params)
 	if err != nil {
-		return fmt.Errorf("failed to construct persistentvolume controller: %v", err)
+		return fmt.Errorf("failed to construct persistentvolume controller: %w", err)
 	}
 
 	go volumeController.Run(ctx.Done())

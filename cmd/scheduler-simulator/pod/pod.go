@@ -3,18 +3,17 @@ package pod
 import (
 	"context"
 	"fmt"
-	"time"
-
-	"k8s.io/kubernetes/cmd/scheduler-simulator/node"
 
 	"golang.org/x/xerrors"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/util/wait"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	coreinformers "k8s.io/client-go/informers/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
+
+	"k8s.io/kubernetes/cmd/scheduler-simulator/node"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/util"
 )
 
 // Service manages pods.
@@ -67,7 +66,7 @@ func (s *Service) Apply(ctx context.Context, simulatorID string, pod *v1.PodAppl
 		return false, xerrors.Errorf("apply pod: %w", err)
 	}
 
-	if err := RetryWithExponentialBackOff(applyFunc); err != nil {
+	if err := util.RetryWithExponentialBackOff(applyFunc); err != nil {
 		return xerrors.Errorf("apply pod with retry: %w", err)
 	}
 
@@ -92,34 +91,16 @@ func (s *Service) Delete(ctx context.Context, name string, simulatorID string) e
 		return false, fmt.Errorf("delete pod: %w", err)
 	}
 
-	if err := RetryWithExponentialBackOff(deleteFunc); err != nil {
+	if err := util.RetryWithExponentialBackOff(deleteFunc); err != nil {
 		return xerrors.Errorf("delete pod with retry: %w", err)
 	}
 
 	return nil
 }
 
-const (
-	// Parameters for retrying with exponential backoff.
-	retryBackoffInitialDuration = 100 * time.Millisecond
-	retryBackoffFactor          = 3
-	retryBackoffJitter          = 0
-	retryBackoffSteps           = 6
-)
-
-// RetryWithExponentialBackOff is the utility for retrying the given function with exponential backoff.
-func RetryWithExponentialBackOff(fn wait.ConditionFunc) error {
-	backoff := wait.Backoff{
-		Duration: retryBackoffInitialDuration,
-		Factor:   retryBackoffFactor,
-		Jitter:   retryBackoffJitter,
-		Steps:    retryBackoffSteps,
-	}
-	return wait.ExponentialBackoff(backoff, fn)
-}
-
 func addSimulatorIDNodeSelector(pac *v1.PodApplyConfiguration, simulatorID string) {
-	pac.Spec.NodeSelector = map[string]string{
-		node.SimulatorIDLabelKey: simulatorID,
+	if pac.Spec.NodeSelector == nil {
+		pac.Spec.NodeSelector = map[string]string{}
 	}
+	pac.Spec.NodeSelector[node.SimulatorIDLabelKey] = simulatorID
 }
