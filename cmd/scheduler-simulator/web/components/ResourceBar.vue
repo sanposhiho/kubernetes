@@ -4,7 +4,7 @@
     right
     temporary
     bottom
-    width="60%"
+    width="80%"
     v-model="drawer"
   >
     <template v-slot:prepend>
@@ -38,7 +38,7 @@
     <v-divider></v-divider>
 
     <template v-if="editmode">
-      <v-textarea filled auto-grow v-model="formData"></v-textarea>
+      <monaco-editor v-model="formData" class="editor" language="yaml"></monaco-editor>
     </template>
 
     <template v-if="!editmode">
@@ -96,6 +96,8 @@ import {
   watch,
   defineComponent,
 } from "@nuxtjs/composition-api";
+//@ts-ignore // it is ok to ignore.
+import MonacoEditor from "vue-monaco";
 import yaml from "js-yaml";
 import PodStoreKey from "./PodStoreKey";
 import { getSimulatorIDFromPath, objectToTreeViewData } from "./lib/util";
@@ -133,6 +135,7 @@ interface SelectedItem {
 
 export default defineComponent({
   components: {
+    MonacoEditor,
     ResourceDeleteButton,
   },
   setup(_, context) {
@@ -289,3 +292,10 @@ export default defineComponent({
   },
 });
 </script>
+
+<style>
+.editor {
+  width: auto;
+  height: 100%;
+}
+</style>
