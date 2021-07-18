@@ -1,5 +1,5 @@
 import { reactive } from "@nuxtjs/composition-api";
-import { applyPod, deletePod, listPod } from "~/api/v1/pod";
+import { applyPod, deletePod, getPod, listPod } from "~/api/v1/pod";
 import { V1Pod, V1PodList } from "@kubernetes/client-node";
 
 type stateType = {
@@ -10,7 +10,7 @@ type stateType = {
 };
 
 export type SelectedPod = {
-  // isNew represents whether this Pod is a new Pod or not.
+  // isNew represents whether this Pod is a new one or not.
   isNew: boolean;
   item: V1Pod;
 };
@@ -46,19 +46,29 @@ export default function podStore() {
     async list(simulatorID: string) {
       const pods = (await listPod(simulatorID)).items;
       var result: { [key: string]: Array<V1Pod> } = {};
-      result["unscheduled"] = []
+      result["unscheduled"] = [];
       pods.forEach((p) => {
-          if (!p.spec?.nodeName) {
-            // unscheduled pod
-            result["unscheduled"].push(p);
-          } else if (!result[p.spec?.nodeName as string]) {
-            // first pod on the node
-            result[p.spec?.nodeName as string] = [p];
-          } else {
-            result[p.spec?.nodeName as string].push(p);
-          }
+        if (!p.spec?.nodeName) {
+          // unscheduled pod
+          result["unscheduled"].push(p);
+        } else if (!result[p.spec?.nodeName as string]) {
+          // first pod on the node
+          result[p.spec?.nodeName as string] = [p];
+        } else {
+          result[p.spec?.nodeName as string].push(p);
+        }
       });
       state.pods = result;
+    },
+
+    async fetchSelected(simulatorID: string) {
+      if (this.selected?.item.metadata?.name && !this.selected?.isNew) {
+        const p = await getPod(
+          this.selected.item.metadata.name,
+          simulatorID
+        );
+        this.select(p, this.selected?.isNew)
+      }
     },
 
     async apply(p: V1Pod, simulatorID: string) {

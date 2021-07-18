@@ -2,6 +2,7 @@ import { reactive } from "@nuxtjs/composition-api";
 import {
   applyStorageClass,
   deleteStorageClass,
+  getStorageClass,
   listStorageClass,
 } from "~/api/v1/storageclass";
 import {
@@ -57,6 +58,15 @@ export default function storageclassStore() {
     async apply(n: V1StorageClass, simulatorID: string) {
       await applyStorageClass(n, simulatorID);
       await this.list(simulatorID);
+    },
+
+    async fetchSelected(simulatorID: string) {
+      if (state.selectedStorageClass?.item.metadata?.name) {
+        state.selectedStorageClass.item = await getStorageClass(
+          state.selectedStorageClass.item.metadata.name,
+          simulatorID
+        );
+      }
     },
 
     async delete(name: string, simulatorID: string) {

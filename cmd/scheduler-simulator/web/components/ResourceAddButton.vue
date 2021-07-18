@@ -1,40 +1,26 @@
 <template>
-  <v-dialog v-model="dialog" width="500">
-    <template v-slot:activator="{ on, attrs }">
-      <v-btn
-        color="primary ma-2"
-        dark
-        v-bind="attrs"
-        v-on="on"
-        v-for="(rn, i) in resourceNames"
-        @click="target = rn"
-        :key="i"
-      >
-        New {{ rn }}
-      </v-btn>
-    </template>
-
-    <v-card>
-      <v-card-title class="text-h5 grey lighten-2">
-        Create New {{ target }}
-      </v-card-title>
-      <v-divider></v-divider>
-      <v-divider></v-divider>
-      <v-card-subtitle> Choose the option below to create. </v-card-subtitle>
-
-      <template>
-        <v-btn @click="create" block class="pa-2">Create with template</v-btn>
-        <v-spacer />
-        <v-btn disabled block class="pa-2">Create with local file</v-btn>
-        <v-spacer />
-      </template>
-    </v-card>
-  </v-dialog>
+  <v-sheet class="transparent">
+    <v-btn
+      color="primary ma-2"
+      dark
+      v-for="(rn, i) in resourceNames"
+      @click="create(rn)"
+      :key="i"
+    >
+      New {{ rn }}
+    </v-btn>
+  </v-sheet>
 </template>
 
 <script lang="ts">
 import { ref, watch, inject, defineComponent } from "@nuxtjs/composition-api";
-import { podTemplate, nodeTemplate, pvTemplate, pvcTemplate, storageclassTemplate } from "./lib/template";
+import {
+  podTemplate,
+  nodeTemplate,
+  pvTemplate,
+  pvcTemplate,
+  storageclassTemplate,
+} from "./lib/template";
 import { getSimulatorIDFromPath } from "./lib/util";
 import PodStoreKey from "./PodStoreKey";
 import NodeStoreKey from "./NodeStoreKey";
@@ -99,40 +85,34 @@ export default defineComponent({
       "Pod",
     ];
 
-    const targetTemplate = ref(null as Resource | null);
-    const target = ref("");
-
-    watch(target, () => {
+    const create = (rn: string) => {
+      var targetTemplate: Resource | null = null;
       const route = context.root.$route;
-      switch (target.value) {
+      switch (rn) {
         case "Pod":
-          targetTemplate.value = podTemplate(
-            getSimulatorIDFromPath(route.path)
-          );
+          targetTemplate = podTemplate(getSimulatorIDFromPath(route.path));
           store = podstore;
           break;
         case "Node":
-          targetTemplate.value = nodeTemplate();
+          targetTemplate = nodeTemplate();
           store = nodestore;
           break;
         case "PersistentVolume":
-          targetTemplate.value = pvTemplate();
+          targetTemplate = pvTemplate();
           store = pvstore;
           break;
         case "PersistentVolumeClaim":
-          targetTemplate.value = pvcTemplate();
+          targetTemplate = pvcTemplate();
           store = pvcstore;
           break;
         case "StorageClass":
-          targetTemplate.value = storageclassTemplate();
+          targetTemplate = storageclassTemplate();
           store = storageclassstore;
           break;
       }
-    });
 
-    const create = () => {
       if (store) {
-        store.select(targetTemplate.value, true);
+        store.select(targetTemplate, true);
       }
       dialog.value = false;
     };
@@ -141,7 +121,6 @@ export default defineComponent({
       create,
       dialog,
       resourceNames,
-      target,
     };
   },
 });

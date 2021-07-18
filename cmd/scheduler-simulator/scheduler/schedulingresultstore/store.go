@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strings"
 	"sync"
 
 	"golang.org/x/xerrors"
@@ -13,6 +14,7 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog/v2"
+
 	"k8s.io/kubernetes/cmd/scheduler-simulator/util"
 )
 
@@ -22,6 +24,7 @@ type Store struct {
 	client clientset.Interface
 	result map[key]*result
 }
+
 type result struct {
 	// node name → plugin name → score
 	score map[string]map[string]int64
@@ -35,8 +38,11 @@ type result struct {
 	filter map[string]map[string]string
 }
 
+// key is the key of result map on Store.
+// key is created from namespace and podName.
 type key string
 
+// newKey creates key with namespace and podName.
 func newKey(namespace, podName string) key {
 	k := namespace + "/" + podName
 	return key(k)
@@ -72,39 +78,6 @@ const (
 	scoreResultAnnotationKey           = "scheduler-simulator/score-result"
 	normalizedScoreResultAnnotationKey = "scheduler-simulator/normalizedscore-result"
 )
-
-func (s *Store) addFilterResultToPod(pod *v1.Pod) error {
-	k := newKey(pod.Namespace, pod.Name)
-	scores, err := json.Marshal(s.result[k].filter)
-	if err != nil {
-		return fmt.Errorf("encode json to record scores: %w", err)
-	}
-
-	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, filterResultAnnotationKey, string(scores))
-	return nil
-}
-
-func (s *Store) addScoreResultToPod(pod *v1.Pod) error {
-	k := newKey(pod.Namespace, pod.Name)
-	scores, err := json.Marshal(s.result[k].score)
-	if err != nil {
-		return fmt.Errorf("encode json to record scores: %w", err)
-	}
-
-	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, scoreResultAnnotationKey, string(scores))
-	return nil
-}
-
-func (s *Store) addNormalizedScoreResultToPod(pod *v1.Pod) error {
-	k := newKey(pod.Namespace, pod.Name)
-	scores, err := json.Marshal(s.result[k].normalizedScore)
-	if err != nil {
-		return fmt.Errorf("encode json to record scores: %w", err)
-	}
-
-	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, normalizedScoreResultAnnotationKey, string(scores))
-	return nil
-}
 
 func (s *Store) addSchedulingResultToPod(oldObj, newObj interface{}) {
 	ctx := context.Background()
@@ -160,12 +133,53 @@ func (s *Store) addSchedulingResultToPod(oldObj, newObj interface{}) {
 	}
 }
 
-func (s *Store) AddFilterResult(namespace, podName, nodeName, pluginName, reason string) {
-	if reason == "" {
-		reason = "ok"
+func (s *Store) addFilterResultToPod(pod *v1.Pod) error {
+	k := newKey(pod.Namespace, pod.Name)
+	scores, err := json.Marshal(s.result[k].filter)
+	if err != nil {
+		return fmt.Errorf("encode json to record scores: %w", err)
 	}
+
+	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, filterResultAnnotationKey, string(scores))
+	return nil
+}
+
+func (s *Store) addScoreResultToPod(pod *v1.Pod) error {
+	k := newKey(pod.Namespace, pod.Name)
+	scores, err := json.Marshal(s.result[k].score)
+	if err != nil {
+		return fmt.Errorf("encode json to record scores: %w", err)
+	}
+
+	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, scoreResultAnnotationKey, string(scores))
+	return nil
+}
+
+func (s *Store) addNormalizedScoreResultToPod(pod *v1.Pod) error {
+	k := newKey(pod.Namespace, pod.Name)
+	scores, err := json.Marshal(s.result[k].normalizedScore)
+	if err != nil {
+		return fmt.Errorf("encode json to record scores: %w", err)
+	}
+
+	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, normalizedScoreResultAnnotationKey, string(scores))
+	return nil
+}
+
+func (s *Store) AddFilterResult(namespace, podName, nodeName, pluginName, reason string) {
+	if !strings.HasSuffix(nodeName, namespace) {
+		// when suffix of nodeName don't match namespace, this node is not created by a user who creates this pod.
+		// So we don't need to record the result in this case.
+		return
+	}
+	if reason == "" {
+		// empty reason means the node passed the filter.
+		reason = "pass"
+	}
+
 	s.mu.Lock()
 	defer s.mu.Unlock()
+
 	k := newKey(namespace, podName)
 	if _, ok := s.result[k]; !ok {
 		s.result[k] = newData()
@@ -178,9 +192,18 @@ func (s *Store) AddFilterResult(namespace, podName, nodeName, pluginName, reason
 	s.result[k].filter[nodeName][pluginName] = reason
 }
 
+// AddScoreResult adds scoring result to pod annotation.
+// When score is -1, it means the plugin is disabled.
 func (s *Store) AddScoreResult(namespace, podName, nodeName, pluginName string, score int64) {
+	if !strings.HasSuffix(nodeName, namespace) {
+		// when suffix of nodeName don't match namespace, this node is not created by a user who creates this pod.
+		// So we don't need to record the result in this case.
+		return
+	}
+
 	s.mu.Lock()
 	defer s.mu.Unlock()
+
 	k := newKey(namespace, podName)
 	if _, ok := s.result[k]; !ok {
 		s.result[k] = newData()
@@ -197,9 +220,18 @@ func (s *Store) AddScoreResult(namespace, podName, nodeName, pluginName string, 
 	s.result[k].normalizedScore[nodeName][pluginName] = score
 }
 
+// AddNormalizeScoreResult adds normalized score result to pod annotation.
+// When normalizedScore is -1, it means the plugin is disabled.
 func (s *Store) AddNormalizeScoreResult(namespace, podName, nodeName, pluginName string, normalizedScore int64) {
+	if !strings.HasSuffix(nodeName, namespace) {
+		// when suffix of nodeName don't match namespace, this node is not created by a user who creates this pod.
+		// So we don't need to record the result in this case.
+		return
+	}
+
 	s.mu.Lock()
 	defer s.mu.Unlock()
+
 	k := newKey(namespace, podName)
 	if _, ok := s.result[k]; !ok {
 		s.result[k] = newData()

@@ -3,16 +3,15 @@ package filterrecord
 import (
 	"context"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/schedulingresultstore"
-
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-
 	"golang.org/x/xerrors"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/kube-scheduler/config/v1beta1"
 
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugins/enabledpluginutil"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/schedulingresultstore"
 	"k8s.io/kubernetes/pkg/scheduler/algorithmprovider"
+	"k8s.io/kubernetes/pkg/scheduler/apis/config"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
 	"k8s.io/kubernetes/pkg/scheduler/framework"
 	"k8s.io/kubernetes/pkg/scheduler/framework/plugins"
@@ -106,8 +105,21 @@ func NewFilterRecordPlugin(s *schedulingresultstore.Store, p framework.FilterPlu
 func (pl *filterRecorder) Name() string { return pl.name }
 
 func (pl *filterRecorder) Filter(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeInfo *framework.NodeInfo) *framework.Status {
-	s := pl.p.Filter(ctx, state, pod, nodeInfo)
-	pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), s.Message())
+	if !enabledpluginutil.IsPluginEnabled(pod, pl.p.Name()) {
+		pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), "(disabled)")
+		// return success not to affect filtering.
+		return nil
+	}
 
+	s := pl.p.Filter(ctx, state, pod, nodeInfo)
+	if s.IsSuccess() {
+		if s == nil {
+			// When status is nil (= success), s.AppendReason panic.
+			s = framework.NewStatus(framework.Success)
+		}
+		s.AppendReason("passed")
+	}
+
+	pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), s.Message())
 	return s
 }

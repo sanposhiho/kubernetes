@@ -24,7 +24,7 @@ export default defineComponent({
       throw new Error(`${PodStoreKey} is not provided`);
     }
 
-     const getPodList = async () => {
+    const getPodList = async () => {
       const route = context.root.$route;
       await store.list(getSimulatorIDFromPath(route.path));
     };

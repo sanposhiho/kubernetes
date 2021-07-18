@@ -79,12 +79,12 @@ func addNameSuffix(pvac *v1.PersistentVolumeApplyConfiguration, suffix string) *
 	if pvac == nil || pvac.Name == nil {
 		return pvac
 	}
-	if strings.HasSuffix(*pvac.Name, suffix[0:7]) {
+	if strings.HasSuffix(*pvac.Name, suffix) {
 		return pvac
 	}
 
 	// Add the suffix to the name only if the name don't have the suffix.
-	newName := *pvac.Name + "-" + suffix[0:7]
+	newName := *pvac.Name + "-" + suffix
 	pvac.Name = &newName
 	return pvac
 }

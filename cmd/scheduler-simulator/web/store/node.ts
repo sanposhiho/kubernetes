@@ -1,5 +1,5 @@
 import { reactive } from "@nuxtjs/composition-api";
-import { applyNode, deleteNode, listNode } from "~/api/v1/node";
+import { applyNode, deleteNode, listNode, getNode } from "~/api/v1/node";
 import { V1Node, V1NodeList, V1Pod, V1PodList } from "@kubernetes/client-node";
 
 type stateType = {
@@ -8,7 +8,7 @@ type stateType = {
 };
 
 type selectedNode = {
-  // isNew represents whether this Pod is a new Node or not.
+  // isNew represents whether this Node is a new one or not.
   isNew: boolean;
   item: V1Node;
 };
@@ -43,6 +43,15 @@ export default function nodeStore() {
 
     async list(simulatorID: string) {
       state.nodes = (await listNode(simulatorID)).items;
+    },
+
+    async fetchSelected(simulatorID: string) {
+      if (state.selectedNode?.item.metadata?.name) {
+        state.selectedNode.item = await getNode(
+          state.selectedNode.item.metadata.name,
+          simulatorID
+        );
+      }
     },
 
     async apply(n: V1Node, simulatorID: string) {

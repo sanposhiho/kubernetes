@@ -17,6 +17,14 @@ export const listStorageClass = async (id: string) => {
   return res.data;
 };
 
+export const getStorageClass = async (name: string, id: string) => {
+  const res = await instance.get<V1StorageClass>(
+    `/simulators/${id}/storageclasses/${name}`,
+    {}
+  );
+  return res.data;
+};
+
 export const deleteStorageClass = async (name: string, id: string) => {
   const res = await instance.delete(
     `/simulators/${id}/storageclasses/${name}`,

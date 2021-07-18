@@ -11,6 +11,12 @@ export const listPod = async (id: string) => {
   return res.data;
 };
 
+export const getPod = async (name: string, id: string) => {
+  const res = await instance.get<V1Pod>(`/simulators/${id}/pods/${name}`, {});
+  console.log(res.data)
+  return res.data;
+};
+
 export const deletePod = async (name: string, id: string) => {
   const res = await instance.delete(`/simulators/${id}/pods/${name}`, {});
   return res.data;

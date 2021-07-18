@@ -2,6 +2,7 @@ import { reactive } from "@nuxtjs/composition-api";
 import {
   applyPersistentVolume,
   deletePersistentVolume,
+  getPersistentVolume,
   listPersistentVolume,
 } from "~/api/v1/pv";
 import {
@@ -52,6 +53,15 @@ export default function pvStore() {
 
     async list(simulatorID: string) {
       state.pvs = (await listPersistentVolume(simulatorID)).items;
+    },
+
+    async fetchSelected(simulatorID: string) {
+      if (state.selectedPersistentVolume?.item.metadata?.name) {
+        state.selectedPersistentVolume.item = await getPersistentVolume(
+          state.selectedPersistentVolume.item.metadata.name,
+          simulatorID
+        );
+      }
     },
 
     async apply(n: V1PersistentVolume, simulatorID: string) {

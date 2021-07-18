@@ -1,5 +1,5 @@
 <template>
-  <v-row no-gutters v-if="storageclasses.length !== 0 ">
+  <v-row no-gutters v-if="storageclasses.length !== 0">
     <v-col>
       <v-card class="ma-2" outlined>
         <v-card-title class="mb-1"> StorageClasses </v-card-title>

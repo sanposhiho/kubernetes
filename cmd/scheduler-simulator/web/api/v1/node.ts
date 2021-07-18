@@ -11,6 +11,11 @@ export const listNode = async (id: string) => {
   return res.data;
 };
 
+export const getNode = async (name: string, id: string) => {
+  const res = await instance.get<V1Node>(`/simulators/${id}/nodes/${name}`, {});
+  return res.data;
+};
+
 export const deleteNode = async (name: string, id: string) => {
   const res = await instance.delete(`/simulators/${id}/nodes/${name}`, {});
   return res.data;

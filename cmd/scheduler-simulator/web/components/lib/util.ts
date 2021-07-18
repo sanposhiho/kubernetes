@@ -31,3 +31,49 @@ export const getSimulatorIDFromPath = (path: string): string => {
   const result = path.split("/");
   return result[1];
 };
+
+export const schedulingResultToTableData = (result: {
+  [nodeName: string]: { [name: string]: string | number };
+}): Array<{ [name: string]: string | number }> => {
+  const ret: Array<{ [name: string]: string | number }> = [];
+
+  for (const nodeName in result) {
+    const data: { [name: string]: string | number } = {};
+    data["Node"] = nodeName;
+    for (const pluginName in result[nodeName]) {
+      data[pluginName] = result[nodeName][pluginName];
+    }
+    ret.push(data);
+  }
+  return ret;
+};
+
+interface header {
+  text: string;
+  value: string;
+}
+
+export const extractTableHeader = (result: {
+  [nodeName: string]: { [name: string]: string | number };
+}): Array<header> => {
+  const ret: Array<header> = [
+    {
+      text: "Node　　　　　　　　　　　",
+      value: "Node",
+    },
+  ];
+
+  var added: { [name: string]: boolean } = {};
+  for (const nodeName in result) {
+    for (const pluginName in result[nodeName]) {
+      if (!added[pluginName]) {
+        ret.push({
+          text: pluginName,
+          value: pluginName,
+        });
+        added[pluginName] = true;
+      }
+    }
+  }
+  return ret;
+};

@@ -79,12 +79,12 @@ func addNameSuffix(sac *v1.StorageClassApplyConfiguration, suffix string) *v1.St
 	if sac == nil || sac.Name == nil {
 		return sac
 	}
-	if strings.HasSuffix(*sac.Name, suffix[0:7]) {
+	if strings.HasSuffix(*sac.Name, suffix) {
 		return sac
 	}
 
 	// Add the suffix to the name only if the name don't have the suffix.
-	newName := *sac.Name + "-" + suffix[0:7]
+	newName := *sac.Name + "-" + suffix
 	sac.Name = &newName
 	return sac
 }

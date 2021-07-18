@@ -1,5 +1,5 @@
 <template>
-  <v-row no-gutters  v-if="pvcs.length !== 0 ">
+  <v-row no-gutters v-if="pvcs.length !== 0">
     <v-col>
       <v-card class="ma-2" outlined>
         <v-card-title class="mb-1"> PersistentVolumeClaims </v-card-title>
@@ -14,7 +14,12 @@
             large
             label
           >
-            <img src="/pvc.svg" height="40" alt="p.metadata.name" class="mr-2" />
+            <img
+              src="/pvc.svg"
+              height="40"
+              alt="p.metadata.name"
+              class="mr-2"
+            />
             {{ p.metadata.name }}
           </v-chip>
         </v-card-actions>

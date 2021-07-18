@@ -1,0 +1,27 @@
+export const filterPlugins = [
+  "AzureDiskLimits",
+  "EBSLimits",
+  "GCEPDLimits",
+  "InterPodAffinity",
+  "NodeAffinity",
+  "NodeName",
+  "NodePorts",
+  "NodeResourcesFit",
+  "NodeUnschedulable",
+  "NodeVolumeLimits",
+  "PodTopologySpread",
+  "TaintToleration",
+  "VolumeBinding",
+  "VolumeRestrictions",
+  "VolumeZone",
+];
+export const scorePlugins = [
+  "ImageLocality",
+  "InterPodAffinity",
+  "NodeAffinity",
+  "NodePreferAvoidPods",
+  "NodeResourcesBalancedAllocation",
+  "NodeResourcesLeastAllocated",
+  "PodTopologySpread",
+  "TaintToleration",
+];

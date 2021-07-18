@@ -4,7 +4,7 @@
     right
     temporary
     bottom
-    width="80%"
+    width="70%"
     v-model="drawer"
   >
     <template v-slot:prepend>
@@ -38,53 +38,30 @@
     <v-divider></v-divider>
 
     <template v-if="editmode">
-      <monaco-editor v-model="formData" class="editor" language="yaml"></monaco-editor>
+      
+      <EnablePluginList v-model="selectedplugins" />
+
+      <v-spacer v-for="n in 3" :key="n" />
+      <v-divider></v-divider>
+      <monaco-editor
+        v-model="formData"
+        class="editor mt-1"
+        language="yaml"
+      ></monaco-editor>
     </template>
 
     <template v-if="!editmode">
-    <template v-if="podFilterResultTreeData.length != 0 ">
-    <v-card-title>Filter</v-card-title>
-    <v-treeview
-      dense
-      v-if="!editmode"
-      :items="podFilterResultTreeData"
-    ></v-treeview>
 
-    <v-divider></v-divider>
-    </template>
-
-
-    <template v-if="podScoringResultTreeData.length != 0">
-    <v-card-title>Score</v-card-title>
-    <v-treeview
-      dense
-      v-if="!editmode"
-      :items="podScoringResultTreeData"
-    ></v-treeview>
-
-    <v-divider></v-divider>
-    </template>
-
-    <template v-if="podNormalizedScoringResultTreeData.length != 0">
-    <v-card-title>Normalize Score</v-card-title>
-    <v-treeview
-      dense
-      v-if="!editmode"
-      :items="podNormalizedScoringResultTreeData"
-    ></v-treeview>
-
-    <v-divider></v-divider>
-    </template>
-
-
-    <v-card-title>Resource Definition</v-card-title>
-    <v-treeview
-      dense
-      open-all
-      ref="tree"
-      v-if="!editmode"
-      :items="treeData"
-    ></v-treeview>
+      <SchedulingResults />
+      
+      <v-card-title>Resource Definition</v-card-title>
+      <v-treeview
+        dense
+        open-all
+        ref="tree"
+        v-if="!editmode"
+        :items="treeData"
+      ></v-treeview>
     </template>
   </v-navigation-drawer>
 </template>
@@ -100,12 +77,18 @@ import {
 import MonacoEditor from "vue-monaco";
 import yaml from "js-yaml";
 import PodStoreKey from "./PodStoreKey";
-import { getSimulatorIDFromPath, objectToTreeViewData } from "./lib/util";
+import {
+  getSimulatorIDFromPath,
+  objectToTreeViewData,
+} from "./lib/util";
 import NodeStoreKey from "./NodeStoreKey";
 import PersistentVolumeStoreKey from "./PVStoreKey";
 import PersistentVolumeClaimStoreKey from "./PVCStoreKey";
 import StorageClassStoreKey from "./StorageClassStoreKey";
+import EnablePluginList from "~/components/EnablePluginList.vue"
 import ResourceDeleteButton from "~/components/ResourceDeleteButton.vue";
+import SchedulingResults from "~/components/SchedulingResults.vue"
+import { filterPlugins, scorePlugins } from "~/components/lib/plugins";
 import {
   V1Node,
   V1PersistentVolumeClaim,
@@ -126,6 +109,7 @@ interface Store {
   resetSelected(): void;
   apply(r: Resource, simulatorID: string): Promise<void>;
   delete(name: string, simulatorID: string): Promise<void>;
+  fetchSelected(simulatorID: string): Promise<void>;
 }
 
 interface SelectedItem {
@@ -135,32 +119,31 @@ interface SelectedItem {
 
 export default defineComponent({
   components: {
+    EnablePluginList,
     MonacoEditor,
     ResourceDeleteButton,
+    SchedulingResults,
   },
   setup(_, context) {
     var store: Store | null = null;
 
+    // inject stores
     const podstore = inject(PodStoreKey);
     if (!podstore) {
       throw new Error(`${PodStoreKey} is not provided`);
     }
-
     const nodestore = inject(NodeStoreKey);
     if (!nodestore) {
       throw new Error(`${NodeStoreKey} is not provided`);
     }
-
     const pvstore = inject(PersistentVolumeStoreKey);
     if (!pvstore) {
       throw new Error(`${pvstore} is not provided`);
     }
-
     const pvcstore = inject(PersistentVolumeClaimStoreKey);
     if (!pvcstore) {
       throw new Error(`${pvcstore} is not provided`);
     }
-
     const storageclassstore = inject(StorageClassStoreKey);
     if (!storageclassstore) {
       throw new Error(`${StorageClassStoreKey} is not provided`);
@@ -172,10 +155,10 @@ export default defineComponent({
 
     const tree: any = ref(null);
     const treeData = ref(objectToTreeViewData(null));
-    const podScoringResultTreeData = ref(objectToTreeViewData(null));
-    const podNormalizedScoringResultTreeData = ref(objectToTreeViewData(null));
-    const podFilterResultTreeData = ref(objectToTreeViewData(null));
 
+    const selectedplugins = ref(filterPlugins.concat(scorePlugins));
+
+    // boolean to switch some view
     const drawer = ref(false);
     const editmode = ref(false);
     const dialog = ref(false);
@@ -184,18 +167,6 @@ export default defineComponent({
     watch(pod, () => {
       store = podstore;
       selected.value = pod.value;
-      if (pod.value?.item.metadata?.annotations) {
-        var score = JSON.parse(pod.value?.item.metadata?.annotations["scheduler-simulator/score-result"])
-        var nscore = JSON.parse(pod.value?.item.metadata?.annotations["scheduler-simulator/normalizedscore-result"])
-        var filter = JSON.parse(pod.value?.item.metadata?.annotations["scheduler-simulator/filter-result"])
-        podScoringResultTreeData.value = objectToTreeViewData(score);
-        podNormalizedScoringResultTreeData.value = objectToTreeViewData(nscore);
-        podFilterResultTreeData.value = objectToTreeViewData(filter);
-      } else {
-        podScoringResultTreeData.value = objectToTreeViewData(null);
-        podNormalizedScoringResultTreeData.value = objectToTreeViewData(null);
-        podFilterResultTreeData.value = objectToTreeViewData(null);
-      }
     });
 
     const node = computed(() => nodestore.selected);
@@ -222,8 +193,12 @@ export default defineComponent({
       selected.value = sc.value;
     });
 
-    watch(selected, () => {
+    watch(selected, (newVal, oldVal) => {
       if (selected.value) {
+        if (!oldVal) {
+          // first change
+          fetchSelected();
+        }
         editmode.value = selected.value.isNew;
 
         formData.value = yaml.dump(selected.value.item);
@@ -255,12 +230,19 @@ export default defineComponent({
 
     const route = context.root.$route;
 
+    const fetchSelected = async () => {
+      if (store) {
+        await store.fetchSelected(getSimulatorIDFromPath(route.path));
+      }
+    };
+
     const applyOnClick = () => {
       if (store) {
-        store.apply(
-          yaml.load(formData.value),
-          getSimulatorIDFromPath(route.path)
-        );
+        const y = yaml.load(formData.value);
+        y.metadata.annotations = {};
+        y.metadata.annotations["scheduler-simulator/enabled-plugins"] =
+          JSON.stringify(selectedplugins.value);
+        store.apply(y, getSimulatorIDFromPath(route.path));
       }
       drawer.value = false;
     };
@@ -284,10 +266,8 @@ export default defineComponent({
       formData,
       treeData,
       applyOnClick,
-      podScoringResultTreeData,
-      podFilterResultTreeData,
-      podNormalizedScoringResultTreeData,
       deleteOnClick,
+      selectedplugins,
     };
   },
 });

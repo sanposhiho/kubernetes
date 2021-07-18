@@ -3,17 +3,16 @@ package scorerecord
 import (
 	"context"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/schedulingresultstore"
-
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-
 	"golang.org/x/xerrors"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/klog/v2"
 	"k8s.io/kube-scheduler/config/v1beta1"
 
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugins/enabledpluginutil"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/schedulingresultstore"
 	"k8s.io/kubernetes/pkg/scheduler/algorithmprovider"
+	"k8s.io/kubernetes/pkg/scheduler/apis/config"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
 	"k8s.io/kubernetes/pkg/scheduler/framework"
 	"k8s.io/kubernetes/pkg/scheduler/framework/plugins"
@@ -116,6 +115,15 @@ func (pl *scoreRecorder) NormalizeScore(ctx context.Context, state *framework.Cy
 	if pl.p.ScoreExtensions() == nil {
 		return framework.NewStatus(framework.Error, "this plugin's NormalizeScore should not be called")
 	}
+	if !enabledpluginutil.IsPluginEnabled(pod, pl.p.Name()) {
+		for _, s := range scores {
+			// When normalizedScore to pass AddNormalizeScoreResult is -1, it means the plugin is disabled.
+			pl.store.AddNormalizeScoreResult(pod.Namespace, pod.Name, s.Name, pl.p.Name(), -1)
+		}
+
+		return nil
+	}
+
 	s := pl.p.ScoreExtensions().NormalizeScore(ctx, state, pod, scores)
 	if !s.IsSuccess() {
 		klog.Errorf("failed to run normalize score: %v, %v", s.Code(), s.Message())
@@ -130,6 +138,14 @@ func (pl *scoreRecorder) NormalizeScore(ctx context.Context, state *framework.Cy
 }
 
 func (pl *scoreRecorder) Score(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeName string) (int64, *framework.Status) {
+	if !enabledpluginutil.IsPluginEnabled(pod, pl.p.Name()) {
+		// When score to pass AddScoreResult is -1, it means the plugin is disabled.
+		pl.store.AddScoreResult(pod.Namespace, pod.Name, nodeName, pl.p.Name(), -1)
+
+		// return 0 not to affect scoring
+		return 0, nil
+	}
+
 	score, s := pl.p.Score(ctx, state, pod, nodeName)
 	if !s.IsSuccess() {
 		klog.Errorf("failed to run score plugin: %v, %v", s.Code(), s.Message())

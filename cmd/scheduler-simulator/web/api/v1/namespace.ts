@@ -5,3 +5,8 @@ export const applyNamespace = async (req: V1Namespace) => {
   const res = await instance.post<V1Namespace>("/namespaces", req);
   return res.data;
 };
+
+export const getNamespace = async (name: string) => {
+  const res = await instance.get<V1Namespace>(`/namespaces/${name}`);
+  return res.data;
+};

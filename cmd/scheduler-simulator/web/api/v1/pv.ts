@@ -23,6 +23,14 @@ export const listPersistentVolume = async (id: string) => {
   return res.data;
 };
 
+export const getPersistentVolume = async (name: string, id: string) => {
+  const res = await instance.get<V1PersistentVolume>(
+    `/simulators/${id}/persistentvolumes/${name}`,
+    {}
+  );
+  return res.data;
+};
+
 export const deletePersistentVolume = async (name: string, id: string) => {
   const res = await instance.delete(
     `/simulators/${id}/persistentvolumes/${name}`,

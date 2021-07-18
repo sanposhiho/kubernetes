@@ -105,12 +105,12 @@ func addNameSuffix(nac *v1.NodeApplyConfiguration, suffix string) {
 	if nac == nil || nac.Name == nil {
 		return
 	}
-	if strings.HasSuffix(*nac.Name, suffix[0:7]) {
+	if strings.HasSuffix(*nac.Name, suffix) {
 		return
 	}
 
 	// Add the suffix to the name only if the name don't have the suffix.
-	newName := *nac.Name + "-" + suffix[0:7]
+	newName := *nac.Name + "-" + suffix
 	nac.Name = &newName
 }
 

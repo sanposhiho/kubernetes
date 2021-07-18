@@ -6,9 +6,17 @@
         <v-row no-gutters>
           <v-col tile v-for="(n, i) in nodes" :key="i" cols="auto">
             <v-card class="ma-2" outlined @click="onClick(n)">
-              <v-card-title >
-                  <img src="/node.svg" height="40" alt="p.metadata.name" class="mr-2" />
-                  {{ n.metadata.name }}
+              <v-card-title>
+                <img
+                  src="/node.svg"
+                  height="40"
+                  alt="p.metadata.name"
+                  class="mr-2"
+                />
+                {{ n.metadata.name.slice(0, -37) }}
+                <div class="grey--text subtitle-2 my-2 mx-1">
+                  {{ n.metadata.name.slice(-37) }}
+                </div>
               </v-card-title>
               <PodList :nodeName="n.metadata.name" />
             </v-card>
