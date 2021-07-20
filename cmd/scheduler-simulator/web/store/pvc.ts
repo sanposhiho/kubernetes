@@ -18,9 +18,10 @@ type stateType = {
 };
 
 type selectedPersistentVolumeClaim = {
-  // isNew represents whether this Pod is a new PersistentVolumeClaim or not.
+  // isNew represents whether this is a new PersistentVolumeClaim or not.
   isNew: boolean;
   item: V1PersistentVolumeClaim;
+  resourceKind: string;
 };
 
 export default function pvcStore() {
@@ -43,6 +44,7 @@ export default function pvcStore() {
         state.selectedPersistentVolumeClaim = {
           isNew: isNew,
           item: n,
+          resourceKind: "PVC",
         };
       }
     },

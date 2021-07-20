@@ -11,6 +11,7 @@ type selectedNode = {
   // isNew represents whether this Node is a new one or not.
   isNew: boolean;
   item: V1Node;
+  resourceKind: string;
 };
 
 export default function nodeStore() {
@@ -33,6 +34,7 @@ export default function nodeStore() {
         state.selectedNode = {
           isNew: isNew,
           item: n,
+          resourceKind: "Node",
         };
       }
     },

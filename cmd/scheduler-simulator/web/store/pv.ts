@@ -18,9 +18,10 @@ type stateType = {
 };
 
 type selectedPersistentVolume = {
-  // isNew represents whether this Pod is a new PersistentVolume or not.
+  // isNew represents whether this is a new PersistentVolume or not.
   isNew: boolean;
   item: V1PersistentVolume;
+  resourceKind: string;
 };
 
 export default function pvStore() {
@@ -43,6 +44,7 @@ export default function pvStore() {
         state.selectedPersistentVolume = {
           isNew: isNew,
           item: n,
+          resourceKind: "PV",
         };
       }
     },

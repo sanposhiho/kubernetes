@@ -18,9 +18,10 @@ type stateType = {
 };
 
 type selectedStorageClass = {
-  // isNew represents whether this Pod is a new StorageClass or not.
+  // isNew represents whether this is a new StorageClass or not.
   isNew: boolean;
   item: V1StorageClass;
+  resourceKind: string;
 };
 
 export default function storageclassStore() {
@@ -43,6 +44,7 @@ export default function storageclassStore() {
         state.selectedStorageClass = {
           isNew: isNew,
           item: n,
+          resourceKind: "SC",
         };
       }
     },

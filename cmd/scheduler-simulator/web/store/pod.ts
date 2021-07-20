@@ -10,9 +10,10 @@ type stateType = {
 };
 
 export type SelectedPod = {
-  // isNew represents whether this Pod is a new one or not.
+  // isNew represents whether this is a new one or not.
   isNew: boolean;
   item: V1Pod;
+  resourceKind: string;
 };
 
 export default function podStore() {
@@ -35,6 +36,7 @@ export default function podStore() {
         state.selectedPod = {
           isNew: isNew,
           item: p,
+          resourceKind: "Pod",
         };
       }
     },
@@ -63,11 +65,8 @@ export default function podStore() {
 
     async fetchSelected(simulatorID: string) {
       if (this.selected?.item.metadata?.name && !this.selected?.isNew) {
-        const p = await getPod(
-          this.selected.item.metadata.name,
-          simulatorID
-        );
-        this.select(p, this.selected?.isNew)
+        const p = await getPod(this.selected.item.metadata.name, simulatorID);
+        this.select(p, this.selected?.isNew);
       }
     },
 

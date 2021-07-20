@@ -38,7 +38,7 @@
     <v-divider></v-divider>
 
     <template v-if="editmode">
-      <EnablePluginList v-model="selectedplugins" />
+      <EnablePluginList v-model="selectedplugins" v-if="selected && selected.resourceKind == 'Pod'" />
 
       <v-spacer v-for="n in 3" :key="n" />
       <v-divider></v-divider>
@@ -62,19 +62,16 @@ import {
 } from "@nuxtjs/composition-api";
 import yaml from "js-yaml";
 import PodStoreKey from "../StoreKey/PodStoreKey";
-import {
-  getSimulatorIDFromPath,
-  objectToTreeViewData,
-} from "../lib/util";
+import { getSimulatorIDFromPath, objectToTreeViewData } from "../lib/util";
 import NodeStoreKey from "../StoreKey/NodeStoreKey";
 import PersistentVolumeStoreKey from "../StoreKey/PVStoreKey";
 import PersistentVolumeClaimStoreKey from "../StoreKey/PVCStoreKey";
 import StorageClassStoreKey from "../StoreKey/StorageClassStoreKey";
-import EnablePluginList from "./EnablePluginList.vue"
+import EnablePluginList from "./EnablePluginList.vue";
 import ResourceDeleteButton from "./ResourceDeleteButton.vue";
-import YamlEditor from "./YamlEditor.vue"
-import SchedulingResults from "./SchedulingResults.vue"
-import ResourceDefinitionTree from "./ResourceDefinitionTree.vue"
+import YamlEditor from "./YamlEditor.vue";
+import SchedulingResults from "./SchedulingResults.vue";
+import ResourceDefinitionTree from "./ResourceDefinitionTree.vue";
 import { filterPlugins, scorePlugins } from "~/components/lib/plugins";
 import {
   V1Node,
@@ -102,6 +99,7 @@ interface Store {
 interface SelectedItem {
   isNew: boolean;
   item: Resource;
+  resourceKind: string;
 }
 
 export default defineComponent({
@@ -207,7 +205,7 @@ export default defineComponent({
         }
         store = null;
         selected.value = null;
-      } 
+      }
     });
 
     const route = context.root.$route;
@@ -221,7 +219,9 @@ export default defineComponent({
     const applyOnClick = () => {
       if (store) {
         const y = yaml.load(formData.value);
-        y.metadata.annotations = {};
+        if (!y.metadata.annotations) {
+          y.metadata.annotations = {};
+        }
         y.metadata.annotations["scheduler-simulator/enabled-plugins"] =
           JSON.stringify(selectedplugins.value);
         store.apply(y, getSimulatorIDFromPath(route.path));

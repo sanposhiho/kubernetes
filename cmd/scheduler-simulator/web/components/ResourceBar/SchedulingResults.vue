@@ -1,42 +1,42 @@
 <template>
-<v-expansion-panels accordion multiple>
-        <v-expansion-panel v-if="filterTableData.length > 1">
-          <v-expansion-panel-header> Filter </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-data-table
-              dense
-              :headers="filterTableHeader"
-              :items="filterTableData"
-              item-key="Node"
-            >
-            </v-data-table>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-        <v-expansion-panel v-if="scoreTableData.length > 1">
-          <v-expansion-panel-header> Score </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-data-table
-              dense
-              :headers="scoreTableHeader"
-              :items="scoreTableData"
-              item-key="Node"
-            >
-            </v-data-table>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-        <v-expansion-panel v-if="normalizedTableData.length > 1">
-          <v-expansion-panel-header> Normalize Score </v-expansion-panel-header>
-          <v-expansion-panel-content>
-            <v-data-table
-              dense
-              :headers="normalizedTableHeader"
-              :items="normalizedTableData"
-              item-key="Node"
-            >
-            </v-data-table>
-          </v-expansion-panel-content>
-        </v-expansion-panel>
-      </v-expansion-panels>
+  <v-expansion-panels accordion multiple>
+    <v-expansion-panel v-if="filterTableData.length > 1">
+      <v-expansion-panel-header> Filter </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <v-data-table
+          dense
+          :headers="filterTableHeader"
+          :items="filterTableData"
+          item-key="Node"
+        >
+        </v-data-table>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <v-expansion-panel v-if="scoreTableData.length > 1">
+      <v-expansion-panel-header> Score </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <v-data-table
+          dense
+          :headers="scoreTableHeader"
+          :items="scoreTableData"
+          item-key="Node"
+        >
+        </v-data-table>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    <v-expansion-panel v-if="normalizedTableData.length > 1">
+      <v-expansion-panel-header> Normalize Score </v-expansion-panel-header>
+      <v-expansion-panel-content>
+        <v-data-table
+          dense
+          :headers="normalizedTableHeader"
+          :items="normalizedTableData"
+          item-key="Node"
+        >
+        </v-data-table>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+  </v-expansion-panels>
 </template>
 <script lang="ts">
 import {
