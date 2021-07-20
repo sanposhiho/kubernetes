@@ -2,7 +2,6 @@ package config
 
 import (
 	"errors"
-	"fmt"
 	"os"
 	"strconv"
 
@@ -85,7 +84,6 @@ func getEtcdURL() (string, error) {
 	if e == "" {
 		return "", xerrors.Errorf("get ETCD_URL from env: %w", ErrEmptyEnv)
 	}
-	fmt.Println(e)
 
 	return e, nil
 }

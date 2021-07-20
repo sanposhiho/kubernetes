@@ -1,10 +1,12 @@
 # Web-based Kubernetes scheduler simulator
 
-Under developing... (issue: [web-based simulator for scheduler behaviour #99605](https://github.com/kubernetes/kubernetes/issues/99605))
+This project is now under developing... 
+
+(issue: [web-based simulator for scheduler behaviour #99605](https://github.com/kubernetes/kubernetes/issues/99605))
 
 ## Contributing
 
-For the first step, you can prepare tools with make.
+For the first step, you have to prepare tools with make.
 
 ```sh
 make tools
@@ -23,6 +25,15 @@ make format
 
 see [Makefile](Makefile) for more details.
 
-## Others
+### Run server
 
-- [API Specification](docs/api.md)
+```sh
+make serve
+```
+
+It starts etcd and simulator-server.
+You have to install etcd with [../../hack/install-etcd.sh](../../hack/install-etcd.sh).
+
+### Run frontend
+
+For the frontend, please see [README.md](./web/README.md) on ./web dir.

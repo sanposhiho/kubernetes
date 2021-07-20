@@ -1,5 +1,7 @@
 # scheduler-simulator
 
+This is the frontend of Kubernetes scheduler simulator.
+
 ## Build Setup
 
 ```bash
