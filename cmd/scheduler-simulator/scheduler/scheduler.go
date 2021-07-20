@@ -21,6 +21,7 @@ import (
 	"k8s.io/klog/v2"
 	"k8s.io/kube-scheduler/config/v1beta1"
 
+	simulatorcfg "k8s.io/kubernetes/cmd/scheduler-simulator/config"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugins"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/shutdownfn"
 	"k8s.io/kubernetes/pkg/controller/volume/persistentvolume"
@@ -35,8 +36,8 @@ import (
 )
 
 // SetupSchedulerOrDie starts k8s-apiserver and scheduler.
-func SetupSchedulerOrDie() (clientset.Interface, coreinformers.PodInformer, shutdownfn.Shutdownfn, error) {
-	apiURL, apiShutdown := startAPIServerOrDie()
+func SetupSchedulerOrDie(simulatorcfg *simulatorcfg.Config) (clientset.Interface, coreinformers.PodInformer, shutdownfn.Shutdownfn, error) {
+	apiURL, apiShutdown := startAPIServerOrDie(simulatorcfg.EtcdURL)
 
 	cfg := &restclient.Config{
 		Host:          apiURL,
@@ -75,7 +76,7 @@ func SetupSchedulerOrDie() (clientset.Interface, coreinformers.PodInformer, shut
 
 // startAPIServerOrDie starts API server, and it make panic when a error happen.
 // TODO: change it not to use integration framework
-func startAPIServerOrDie() (string, shutdownfn.Shutdownfn) {
+func startAPIServerOrDie(etcdURL string) (string, shutdownfn.Shutdownfn) {
 	h := &framework.APIServerHolder{Initialized: make(chan struct{})}
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		<-h.Initialized
@@ -84,8 +85,7 @@ func startAPIServerOrDie() (string, shutdownfn.Shutdownfn) {
 
 	// etcdOption for control plane
 	etcdOptions := options.NewEtcdOptions(storagebackend.NewDefaultConfig(uuid.New().String(), nil))
-	// TODO: get etcd address from config
-	etcdOptions.StorageConfig.Transport.ServerList = []string{"http://127.0.0.1:2379"}
+	etcdOptions.StorageConfig.Transport.ServerList = []string{etcdURL}
 	c := framework.NewIntegrationTestControlPlaneConfigWithOptions(&framework.MasterConfigOptions{
 		EtcdOptions: etcdOptions,
 	})

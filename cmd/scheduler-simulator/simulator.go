@@ -26,7 +26,7 @@ func startSimulator() error {
 	}
 
 	// start kube-apiserver and kube-scheduler
-	clientset, podInformer, shutdownFn1, err := scheduler.SetupSchedulerOrDie()
+	clientset, podInformer, shutdownFn1, err := scheduler.SetupSchedulerOrDie(cfg)
 	if err != nil {
 		return xerrors.Errorf("start scheduler and some needed k8s components: %w", err)
 	}

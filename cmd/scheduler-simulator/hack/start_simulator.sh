@@ -4,6 +4,7 @@ KUBE_ROOT=$(dirname "${BASH_SOURCE[0]}")/../../..
 
 source "${KUBE_ROOT}/hack/lib/init.sh"
 export PATH="${KUBE_ROOT}/third_party/etcd:${PATH}"
+export KUBE_SCHEDULER_SIMULATOR_ETCD_URL=${KUBE_INTEGRATION_ETCD_URL}
 
 checkEtcdOnPath() {
   kube::log::status "Checking etcd is on PATH"
@@ -19,6 +20,7 @@ start_etcd() {
   kube::log::status "Starting etcd instance"
   CLEANUP_REQUIRED=1
   kube::etcd::start
+  KUBE_SCHEDULER_SIMULATOR_ETCD_URL=${KUBE_INTEGRATION_ETCD_URL}
   kube::log::status "etcd started"
 }
 

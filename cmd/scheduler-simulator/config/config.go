@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strconv"
 
@@ -19,8 +20,9 @@ var (
 
 // Config is configuration for simulator.
 type Config struct {
-	Env  env.Env
-	Port int
+	Env     env.Env
+	Port    int
+	EtcdURL string
 }
 
 // NewConfig gets some settings from environment variables.
@@ -35,9 +37,15 @@ func NewConfig() (*Config, error) {
 		return nil, xerrors.Errorf("get env: %w", err)
 	}
 
+	etcdurl, err := getEtcdURL()
+	if err != nil {
+		return nil, xerrors.Errorf("get etcd URL: %w", err)
+	}
+
 	return &Config{
-		Env:  e,
-		Port: port,
+		Env:     e,
+		Port:    port,
+		EtcdURL: etcdurl,
 	}, nil
 }
 
@@ -70,4 +78,14 @@ func getEnv() (env.Env, error) {
 	}
 
 	return 0, xerrors.Errorf("convert ENV of string to type Env: %w", ErrInvalidEnv)
+}
+
+func getEtcdURL() (string, error) {
+	e := os.Getenv("KUBE_SCHEDULER_SIMULATOR_ETCD_URL")
+	if e == "" {
+		return "", xerrors.Errorf("get ETCD_URL from env: %w", ErrEmptyEnv)
+	}
+	fmt.Println(e)
+
+	return e, nil
 }
