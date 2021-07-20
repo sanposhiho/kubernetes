@@ -13,7 +13,6 @@ export const listPod = async (id: string) => {
 
 export const getPod = async (name: string, id: string) => {
   const res = await instance.get<V1Pod>(`/simulators/${id}/pods/${name}`, {});
-  console.log(res.data)
   return res.data;
 };
 

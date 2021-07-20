@@ -6,12 +6,12 @@
 
 <script lang="ts">
 import { defineComponent, provide } from "@nuxtjs/composition-api";
-import PersistentVolumeStore from "../store/pv";
-import PersistentVolumeStoreKey from "./PVStoreKey";
+import PersistentVolumeClaimStore from "../../store/pvc";
+import PersistentVolumeClaimStoreKey from "../StoreKey/PVCStoreKey";
 
 export default defineComponent({
   setup() {
-    provide(PersistentVolumeStoreKey, PersistentVolumeStore());
+    provide(PersistentVolumeClaimStoreKey, PersistentVolumeClaimStore());
     return {};
   },
 });

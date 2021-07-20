@@ -38,30 +38,17 @@
     <v-divider></v-divider>
 
     <template v-if="editmode">
-      
       <EnablePluginList v-model="selectedplugins" />
 
       <v-spacer v-for="n in 3" :key="n" />
       <v-divider></v-divider>
-      <monaco-editor
-        v-model="formData"
-        class="editor mt-1"
-        language="yaml"
-      ></monaco-editor>
+
+      <YamlEditor v-model="formData" />
     </template>
 
     <template v-if="!editmode">
-
       <SchedulingResults />
-      
-      <v-card-title>Resource Definition</v-card-title>
-      <v-treeview
-        dense
-        open-all
-        ref="tree"
-        v-if="!editmode"
-        :items="treeData"
-      ></v-treeview>
+      <ResourceDefinitionTree :items="treeData" />
     </template>
   </v-navigation-drawer>
 </template>
@@ -73,21 +60,21 @@ import {
   watch,
   defineComponent,
 } from "@nuxtjs/composition-api";
-//@ts-ignore // it is ok to ignore.
-import MonacoEditor from "vue-monaco";
 import yaml from "js-yaml";
-import PodStoreKey from "./PodStoreKey";
+import PodStoreKey from "../StoreKey/PodStoreKey";
 import {
   getSimulatorIDFromPath,
   objectToTreeViewData,
-} from "./lib/util";
-import NodeStoreKey from "./NodeStoreKey";
-import PersistentVolumeStoreKey from "./PVStoreKey";
-import PersistentVolumeClaimStoreKey from "./PVCStoreKey";
-import StorageClassStoreKey from "./StorageClassStoreKey";
-import EnablePluginList from "~/components/EnablePluginList.vue"
-import ResourceDeleteButton from "~/components/ResourceDeleteButton.vue";
-import SchedulingResults from "~/components/SchedulingResults.vue"
+} from "../lib/util";
+import NodeStoreKey from "../StoreKey/NodeStoreKey";
+import PersistentVolumeStoreKey from "../StoreKey/PVStoreKey";
+import PersistentVolumeClaimStoreKey from "../StoreKey/PVCStoreKey";
+import StorageClassStoreKey from "../StoreKey/StorageClassStoreKey";
+import EnablePluginList from "./EnablePluginList.vue"
+import ResourceDeleteButton from "./ResourceDeleteButton.vue";
+import YamlEditor from "./YamlEditor.vue"
+import SchedulingResults from "./SchedulingResults.vue"
+import ResourceDefinitionTree from "./ResourceDefinitionTree.vue"
 import { filterPlugins, scorePlugins } from "~/components/lib/plugins";
 import {
   V1Node,
@@ -120,7 +107,8 @@ interface SelectedItem {
 export default defineComponent({
   components: {
     EnablePluginList,
-    MonacoEditor,
+    YamlEditor,
+    ResourceDefinitionTree,
     ResourceDeleteButton,
     SchedulingResults,
   },
@@ -149,13 +137,10 @@ export default defineComponent({
       throw new Error(`${StorageClassStoreKey} is not provided`);
     }
 
-    const selected = ref(null as SelectedItem | null);
-
-    const formData = ref("");
-
-    const tree: any = ref(null);
     const treeData = ref(objectToTreeViewData(null));
 
+    // for edit mode
+    const formData = ref("");
     const selectedplugins = ref(filterPlugins.concat(scorePlugins));
 
     // boolean to switch some view
@@ -163,6 +148,8 @@ export default defineComponent({
     const editmode = ref(false);
     const dialog = ref(false);
 
+    // watch each selected resource
+    const selected = ref(null as SelectedItem | null);
     const pod = computed(() => podstore.selected);
     watch(pod, () => {
       store = podstore;
@@ -220,12 +207,7 @@ export default defineComponent({
         }
         store = null;
         selected.value = null;
-      } else {
-        // open all tree when sidebar be visible.
-        if (tree.value) {
-          tree.value.updateAll(true);
-        }
-      }
+      } 
     });
 
     const route = context.root.$route;
@@ -261,7 +243,6 @@ export default defineComponent({
       drawer,
       editmode,
       dialog,
-      tree,
       selected,
       formData,
       treeData,

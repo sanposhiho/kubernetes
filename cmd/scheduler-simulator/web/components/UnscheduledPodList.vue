@@ -16,7 +16,7 @@ import {
   defineComponent,
 } from "@nuxtjs/composition-api";
 import { getSimulatorIDFromPath } from "./lib/util";
-import PodStoreKey from "./PodStoreKey";
+import PodStoreKey from "./StoreKey/PodStoreKey";
 export default defineComponent({
   setup(_, context) {
     const store = inject(PodStoreKey);

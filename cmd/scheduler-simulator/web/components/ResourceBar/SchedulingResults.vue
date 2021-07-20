@@ -46,8 +46,8 @@ import {
   computed,
   watch,
 } from "@nuxtjs/composition-api";
-import { extractTableHeader, schedulingResultToTableData } from "./lib/util";
-import PodStoreKey from "./PodStoreKey";
+import { extractTableHeader, schedulingResultToTableData } from "../lib/util";
+import PodStoreKey from "../StoreKey/PodStoreKey";
 
 export default defineComponent({
   setup() {

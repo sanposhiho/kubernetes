@@ -34,7 +34,7 @@ import {
   defineComponent,
 } from "@nuxtjs/composition-api";
 import { getSimulatorIDFromPath } from "./lib/util";
-import StorageClassStoreKey from "./StorageClassStoreKey";
+import StorageClassStoreKey from "./StoreKey/StorageClassStoreKey";
 export default defineComponent({
   setup(_, context) {
     const store = inject(StorageClassStoreKey);

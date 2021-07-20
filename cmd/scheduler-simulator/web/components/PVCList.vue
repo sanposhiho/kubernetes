@@ -38,7 +38,7 @@ import {
   defineComponent,
 } from "@nuxtjs/composition-api";
 import { getSimulatorIDFromPath } from "./lib/util";
-import PersistentVolumeClaimStoreKey from "./PVCStoreKey";
+import PersistentVolumeClaimStoreKey from "./StoreKey/PVCStoreKey";
 export default defineComponent({
   setup(_, context) {
     const store = inject(PersistentVolumeClaimStoreKey);

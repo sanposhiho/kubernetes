@@ -22,11 +22,11 @@ import {
   storageclassTemplate,
 } from "./lib/template";
 import { getSimulatorIDFromPath } from "./lib/util";
-import PodStoreKey from "./PodStoreKey";
-import NodeStoreKey from "./NodeStoreKey";
-import PersistentVolumeStoreKey from "./PVStoreKey";
-import PersistentVolumeClaimStoreKey from "./PVCStoreKey";
-import StorageClassStoreKey from "./StorageClassStoreKey";
+import PodStoreKey from "./StoreKey/PodStoreKey";
+import NodeStoreKey from "./StoreKey/NodeStoreKey";
+import PersistentVolumeStoreKey from "./StoreKey/PVStoreKey";
+import PersistentVolumeClaimStoreKey from "./StoreKey/PVCStoreKey";
+import StorageClassStoreKey from "./StoreKey/StorageClassStoreKey";
 import {
   V1Node,
   V1PersistentVolumeClaim,

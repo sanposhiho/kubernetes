@@ -1,5 +1,5 @@
 import { InjectionKey } from "@nuxtjs/composition-api";
-import { StorageClassStore } from "../store/storageclass";
+import { StorageClassStore } from "../../store/storageclass";
 
 const StorageClassStoreKey: InjectionKey<StorageClassStore> =
   Symbol("StorageClassStore");
