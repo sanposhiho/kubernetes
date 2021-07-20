@@ -7,9 +7,12 @@ import (
 	"net/http/httptest"
 	"time"
 
+	"github.com/google/uuid"
 	"golang.org/x/xerrors"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
+	"k8s.io/apiserver/pkg/server/options"
+	"k8s.io/apiserver/pkg/storage/storagebackend"
 	"k8s.io/client-go/informers"
 	coreinformers "k8s.io/client-go/informers/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
@@ -71,6 +74,7 @@ func SetupSchedulerOrDie() (clientset.Interface, coreinformers.PodInformer, shut
 }
 
 // startAPIServerOrDie starts API server, and it make panic when a error happen.
+// TODO: change it not to use integration framework
 func startAPIServerOrDie() (string, shutdownfn.Shutdownfn) {
 	h := &framework.APIServerHolder{Initialized: make(chan struct{})}
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
@@ -78,7 +82,13 @@ func startAPIServerOrDie() (string, shutdownfn.Shutdownfn) {
 		h.M.GenericAPIServer.Handler.ServeHTTP(w, req)
 	}))
 
-	c := framework.NewIntegrationTestControlPlaneConfig()
+	// etcdOption for control plane
+	etcdOptions := options.NewEtcdOptions(storagebackend.NewDefaultConfig(uuid.New().String(), nil))
+	// TODO: get etcd address from config
+	etcdOptions.StorageConfig.Transport.ServerList = []string{"http://127.0.0.1:2379"}
+	c := framework.NewIntegrationTestControlPlaneConfigWithOptions(&framework.MasterConfigOptions{
+		EtcdOptions: etcdOptions,
+	})
 	c.GenericConfig.OpenAPIConfig = framework.DefaultOpenAPIConfig()
 
 	// Note: This function die when a error happen.
