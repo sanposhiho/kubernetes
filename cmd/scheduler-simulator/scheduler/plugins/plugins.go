@@ -13,7 +13,13 @@ import (
 )
 
 func NewRegistry(informerFactory informers.SharedInformerFactory, client clientset.Interface) schedulerRuntime.Registry {
-	store := schedulingresultstore.New(informerFactory, client)
+	defaultScorePluginWeight := map[string]int32{}
+	defaultScorePlugin := scorerecord.DefaultScorePlugins()
+	for _, p := range defaultScorePlugin {
+		defaultScorePluginWeight[p.Name] = p.Weight
+	}
+
+	store := schedulingresultstore.New(informerFactory, client, defaultScorePluginWeight)
 	sr := scorerecord.NewRegistryForScoreRecord(store)
 	fr := filterrecord.NewRegistryForFilterRecord(store)
 
@@ -47,11 +53,11 @@ func NewPlugin() *config.Plugins {
 }
 
 func NewPluginConfig() ([]config.PluginConfig, error) {
-	s, err := scorerecord.ScoreRecordPluginConfig()
+	s, err := scorerecord.PluginConfigs()
 	if err != nil {
 		return nil, xerrors.Errorf("get score record plugin config: %w", err)
 	}
-	f, err := filterrecord.FilterRecordPluginConfig()
+	f, err := filterrecord.PluginConfigs()
 	if err != nil {
 		return nil, xerrors.Errorf("get filter record plugin config: %w", err)
 	}

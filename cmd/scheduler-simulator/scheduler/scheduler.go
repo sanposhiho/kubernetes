@@ -75,7 +75,7 @@ func SetupSchedulerOrDie(simulatorcfg *simulatorcfg.Config) (clientset.Interface
 }
 
 // startAPIServerOrDie starts API server, and it make panic when a error happen.
-// TODO: change it not to use integration framework
+// TODO: change it not to use integration framework.
 func startAPIServerOrDie(etcdURL string) (string, shutdownfn.Shutdownfn) {
 	h := &framework.APIServerHolder{Initialized: make(chan struct{})}
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -21,21 +22,55 @@ import (
 type Store struct {
 	mu *sync.Mutex
 
-	client clientset.Interface
-	result map[key]*result
+	client            clientset.Interface
+	result            map[key]*result
+	scorePluginWeight map[string]int32
 }
 
-type result struct {
-	// node name → plugin name → score
-	score map[string]map[string]int64
+const (
+	// DisabledMessage is used when plugin is disabled.
+	DisabledMessage = "(disabled)"
+	// DisabledScore means the scoring plugin is disabled.
+	DisabledScore = -1
 
-	// node name → plugin name → normalizedScore
-	normalizedScore map[string]map[string]int64
+	// PassedFilterMessage is used when node pass the filter plugin.
+	PassedFilterMessage = "passed"
+)
+
+// result has a scheduling result of pod.
+type result struct {
+	// node name → plugin name → score(string)
+	// When the plugin is disabled, score will be DisabledMessage.
+	score map[string]map[string]string
+
+	// node name → plugin name → finalscore(string)
+	// This score is normalized and applied weight for each plugins.
+	// When the plugin is disabled, score will be DisabledMessage.
+	finalscore map[string]map[string]string
 
 	// node name → plugin name → filtering result
-	// - When node pass the filter, filtering result is "pass".
-	// - When node blocked by the filter, filtering result is blocked reason.
+	// When node pass the filter, filtering result will be PassedFilterMessage.
+	// When node blocked by the filter, filtering result is blocked reason.
+	// When the plugin is disabled, score will be DisabledMessage.
 	filter map[string]map[string]string
+}
+
+func New(informerFactory informers.SharedInformerFactory, client clientset.Interface, scorePluginWeight map[string]int32) *Store {
+	s := &Store{
+		mu:                new(sync.Mutex),
+		client:            client,
+		result:            map[key]*result{},
+		scorePluginWeight: scorePluginWeight,
+	}
+
+	// Store adds scheduling results when pod is updating.
+	informerFactory.Core().V1().Pods().Informer().AddEventHandler(
+		cache.ResourceEventHandlerFuncs{
+			UpdateFunc: s.addSchedulingResultToPod,
+		},
+	)
+
+	return s
 }
 
 // key is the key of result map on Store.
@@ -50,36 +85,20 @@ func newKey(namespace, podName string) key {
 
 func newData() *result {
 	d := &result{
-		score:           map[string]map[string]int64{},
-		normalizedScore: map[string]map[string]int64{},
-		filter:          map[string]map[string]string{},
+		score:      map[string]map[string]string{},
+		finalscore: map[string]map[string]string{},
+		filter:     map[string]map[string]string{},
 	}
 	return d
 }
 
-func New(informerFactory informers.SharedInformerFactory, client clientset.Interface) *Store {
-	s := &Store{
-		mu:     new(sync.Mutex),
-		client: client,
-		result: map[key]*result{},
-	}
-
-	informerFactory.Core().V1().Pods().Informer().AddEventHandler(
-		cache.ResourceEventHandlerFuncs{
-			UpdateFunc: s.addSchedulingResultToPod,
-		},
-	)
-
-	return s
-}
-
 const (
-	filterResultAnnotationKey          = "scheduler-simulator/filter-result"
-	scoreResultAnnotationKey           = "scheduler-simulator/score-result"
-	normalizedScoreResultAnnotationKey = "scheduler-simulator/normalizedscore-result"
+	filterResultAnnotationKey     = "scheduler-simulator/filter-result"
+	scoreResultAnnotationKey      = "scheduler-simulator/score-result"
+	finalScoreResultAnnotationKey = "scheduler-simulator/finalscore-result"
 )
 
-func (s *Store) addSchedulingResultToPod(oldObj, newObj interface{}) {
+func (s *Store) addSchedulingResultToPod(_, newObj interface{}) {
 	ctx := context.Background()
 
 	pod, ok := newObj.(*v1.Pod)
@@ -89,20 +108,17 @@ func (s *Store) addSchedulingResultToPod(oldObj, newObj interface{}) {
 	}
 
 	_, ok = pod.Annotations[scoreResultAnnotationKey]
-	_, ok2 := pod.Annotations[normalizedScoreResultAnnotationKey]
+	_, ok2 := pod.Annotations[finalScoreResultAnnotationKey]
 	if ok && ok2 {
-		// already have scheduling result
+		// Pod already have scheduling result
 		return
 	}
 
 	k := newKey(pod.Namespace, pod.Name)
 	if _, ok := s.result[k]; !ok {
-		// not scheduled yet
+		// Store doesn't have scheduling result of pod.
 		return
 	}
-	defer func() {
-		s.DeleteData(k)
-	}()
 
 	if err := s.addFilterResultToPod(pod); err != nil {
 		klog.Errorf("failed to add filtering result to pod: %v", err)
@@ -114,8 +130,8 @@ func (s *Store) addSchedulingResultToPod(oldObj, newObj interface{}) {
 		return
 	}
 
-	if err := s.addNormalizedScoreResultToPod(pod); err != nil {
-		klog.Errorf("failed to add normalized score result to pod: %v", err)
+	if err := s.addFinalScoreResultToPod(pod); err != nil {
+		klog.Errorf("failed to add final score result to pod: %v", err)
 		return
 	}
 
@@ -131,6 +147,9 @@ func (s *Store) addSchedulingResultToPod(oldObj, newObj interface{}) {
 		klog.Errorf("failed to update pod with retry to record score: %v", err)
 		return
 	}
+
+	// delete data from Store only if data is successfully added on pod's annotations.
+	s.DeleteData(k)
 }
 
 func (s *Store) addFilterResultToPod(pod *v1.Pod) error {
@@ -155,26 +174,23 @@ func (s *Store) addScoreResultToPod(pod *v1.Pod) error {
 	return nil
 }
 
-func (s *Store) addNormalizedScoreResultToPod(pod *v1.Pod) error {
+func (s *Store) addFinalScoreResultToPod(pod *v1.Pod) error {
 	k := newKey(pod.Namespace, pod.Name)
-	scores, err := json.Marshal(s.result[k].normalizedScore)
+	scores, err := json.Marshal(s.result[k].finalscore)
 	if err != nil {
 		return fmt.Errorf("encode json to record scores: %w", err)
 	}
 
-	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, normalizedScoreResultAnnotationKey, string(scores))
+	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, finalScoreResultAnnotationKey, string(scores))
 	return nil
 }
 
+// AddFilterResult adds filtering result to pod annotation.
 func (s *Store) AddFilterResult(namespace, podName, nodeName, pluginName, reason string) {
 	if !strings.HasSuffix(nodeName, namespace) {
 		// when suffix of nodeName don't match namespace, this node is not created by a user who creates this pod.
 		// So we don't need to record the result in this case.
 		return
-	}
-	if reason == "" {
-		// empty reason means the node passed the filter.
-		reason = "pass"
 	}
 
 	s.mu.Lock()
@@ -193,7 +209,6 @@ func (s *Store) AddFilterResult(namespace, podName, nodeName, pluginName, reason
 }
 
 // AddScoreResult adds scoring result to pod annotation.
-// When score is -1, it means the plugin is disabled.
 func (s *Store) AddScoreResult(namespace, podName, nodeName, pluginName string, score int64) {
 	if !strings.HasSuffix(nodeName, namespace) {
 		// when suffix of nodeName don't match namespace, this node is not created by a user who creates this pod.
@@ -210,19 +225,19 @@ func (s *Store) AddScoreResult(namespace, podName, nodeName, pluginName string, 
 	}
 
 	if _, ok := s.result[k].score[nodeName]; !ok {
-		s.result[k].score[nodeName] = map[string]int64{}
+		s.result[k].score[nodeName] = map[string]string{}
 	}
-	if _, ok := s.result[k].normalizedScore[nodeName]; !ok {
-		s.result[k].normalizedScore[nodeName] = map[string]int64{}
+	if _, ok := s.result[k].finalscore[nodeName]; !ok {
+		s.result[k].finalscore[nodeName] = map[string]string{}
 	}
 
-	s.result[k].score[nodeName][pluginName] = score
-	s.result[k].normalizedScore[nodeName][pluginName] = score
+	s.result[k].score[nodeName][pluginName] = scoreToString(score)
+	s.addFinalScoreResultWithoutLock(namespace, podName, nodeName, pluginName, score)
 }
 
-// AddNormalizeScoreResult adds normalized score result to pod annotation.
-// When normalizedScore is -1, it means the plugin is disabled.
-func (s *Store) AddNormalizeScoreResult(namespace, podName, nodeName, pluginName string, normalizedScore int64) {
+// AddFinalScoreResult adds final score result to pod annotation.
+// Final score is calculated with each plugin weight from normalizedScore.
+func (s *Store) AddFinalScoreResult(namespace, podName, nodeName, pluginName string, normalizedScore int64) {
 	if !strings.HasSuffix(nodeName, namespace) {
 		// when suffix of nodeName don't match namespace, this node is not created by a user who creates this pod.
 		// So we don't need to record the result in this case.
@@ -232,16 +247,36 @@ func (s *Store) AddNormalizeScoreResult(namespace, podName, nodeName, pluginName
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
+	s.addFinalScoreResultWithoutLock(namespace, podName, nodeName, pluginName, normalizedScore)
+}
+
+func (s *Store) addFinalScoreResultWithoutLock(namespace, podName, nodeName, pluginName string, normalizedScore int64) {
 	k := newKey(namespace, podName)
 	if _, ok := s.result[k]; !ok {
 		s.result[k] = newData()
 	}
 
-	if _, ok := s.result[k].normalizedScore[nodeName]; !ok {
-		s.result[k].normalizedScore[nodeName] = map[string]int64{}
+	if _, ok := s.result[k].finalscore[nodeName]; !ok {
+		s.result[k].finalscore[nodeName] = map[string]string{}
 	}
 
-	s.result[k].normalizedScore[nodeName][pluginName] = normalizedScore
+	// apply weight to calculate final score.
+	finalscore := s.applyWeightOnScore(pluginName, normalizedScore)
+	s.result[k].finalscore[nodeName][pluginName] = scoreToString(finalscore)
+}
+
+func (s *Store) applyWeightOnScore(pluginName string, score int64) int64 {
+	weight := s.scorePluginWeight[pluginName]
+	return score * int64(weight)
+}
+
+// scoreToString convert score(int64) to string.
+// It returns DisabledMessage when score is DisabledScore.
+func scoreToString(score int64) string {
+	if score == DisabledScore {
+		return DisabledMessage
+	}
+	return strconv.FormatInt(score, 10)
 }
 
 func (s *Store) DeleteData(k key) {

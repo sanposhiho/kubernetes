@@ -55,7 +55,7 @@ func ScoreRecorderPlugins() []config.Plugin {
 	return ret
 }
 
-func ScoreRecordPluginConfig() ([]config.PluginConfig, error) {
+func PluginConfigs() ([]config.PluginConfig, error) {
 	defaultPlugins := algorithmprovider.GetDefaultConfig()
 
 	configDecoder := scheme.Codecs.UniversalDecoder()
@@ -117,8 +117,8 @@ func (pl *scoreRecorder) NormalizeScore(ctx context.Context, state *framework.Cy
 	}
 	if !enabledpluginutil.IsPluginEnabled(pod, pl.p.Name()) {
 		for _, s := range scores {
-			// When normalizedScore to pass AddNormalizeScoreResult is -1, it means the plugin is disabled.
-			pl.store.AddNormalizeScoreResult(pod.Namespace, pod.Name, s.Name, pl.p.Name(), -1)
+			// When normalizedScore to pass AddFinalScoreResult is -1, it means the plugin is disabled.
+			pl.store.AddFinalScoreResult(pod.Namespace, pod.Name, s.Name, pl.p.Name(), schedulingresultstore.DisabledScore)
 		}
 
 		return nil
@@ -131,7 +131,7 @@ func (pl *scoreRecorder) NormalizeScore(ctx context.Context, state *framework.Cy
 	}
 
 	for _, s := range scores {
-		pl.store.AddNormalizeScoreResult(pod.Namespace, pod.Name, s.Name, pl.p.Name(), s.Score)
+		pl.store.AddFinalScoreResult(pod.Namespace, pod.Name, s.Name, pl.p.Name(), s.Score)
 	}
 
 	return s
@@ -139,8 +139,7 @@ func (pl *scoreRecorder) NormalizeScore(ctx context.Context, state *framework.Cy
 
 func (pl *scoreRecorder) Score(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeName string) (int64, *framework.Status) {
 	if !enabledpluginutil.IsPluginEnabled(pod, pl.p.Name()) {
-		// When score to pass AddScoreResult is -1, it means the plugin is disabled.
-		pl.store.AddScoreResult(pod.Namespace, pod.Name, nodeName, pl.p.Name(), -1)
+		pl.store.AddScoreResult(pod.Namespace, pod.Name, nodeName, pl.p.Name(), schedulingresultstore.DisabledScore)
 
 		// return 0 not to affect scoring
 		return 0, nil

@@ -54,7 +54,7 @@ func FilterRecorderPlugins() []config.Plugin {
 	return ret
 }
 
-func FilterRecordPluginConfig() ([]config.PluginConfig, error) {
+func PluginConfigs() ([]config.PluginConfig, error) {
 	defaultPlugins := algorithmprovider.GetDefaultConfig()
 
 	configDecoder := scheme.Codecs.UniversalDecoder()
@@ -106,18 +106,15 @@ func (pl *filterRecorder) Name() string { return pl.name }
 
 func (pl *filterRecorder) Filter(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeInfo *framework.NodeInfo) *framework.Status {
 	if !enabledpluginutil.IsPluginEnabled(pod, pl.p.Name()) {
-		pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), "(disabled)")
+		pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), schedulingresultstore.DisabledMessage)
 		// return success not to affect filtering.
 		return nil
 	}
 
 	s := pl.p.Filter(ctx, state, pod, nodeInfo)
 	if s.IsSuccess() {
-		if s == nil {
-			// When status is nil (= success), s.AppendReason panic.
-			s = framework.NewStatus(framework.Success)
-		}
-		s.AppendReason("passed")
+		pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), schedulingresultstore.PassedFilterMessage)
+		return s
 	}
 
 	pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), s.Message())
