@@ -43,7 +43,7 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 
 	// register apis
 	v1 := e.Group("/api/v1")
-	v1.POST("/namespaces", namespaceHandler.ApplyNamespace)
+	v1.POST("/namespaces", namespaceHandler.CreateNamespace)
 
 	v1simulator := v1.Group("/simulators/:simulatorID")
 	v1simulator.GET("/nodes", nodeHandler.ListNode)

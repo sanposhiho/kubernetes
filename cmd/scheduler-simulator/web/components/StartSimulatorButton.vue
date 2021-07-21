@@ -3,22 +3,20 @@
 </template>
 
 <script lang="ts">
-import UUID from "uuidjs";
 import {
   defineComponent,
   reactive,
   watchEffect,
 } from "@nuxtjs/composition-api";
-import { applyNamespace } from "~/api/v1/namespace";
+import { createNamespace } from "~/api/v1/namespace";
 
 export default defineComponent({
   setup(_, context) {
     const router = context.root.$router;
 
     const onClick = async () => {
-      let name: string = UUID.generate();
-      await applyNamespace({ metadata: { name: name } });
-      router.push(`/${name}`);
+      var n = await createNamespace();
+      router.push(`/${n.metadata?.name}`);
     };
     return {
       onClick,

@@ -4,6 +4,7 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
@@ -25,16 +26,13 @@ func NewNamespaceHandler(s NamespaceService) *NamespaceHandler {
 	return &NamespaceHandler{service: s}
 }
 
-// ApplyNamespace handles the endpoint for applying namespace.
-func (h *NamespaceHandler) ApplyNamespace(c echo.Context) error {
+// CreateNamespace handles the endpoint for creating namespace.
+// It creates unique namespace with uuid.
+func (h *NamespaceHandler) CreateNamespace(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	namespace := new(v1.NamespaceApplyConfiguration)
-	if err := c.Bind(namespace); err != nil {
-		klog.Errorf("failed to bind apply namespace request: %+v", err)
-		return echo.NewHTTPError(http.StatusInternalServerError)
-	}
-
+	// create namespace with uuid
+	namespace := v1.Namespace(uuid.New().String())
 	n, err := h.service.Apply(ctx, namespace)
 	if err != nil {
 		klog.Errorf("failed to apply namespace: %+v", err)

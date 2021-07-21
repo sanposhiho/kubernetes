@@ -24,13 +24,13 @@
         </v-data-table>
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <v-expansion-panel v-if="normalizedTableData.length > 1">
-      <v-expansion-panel-header> Normalize Score </v-expansion-panel-header>
+    <v-expansion-panel v-if="finalscoreTableData.length > 1">
+      <v-expansion-panel-header> Final Score (Normalized + Applied plugin weight) </v-expansion-panel-header>
       <v-expansion-panel-content>
         <v-data-table
           dense
-          :headers="normalizedTableHeader"
-          :items="normalizedTableData"
+          :headers="finalscoreTableHeader"
+          :items="finalscoreTableData"
           item-key="Node"
         >
         </v-data-table>
@@ -75,46 +75,50 @@ export default defineComponent({
     const scoreTableData = ref(
       [] as Array<{ [name: string]: string | number }>
     );
-    const normalizedTableHeader = ref(
+    const finalscoreTableHeader = ref(
       [] as Array<{
         text: string;
         value: string;
       }>
     );
-    const normalizedTableData = ref(
+    const finalscoreTableData = ref(
       [] as Array<{ [name: string]: string | number }>
     );
+
+    const 	filterResultAnnotationKey     = "scheduler-simulator/filter-result"
+    const	scoreResultAnnotationKey      = "scheduler-simulator/score-result"
+    const	finalScoreResultAnnotationKey = "scheduler-simulator/finalscore-result"
 
     const pod = computed(() => podstore.selected);
     watch(pod, () => {
       if (pod.value?.item.metadata?.annotations) {
         if (
-          "scheduler-simulator/score-result" in
+         scoreResultAnnotationKey in
           pod.value.item.metadata.annotations
         ) {
           var score = JSON.parse(
             pod.value?.item.metadata?.annotations[
-              "scheduler-simulator/score-result"
+             scoreResultAnnotationKey
             ]
           );
         }
         if (
-          "scheduler-simulator/normalizedscore-result" in
+          finalScoreResultAnnotationKey in
           pod.value.item.metadata.annotations
         ) {
-          var nscore = JSON.parse(
+          var finalscore = JSON.parse(
             pod.value?.item.metadata?.annotations[
-              "scheduler-simulator/normalizedscore-result"
+              finalScoreResultAnnotationKey
             ]
           );
         }
         if (
-          "scheduler-simulator/filter-result" in
+          filterResultAnnotationKey in
           pod.value.item.metadata.annotations
         ) {
           var filter = JSON.parse(
             pod.value?.item.metadata?.annotations[
-              "scheduler-simulator/filter-result"
+              filterResultAnnotationKey
             ]
           );
         }
@@ -123,8 +127,8 @@ export default defineComponent({
         filterTableData.value = schedulingResultToTableData(filter);
         scoreTableHeader.value = extractTableHeader(score);
         scoreTableData.value = schedulingResultToTableData(score);
-        normalizedTableHeader.value = extractTableHeader(nscore);
-        normalizedTableData.value = schedulingResultToTableData(nscore);
+        finalscoreTableHeader.value = extractTableHeader(finalscore);
+        finalscoreTableData.value = schedulingResultToTableData(finalscore);
       }
     });
 
@@ -133,8 +137,8 @@ export default defineComponent({
       filterTableData,
       scoreTableHeader,
       scoreTableData,
-      normalizedTableHeader,
-      normalizedTableData,
+      finalscoreTableHeader,
+      finalscoreTableData,
     };
   },
 });

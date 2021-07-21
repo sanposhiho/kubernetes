@@ -17,10 +17,10 @@
     "@kubernetes/client-node": "^0.14.3",
     "@nuxtjs/axios": "^5.13.1",
     "@nuxtjs/composition-api": "^0.24.4",
+    "@types/node": "^16.4.0",
     "core-js": "^3.9.1",
     "js-yaml": "^4.1.0",
     "nuxt": "^2.15.3",
-    "uuidjs": "^4.2.8",
     "vue-monaco": "^1.2.2"
   },
   "devDependencies": {
