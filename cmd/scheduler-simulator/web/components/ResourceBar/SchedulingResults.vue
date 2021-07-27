@@ -25,7 +25,9 @@
       </v-expansion-panel-content>
     </v-expansion-panel>
     <v-expansion-panel v-if="finalscoreTableData.length > 1">
-      <v-expansion-panel-header> Final Score (Normalized + Applied plugin weight) </v-expansion-panel-header>
+      <v-expansion-panel-header>
+        Final Score (Normalized + Applied plugin weight)
+      </v-expansion-panel-header>
       <v-expansion-panel-content>
         <v-data-table
           dense
@@ -85,41 +87,29 @@ export default defineComponent({
       [] as Array<{ [name: string]: string | number }>
     );
 
-    const 	filterResultAnnotationKey     = "scheduler-simulator/filter-result"
-    const	scoreResultAnnotationKey      = "scheduler-simulator/score-result"
-    const	finalScoreResultAnnotationKey = "scheduler-simulator/finalscore-result"
+    const filterResultAnnotationKey = "scheduler-simulator/filter-result";
+    const scoreResultAnnotationKey = "scheduler-simulator/score-result";
+    const finalScoreResultAnnotationKey =
+      "scheduler-simulator/finalscore-result";
 
     const pod = computed(() => podstore.selected);
     watch(pod, () => {
       if (pod.value?.item.metadata?.annotations) {
-        if (
-         scoreResultAnnotationKey in
-          pod.value.item.metadata.annotations
-        ) {
+        if (scoreResultAnnotationKey in pod.value.item.metadata.annotations) {
           var score = JSON.parse(
-            pod.value?.item.metadata?.annotations[
-             scoreResultAnnotationKey
-            ]
+            pod.value?.item.metadata?.annotations[scoreResultAnnotationKey]
           );
         }
         if (
-          finalScoreResultAnnotationKey in
-          pod.value.item.metadata.annotations
+          finalScoreResultAnnotationKey in pod.value.item.metadata.annotations
         ) {
           var finalscore = JSON.parse(
-            pod.value?.item.metadata?.annotations[
-              finalScoreResultAnnotationKey
-            ]
+            pod.value?.item.metadata?.annotations[finalScoreResultAnnotationKey]
           );
         }
-        if (
-          filterResultAnnotationKey in
-          pod.value.item.metadata.annotations
-        ) {
+        if (filterResultAnnotationKey in pod.value.item.metadata.annotations) {
           var filter = JSON.parse(
-            pod.value?.item.metadata?.annotations[
-              filterResultAnnotationKey
-            ]
+            pod.value?.item.metadata?.annotations[filterResultAnnotationKey]
           );
         }
 

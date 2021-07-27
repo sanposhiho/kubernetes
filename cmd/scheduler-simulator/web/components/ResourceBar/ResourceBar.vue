@@ -1,45 +1,28 @@
 <template>
   <v-navigation-drawer
-    absolute
+    fixed
     right
     temporary
     bottom
     width="70%"
     v-model="drawer"
   >
-    <template v-slot:prepend>
-      <v-list-item two-line>
-        <v-list-item-content>
-          <v-list-item-title>Resource</v-list-item-title>
-          <v-row>
-            <v-col>
-              <v-switch
-                class="ma-5 mb-0"
-                v-model="editmode"
-                inset
-                label="edit"
-              />
-            </v-col>
-            <v-spacer v-for="n in 3" :key="n" />
-            <v-col>
-              <v-btn class="ma-5 mb-0" @click="applyOnClick"> Apply </v-btn>
-            </v-col>
-            <v-col>
-              <ResourceDeleteButton
-                @deleteOnClick="deleteOnClick"
-                v-if="selected && !selected.isNew"
-              />
-            </v-col>
-          </v-row>
-        </v-list-item-content>
-      </v-list-item>
-    </template>
+    <BarHeader
+      title="Resource"
+      :deleteOnClick="deleteOnClick"
+      :applyOnClick="applyOnClick"
+      :editmodeOnChange="
+        () => {
+          editmode = !editmode;
+        }
+      "
+      :enableDeleteBtn="selected && !selected.isNew"
+      :enableEditmodeSwitch="selected && !selected.isNew"
+    />
 
     <v-divider></v-divider>
 
     <template v-if="editmode">
-      <EnablePluginList v-model="selectedplugins" v-if="selected && selected.resourceKind == 'Pod'" />
-
       <v-spacer v-for="n in 3" :key="n" />
       <v-divider></v-divider>
 
@@ -67,12 +50,10 @@ import NodeStoreKey from "../StoreKey/NodeStoreKey";
 import PersistentVolumeStoreKey from "../StoreKey/PVStoreKey";
 import PersistentVolumeClaimStoreKey from "../StoreKey/PVCStoreKey";
 import StorageClassStoreKey from "../StoreKey/StorageClassStoreKey";
-import EnablePluginList from "./EnablePluginList.vue";
-import ResourceDeleteButton from "./ResourceDeleteButton.vue";
 import YamlEditor from "./YamlEditor.vue";
 import SchedulingResults from "./SchedulingResults.vue";
-import ResourceDefinitionTree from "./ResourceDefinitionTree.vue";
-import { filterPlugins, scorePlugins } from "~/components/lib/plugins";
+import ResourceDefinitionTree from "./DefinitionTree.vue";
+import BarHeader from "./BarHeader.vue";
 import {
   V1Node,
   V1PersistentVolumeClaim,
@@ -104,10 +85,9 @@ interface SelectedItem {
 
 export default defineComponent({
   components: {
-    EnablePluginList,
     YamlEditor,
+    BarHeader,
     ResourceDefinitionTree,
-    ResourceDeleteButton,
     SchedulingResults,
   },
   setup(_, context) {
@@ -139,12 +119,10 @@ export default defineComponent({
 
     // for edit mode
     const formData = ref("");
-    const selectedplugins = ref(filterPlugins.concat(scorePlugins));
 
     // boolean to switch some view
     const drawer = ref(false);
     const editmode = ref(false);
-    const dialog = ref(false);
 
     // watch each selected resource
     const selected = ref(null as SelectedItem | null);
@@ -188,12 +166,8 @@ export default defineComponent({
 
         formData.value = yaml.dump(selected.value.item);
         treeData.value = objectToTreeViewData(selected.value.item);
+        drawer.value = true;
       }
-    });
-
-    watch(treeData, () => {
-      // make sidebar visible, after treeData changed to open treeview correctly.
-      drawer.value = true;
     });
 
     watch(drawer, (newValue, _) => {
@@ -219,11 +193,6 @@ export default defineComponent({
     const applyOnClick = () => {
       if (store) {
         const y = yaml.load(formData.value);
-        if (!y.metadata.annotations) {
-          y.metadata.annotations = {};
-        }
-        y.metadata.annotations["scheduler-simulator/enabled-plugins"] =
-          JSON.stringify(selectedplugins.value);
         store.apply(y, getSimulatorIDFromPath(route.path));
       }
       drawer.value = false;
@@ -242,21 +211,12 @@ export default defineComponent({
     return {
       drawer,
       editmode,
-      dialog,
       selected,
       formData,
       treeData,
       applyOnClick,
       deleteOnClick,
-      selectedplugins,
     };
   },
 });
 </script>
-
-<style>
-.editor {
-  width: auto;
-  height: 100%;
-}
-</style>

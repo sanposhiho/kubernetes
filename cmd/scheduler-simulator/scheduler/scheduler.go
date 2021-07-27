@@ -14,7 +14,6 @@ import (
 	"k8s.io/apiserver/pkg/server/options"
 	"k8s.io/apiserver/pkg/storage/storagebackend"
 	"k8s.io/client-go/informers"
-	coreinformers "k8s.io/client-go/informers/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/events"
@@ -22,8 +21,7 @@ import (
 	"k8s.io/kube-scheduler/config/v1beta1"
 
 	simulatorcfg "k8s.io/kubernetes/cmd/scheduler-simulator/config"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugins"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/shutdownfn"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin"
 	"k8s.io/kubernetes/pkg/controller/volume/persistentvolume"
 	"k8s.io/kubernetes/pkg/scheduler"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
@@ -36,7 +34,11 @@ import (
 )
 
 // SetupSchedulerOrDie starts k8s-apiserver and scheduler.
-func SetupSchedulerOrDie(simulatorcfg *simulatorcfg.Config) (clientset.Interface, coreinformers.PodInformer, shutdownfn.Shutdownfn, error) {
+func SetupSchedulerOrDie(simulatorcfg *simulatorcfg.Config) (
+	clientset.Interface,
+	func(), // function for shutdown
+	error,
+) {
 	apiURL, apiShutdown := startAPIServerOrDie(simulatorcfg.EtcdURL)
 
 	cfg := &restclient.Config{
@@ -48,22 +50,21 @@ func SetupSchedulerOrDie(simulatorcfg *simulatorcfg.Config) (clientset.Interface
 
 	schedCfg, err := schedulerConfig()
 	if err != nil {
-		return nil, nil, nil, xerrors.Errorf("get default component config: %w", err)
+		return nil, nil, xerrors.Errorf("get default component config: %w", err)
 	}
 
 	client := clientset.NewForConfigOrDie(cfg)
 
 	ctx, cancel := context.WithCancel(context.Background())
 
-	podInformer, err := startScheduler(ctx, client, cfg, schedCfg)
-	if err != nil {
+	if err := startScheduler(ctx, client, cfg, schedCfg); err != nil {
 		cancel()
-		return nil, nil, nil, xerrors.Errorf("start scheduler: %w", err)
+		return nil, nil, xerrors.Errorf("start scheduler: %w", err)
 	}
 
 	if err := startPersistentVolumeController(ctx, client); err != nil {
 		cancel()
-		return nil, nil, nil, xerrors.Errorf("start pv controller: %w", err)
+		return nil, nil, xerrors.Errorf("start pv controller: %w", err)
 	}
 
 	shutdownFunc := func() {
@@ -71,12 +72,12 @@ func SetupSchedulerOrDie(simulatorcfg *simulatorcfg.Config) (clientset.Interface
 		apiShutdown()
 	}
 
-	return client, podInformer, shutdownFunc, nil
+	return client, shutdownFunc, nil
 }
 
 // startAPIServerOrDie starts API server, and it make panic when a error happen.
 // TODO: change it not to use integration framework.
-func startAPIServerOrDie(etcdURL string) (string, shutdownfn.Shutdownfn) {
+func startAPIServerOrDie(etcdURL string) (string, func()) {
 	h := &framework.APIServerHolder{Initialized: make(chan struct{})}
 	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
 		<-h.Initialized
@@ -112,7 +113,7 @@ func schedulerConfig() (*config.KubeSchedulerConfiguration, error) {
 		return nil, xerrors.Errorf("decode config: %w", err)
 	}
 
-	pc, err := plugins.NewPluginConfig()
+	pc, err := plugin.NewPluginConfig()
 	if err != nil {
 		return nil, xerrors.Errorf("get plugin configs: %w", err)
 	}
@@ -120,7 +121,7 @@ func schedulerConfig() (*config.KubeSchedulerConfiguration, error) {
 	cfg.Profiles = []config.KubeSchedulerProfile{
 		{
 			SchedulerName: v1.DefaultSchedulerName,
-			Plugins:       plugins.NewPlugin(),
+			Plugins:       plugin.NewPlugin(),
 			PluginConfig:  pc,
 		},
 	}
@@ -133,7 +134,7 @@ func startScheduler(
 	clientSet clientset.Interface,
 	kubeConfig *restclient.Config,
 	cfg *config.KubeSchedulerConfiguration,
-) (coreinformers.PodInformer, error) {
+) error {
 	informerFactory := scheduler.NewInformerFactory(clientSet, 0)
 	evtBroadcaster := events.NewBroadcaster(&events.EventSinkImpl{
 		Interface: clientSet.EventsV1(),
@@ -154,10 +155,10 @@ func startScheduler(
 		scheduler.WithPodInitialBackoffSeconds(cfg.PodInitialBackoffSeconds),
 		scheduler.WithExtenders(cfg.Extenders...),
 		scheduler.WithParallelism(cfg.Parallelism),
-		scheduler.WithFrameworkOutOfTreeRegistry(plugins.NewRegistry(informerFactory, clientSet)),
+		scheduler.WithFrameworkOutOfTreeRegistry(plugin.NewRegistry(informerFactory, clientSet)),
 	)
 	if err != nil {
-		return nil, xerrors.Errorf("create scheduler: %w", err)
+		return xerrors.Errorf("create scheduler: %w", err)
 	}
 
 	informerFactory.Start(ctx.Done())
@@ -165,7 +166,7 @@ func startScheduler(
 
 	go sched.Run(ctx)
 
-	return informerFactory.Core().V1().Pods(), nil
+	return nil
 }
 
 func startPersistentVolumeController(ctx context.Context, client clientset.Interface) error {

@@ -1,12 +1,12 @@
-package plugins
+package plugin
 
 import (
 	"golang.org/x/xerrors"
 	"k8s.io/client-go/informers"
 	clientset "k8s.io/client-go/kubernetes"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugins/filterrecord"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugins/scorerecord"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/filter"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/score"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/schedulingresultstore"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
 	schedulerRuntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
@@ -14,14 +14,14 @@ import (
 
 func NewRegistry(informerFactory informers.SharedInformerFactory, client clientset.Interface) schedulerRuntime.Registry {
 	defaultScorePluginWeight := map[string]int32{}
-	defaultScorePlugin := scorerecord.DefaultScorePlugins()
+	defaultScorePlugin := score.DefaultScorePlugins()
 	for _, p := range defaultScorePlugin {
 		defaultScorePluginWeight[p.Name] = p.Weight
 	}
 
 	store := schedulingresultstore.New(informerFactory, client, defaultScorePluginWeight)
-	sr := scorerecord.NewRegistryForScoreRecord(store)
-	fr := filterrecord.NewRegistryForFilterRecord(store)
+	sr := score.NewRegistryForScoreRecord(store)
+	fr := filter.NewRegistryForFilterRecord(store)
 
 	return merge(sr, fr)
 }
@@ -40,24 +40,24 @@ func merge(pfs ...map[string]schedulerRuntime.PluginFactory) map[string]schedule
 func NewPlugin() *config.Plugins {
 	return &config.Plugins{
 		Filter: config.PluginSet{
-			Enabled: filterrecord.FilterRecorderPlugins(),
+			Enabled: filter.FilterRecorderPlugins(),
 			// disable all filter plugin.
-			Disabled: filterrecord.DefaultFilterPlugins(),
+			Disabled: filter.DefaultFilterPlugins(),
 		},
 		Score: config.PluginSet{
-			Enabled: scorerecord.ScoreRecorderPlugins(),
+			Enabled: score.ScoreRecorderPlugins(),
 			// disable all score plugin.
-			Disabled: scorerecord.DefaultScorePlugins(),
+			Disabled: score.DefaultScorePlugins(),
 		},
 	}
 }
 
 func NewPluginConfig() ([]config.PluginConfig, error) {
-	s, err := scorerecord.PluginConfigs()
+	s, err := score.PluginConfigs()
 	if err != nil {
 		return nil, xerrors.Errorf("get score record plugin config: %w", err)
 	}
-	f, err := filterrecord.PluginConfigs()
+	f, err := filter.PluginConfigs()
 	if err != nil {
 		return nil, xerrors.Errorf("get filter record plugin config: %w", err)
 	}

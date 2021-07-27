@@ -5,6 +5,8 @@
         <PVCStoreProvider>
           <StorageClassStoreProvider>
             <ResourceBar />
+            <SchedulerConfigurationBar v-model="schedulerCfgDrawer" />
+            <SchedulerConfigurationEditButton v-model="schedulerCfgDrawer" />
             <ResourceAddButton />
             <NodeList />
             <UnscheduledPodList />
@@ -19,7 +21,9 @@
 </template>
 
 <script>
-import { computed, defineComponent, inject } from "@nuxtjs/composition-api";
+import { defineComponent, ref } from "@nuxtjs/composition-api";
+import SchedulerConfigurationEditButton from "~/components/ResourceBar/SchedulerConfigurationEditButton.vue";
+import SchedulerConfigurationBar from "~/components/ResourceBar/SchedulerConfigurationBar.vue";
 import NodeStoreProvider from "~/components/StoreProvider/NodeStoreProvider.vue";
 import PVStoreProvider from "~/components/StoreProvider/PVStoreProvider.vue";
 import PVCStoreProvider from "~/components/StoreProvider/PVCStoreProvider.vue";
@@ -47,9 +51,14 @@ export default defineComponent({
     StorageClassStoreProvider,
     PVStoreProvider,
     PVCStoreProvider,
+    SchedulerConfigurationEditButton,
+    SchedulerConfigurationBar,
   },
   setup() {
-    return {};
+    const schedulerCfgDrawer = ref(false);
+    return {
+      schedulerCfgDrawer,
+    };
   },
 });
 </script>

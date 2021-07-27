@@ -1,4 +1,4 @@
-package filterrecord
+package filter
 
 import (
 	"context"
@@ -8,7 +8,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/kube-scheduler/config/v1beta1"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugins/enabledpluginutil"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/enabledplugin"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/schedulingresultstore"
 	"k8s.io/kubernetes/pkg/scheduler/algorithmprovider"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
@@ -34,7 +34,7 @@ func NewRegistryForFilterRecord(s *schedulingresultstore.Store) map[string]sched
 			}
 			return NewFilterRecordPlugin(s, typed), nil
 		}
-		ret[filterRecorderName(pl.Name)] = factory
+		ret[FilterPluginName(pl.Name)] = factory
 	}
 
 	return ret
@@ -49,7 +49,7 @@ func FilterRecorderPlugins() []config.Plugin {
 	defaultPlugins := algorithmprovider.GetDefaultConfig()
 	ret := make([]config.Plugin, len(defaultPlugins.Filter.Enabled))
 	for i, n := range defaultPlugins.Filter.Enabled {
-		ret[i] = config.Plugin{Name: filterRecorderName(n.Name), Weight: n.Weight}
+		ret[i] = config.Plugin{Name: FilterPluginName(n.Name), Weight: n.Weight}
 	}
 	return ret
 }
@@ -72,7 +72,7 @@ func PluginConfigs() ([]config.PluginConfig, error) {
 		}
 
 		ret[i] = config.PluginConfig{
-			Name: filterRecorderName(name),
+			Name: FilterPluginName(name),
 			Args: obj,
 		}
 	}
@@ -87,16 +87,16 @@ type filterRecorder struct {
 }
 
 const (
-	filterRecorderSuffix = "ToRecordFilteringResult"
+	filterPluginSuffix = "ForFilter"
 )
 
-func filterRecorderName(pluginName string) string {
-	return pluginName + filterRecorderSuffix
+func FilterPluginName(pluginName string) string {
+	return pluginName + filterPluginSuffix
 }
 
 func NewFilterRecordPlugin(s *schedulingresultstore.Store, p framework.FilterPlugin) framework.FilterPlugin {
 	return &filterRecorder{
-		name:  filterRecorderName(p.Name()),
+		name:  FilterPluginName(p.Name()),
 		p:     p,
 		store: s,
 	}
@@ -105,7 +105,7 @@ func NewFilterRecordPlugin(s *schedulingresultstore.Store, p framework.FilterPlu
 func (pl *filterRecorder) Name() string { return pl.name }
 
 func (pl *filterRecorder) Filter(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeInfo *framework.NodeInfo) *framework.Status {
-	if !enabledpluginutil.IsPluginEnabled(pod, pl.p.Name()) {
+	if !enabledplugin.IsPluginEnabled(pod, pl.p.Name(), enabledplugin.Filter) {
 		pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), schedulingresultstore.DisabledMessage)
 		// return success not to affect filtering.
 		return nil

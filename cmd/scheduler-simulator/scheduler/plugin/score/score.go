@@ -1,4 +1,4 @@
-package scorerecord
+package score
 
 import (
 	"context"
@@ -9,7 +9,7 @@ import (
 	"k8s.io/klog/v2"
 	"k8s.io/kube-scheduler/config/v1beta1"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugins/enabledpluginutil"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/enabledplugin"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/schedulingresultstore"
 	"k8s.io/kubernetes/pkg/scheduler/algorithmprovider"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
@@ -35,7 +35,7 @@ func NewRegistryForScoreRecord(s *schedulingresultstore.Store) map[string]schedu
 			}
 			return NewScoreRecordPlugin(s, typed), nil
 		}
-		ret[scoreRecorderName(pl.Name)] = factory
+		ret[ScorePluginName(pl.Name)] = factory
 	}
 
 	return ret
@@ -50,7 +50,7 @@ func ScoreRecorderPlugins() []config.Plugin {
 	defaultPlugins := algorithmprovider.GetDefaultConfig()
 	ret := make([]config.Plugin, len(defaultPlugins.Score.Enabled))
 	for i, n := range defaultPlugins.Score.Enabled {
-		ret[i] = config.Plugin{Name: scoreRecorderName(n.Name), Weight: n.Weight}
+		ret[i] = config.Plugin{Name: ScorePluginName(n.Name), Weight: n.Weight}
 	}
 	return ret
 }
@@ -73,7 +73,7 @@ func PluginConfigs() ([]config.PluginConfig, error) {
 		}
 
 		ret[i] = config.PluginConfig{
-			Name: scoreRecorderName(name),
+			Name: ScorePluginName(name),
 			Args: obj,
 		}
 	}
@@ -88,16 +88,16 @@ type scoreRecorder struct {
 }
 
 const (
-	scoreRecorderSuffix = "ToRecordScore"
+	scorePluginSuffix = "ForScore"
 )
 
-func scoreRecorderName(pluginName string) string {
-	return pluginName + scoreRecorderSuffix
+func ScorePluginName(pluginName string) string {
+	return pluginName + scorePluginSuffix
 }
 
 func NewScoreRecordPlugin(s *schedulingresultstore.Store, p framework.ScorePlugin) framework.ScorePlugin {
 	return &scoreRecorder{
-		name:  scoreRecorderName(p.Name()),
+		name:  ScorePluginName(p.Name()),
 		p:     p,
 		store: s,
 	}
@@ -115,7 +115,7 @@ func (pl *scoreRecorder) NormalizeScore(ctx context.Context, state *framework.Cy
 	if pl.p.ScoreExtensions() == nil {
 		return framework.NewStatus(framework.Error, "this plugin's NormalizeScore should not be called")
 	}
-	if !enabledpluginutil.IsPluginEnabled(pod, pl.p.Name()) {
+	if !enabledplugin.IsPluginEnabled(pod, pl.p.Name(), enabledplugin.Score) {
 		for _, s := range scores {
 			// When normalizedScore to pass AddFinalScoreResult is -1, it means the plugin is disabled.
 			pl.store.AddFinalScoreResult(pod.Namespace, pod.Name, s.Name, pl.p.Name(), schedulingresultstore.DisabledScore)
@@ -138,7 +138,7 @@ func (pl *scoreRecorder) NormalizeScore(ctx context.Context, state *framework.Cy
 }
 
 func (pl *scoreRecorder) Score(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeName string) (int64, *framework.Status) {
-	if !enabledpluginutil.IsPluginEnabled(pod, pl.p.Name()) {
+	if !enabledplugin.IsPluginEnabled(pod, pl.p.Name(), enabledplugin.Score) {
 		pl.store.AddScoreResult(pod.Namespace, pod.Name, nodeName, pl.p.Name(), schedulingresultstore.DisabledScore)
 
 		// return 0 not to affect scoring

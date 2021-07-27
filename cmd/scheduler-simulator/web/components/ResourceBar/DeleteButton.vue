@@ -24,15 +24,14 @@
 <script lang="ts">
 import { ref, defineComponent, PropType } from "@nuxtjs/composition-api";
 export default defineComponent({
+  props: {
+    deleteOnClick: Function,
+  },
   setup(props, context) {
     const dialog = ref(false);
-    const deleteOnClick = () => {
-      context.emit("deleteOnClick");
-    };
 
     return {
       dialog,
-      deleteOnClick,
     };
   },
 });

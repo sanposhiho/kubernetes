@@ -16,6 +16,7 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog/v2"
 
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/annotation"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/util"
 )
 
@@ -31,7 +32,7 @@ const (
 	// DisabledMessage is used when plugin is disabled.
 	DisabledMessage = "(disabled)"
 	// DisabledScore means the scoring plugin is disabled.
-	DisabledScore = -1
+	DisabledScore int64 = -1
 
 	// PassedFilterMessage is used when node pass the filter plugin.
 	PassedFilterMessage = "passed"
@@ -92,12 +93,6 @@ func newData() *result {
 	return d
 }
 
-const (
-	filterResultAnnotationKey     = "scheduler-simulator/filter-result"
-	scoreResultAnnotationKey      = "scheduler-simulator/score-result"
-	finalScoreResultAnnotationKey = "scheduler-simulator/finalscore-result"
-)
-
 func (s *Store) addSchedulingResultToPod(_, newObj interface{}) {
 	ctx := context.Background()
 
@@ -107,8 +102,8 @@ func (s *Store) addSchedulingResultToPod(_, newObj interface{}) {
 		return
 	}
 
-	_, ok = pod.Annotations[scoreResultAnnotationKey]
-	_, ok2 := pod.Annotations[finalScoreResultAnnotationKey]
+	_, ok = pod.Annotations[annotation.ScoreResultAnnotationKey]
+	_, ok2 := pod.Annotations[annotation.FinalScoreResultAnnotationKey]
 	if ok && ok2 {
 		// Pod already have scheduling result
 		return
@@ -159,7 +154,7 @@ func (s *Store) addFilterResultToPod(pod *v1.Pod) error {
 		return fmt.Errorf("encode json to record scores: %w", err)
 	}
 
-	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, filterResultAnnotationKey, string(scores))
+	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, annotation.FilterResultAnnotationKey, string(scores))
 	return nil
 }
 
@@ -170,7 +165,7 @@ func (s *Store) addScoreResultToPod(pod *v1.Pod) error {
 		return fmt.Errorf("encode json to record scores: %w", err)
 	}
 
-	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, scoreResultAnnotationKey, string(scores))
+	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, annotation.ScoreResultAnnotationKey, string(scores))
 	return nil
 }
 
@@ -181,7 +176,7 @@ func (s *Store) addFinalScoreResultToPod(pod *v1.Pod) error {
 		return fmt.Errorf("encode json to record scores: %w", err)
 	}
 
-	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, finalScoreResultAnnotationKey, string(scores))
+	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, annotation.FinalScoreResultAnnotationKey, string(scores))
 	return nil
 }
 
@@ -232,6 +227,7 @@ func (s *Store) AddScoreResult(namespace, podName, nodeName, pluginName string, 
 	}
 
 	s.result[k].score[nodeName][pluginName] = scoreToString(score)
+	// We don't need to lock, already locked above.
 	s.addFinalScoreResultWithoutLock(namespace, podName, nodeName, pluginName, score)
 }
 
@@ -260,8 +256,11 @@ func (s *Store) addFinalScoreResultWithoutLock(namespace, podName, nodeName, plu
 		s.result[k].finalscore[nodeName] = map[string]string{}
 	}
 
+	finalscore := DisabledScore
+	if normalizedScore != DisabledScore {
+		finalscore = s.applyWeightOnScore(pluginName, normalizedScore)
+	}
 	// apply weight to calculate final score.
-	finalscore := s.applyWeightOnScore(pluginName, normalizedScore)
 	s.result[k].finalscore[nodeName][pluginName] = scoreToString(finalscore)
 }
 

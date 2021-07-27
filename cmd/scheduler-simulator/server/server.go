@@ -15,7 +15,6 @@ import (
 	"k8s.io/kubernetes/cmd/scheduler-simulator/config/env"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server/handler"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/shutdownfn"
 )
 
 // SimulatorServer is server for simulator.
@@ -40,12 +39,17 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 	pvHandler := handler.NewPersistentVolumeHandler(dic.PersistentVolumeService())
 	pvcHandler := handler.NewPersistentVolumeClaimHandler(dic.PersistentVolumeClaimService())
 	storageClassHandler := handler.NewStorageClassHandler(dic.StorageClassService())
+	schedulercfgHandler := handler.NewSchedulerConfigHandler(dic.SchedulerConfigService())
 
 	// register apis
 	v1 := e.Group("/api/v1")
 	v1.POST("/namespaces", namespaceHandler.CreateNamespace)
 
 	v1simulator := v1.Group("/simulators/:simulatorID")
+
+	v1simulator.GET("/schedulerconfiguration", schedulercfgHandler.GetSchedulerConfig)
+	v1simulator.POST("/schedulerconfiguration", schedulercfgHandler.PutSchedulerConfig)
+
 	v1simulator.GET("/nodes", nodeHandler.ListNode)
 	v1simulator.POST("/nodes", nodeHandler.ApplyNode)
 	v1simulator.GET("/nodes/:name", nodeHandler.GetNode)
@@ -88,7 +92,10 @@ func (s *SimulatorServer) setLogLevel(e env.Env) {
 }
 
 // Start starts SimulatorServer.
-func (s *SimulatorServer) Start(port int) (shutdownfn.Shutdownfn, error) {
+func (s *SimulatorServer) Start(port int) (
+	func(), // function for shutdown
+	error,
+) {
 	e := s.e
 
 	go func() {

@@ -1,7 +1,6 @@
 package node
 
 //go:generate mockgen -destination=./mock_$GOPACKAGE/$GOFILE --build_flags=--mod=mod . PodService
-//go:generate mockgen -destination=./mock_clientset/clientset.go --build_flags=--mod=mod k8s.io/client-go/kubernetes Interface
 // --build_flags is need for https://github.com/golang/mock#reflect-vendoring-error
 
 import (
@@ -117,6 +116,7 @@ func addNameSuffix(nac *v1.NodeApplyConfiguration, suffix string) {
 const SimulatorIDLabelKey = "simulatorID"
 
 // addSimulatorIDLabel adds simulatorID to label.
+// This label is used for nodeSelector.
 func addSimulatorIDLabel(nac *v1.NodeApplyConfiguration, simulatorID string) {
 	if nac == nil {
 		return
