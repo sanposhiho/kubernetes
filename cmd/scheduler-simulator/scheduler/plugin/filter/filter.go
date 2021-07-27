@@ -45,7 +45,7 @@ func DefaultFilterPlugins() []config.Plugin {
 	return defaultPlugins.Filter.Enabled
 }
 
-func FilterRecorderPlugins() []config.Plugin {
+func FilterPlugins() []config.Plugin {
 	defaultPlugins := algorithmprovider.GetDefaultConfig()
 	ret := make([]config.Plugin, len(defaultPlugins.Filter.Enabled))
 	for i, n := range defaultPlugins.Filter.Enabled {
@@ -79,7 +79,7 @@ func PluginConfigs() ([]config.PluginConfig, error) {
 	return ret, nil
 }
 
-type filterRecorder struct {
+type filterPlugin struct {
 	name string
 	p    framework.FilterPlugin
 
@@ -95,16 +95,16 @@ func FilterPluginName(pluginName string) string {
 }
 
 func NewFilterRecordPlugin(s *schedulingresultstore.Store, p framework.FilterPlugin) framework.FilterPlugin {
-	return &filterRecorder{
+	return &filterPlugin{
 		name:  FilterPluginName(p.Name()),
 		p:     p,
 		store: s,
 	}
 }
 
-func (pl *filterRecorder) Name() string { return pl.name }
+func (pl *filterPlugin) Name() string { return pl.name }
 
-func (pl *filterRecorder) Filter(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeInfo *framework.NodeInfo) *framework.Status {
+func (pl *filterPlugin) Filter(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeInfo *framework.NodeInfo) *framework.Status {
 	if !enabledplugin.IsPluginEnabled(pod, pl.p.Name(), enabledplugin.Filter) {
 		pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), schedulingresultstore.DisabledMessage)
 		// return success not to affect filtering.

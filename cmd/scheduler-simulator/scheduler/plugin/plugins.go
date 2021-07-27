@@ -40,12 +40,12 @@ func merge(pfs ...map[string]schedulerRuntime.PluginFactory) map[string]schedule
 func NewPlugin() *config.Plugins {
 	return &config.Plugins{
 		Filter: config.PluginSet{
-			Enabled: filter.FilterRecorderPlugins(),
+			Enabled: filter.FilterPlugins(),
 			// disable all filter plugin.
 			Disabled: filter.DefaultFilterPlugins(),
 		},
 		Score: config.PluginSet{
-			Enabled: score.ScoreRecorderPlugins(),
+			Enabled: score.ScorePlugins(),
 			// disable all score plugin.
 			Disabled: score.DefaultScorePlugins(),
 		},

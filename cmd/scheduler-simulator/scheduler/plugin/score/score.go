@@ -22,7 +22,9 @@ import (
 func NewRegistryForScoreRecord(s *schedulingresultstore.Store) map[string]schedulerRuntime.PluginFactory {
 	ret := map[string]schedulerRuntime.PluginFactory{}
 	rs := plugins.NewInTreeRegistry()
+	manager := NewScorePluginManager()
 	for _, pl := range DefaultScorePlugins() {
+		pl := pl
 		r := rs[pl.Name]
 		factory := func(configuration runtime.Object, f framework.Handle) (framework.Plugin, error) {
 			p, err := r(configuration, f)
@@ -33,7 +35,7 @@ func NewRegistryForScoreRecord(s *schedulingresultstore.Store) map[string]schedu
 			if !ok {
 				return nil, xerrors.New("not score plugin")
 			}
-			return NewScoreRecordPlugin(s, typed), nil
+			return NewScoreRecordPlugin(s, typed, pl.Weight, manager), nil
 		}
 		ret[ScorePluginName(pl.Name)] = factory
 	}
@@ -46,7 +48,7 @@ func DefaultScorePlugins() []config.Plugin {
 	return defaultPlugins.Score.Enabled
 }
 
-func ScoreRecorderPlugins() []config.Plugin {
+func ScorePlugins() []config.Plugin {
 	defaultPlugins := algorithmprovider.GetDefaultConfig()
 	ret := make([]config.Plugin, len(defaultPlugins.Score.Enabled))
 	for i, n := range defaultPlugins.Score.Enabled {
@@ -80,9 +82,13 @@ func PluginConfigs() ([]config.PluginConfig, error) {
 	return ret, nil
 }
 
-type scoreRecorder struct {
-	name string
-	p    framework.ScorePlugin
+type scorePlugin struct {
+	// all scorePlugin should have the same manager
+	manager *scorePluginManager
+
+	name          string
+	p             framework.ScorePlugin
+	defaultWeight int32
 
 	store *schedulingresultstore.Store
 }
@@ -95,49 +101,86 @@ func ScorePluginName(pluginName string) string {
 	return pluginName + scorePluginSuffix
 }
 
-func NewScoreRecordPlugin(s *schedulingresultstore.Store, p framework.ScorePlugin) framework.ScorePlugin {
-	return &scoreRecorder{
-		name:  ScorePluginName(p.Name()),
-		p:     p,
-		store: s,
+func NewScoreRecordPlugin(s *schedulingresultstore.Store, p framework.ScorePlugin, weight int32, manager *scorePluginManager) framework.ScorePlugin {
+	sp := &scorePlugin{
+		name:          ScorePluginName(p.Name()),
+		p:             p,
+		defaultWeight: weight,
+		store:         s,
+		manager:       manager,
 	}
+	manager.registerPlugin(sp)
+	return sp
 }
 
-func (pl *scoreRecorder) Name() string { return pl.name }
-func (pl *scoreRecorder) ScoreExtensions() framework.ScoreExtensions {
-	if pl.p.ScoreExtensions() == nil {
-		return nil
-	}
+func (pl *scorePlugin) Name() string { return pl.name }
+func (pl *scorePlugin) ScoreExtensions() framework.ScoreExtensions {
 	return pl
 }
 
-func (pl *scoreRecorder) NormalizeScore(ctx context.Context, state *framework.CycleState, pod *v1.Pod, scores framework.NodeScoreList) *framework.Status {
-	if pl.p.ScoreExtensions() == nil {
-		return framework.NewStatus(framework.Error, "this plugin's NormalizeScore should not be called")
+func (pl *scorePlugin) ApplyPluginWeight(pod *v1.Pod, scores framework.NodeScoreList) {
+	weight := enabledplugin.GetPluginWeight(pod, pl.p.Name(), enabledplugin.Score, pl.defaultWeight)
+	for i, s := range scores {
+		scores[i].Score = s.Score * int64(weight)
 	}
-	if !enabledplugin.IsPluginEnabled(pod, pl.p.Name(), enabledplugin.Score) {
-		for _, s := range scores {
-			// When normalizedScore to pass AddFinalScoreResult is -1, it means the plugin is disabled.
-			pl.store.AddFinalScoreResult(pod.Namespace, pod.Name, s.Name, pl.p.Name(), schedulingresultstore.DisabledScore)
-		}
+}
 
-		return nil
-	}
-
-	s := pl.p.ScoreExtensions().NormalizeScore(ctx, state, pod, scores)
+// NormalizeScore calculates the final score(include plugin weight) of all plugins
+// and score 1 for selected node and 0 for the other nodes.
+//
+// Scheduling framework run score and normalized score in parallel,
+// and internally there are upper and lower limits to scores.
+// These don't allow score to be changed flexibly from plugins.
+// (And, of course, we don't want to change the code in the scheduler itself.)
+//
+// So, when we run normalized score plugins, it calculates the final score(include plugin weight) of all plugins.
+// This allows us to determine which Node will be selected with **user specified** plugin weight.
+//
+// When run normalized score, we score 1 for selected node and 0 for the other nodes.
+func (pl *scorePlugin) NormalizeScore(ctx context.Context, state *framework.CycleState, pod *v1.Pod, scores framework.NodeScoreList) *framework.Status {
+	selected, s := pl.manager.getSelectedNode(ctx, state, pod)
 	if !s.IsSuccess() {
 		klog.Errorf("failed to run normalize score: %v, %v", s.Code(), s.Message())
 		return s
 	}
+	for _, nodescore := range scores {
+		nodescore.Score = 0
+		if nodescore.Name == selected {
+			// score 1 for selectedNode only.
+			nodescore.Score = 1
+		}
+	}
+	return nil
+}
+
+func (pl *scorePlugin) RunNormalizeScore(ctx context.Context, state *framework.CycleState, pod *v1.Pod, scores framework.NodeScoreList) *framework.Status {
+	if pl.p.ScoreExtensions() != nil {
+		if !enabledplugin.IsPluginEnabled(pod, pl.p.Name(), enabledplugin.Score) {
+			for _, s := range scores {
+				// When normalizedScore to pass AddFinalScoreResult is -1, it means the plugin is disabled.
+				pl.store.AddFinalScoreResult(pod.Namespace, pod.Name, s.Name, pl.p.Name(), schedulingresultstore.DisabledScore)
+			}
+
+			return nil
+		}
+
+		s := pl.p.ScoreExtensions().NormalizeScore(ctx, state, pod, scores)
+		if !s.IsSuccess() {
+			klog.Errorf("failed to run normalize score: %v, %v", s.Code(), s.Message())
+			return s
+		}
+	}
+
+	pl.ApplyPluginWeight(pod, scores)
 
 	for _, s := range scores {
 		pl.store.AddFinalScoreResult(pod.Namespace, pod.Name, s.Name, pl.p.Name(), s.Score)
 	}
 
-	return s
+	return nil
 }
 
-func (pl *scoreRecorder) Score(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeName string) (int64, *framework.Status) {
+func (pl *scorePlugin) Score(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeName string) (int64, *framework.Status) {
 	if !enabledplugin.IsPluginEnabled(pod, pl.p.Name(), enabledplugin.Score) {
 		pl.store.AddScoreResult(pod.Namespace, pod.Name, nodeName, pl.p.Name(), schedulingresultstore.DisabledScore)
 
@@ -152,6 +195,13 @@ func (pl *scoreRecorder) Score(ctx context.Context, state *framework.CycleState,
 	}
 
 	pl.store.AddScoreResult(pod.Namespace, pod.Name, nodeName, pl.p.Name(), score)
+
+	if err := pl.manager.appendPluginToNodeScores(state, pl.Name(), framework.NodeScore{
+		Name:  nodeName,
+		Score: score,
+	}); err != nil {
+		return 0, framework.AsStatus(err)
+	}
 
 	return score, s
 }

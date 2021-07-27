@@ -2,6 +2,7 @@ package enabledplugin
 
 import (
 	"encoding/json"
+	"errors"
 
 	"golang.org/x/xerrors"
 	v1 "k8s.io/api/core/v1"
@@ -27,23 +28,35 @@ const (
 )
 
 func IsPluginEnabled(pod *v1.Pod, pluginName string, phase PluginPhase) bool {
-	enabledPlugins, err := getEnabledPlugins(pod, phase)
-	if err != nil || enabledPlugins == nil {
-		if err != nil {
+	_, err := GetEnabledPlugin(pod, pluginName, phase)
+	if err != nil {
+		if !xerrors.Is(err, errPluginNotFound) {
+			// something goes wrong
 			klog.Errorf("failed to get enabled plugins: %w", err)
 		}
-		// when enabledPluginAnnotation does not exist or something goes wrong with get enabled plugins,
-		// all plugins will be enabled.
 		return false
+	}
+
+	// plugin is enabled
+	return true
+}
+
+var (
+	errPluginNotFound = errors.New("plugin not found")
+)
+
+func GetEnabledPlugin(pod *v1.Pod, pluginName string, phase PluginPhase) (*schedulerapi.Plugin, error) {
+	enabledPlugins, err := getEnabledPlugins(pod, phase)
+	if err != nil {
+		return nil, xerrors.Errorf("get enabled plugin: %w", err)
 	}
 
 	for _, p := range enabledPlugins {
 		if p.Name == pluginName {
-			return true
+			return &p, nil
 		}
 	}
-
-	return false
+	return nil, errPluginNotFound
 }
 
 // getEnabledPlugins get enabled plugins from pod annotation with enabledPluginsAnnotationKey.
@@ -58,21 +71,21 @@ func getEnabledPlugins(pod *v1.Pod, phase PluginPhase) ([]schedulerapi.Plugin, e
 		return nil, xerrors.Errorf("encode plugin json: %w", err)
 	}
 
+	// TODO: support all plugin phase
 	switch phase {
 	//	case PreFilter:
+	//	case Reserve:
+	//	case Permit:
+	//	case PreBind:
+	//	case Bind:
+	//	case PostBind:
+	//	case PostFilter:
+	//	case PreScore:
 	case Filter:
 		return plugins.Filter.Enabled, nil
-		//	case PostFilter:
-		//	case PreScore:
 	case Score:
 		return plugins.Score.Enabled, nil
-		//	case Reserve:
-		//	case Permit:
-		//	case PreBind:
-		//	case Bind:
-		//	case PostBind:
 	}
 
-	// TODO: support all plugins
 	return nil, xerrors.New("non-supported plugin phase")
 }

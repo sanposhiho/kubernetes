@@ -74,6 +74,7 @@ func ConvertFromOriginalPluginSetType(originalPluginSet original.PluginSet) *sch
 	convertfn := func(ps []original.Plugin) []schedulerapi.Plugin {
 		plugins := make([]schedulerapi.Plugin, len(ps))
 		for i, p := range ps {
+			p := p
 			plugins[i].Name = p.Name
 			if p.Weight != 0 {
 				plugins[i].Weight = &p.Weight

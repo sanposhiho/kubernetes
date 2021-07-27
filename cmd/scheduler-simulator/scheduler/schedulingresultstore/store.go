@@ -224,18 +224,12 @@ func (s *Store) AddScoreResult(namespace, podName, nodeName, pluginName string, 
 	if _, ok := s.result[k].score[nodeName]; !ok {
 		s.result[k].score[nodeName] = map[string]string{}
 	}
-	if _, ok := s.result[k].finalscore[nodeName]; !ok {
-		s.result[k].finalscore[nodeName] = map[string]string{}
-	}
 
 	s.result[k].score[nodeName][pluginName] = scoreToString(score)
-	// We don't need to lock, already locked above.
-	s.addFinalScoreResultWithoutLock(namespace, podName, nodeName, pluginName, score)
 }
 
 // AddFinalScoreResult adds final score result to pod annotation.
-// Final score is calculated with each plugin weight from normalizedScore.
-func (s *Store) AddFinalScoreResult(namespace, podName, nodeName, pluginName string, normalizedScore int64) {
+func (s *Store) AddFinalScoreResult(namespace, podName, nodeName, pluginName string, finalscore int64) {
 	if !strings.HasSuffix(nodeName, namespace) {
 		// when suffix of nodeName don't match namespace, this node is not created by a user who creates this pod.
 		// So we don't need to record the result in this case.
@@ -245,10 +239,6 @@ func (s *Store) AddFinalScoreResult(namespace, podName, nodeName, pluginName str
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
-	s.addFinalScoreResultWithoutLock(namespace, podName, nodeName, pluginName, normalizedScore)
-}
-
-func (s *Store) addFinalScoreResultWithoutLock(namespace, podName, nodeName, pluginName string, normalizedScore int64) {
 	k := newKey(namespace, podName)
 	if _, ok := s.result[k]; !ok {
 		s.result[k] = newData()
@@ -258,10 +248,6 @@ func (s *Store) addFinalScoreResultWithoutLock(namespace, podName, nodeName, plu
 		s.result[k].finalscore[nodeName] = map[string]string{}
 	}
 
-	finalscore := DisabledScore
-	if normalizedScore != DisabledScore {
-		finalscore = s.applyWeightOnScore(pluginName, normalizedScore)
-	}
 	// apply weight to calculate final score.
 	s.result[k].finalscore[nodeName][pluginName] = scoreToString(finalscore)
 }
