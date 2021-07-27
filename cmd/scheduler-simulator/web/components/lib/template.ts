@@ -7,39 +7,52 @@ import {
 } from "@kubernetes/client-node";
 import yaml from "js-yaml";
 
-export const podTemplate = (simulatorID: string): V1Pod => {
+export const podTemplate = (simulatorID: string, namesuffix: string): V1Pod => {
   if (process.env.POD_TEMPLATE) {
     const temp = yaml.load(process.env.POD_TEMPLATE);
+    temp.metadata.namespace = simulatorID;
+    temp.metadata.name = temp.metadata.name + namesuffix;
+    return temp;
+  }
+  return {};
+};
+
+export const nodeTemplate = (namesuffix: string): V1Node => {
+  if (process.env.NODE_TEMPLATE) {
+    const temp = yaml.load(process.env.NODE_TEMPLATE);
+    temp.metadata.name = temp.metadata.name + namesuffix;
+    return temp;
+  }
+  return {};
+};
+
+export const pvTemplate = (namesuffix: string): V1PersistentVolume => {
+  if (process.env.PV_TEMPLATE) {
+    const temp = yaml.load(process.env.PV_TEMPLATE);
+    temp.metadata.name = temp.metadata.name + namesuffix;
+    return temp;
+  }
+  return {};
+};
+
+export const pvcTemplate = (
+  simulatorID: string,
+  namesuffix: string
+): V1PersistentVolumeClaim => {
+  if (process.env.PVC_TEMPLATE) {
+    const temp = yaml.load(process.env.PVC_TEMPLATE);
+    temp.metadata.name = temp.metadata.name + namesuffix;
     temp.metadata.namespace = simulatorID;
     return temp;
   }
   return {};
 };
 
-export const nodeTemplate = (): V1Node => {
-  if (process.env.NODE_TEMPLATE) {
-    return yaml.load(process.env.NODE_TEMPLATE);
-  }
-  return {};
-};
-
-export const pvTemplate = (): V1PersistentVolume => {
-  if (process.env.PV_TEMPLATE) {
-    return yaml.load(process.env.PV_TEMPLATE);
-  }
-  return {};
-};
-
-export const pvcTemplate = (): V1PersistentVolumeClaim => {
-  if (process.env.PVC_TEMPLATE) {
-    return yaml.load(process.env.PVC_TEMPLATE);
-  }
-  return {};
-};
-
-export const storageclassTemplate = (): V1StorageClass => {
+export const storageclassTemplate = (namesuffix: string): V1StorageClass => {
   if (process.env.SC_TEMPLATE) {
-    return yaml.load(process.env.SC_TEMPLATE);
+    const temp = yaml.load(process.env.SC_TEMPLATE);
+    temp.metadata.name = temp.metadata.name + namesuffix;
+    return temp;
   }
   return { provisioner: "" };
 };

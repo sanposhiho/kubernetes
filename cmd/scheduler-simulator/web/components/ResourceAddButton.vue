@@ -44,6 +44,7 @@ type Resource =
 
 interface Store {
   readonly selected: object | null;
+  readonly count: number;
   select(name: Resource | null, isNew: boolean): void;
 }
 
@@ -90,24 +91,35 @@ export default defineComponent({
       const route = context.root.$route;
       switch (rn) {
         case "Pod":
-          targetTemplate = podTemplate(getSimulatorIDFromPath(route.path));
           store = podstore;
+          // if store.count = 0, name suffix is 1.
+          targetTemplate = podTemplate(
+            getSimulatorIDFromPath(route.path),
+            (store.count + 1).toString()
+          );
           break;
         case "Node":
-          targetTemplate = nodeTemplate();
           store = nodestore;
+          // if store.count = 0, name suffix is 1.
+          targetTemplate = nodeTemplate((store.count + 1).toString());
           break;
         case "PersistentVolume":
-          targetTemplate = pvTemplate();
           store = pvstore;
+          // if store.count = 0, name suffix is 1.
+          targetTemplate = pvTemplate((store.count + 1).toString());
           break;
         case "PersistentVolumeClaim":
-          targetTemplate = pvcTemplate();
           store = pvcstore;
+          // if store.count = 0, name suffix is 1.
+          targetTemplate = pvcTemplate(
+            getSimulatorIDFromPath(route.path),
+            (store.count + 1).toString()
+          );
           break;
         case "StorageClass":
-          targetTemplate = storageclassTemplate();
           store = storageclassstore;
+          // if store.count = 0, name suffix is 1.
+          targetTemplate = storageclassTemplate((store.count + 1).toString());
           break;
       }
 

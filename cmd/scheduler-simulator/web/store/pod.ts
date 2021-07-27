@@ -5,6 +5,7 @@ import { V1Pod, V1PodList } from "@kubernetes/client-node";
 type stateType = {
   selectedPod: SelectedPod | null;
   pods: {
+    // key is node name or "unscheduled"
     [key: string]: Array<V1Pod>;
   };
 };
@@ -25,6 +26,14 @@ export default function podStore() {
   return {
     get pods() {
       return state.pods;
+    },
+
+    get count(): number {
+      var num = 0;
+      Object.keys(state.pods).forEach((key) => {
+        num += state.pods[key].length;
+      });
+      return num;
     },
 
     get selected() {

@@ -35,6 +35,10 @@ export default function pvcStore() {
       return state.pvcs;
     },
 
+    get count(): number {
+      return state.pvcs.length;
+    },
+
     get selected() {
       return state.selectedPersistentVolumeClaim;
     },

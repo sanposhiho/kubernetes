@@ -25,6 +25,10 @@ export default function nodeStore() {
       return state.nodes;
     },
 
+    get count(): number {
+      return state.nodes.length;
+    },
+
     get selected() {
       return state.selectedNode;
     },

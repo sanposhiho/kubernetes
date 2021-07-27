@@ -35,6 +35,10 @@ export default function storageclassStore() {
       return state.storageclasses;
     },
 
+    get count(): number {
+      return state.storageclasses.length;
+    },
+
     get selected() {
       return state.selectedStorageClass;
     },

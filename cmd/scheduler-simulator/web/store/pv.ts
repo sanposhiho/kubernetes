@@ -35,6 +35,10 @@ export default function pvStore() {
       return state.pvs;
     },
 
+    get count(): number {
+      return state.pvs.length;
+    },
+
     get selected() {
       return state.selectedPersistentVolume;
     },
