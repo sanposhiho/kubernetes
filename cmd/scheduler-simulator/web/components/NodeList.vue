@@ -56,7 +56,7 @@ export default defineComponent({
     const route = context.root.$route;
 
     const getNodeList = async () => {
-      await nstore.list(getSimulatorIDFromPath(route.path));
+      await nstore.fetchlist(getSimulatorIDFromPath(route.path));
     };
 
     onMounted(getNodeList);

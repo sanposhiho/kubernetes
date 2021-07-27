@@ -48,7 +48,7 @@ export default defineComponent({
 
     const getPVCList = async () => {
       const route = context.root.$route;
-      await store.list(getSimulatorIDFromPath(route.path));
+      await store.fetchlist(getSimulatorIDFromPath(route.path));
     };
     const onClick = (pvc: V1PersistentVolumeClaim) => {
       store.select(pvc, false);

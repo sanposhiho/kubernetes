@@ -46,25 +46,25 @@ export default defineComponent({
     const route = context.root.$route;
 
     const fetch = async () => {
-        getSchedulerConfiguration(getSimulatorIDFromPath(route.path)).then(
-          (value: SchedulerConfiguration) => {
-            formData.value = yaml.dump(value);
-                d.value = props.value
-          }
-          )
-    }
+      getSchedulerConfiguration(getSimulatorIDFromPath(route.path)).then(
+        (value: SchedulerConfiguration) => {
+          formData.value = yaml.dump(value);
+          d.value = props.value;
+        }
+      );
+    };
 
     const applyOnClick = async () => {
       const cfg = yaml.load(formData.value);
       applySchedulerConfiguration(cfg, getSimulatorIDFromPath(route.path));
-      d.value = false
+      d.value = false;
     };
 
     const d = ref(false);
 
     watch(props, (newvalue, _) => {
       if (newvalue) {
-          fetch()
+        fetch();
       }
     });
 

@@ -22,7 +22,7 @@
 
 <script>
 import { defineComponent, ref } from "@nuxtjs/composition-api";
-import SchedulerConfigurationEditButton from "~/components/ResourceBar/SchedulerConfigurationEditButton.vue";
+import SchedulerConfigurationEditButton from "~/components/SchedulerConfigurationEditButton.vue";
 import SchedulerConfigurationBar from "~/components/ResourceBar/SchedulerConfigurationBar.vue";
 import NodeStoreProvider from "~/components/StoreProvider/NodeStoreProvider.vue";
 import PVStoreProvider from "~/components/StoreProvider/PVStoreProvider.vue";

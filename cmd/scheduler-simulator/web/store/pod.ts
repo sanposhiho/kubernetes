@@ -45,7 +45,7 @@ export default function podStore() {
       state.selectedPod = null;
     },
 
-    async list(simulatorID: string) {
+    async fetchlist(simulatorID: string) {
       const pods = (await listPod(simulatorID)).items;
       var result: { [key: string]: Array<V1Pod> } = {};
       result["unscheduled"] = [];
@@ -72,12 +72,12 @@ export default function podStore() {
 
     async apply(p: V1Pod, simulatorID: string) {
       await applyPod(p, simulatorID);
-      await this.list(simulatorID);
+      await this.fetchlist(simulatorID);
     },
 
     async delete(name: string, simulatorID: string) {
       await deletePod(name, simulatorID);
-      await this.list(simulatorID);
+      await this.fetchlist(simulatorID);
     },
   };
 }

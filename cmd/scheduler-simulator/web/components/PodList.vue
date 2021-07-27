@@ -43,7 +43,7 @@ export default defineComponent({
 
     const getPodList = async () => {
       const route = context.root.$route;
-      await store.list(getSimulatorIDFromPath(route.path));
+      await store.fetchlist(getSimulatorIDFromPath(route.path));
     };
     const onClick = (pod: V1Pod) => {
       store.select(pod, false);

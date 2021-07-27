@@ -159,18 +159,16 @@ export default defineComponent({
     watch(selected, (newVal, oldVal) => {
       if (selected.value) {
         if (!oldVal) {
-        fetchSelected().then(
-          _ => {
-      if (selected.value) {
-            editmode.value = selected.value.isNew;
+          fetchSelected().then((_) => {
+            if (selected.value) {
+              editmode.value = selected.value.isNew;
 
-            formData.value = yaml.dump(selected.value.item);
-            treeData.value = objectToTreeViewData(selected.value.item);
-            drawer.value = true;
-          }
-          }
-        )
-      }
+              formData.value = yaml.dump(selected.value.item);
+              treeData.value = objectToTreeViewData(selected.value.item);
+              drawer.value = true;
+            }
+          });
+        }
       }
     });
 

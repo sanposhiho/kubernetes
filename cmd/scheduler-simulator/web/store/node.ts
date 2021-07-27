@@ -43,7 +43,7 @@ export default function nodeStore() {
       state.selectedNode = null;
     },
 
-    async list(simulatorID: string) {
+    async fetchlist(simulatorID: string) {
       state.nodes = (await listNode(simulatorID)).items;
     },
 
@@ -58,12 +58,12 @@ export default function nodeStore() {
 
     async apply(n: V1Node, simulatorID: string) {
       await applyNode(n, simulatorID);
-      await this.list(simulatorID);
+      await this.fetchlist(simulatorID);
     },
 
     async delete(name: string, simulatorID: string) {
       await deleteNode(name, simulatorID);
-      await this.list(simulatorID);
+      await this.fetchlist(simulatorID);
     },
   };
 }

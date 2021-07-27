@@ -53,17 +53,20 @@ export default function pvcStore() {
       state.selectedPersistentVolumeClaim = null;
     },
 
-    async list(simulatorID: string) {
+    async fetchlist(simulatorID: string) {
       state.pvcs = (await listPersistentVolumeClaim(simulatorID)).items;
     },
 
     async apply(n: V1PersistentVolumeClaim, simulatorID: string) {
       await applyPersistentVolumeClaim(n, simulatorID);
-      await this.list(simulatorID);
+      await this.fetchlist(simulatorID);
     },
 
     async fetchSelected(simulatorID: string) {
-      if (state.selectedPersistentVolumeClaim?.item.metadata?.name&& !this.selected?.isNew) {
+      if (
+        state.selectedPersistentVolumeClaim?.item.metadata?.name &&
+        !this.selected?.isNew
+      ) {
         state.selectedPersistentVolumeClaim.item =
           await getPersistentVolumeClaim(
             state.selectedPersistentVolumeClaim.item.metadata.name,
@@ -74,7 +77,7 @@ export default function pvcStore() {
 
     async delete(name: string, simulatorID: string) {
       await deletePersistentVolumeClaim(name, simulatorID);
-      await this.list(simulatorID);
+      await this.fetchlist(simulatorID);
     },
   };
 }

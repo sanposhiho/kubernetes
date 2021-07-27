@@ -1,5 +1,5 @@
 metadata:
-  name: sample-pv
+  name: pv
   labels: {}
 spec:
   capacity:

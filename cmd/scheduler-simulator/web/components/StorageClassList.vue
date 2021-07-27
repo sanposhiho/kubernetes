@@ -44,7 +44,7 @@ export default defineComponent({
 
     const getStorageClassList = async () => {
       const route = context.root.$route;
-      await store.list(getSimulatorIDFromPath(route.path));
+      await store.fetchlist(getSimulatorIDFromPath(route.path));
     };
     const onClick = (storageclass: V1StorageClass) => {
       store.select(storageclass, false);

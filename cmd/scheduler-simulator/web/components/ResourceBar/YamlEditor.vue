@@ -24,7 +24,7 @@ export default defineComponent({
 
     watch(props, (newvalue, _) => {
       if (newvalue.value) {
-        formData.value = newvalue.value
+        formData.value = newvalue.value;
       }
     });
 
