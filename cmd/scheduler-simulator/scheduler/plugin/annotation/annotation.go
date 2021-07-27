@@ -1,12 +1,14 @@
 package annotation
 
 const (
-	// for scheduling results.
-
+	// scheduling results.
 	FilterResultAnnotationKey     = "scheduler-simulator/filter-result"
 	ScoreResultAnnotationKey      = "scheduler-simulator/score-result"
 	FinalScoreResultAnnotationKey = "scheduler-simulator/finalscore-result"
 
-	// for enable plugins.
+	// enable plugins.
 	EnabledPluginsAnnotationKey = "scheduler-simulator/enabled-plugins"
+
+	// scheduler name.
+	SchedulerNameAnnotationKey = "scheduler-simulator/scheduler-name"
 )

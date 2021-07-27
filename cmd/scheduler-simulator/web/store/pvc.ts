@@ -63,7 +63,7 @@ export default function pvcStore() {
     },
 
     async fetchSelected(simulatorID: string) {
-      if (state.selectedPersistentVolumeClaim?.item.metadata?.name) {
+      if (state.selectedPersistentVolumeClaim?.item.metadata?.name&& !this.selected?.isNew) {
         state.selectedPersistentVolumeClaim.item =
           await getPersistentVolumeClaim(
             state.selectedPersistentVolumeClaim.item.metadata.name,

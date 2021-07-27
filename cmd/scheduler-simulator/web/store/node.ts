@@ -48,7 +48,7 @@ export default function nodeStore() {
     },
 
     async fetchSelected(simulatorID: string) {
-      if (state.selectedNode?.item.metadata?.name) {
+      if (state.selectedNode?.item.metadata?.name && !this.selected?.isNew) {
         state.selectedNode.item = await getNode(
           state.selectedNode.item.metadata.name,
           simulatorID

@@ -3,7 +3,6 @@ package schedulingresultstore
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"strconv"
 	"strings"
 	"sync"
@@ -20,6 +19,8 @@ import (
 	"k8s.io/kubernetes/cmd/scheduler-simulator/util"
 )
 
+// Store has results of scheduling.
+// It manages all scheduling results and reflects all results on the pod annotation when the scheduling is finished.
 type Store struct {
 	mu *sync.Mutex
 
@@ -33,7 +34,6 @@ const (
 	DisabledMessage = "(disabled)"
 	// DisabledScore means the scoring plugin is disabled.
 	DisabledScore int64 = -1
-
 	// PassedFilterMessage is used when node pass the filter plugin.
 	PassedFilterMessage = "passed"
 )
@@ -65,6 +65,8 @@ func New(informerFactory informers.SharedInformerFactory, client clientset.Inter
 	}
 
 	// Store adds scheduling results when pod is updating.
+	// This is because scheduling framework doesn’t have any phase to hook scheduling finished.
+	// (both successfully and non-successfully)
 	informerFactory.Core().V1().Pods().Informer().AddEventHandler(
 		cache.ResourceEventHandlerFuncs{
 			UpdateFunc: s.addSchedulingResultToPod,
@@ -116,17 +118,17 @@ func (s *Store) addSchedulingResultToPod(_, newObj interface{}) {
 	}
 
 	if err := s.addFilterResultToPod(pod); err != nil {
-		klog.Errorf("failed to add filtering result to pod: %v", err)
+		klog.Errorf("failed to add filtering result to pod: %+v", err)
 		return
 	}
 
 	if err := s.addScoreResultToPod(pod); err != nil {
-		klog.Errorf("failed to add scoring result to pod: %v", err)
+		klog.Errorf("failed to add scoring result to pod: %+v", err)
 		return
 	}
 
 	if err := s.addFinalScoreResultToPod(pod); err != nil {
-		klog.Errorf("failed to add final score result to pod: %v", err)
+		klog.Errorf("failed to add final score result to pod: %+v", err)
 		return
 	}
 
@@ -139,7 +141,7 @@ func (s *Store) addSchedulingResultToPod(_, newObj interface{}) {
 		return true, nil
 	}
 	if err := util.RetryWithExponentialBackOff(updateFunc); err != nil {
-		klog.Errorf("failed to update pod with retry to record score: %v", err)
+		klog.Errorf("failed to update pod with retry to record score: %+v", err)
 		return
 	}
 
@@ -151,7 +153,7 @@ func (s *Store) addFilterResultToPod(pod *v1.Pod) error {
 	k := newKey(pod.Namespace, pod.Name)
 	scores, err := json.Marshal(s.result[k].filter)
 	if err != nil {
-		return fmt.Errorf("encode json to record scores: %w", err)
+		return xerrors.Errorf("encode json to record scores: %w", err)
 	}
 
 	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, annotation.FilterResultAnnotationKey, string(scores))
@@ -162,7 +164,7 @@ func (s *Store) addScoreResultToPod(pod *v1.Pod) error {
 	k := newKey(pod.Namespace, pod.Name)
 	scores, err := json.Marshal(s.result[k].score)
 	if err != nil {
-		return fmt.Errorf("encode json to record scores: %w", err)
+		return xerrors.Errorf("encode json to record scores: %w", err)
 	}
 
 	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, annotation.ScoreResultAnnotationKey, string(scores))
@@ -173,7 +175,7 @@ func (s *Store) addFinalScoreResultToPod(pod *v1.Pod) error {
 	k := newKey(pod.Namespace, pod.Name)
 	scores, err := json.Marshal(s.result[k].finalscore)
 	if err != nil {
-		return fmt.Errorf("encode json to record scores: %w", err)
+		return xerrors.Errorf("encode json to record scores: %w", err)
 	}
 
 	metav1.SetMetaDataAnnotation(&pod.ObjectMeta, annotation.FinalScoreResultAnnotationKey, string(scores))

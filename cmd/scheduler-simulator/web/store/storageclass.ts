@@ -63,7 +63,7 @@ export default function storageclassStore() {
     },
 
     async fetchSelected(simulatorID: string) {
-      if (state.selectedStorageClass?.item.metadata?.name) {
+      if (state.selectedStorageClass?.item.metadata?.name&& !this.selected?.isNew) {
         state.selectedStorageClass.item = await getStorageClass(
           state.selectedStorageClass.item.metadata.name,
           simulatorID

@@ -58,7 +58,7 @@ export default function pvStore() {
     },
 
     async fetchSelected(simulatorID: string) {
-      if (state.selectedPersistentVolume?.item.metadata?.name) {
+      if (state.selectedPersistentVolume?.item.metadata?.name&& !this.selected?.isNew) {
         state.selectedPersistentVolume.item = await getPersistentVolume(
           state.selectedPersistentVolume.item.metadata.name,
           simulatorID

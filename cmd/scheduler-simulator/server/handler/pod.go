@@ -4,6 +4,9 @@ import (
 	"context"
 	"net/http"
 
+	"golang.org/x/xerrors"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/annotation"
+
 	"github.com/labstack/echo/v4"
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
@@ -61,6 +64,11 @@ func (h *PodHandler) GetPod(c echo.Context) error {
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
+	if err := addSchedulerNameToPod(p); err != nil {
+		klog.Errorf("failed to add scheduler name to pod: %+v", err)
+		return echo.NewHTTPError(http.StatusInternalServerError)
+	}
+
 	return c.JSON(http.StatusOK, p)
 }
 
@@ -92,4 +100,19 @@ func (h *PodHandler) DeletePod(c echo.Context) error {
 	}
 
 	return c.NoContent(http.StatusOK)
+}
+
+// addSchedulerNameToPod adds scheduler name on .spec.schedulerName
+// so that users can see what schedulerName they have used.
+// When simulator creates pods, it removes .spec.schedulerName to use `default-scheduler`.
+// This simulator has only one scheduler named default-scheduler,
+// and it behaves as if there are multiple schedulers.
+// Annotation of annotation.SchedulerNameAnnotationKey has scheduler name that the user specified.
+func addSchedulerNameToPod(pod *corev1.Pod) error {
+	schedulerName, ok := pod.Annotations[annotation.SchedulerNameAnnotationKey]
+	if !ok {
+		return xerrors.New("pod doesn't have scheduler name on annotation")
+	}
+	pod.Spec.SchedulerName = schedulerName
+	return nil
 }

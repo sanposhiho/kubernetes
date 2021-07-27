@@ -162,8 +162,10 @@ func (s *Service) addSchedulerConfiguration(pac *v1.PodApplyConfiguration, sc *s
 		return xerrors.Errorf("encode to json: %w", err)
 	}
 	pac.Annotations[annotation.EnabledPluginsAnnotationKey] = string(j)
+
 	// remove scheduler name to use `default-scheduler`.
 	// This simulator has only one scheduler named default-scheduler, and it behaves as if there are multiple schedulers.
+	pac.Annotations[annotation.SchedulerNameAnnotationKey] = *pac.Spec.SchedulerName
 	pac.Spec.SchedulerName = nil
 
 	return nil
