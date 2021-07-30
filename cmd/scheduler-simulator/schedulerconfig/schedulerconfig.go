@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"golang.org/x/xerrors"
-
 	schedulerapi "k8s.io/kube-scheduler/config/v1beta1"
 )
 

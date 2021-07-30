@@ -7,18 +7,18 @@ import (
 	"sync"
 
 	"golang.org/x/xerrors"
-
 	v1 "k8s.io/api/core/v1"
+
 	"k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
-// scorePluginManager has all scorePlugin
+// scorePluginManager has all scorePlugin.
 type scorePluginManager struct {
 	mu      *sync.Mutex
 	plugins []*scorePlugin
 }
 
-func NewScorePluginManager() *scorePluginManager {
+func newScorePluginManager() *scorePluginManager {
 	return &scorePluginManager{
 		mu: new(sync.Mutex),
 	}
@@ -39,7 +39,7 @@ func (s *scorePluginManager) appendPluginToNodeScores(state *framework.CycleStat
 	d, err := state.Read(key)
 	if err != nil {
 		if !errors.Is(err, framework.ErrNotFound) {
-			return xerrors.Errorf("read from cycle state", err)
+			return xerrors.Errorf("read from cycle state: %w", err)
 		}
 		d = &scoringdata{scores: map[string]framework.NodeScoreList{}}
 	}
@@ -61,7 +61,7 @@ func (s *scorePluginManager) getSelectedNode(ctx context.Context, state *framewo
 	d, err := state.Read(key)
 	if err != nil {
 		if !errors.Is(err, framework.ErrNotFound) {
-			return "", framework.AsStatus(xerrors.Errorf("read from cycle state", err))
+			return "", framework.AsStatus(xerrors.Errorf("read from cycle state: %w", err))
 		}
 		d = &scoringdata{}
 	}
@@ -111,8 +111,8 @@ func (s *scorePluginManager) runAllNormalizedScore(ctx context.Context, state *f
 	var returnStatus *framework.Status
 	for _, p := range s.plugins {
 		p := p
+		wg.Add(1)
 		go func() {
-			wg.Add(1)
 			s := p.RunNormalizeScore(ctx, state, pod, pluginToNodeScores[p.Name()])
 			if !s.IsSuccess() {
 				returnStatus = s

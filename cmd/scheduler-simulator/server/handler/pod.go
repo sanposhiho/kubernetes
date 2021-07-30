@@ -4,13 +4,13 @@ import (
 	"context"
 	"net/http"
 
-	"golang.org/x/xerrors"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/annotation"
-
 	"github.com/labstack/echo/v4"
+	"golang.org/x/xerrors"
 	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	"k8s.io/klog/v2"
+
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/annotation"
 )
 
 // PodHandler is handler for manage pod.

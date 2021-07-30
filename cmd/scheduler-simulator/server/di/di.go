@@ -2,14 +2,14 @@ package di
 
 import (
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/etcd"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/pod"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/schedulerconfig"
 
+	"k8s.io/kubernetes/cmd/scheduler-simulator/etcd"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/namespace"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/node"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/persistentvolume"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/persistentvolumeclaim"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/pod"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/schedulerconfig"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server/handler"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/storageclass"
 )

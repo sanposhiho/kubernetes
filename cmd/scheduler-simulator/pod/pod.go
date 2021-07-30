@@ -5,24 +5,22 @@ import (
 	"encoding/json"
 	"fmt"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/schedulerconfig"
-
-	original "k8s.io/kubernetes/pkg/scheduler/apis/config"
-
 	"golang.org/x/xerrors"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
-
 	schedulerapi "k8s.io/kube-scheduler/config/v1beta1"
+
 	"k8s.io/kubernetes/cmd/scheduler-simulator/errors"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/node"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/annotation"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/schedulerconfig"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/util"
 	"k8s.io/kubernetes/pkg/scheduler/algorithmprovider"
+	original "k8s.io/kubernetes/pkg/scheduler/apis/config"
 )
 
 // Service manages pods.
@@ -74,7 +72,7 @@ func (s *Service) Apply(ctx context.Context, simulatorID string, pod *v1.PodAppl
 	sc, err := s.schedulerConfigurationService.GetSchedulerConfig(ctx, simulatorID)
 	if err != nil {
 		if !xerrors.Is(err, errors.ErrNotFound) {
-			return xerrors.Errorf("get scheduler config: %w")
+			return xerrors.Errorf("get scheduler config: %w", err)
 		}
 		sc = schedulerconfig.DefaultSchedulerConfig()
 	}

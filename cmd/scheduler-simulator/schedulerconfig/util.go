@@ -1,16 +1,16 @@
 package schedulerconfig
 
 import (
+	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	// We have to use this config for encoding to json. This is because it has omitempty json tag.
 	schedulerapi "k8s.io/kube-scheduler/config/v1beta1"
 
-	// But, we have to use some function which use the type on this package.
-	// We call types on this package `originalPlugins` and `originalPluginSet`
-	original "k8s.io/kubernetes/pkg/scheduler/apis/config"
-
-	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
 	"k8s.io/kubernetes/pkg/scheduler/algorithmprovider"
+
+	// We call types on this package `originalPlugins` and `originalPluginSet`.
+	original "k8s.io/kubernetes/pkg/scheduler/apis/config"
 )
 
 func ConvertToOriginalPluginsType(ps *schedulerapi.Plugins) *original.Plugins {

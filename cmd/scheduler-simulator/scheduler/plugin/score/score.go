@@ -22,7 +22,7 @@ import (
 func NewRegistryForScoreRecord(s *schedulingresultstore.Store) map[string]schedulerRuntime.PluginFactory {
 	ret := map[string]schedulerRuntime.PluginFactory{}
 	rs := plugins.NewInTreeRegistry()
-	manager := NewScorePluginManager()
+	manager := newScorePluginManager()
 	for _, pl := range DefaultScorePlugins() {
 		pl := pl
 		r := rs[pl.Name]

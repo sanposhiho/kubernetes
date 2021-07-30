@@ -41,9 +41,7 @@ func IsPluginEnabled(pod *v1.Pod, pluginName string, phase PluginPhase) bool {
 	return true
 }
 
-var (
-	errPluginNotFound = errors.New("plugin not found")
-)
+var errPluginNotFound = errors.New("plugin not found")
 
 func GetEnabledPlugin(pod *v1.Pod, pluginName string, phase PluginPhase) (*schedulerapi.Plugin, error) {
 	enabledPlugins, err := getEnabledPlugins(pod, phase)

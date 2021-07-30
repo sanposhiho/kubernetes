@@ -7,6 +7,7 @@ import (
 
 	"go.etcd.io/etcd/clientv3"
 	"golang.org/x/xerrors"
+	"k8s.io/klog/v2"
 
 	simulatorcfg "k8s.io/kubernetes/cmd/scheduler-simulator/config"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/errors"
@@ -22,7 +23,11 @@ const (
 	dialTimeout = 5 * time.Second
 )
 
-func NewClient(cfg *simulatorcfg.Config) *Client {
+func NewClient(cfg *simulatorcfg.Config) (
+	*Client,
+	func(), // function to close client
+	error,
+) {
 	cli, err := clientv3.New(clientv3.Config{
 		Endpoints:   []string{cfg.EtcdURL},
 		DialTimeout: dialTimeout,
@@ -30,11 +35,18 @@ func NewClient(cfg *simulatorcfg.Config) *Client {
 	// TODO: error handle
 	// TODO: close
 	if err != nil {
+		return nil, nil, xerrors.Errorf("create new v3 client for etcd: %w", err)
+	}
+
+	closefn := func() {
+		if err := cli.Close(); err != nil {
+			klog.Errorf("failed to close v3 client for etcd: %w", err)
+		}
 	}
 
 	return &Client{
 		c: cli,
-	}
+	}, closefn, nil
 }
 
 func (c *Client) get(ctx context.Context, k string, v interface{}) error {

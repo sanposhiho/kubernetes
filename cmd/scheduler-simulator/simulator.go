@@ -7,9 +7,9 @@ import (
 
 	"golang.org/x/xerrors"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/etcd"
 
 	"k8s.io/kubernetes/cmd/scheduler-simulator/config"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/etcd"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
@@ -36,18 +36,23 @@ func startSimulator() error {
 	}
 	defer shutdownFn1()
 
-	etcdclient := etcd.NewClient(cfg)
+	etcdclient, shutdownFn2, err := etcd.NewClient(cfg)
+	if err != nil {
+		return xerrors.Errorf("create new etcd client: %w", err)
+	}
+	defer shutdownFn2()
 
 	dic := di.NewDIContainer(clientset, etcdclient)
 
 	// start simulator server
 	s := server.NewSimulatorServer(cfg, dic)
-	shutdownFn2, err := s.Start(cfg.Port)
+	shutdownFn3, err := s.Start(cfg.Port)
 	if err != nil {
 		return xerrors.Errorf("start simulator server: %w", err)
 	}
-	defer shutdownFn2()
+	defer shutdownFn3()
 
+	// wait the signal
 	quit := make(chan os.Signal, 1)
 	signal.Notify(quit, syscall.SIGTERM, os.Interrupt)
 	<-quit

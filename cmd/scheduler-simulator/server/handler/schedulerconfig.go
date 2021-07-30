@@ -4,16 +4,14 @@ import (
 	"context"
 	"net/http"
 
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
-	"k8s.io/kubernetes/cmd/scheduler-simulator/schedulerconfig"
-
 	"github.com/labstack/echo/v4"
 	"golang.org/x/xerrors"
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/klog/v2"
 	schedulerapi "k8s.io/kube-scheduler/config/v1beta1"
 
 	"k8s.io/kubernetes/cmd/scheduler-simulator/errors"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/schedulerconfig"
 )
 
 // SchedulerConfigHandler is handler for manage scheduler config.
