@@ -14,7 +14,6 @@ import (
 	schedulerapi "k8s.io/kube-scheduler/config/v1beta1"
 
 	"k8s.io/kubernetes/cmd/scheduler-simulator/errors"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/node"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/annotation"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/schedulerconfig"
@@ -67,8 +66,6 @@ func (s *Service) Apply(ctx context.Context, simulatorID string, pod *v1.PodAppl
 	pod.WithKind("Pod")
 	pod.WithAPIVersion("v1")
 
-	addSimulatorIDNodeSelector(pod, simulatorID)
-
 	sc, err := s.schedulerConfigurationService.GetSchedulerConfig(ctx, simulatorID)
 	if err != nil {
 		if !xerrors.Is(err, errors.ErrNotFound) {
@@ -119,13 +116,6 @@ func (s *Service) Delete(ctx context.Context, name string, simulatorID string) e
 	}
 
 	return nil
-}
-
-func addSimulatorIDNodeSelector(pac *v1.PodApplyConfiguration, simulatorID string) {
-	if pac.Spec.NodeSelector == nil {
-		pac.Spec.NodeSelector = map[string]string{}
-	}
-	pac.Spec.NodeSelector[node.SimulatorIDLabelKey] = simulatorID
 }
 
 func (s *Service) addSchedulerConfiguration(pac *v1.PodApplyConfiguration, sc *schedulerapi.KubeSchedulerConfiguration) error {

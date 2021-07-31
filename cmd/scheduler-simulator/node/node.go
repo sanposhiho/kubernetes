@@ -5,7 +5,6 @@ package node
 
 import (
 	"context"
-	"strings"
 
 	"golang.org/x/xerrors"
 	corev1 "k8s.io/api/core/v1"
@@ -46,8 +45,7 @@ func (s *Service) Get(ctx context.Context, name string, simulatorID string) (*co
 
 // List lists all nodes.
 func (s *Service) List(ctx context.Context, simulatorID string) (*corev1.NodeList, error) {
-	labelSelector := simulatorIDLabelSelector(simulatorID)
-	nl, err := s.client.CoreV1().Nodes().List(ctx, metav1.ListOptions{LabelSelector: metav1.FormatLabelSelector(labelSelector)})
+	nl, err := s.client.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("list nodes: %w", err)
 	}
@@ -59,10 +57,6 @@ func (s *Service) List(ctx context.Context, simulatorID string) (*corev1.NodeLis
 func (s *Service) Apply(ctx context.Context, simulatorID string, nac *v1.NodeApplyConfiguration) error {
 	nac.WithAPIVersion("v1")
 	nac.WithKind("Node")
-
-	// add information for manage all user's node.
-	addSimulatorIDLabel(nac, simulatorID)
-	addNameSuffix(nac, simulatorID)
 
 	_, err := s.client.CoreV1().Nodes().Apply(ctx, nac, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
 	if err != nil {
@@ -96,41 +90,4 @@ func (s *Service) Delete(ctx context.Context, name string, simulatorID string) e
 		return xerrors.Errorf("delete node: %w", err)
 	}
 	return nil
-}
-
-// addNameSuffix adds suffix to nac.Name
-// Make Node names unique by using simulatorID as a suffix.
-func addNameSuffix(nac *v1.NodeApplyConfiguration, suffix string) {
-	if nac == nil || nac.Name == nil {
-		return
-	}
-	if strings.HasSuffix(*nac.Name, suffix) {
-		return
-	}
-
-	// Add the suffix to the name only if the name don't have the suffix.
-	newName := *nac.Name + "-" + suffix
-	nac.Name = &newName
-}
-
-const SimulatorIDLabelKey = "simulatorID"
-
-// addSimulatorIDLabel adds simulatorID to label.
-// This label is used for nodeSelector.
-func addSimulatorIDLabel(nac *v1.NodeApplyConfiguration, simulatorID string) {
-	if nac == nil {
-		return
-	}
-	if nac.Labels == nil {
-		nac.Labels = map[string]string{}
-	}
-	nac.Labels[SimulatorIDLabelKey] = simulatorID
-}
-
-func simulatorIDLabelSelector(simulatorID string) *metav1.LabelSelector {
-	return &metav1.LabelSelector{
-		MatchLabels: map[string]string{
-			SimulatorIDLabelKey: simulatorID,
-		},
-	}
 }

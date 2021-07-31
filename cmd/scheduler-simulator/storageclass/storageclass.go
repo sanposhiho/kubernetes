@@ -2,7 +2,6 @@ package storageclass
 
 import (
 	"context"
-	"strings"
 
 	"golang.org/x/xerrors"
 	storagev1 "k8s.io/api/storage/v1"
@@ -36,8 +35,7 @@ func (s *Service) Get(ctx context.Context, name string, simulatorID string) (*st
 // List list all storageClass.
 // use simulatorID as namespace.
 func (s *Service) List(ctx context.Context, simulatorID string) (*storagev1.StorageClassList, error) {
-	labelSelector := simulatorIDLabelSelector(simulatorID)
-	pl, err := s.client.StorageV1().StorageClasses().List(ctx, metav1.ListOptions{LabelSelector: metav1.FormatLabelSelector(labelSelector)})
+	pl, err := s.client.StorageV1().StorageClasses().List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("list storageClasss: %w", err)
 	}
@@ -49,10 +47,6 @@ func (s *Service) List(ctx context.Context, simulatorID string) (*storagev1.Stor
 func (s *Service) Apply(ctx context.Context, simulatorID string, storageClass *v1.StorageClassApplyConfiguration) error {
 	storageClass.WithKind("StorageClass")
 	storageClass.WithAPIVersion("storage.k8s.io/v1")
-
-	// add information for manage all user's node.
-	addSimulatorIDLabel(storageClass, simulatorID)
-	addNameSuffix(storageClass, simulatorID)
 
 	_, err := s.client.StorageV1().StorageClasses().Apply(ctx, storageClass, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
 	if err != nil {
@@ -71,42 +65,4 @@ func (s *Service) Delete(ctx context.Context, name string, simulatorID string) e
 	}
 
 	return nil
-}
-
-// addNameSuffix adds suffix to name
-// Make storageClass names unique by using simulatorID as a suffix.
-func addNameSuffix(sac *v1.StorageClassApplyConfiguration, suffix string) *v1.StorageClassApplyConfiguration {
-	if sac == nil || sac.Name == nil {
-		return sac
-	}
-	if strings.HasSuffix(*sac.Name, suffix) {
-		return sac
-	}
-
-	// Add the suffix to the name only if the name don't have the suffix.
-	newName := *sac.Name + "-" + suffix
-	sac.Name = &newName
-	return sac
-}
-
-const simulatorIDLabelKey = "simulatorID"
-
-// addSimulatorIDLabel adds simulatorID to label.
-func addSimulatorIDLabel(sac *v1.StorageClassApplyConfiguration, simulatorID string) *v1.StorageClassApplyConfiguration {
-	if sac == nil {
-		return sac
-	}
-	if sac.Labels == nil {
-		sac.Labels = map[string]string{}
-	}
-	sac.Labels[simulatorIDLabelKey] = simulatorID
-	return sac
-}
-
-func simulatorIDLabelSelector(simulatorID string) *metav1.LabelSelector {
-	return &metav1.LabelSelector{
-		MatchLabels: map[string]string{
-			simulatorIDLabelKey: simulatorID,
-		},
-	}
 }

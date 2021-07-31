@@ -13,10 +13,7 @@
                   alt="p.metadata.name"
                   class="mr-2"
                 />
-                {{ n.metadata.name.slice(0, -37) }}
-                <div class="grey--text subtitle-2 my-2 mx-1">
-                  {{ n.metadata.name.slice(-37) }}
-                </div>
+                {{ n.metadata.name }}
               </v-card-title>
               <PodList :nodeName="n.metadata.name" />
             </v-card>
