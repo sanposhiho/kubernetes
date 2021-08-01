@@ -45,10 +45,9 @@ func DefaultFilterPlugins() []config.Plugin {
 	return defaultPlugins.Filter.Enabled
 }
 
-func FilterPlugins() []config.Plugin {
-	defaultPlugins := algorithmprovider.GetDefaultConfig()
-	ret := make([]config.Plugin, len(defaultPlugins.Filter.Enabled))
-	for i, n := range defaultPlugins.Filter.Enabled {
+func FilterPlugins(enabledPlugins []config.Plugin) []config.Plugin {
+	ret := make([]config.Plugin, len(enabledPlugins))
+	for i, n := range enabledPlugins {
 		ret[i] = config.Plugin{Name: FilterPluginName(n.Name), Weight: n.Weight}
 	}
 	return ret

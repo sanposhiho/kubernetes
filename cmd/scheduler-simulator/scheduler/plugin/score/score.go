@@ -48,10 +48,9 @@ func DefaultScorePlugins() []config.Plugin {
 	return defaultPlugins.Score.Enabled
 }
 
-func ScorePlugins() []config.Plugin {
-	defaultPlugins := algorithmprovider.GetDefaultConfig()
-	ret := make([]config.Plugin, len(defaultPlugins.Score.Enabled))
-	for i, n := range defaultPlugins.Score.Enabled {
+func ScorePlugins(enabledPlugins []config.Plugin) []config.Plugin {
+	ret := make([]config.Plugin, len(enabledPlugins))
+	for i, n := range enabledPlugins {
 		ret[i] = config.Plugin{Name: ScorePluginName(n.Name), Weight: n.Weight}
 	}
 	return ret

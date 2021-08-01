@@ -48,7 +48,7 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 	v1simulator := v1.Group("/simulators/:simulatorID")
 
 	v1simulator.GET("/schedulerconfiguration", schedulercfgHandler.GetSchedulerConfig)
-	v1simulator.POST("/schedulerconfiguration", schedulercfgHandler.PutSchedulerConfig)
+	v1simulator.POST("/schedulerconfiguration", schedulercfgHandler.ApplySchedulerConfig)
 
 	v1simulator.GET("/nodes", nodeHandler.ListNode)
 	v1simulator.POST("/nodes", nodeHandler.ApplyNode)

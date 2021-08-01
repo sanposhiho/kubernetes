@@ -1,66 +1,45 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	"golang.org/x/xerrors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/klog/v2"
 	schedulerapi "k8s.io/kube-scheduler/config/v1beta1"
-
-	"k8s.io/kubernetes/cmd/scheduler-simulator/errors"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/schedulerconfig"
 )
 
 // SchedulerConfigHandler is handler for manage scheduler config.
 type SchedulerConfigHandler struct {
-	service SchedulerConfigService
+	service SchedulerService
 }
 
-// SchedulerConfigService represents service for manage scheduler config.
-type SchedulerConfigService interface {
-	GetSchedulerConfig(ctx context.Context, simulatorID string) (*schedulerapi.KubeSchedulerConfiguration, error)
-	PutSchedulerConfig(ctx context.Context, simulatorID string, cfg *schedulerapi.KubeSchedulerConfiguration) error
+// SchedulerService represents service for manage scheduler.
+type SchedulerService interface {
+	GetSchedulerConfig() *schedulerapi.KubeSchedulerConfiguration
+	RestartScheduler(cfg *schedulerapi.KubeSchedulerConfiguration) error
 }
 
-func NewSchedulerConfigHandler(s SchedulerConfigService) *SchedulerConfigHandler {
+func NewSchedulerConfigHandler(s SchedulerService) *SchedulerConfigHandler {
 	return &SchedulerConfigHandler{
 		service: s,
 	}
 }
 
 func (h *SchedulerConfigHandler) GetSchedulerConfig(c echo.Context) error {
-	ctx := c.Request().Context()
-
-	simulatorID := c.Param("simulatorID")
-
-	cfg, err := h.service.GetSchedulerConfig(ctx, simulatorID)
-	if err != nil {
-		if !xerrors.Is(err, errors.ErrNotFound) {
-			klog.Errorf("failed to get scheduler config: %+v", err)
-			return echo.NewHTTPError(http.StatusInternalServerError)
-		}
-		cfg = schedulerconfig.DefaultSchedulerConfig()
-	}
-
+	cfg := h.service.GetSchedulerConfig()
 	return c.JSON(http.StatusOK, convertToJSON(cfg))
 }
 
-func (h *SchedulerConfigHandler) PutSchedulerConfig(c echo.Context) error {
-	ctx := c.Request().Context()
-
-	simulatorID := c.Param("simulatorID")
-
+func (h *SchedulerConfigHandler) ApplySchedulerConfig(c echo.Context) error {
 	reqSchedulerCfg := new(schedulerapi.KubeSchedulerConfiguration)
 	if err := c.Bind(reqSchedulerCfg); err != nil {
 		klog.Errorf("failed to bind scheduler config request: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
-	if err := h.service.PutSchedulerConfig(ctx, simulatorID, reqSchedulerCfg); err != nil {
-		klog.Errorf("failed to put scheduler config: %+v", err)
+	if err := h.service.RestartScheduler(reqSchedulerCfg); err != nil {
+		klog.Errorf("failed to restart scheduler: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 

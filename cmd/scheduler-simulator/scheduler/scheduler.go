@@ -2,139 +2,53 @@ package scheduler
 
 import (
 	"context"
-	"fmt"
-	"net/http"
-	"net/http/httptest"
-	"time"
 
-	"github.com/google/uuid"
+	"k8s.io/klog/v2"
+
 	"golang.org/x/xerrors"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/apiserver/pkg/server/options"
-	"k8s.io/apiserver/pkg/storage/storagebackend"
-	"k8s.io/client-go/informers"
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/events"
-	"k8s.io/klog/v2"
 	"k8s.io/kube-scheduler/config/v1beta1"
 
-	simulatorcfg "k8s.io/kubernetes/cmd/scheduler-simulator/config"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin"
-	"k8s.io/kubernetes/pkg/controller/volume/persistentvolume"
 	"k8s.io/kubernetes/pkg/scheduler"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
 	kubeschedulerscheme "k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
 	"k8s.io/kubernetes/pkg/scheduler/profile"
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/hostpath"
-	"k8s.io/kubernetes/pkg/volume/local"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
-// SetupSchedulerOrDie starts k8s-apiserver and scheduler.
-func SetupSchedulerOrDie(simulatorcfg *simulatorcfg.Config) (
-	clientset.Interface,
-	func(), // function for shutdown
-	error,
-) {
-	apiURL, apiShutdown := startAPIServerOrDie(simulatorcfg.EtcdURL)
+// Service manages scheduler.
+type Service struct {
+	// function to shutdown scheduler.
+	shutdownfn func()
 
-	cfg := &restclient.Config{
-		Host:          apiURL,
-		ContentConfig: restclient.ContentConfig{GroupVersion: &schema.GroupVersion{Group: "", Version: "v1"}},
-		QPS:           5000.0,
-		Burst:         5000,
+	clientset           clientset.Interface
+	restclientCfg       *restclient.Config
+	currentSchedulerCfg *config.KubeSchedulerConfiguration
+}
+
+// NewSchedulerService starts scheduler and return *Service.
+func NewSchedulerService(client clientset.Interface, restclientCfg *restclient.Config) *Service {
+	return &Service{clientset: client, restclientCfg: restclientCfg}
+}
+
+func (s *Service) RestartScheduler(cfg *config.KubeSchedulerConfiguration) error {
+	s.ShutdownScheduler()
+
+	if err := s.StartScheduler(cfg); err != nil {
+		return xerrors.Errorf("start scheduler: %w")
 	}
+	return nil
+}
 
-	schedCfg, err := schedulerConfig()
-	if err != nil {
-		return nil, nil, xerrors.Errorf("get default component config: %w", err)
-	}
-
-	client := clientset.NewForConfigOrDie(cfg)
-
+// StartScheduler starts scheduler.
+func (s *Service) StartScheduler(cfg *config.KubeSchedulerConfiguration) error {
+	clientSet := s.clientset
+	restConfig := s.restclientCfg
 	ctx, cancel := context.WithCancel(context.Background())
 
-	if err := startScheduler(ctx, client, cfg, schedCfg); err != nil {
-		cancel()
-		return nil, nil, xerrors.Errorf("start scheduler: %w", err)
-	}
-
-	if err := startPersistentVolumeController(ctx, client); err != nil {
-		cancel()
-		return nil, nil, xerrors.Errorf("start pv controller: %w", err)
-	}
-
-	shutdownFunc := func() {
-		cancel()
-		apiShutdown()
-	}
-
-	return client, shutdownFunc, nil
-}
-
-// startAPIServerOrDie starts API server, and it make panic when a error happen.
-// TODO: change it not to use integration framework.
-func startAPIServerOrDie(etcdURL string) (string, func()) {
-	h := &framework.APIServerHolder{Initialized: make(chan struct{})}
-	s := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, req *http.Request) {
-		<-h.Initialized
-		h.M.GenericAPIServer.Handler.ServeHTTP(w, req)
-	}))
-
-	// etcdOption for control plane
-	etcdOptions := options.NewEtcdOptions(storagebackend.NewDefaultConfig(uuid.New().String(), nil))
-	etcdOptions.StorageConfig.Transport.ServerList = []string{etcdURL}
-	c := framework.NewIntegrationTestControlPlaneConfigWithOptions(&framework.MasterConfigOptions{
-		EtcdOptions: etcdOptions,
-	})
-	c.GenericConfig.OpenAPIConfig = framework.DefaultOpenAPIConfig()
-
-	// Note: This function die when a error happen.
-	_, _, closeFn := framework.RunAnAPIServerUsingServer(c, s, h)
-
-	shutdownFunc := func() {
-		klog.Infof("destroying API server")
-		closeFn()
-		s.Close()
-		klog.Infof("destroyed API server")
-	}
-	return s.URL, shutdownFunc
-}
-
-// schedulerConfig creates KubeSchedulerConfiguration default configuration.
-func schedulerConfig() (*config.KubeSchedulerConfiguration, error) {
-	gvk := v1beta1.SchemeGroupVersion.WithKind("KubeSchedulerConfiguration")
-	cfg := config.KubeSchedulerConfiguration{}
-	_, _, err := kubeschedulerscheme.Codecs.UniversalDecoder().Decode(nil, &gvk, &cfg)
-	if err != nil {
-		return nil, xerrors.Errorf("decode config: %w", err)
-	}
-
-	pc, err := plugin.NewPluginConfig()
-	if err != nil {
-		return nil, xerrors.Errorf("get plugin configs: %w", err)
-	}
-
-	cfg.Profiles = []config.KubeSchedulerProfile{
-		{
-			SchedulerName: v1.DefaultSchedulerName,
-			Plugins:       plugin.NewPlugin(),
-			PluginConfig:  pc,
-		},
-	}
-	return &cfg, nil
-}
-
-// startScheduler starts scheduler.
-func startScheduler(
-	ctx context.Context,
-	clientSet clientset.Interface,
-	kubeConfig *restclient.Config,
-	cfg *config.KubeSchedulerConfiguration,
-) error {
 	informerFactory := scheduler.NewInformerFactory(clientSet, 0)
 	evtBroadcaster := events.NewBroadcaster(&events.EventSinkImpl{
 		Interface: clientSet.EventsV1(),
@@ -147,7 +61,7 @@ func startScheduler(
 		informerFactory,
 		profile.NewRecorderFactory(evtBroadcaster),
 		ctx.Done(),
-		scheduler.WithKubeConfig(kubeConfig),
+		scheduler.WithKubeConfig(restConfig),
 		scheduler.WithProfiles(cfg.Profiles...),
 		scheduler.WithAlgorithmSource(cfg.AlgorithmSource),
 		scheduler.WithPercentageOfNodesToScore(cfg.PercentageOfNodesToScore),
@@ -158,6 +72,7 @@ func startScheduler(
 		scheduler.WithFrameworkOutOfTreeRegistry(plugin.NewRegistry(informerFactory, clientSet)),
 	)
 	if err != nil {
+		cancel()
 		return xerrors.Errorf("create scheduler: %w", err)
 	}
 
@@ -166,30 +81,55 @@ func startScheduler(
 
 	go sched.Run(ctx)
 
+	s.shutdownfn = cancel
+	s.currentSchedulerCfg = cfg
+
 	return nil
 }
 
-func startPersistentVolumeController(ctx context.Context, client clientset.Interface) error {
-	informerFactory := informers.NewSharedInformerFactory(client, 0)
-	params := persistentvolume.ControllerParameters{
-		KubeClient:                client,
-		SyncPeriod:                1 * time.Second,
-		VolumePlugins:             append(local.ProbeVolumePlugins(), hostpath.ProbeVolumePlugins(volume.VolumeConfig{})...),
-		VolumeInformer:            informerFactory.Core().V1().PersistentVolumes(),
-		ClaimInformer:             informerFactory.Core().V1().PersistentVolumeClaims(),
-		ClassInformer:             informerFactory.Storage().V1().StorageClasses(),
-		PodInformer:               informerFactory.Core().V1().Pods(),
-		NodeInformer:              informerFactory.Core().V1().Nodes(),
-		EnableDynamicProvisioning: true,
+func (s *Service) ShutdownScheduler() {
+	if s.shutdownfn != nil {
+		klog.Info("shutdown scheduler...")
+		s.shutdownfn()
 	}
-	volumeController, err := persistentvolume.NewController(params)
+}
+
+func (s *Service) GetSchedulerConfig() *config.KubeSchedulerConfiguration {
+	return s.currentSchedulerCfg
+}
+
+// DefaultConfig creates KubeSchedulerConfiguration default configuration.
+func DefaultConfig() (*config.KubeSchedulerConfiguration, error) {
+	gvk := v1beta1.SchemeGroupVersion.WithKind("KubeSchedulerConfiguration")
+	cfg := config.KubeSchedulerConfiguration{}
+	_, _, err := kubeschedulerscheme.Codecs.UniversalDecoder().Decode(nil, &gvk, &cfg)
 	if err != nil {
-		return fmt.Errorf("failed to construct persistentvolume controller: %w", err)
+		return nil, xerrors.Errorf("decode config: %w", err)
 	}
 
-	go volumeController.Run(ctx.Done())
-	informerFactory.Start(ctx.Done())
-	informerFactory.WaitForCacheSync(ctx.Done())
+	plugins := plugin.NewPlugins()
 
-	return nil
+	pc, err := plugin.NewPluginConfig()
+	if err != nil {
+		return nil, xerrors.Errorf("get plugin configs: %w", err)
+	}
+
+	cfg.Profiles = []config.KubeSchedulerProfile{
+		{
+			SchedulerName: v1.DefaultSchedulerName,
+			Plugins:       plugins,
+			PluginConfig:  pc,
+		},
+	}
+	return &cfg, nil
+
+}
+
+func SwitchPluginsForSimulator(cfg *config.KubeSchedulerConfiguration) *config.KubeSchedulerConfiguration {
+
+}
+
+// OnlyProfile exclude all but Profiles fields.
+func OnlyProfile(cfg *config.KubeSchedulerConfiguration) *config.KubeSchedulerConfiguration {
+	return &config.KubeSchedulerConfiguration{Profiles: cfg.Profiles}
 }

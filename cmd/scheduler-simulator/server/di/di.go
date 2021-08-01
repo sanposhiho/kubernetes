@@ -2,8 +2,9 @@ package di
 
 import (
 	clientset "k8s.io/client-go/kubernetes"
+	restclient "k8s.io/client-go/rest"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/etcd"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/namespace"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/node"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/persistentvolume"
@@ -23,10 +24,11 @@ type Container struct {
 	storageClassService    handler.StorageClassService
 	namespaceService       handler.NamespaceService
 	schedulerconfigService handler.SchedulerConfigService
+	schedulerService       *scheduler.Service
 }
 
 // NewDIContainer initializes Container.
-func NewDIContainer(client clientset.Interface, etcdclient *etcd.Client) *Container {
+func NewDIContainer(client clientset.Interface, restclientCfg *restclient.Config) *Container {
 	c := &Container{}
 
 	// initialize each service
@@ -34,7 +36,8 @@ func NewDIContainer(client clientset.Interface, etcdclient *etcd.Client) *Contai
 	c.pvService = persistentvolume.NewPersistentVolumeService(client)
 	c.pvcService = persistentvolumeclaim.NewPersistentVolumeClaimService(client)
 	c.storageClassService = storageclass.NewStorageClassService(client)
-	c.schedulerconfigService = schedulerconfig.NewSchedulerConfigService(etcdclient)
+	c.schedulerService = scheduler.NewSchedulerService(client, restclientCfg)
+	c.schedulerconfigService = schedulerconfig.NewSchedulerConfigService(c.schedulerService)
 	c.podService = pod.NewPodService(client, c.schedulerconfigService)
 	c.nodeService = node.NewNodeService(client, c.podService)
 
@@ -73,4 +76,8 @@ func (c *Container) PersistentVolumeClaimService() handler.PersistentVolumeClaim
 
 func (c *Container) SchedulerConfigService() handler.SchedulerConfigService {
 	return c.schedulerconfigService
+}
+
+func (c *Container) SchedulerService() *scheduler.Service {
+	return c.schedulerService
 }

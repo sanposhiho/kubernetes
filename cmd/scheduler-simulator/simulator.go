@@ -5,12 +5,17 @@ import (
 	"os/signal"
 	"syscall"
 
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
+
+	"k8s.io/kubernetes/cmd/scheduler-simulator/pvcontroller"
+
+	clientset "k8s.io/client-go/kubernetes"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/k8sapiserver"
+
 	"golang.org/x/xerrors"
 	"k8s.io/klog/v2"
 
 	"k8s.io/kubernetes/cmd/scheduler-simulator/config"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/etcd"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
 )
@@ -29,20 +34,27 @@ func startSimulator() error {
 		return xerrors.Errorf("get config: %w", err)
 	}
 
-	// start kube-apiserver and kube-scheduler
-	clientset, shutdownFn1, err := scheduler.SetupSchedulerOrDie(cfg)
-	if err != nil {
-		return xerrors.Errorf("start scheduler and some needed k8s components: %w", err)
-	}
-	defer shutdownFn1()
+	restclientCfg, apiShutdown := k8sapiserver.StartAPIServerOrDie(cfg.EtcdURL)
+	defer apiShutdown()
 
-	etcdclient, shutdownFn2, err := etcd.NewClient(cfg)
-	if err != nil {
-		return xerrors.Errorf("create new etcd client: %w", err)
-	}
-	defer shutdownFn2()
+	client := clientset.NewForConfigOrDie(restclientCfg)
 
-	dic := di.NewDIContainer(clientset, etcdclient)
+	pvshutdown, err := pvcontroller.StartPersistentVolumeController(client)
+	if err != nil {
+		return xerrors.Errorf("start pv controller: %w", err)
+	}
+	defer pvshutdown()
+
+	dic := di.NewDIContainer(client, restclientCfg)
+	schedCfg, err := scheduler.DefaultConfig()
+	if err != nil {
+		return xerrors.Errorf("get default scheduler config: %w", err)
+	}
+
+	if err := dic.SchedulerService().StartScheduler(schedCfg); err != nil {
+		return xerrors.Errorf("start scheduler: %w", err)
+	}
+	defer dic.SchedulerService().ShutdownScheduler()
 
 	// start simulator server
 	s := server.NewSimulatorServer(cfg, dic)
