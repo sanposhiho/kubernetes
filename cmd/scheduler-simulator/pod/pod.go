@@ -2,7 +2,6 @@ package pod
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 
 	"golang.org/x/xerrors"
@@ -11,32 +10,19 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
-	schedulerapi "k8s.io/kube-scheduler/config/v1beta1"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/errors"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/annotation"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/schedulerconfig"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/util"
-	"k8s.io/kubernetes/pkg/scheduler/algorithmprovider"
-	original "k8s.io/kubernetes/pkg/scheduler/apis/config"
 )
 
 // Service manages pods.
 type Service struct {
-	client                        clientset.Interface
-	schedulerConfigurationService SchedulerConfigurationService
-}
-
-type SchedulerConfigurationService interface {
-	GetSchedulerConfig(ctx context.Context, k string) (*schedulerapi.KubeSchedulerConfiguration, error)
+	client clientset.Interface
 }
 
 // NewPodService initializes Service.
-func NewPodService(client clientset.Interface, scs SchedulerConfigurationService) *Service {
+func NewPodService(client clientset.Interface) *Service {
 	return &Service{
-		client:                        client,
-		schedulerConfigurationService: scs,
+		client: client,
 	}
 }
 
@@ -65,18 +51,6 @@ func (s *Service) List(ctx context.Context, simulatorID string) (*corev1.PodList
 func (s *Service) Apply(ctx context.Context, simulatorID string, pod *v1.PodApplyConfiguration) error {
 	pod.WithKind("Pod")
 	pod.WithAPIVersion("v1")
-
-	sc, err := s.schedulerConfigurationService.GetSchedulerConfig(ctx, simulatorID)
-	if err != nil {
-		if !xerrors.Is(err, errors.ErrNotFound) {
-			return xerrors.Errorf("get scheduler config: %w", err)
-		}
-		sc = schedulerconfig.DefaultSchedulerConfig()
-	}
-
-	if err := s.addSchedulerConfiguration(pod, sc); err != nil {
-		return xerrors.Errorf("add scheduler configuration on pod annotation: %w", err)
-	}
 
 	applyFunc := func() (bool, error) {
 		_, err := s.client.CoreV1().Pods(simulatorID).Apply(ctx, pod, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
@@ -114,47 +88,6 @@ func (s *Service) Delete(ctx context.Context, name string, simulatorID string) e
 	if err := util.RetryWithExponentialBackOff(deleteFunc); err != nil {
 		return xerrors.Errorf("delete pod with retry: %w", err)
 	}
-
-	return nil
-}
-
-func (s *Service) addSchedulerConfiguration(pac *v1.PodApplyConfiguration, sc *schedulerapi.KubeSchedulerConfiguration) error {
-	if pac.Annotations == nil {
-		pac.Annotations = make(map[string]string)
-	}
-
-	if pac.Spec == nil || pac.Spec.SchedulerName == nil {
-		defaultSchedulerName := scheduler.DefaultSchedulerName
-		pac.Spec.SchedulerName = &defaultSchedulerName
-	}
-
-	pluginindex := -1
-	for i, p := range sc.Profiles {
-		if *p.SchedulerName != *pac.Spec.SchedulerName {
-			continue
-		}
-		pluginindex = i
-	}
-	if pluginindex == -1 {
-		return xerrors.New("plugin profile not found")
-	}
-
-	// only original.Plugins has Append and Apply method.
-	defaultPlugins := algorithmprovider.GetDefaultConfig()
-	plugins := &original.Plugins{}
-	plugins.Append(defaultPlugins)
-	plugins.Apply(schedulerconfig.ConvertToOriginalPluginsType(sc.Profiles[pluginindex].Plugins))
-
-	j, err := json.Marshal(plugins)
-	if err != nil {
-		return xerrors.Errorf("encode to json: %w", err)
-	}
-	pac.Annotations[annotation.EnabledPluginsAnnotationKey] = string(j)
-
-	// remove scheduler name to use `default-scheduler`.
-	// This simulator has only one scheduler named default-scheduler, and it behaves as if there are multiple schedulers.
-	pac.Annotations[annotation.SchedulerNameAnnotationKey] = *pac.Spec.SchedulerName
-	pac.Spec.SchedulerName = nil
 
 	return nil
 }

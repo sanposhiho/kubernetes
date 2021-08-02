@@ -5,17 +5,14 @@ import (
 	"os/signal"
 	"syscall"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
-
-	"k8s.io/kubernetes/cmd/scheduler-simulator/pvcontroller"
-
-	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/k8sapiserver"
-
 	"golang.org/x/xerrors"
+	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
 
 	"k8s.io/kubernetes/cmd/scheduler-simulator/config"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/k8sapiserver"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/pvcontroller"
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
 )
@@ -46,12 +43,13 @@ func startSimulator() error {
 	defer pvshutdown()
 
 	dic := di.NewDIContainer(client, restclientCfg)
-	schedCfg, err := scheduler.DefaultConfig()
+
+	sc, err := scheduler.DefaultSchedulerConfig()
 	if err != nil {
-		return xerrors.Errorf("get default scheduler config: %w", err)
+		return xerrors.Errorf("create scheduler config")
 	}
 
-	if err := dic.SchedulerService().StartScheduler(schedCfg); err != nil {
+	if err := dic.SchedulerService().StartScheduler(sc); err != nil {
 		return xerrors.Errorf("start scheduler: %w", err)
 	}
 	defer dic.SchedulerService().ShutdownScheduler()

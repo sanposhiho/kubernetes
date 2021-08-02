@@ -1,30 +1,22 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	"k8s.io/klog/v2"
+
+	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
 )
 
 // PersistentVolumeClaimHandler is handler for manage persistentVolumeClaim.
 type PersistentVolumeClaimHandler struct {
-	service PersistentVolumeClaimService
-}
-
-// PersistentVolumeClaimService represents service for manage Nodes.
-type PersistentVolumeClaimService interface {
-	Get(ctx context.Context, name string, simulatorID string) (*corev1.PersistentVolumeClaim, error)
-	List(ctx context.Context, simulatorID string) (*corev1.PersistentVolumeClaimList, error)
-	Apply(ctx context.Context, simulatorID string, pvc *v1.PersistentVolumeClaimApplyConfiguration) error
-	Delete(ctx context.Context, name string, simulatorID string) error
+	service di.PersistentVolumeClaimService
 }
 
 // NewPersistentVolumeClaimHandler initializes PersistentVolumeClaimHandler.
-func NewPersistentVolumeClaimHandler(s PersistentVolumeClaimService) *PersistentVolumeClaimHandler {
+func NewPersistentVolumeClaimHandler(s di.PersistentVolumeClaimService) *PersistentVolumeClaimHandler {
 	return &PersistentVolumeClaimHandler{service: s}
 }
 

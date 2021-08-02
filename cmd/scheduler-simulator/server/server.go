@@ -39,7 +39,7 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 	pvHandler := handler.NewPersistentVolumeHandler(dic.PersistentVolumeService())
 	pvcHandler := handler.NewPersistentVolumeClaimHandler(dic.PersistentVolumeClaimService())
 	storageClassHandler := handler.NewStorageClassHandler(dic.StorageClassService())
-	schedulercfgHandler := handler.NewSchedulerConfigHandler(dic.SchedulerConfigService())
+	schedulercfgHandler := handler.NewSchedulerConfigHandler(dic.SchedulerService())
 
 	// register apis
 	v1 := e.Group("/api/v1")

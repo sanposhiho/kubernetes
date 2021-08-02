@@ -37,33 +37,14 @@ func merge(pfs ...map[string]schedulerRuntime.PluginFactory) map[string]schedule
 	return ret
 }
 
-func NewPlugins() *config.Plugins {
-	defaultFilterPlugins := filter.DefaultFilterPlugins()
-	defaultScorePlugins := score.DefaultScorePlugins()
-	return &config.Plugins{
-		Filter: config.PluginSet{
-			// enable all filter plugins for simulator
-			Enabled: filter.FilterPlugins(defaultFilterPlugins),
-			// disable all default filter plugin.
-			Disabled: defaultFilterPlugins,
-		},
-		Score: config.PluginSet{
-			// enable all score plugins for simulator
-			Enabled: score.ScorePlugins(defaultScorePlugins),
-			// disable all default score plugin.
-			Disabled: defaultScorePlugins,
-		},
-	}
-}
-
 func NewPluginConfig() ([]config.PluginConfig, error) {
 	s, err := score.PluginConfigs()
 	if err != nil {
-		return nil, xerrors.Errorf("get score record plugin config: %w", err)
+		return nil, xerrors.Errorf("get score plugin config: %w", err)
 	}
 	f, err := filter.PluginConfigs()
 	if err != nil {
-		return nil, xerrors.Errorf("get filter record plugin config: %w", err)
+		return nil, xerrors.Errorf("get filter plugin config: %w", err)
 	}
 	return append(s, f...), nil
 }

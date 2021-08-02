@@ -1,28 +1,23 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/google/uuid"
 	"github.com/labstack/echo/v4"
-	corev1 "k8s.io/api/core/v1"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	"k8s.io/klog/v2"
+
+	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
 )
 
 // NamespaceHandler is handler for manage namespace.
 type NamespaceHandler struct {
-	service NamespaceService
-}
-
-// NamespaceService represents service for manage Namespaces.
-type NamespaceService interface {
-	Apply(ctx context.Context, namespace *v1.NamespaceApplyConfiguration) (*corev1.Namespace, error)
+	service di.NamespaceService
 }
 
 // NewNamespaceHandler initializes NamespaceHandler.
-func NewNamespaceHandler(s NamespaceService) *NamespaceHandler {
+func NewNamespaceHandler(s di.NamespaceService) *NamespaceHandler {
 	return &NamespaceHandler{service: s}
 }
 

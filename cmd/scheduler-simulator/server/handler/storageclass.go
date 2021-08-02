@@ -1,30 +1,22 @@
 package handler
 
 import (
-	"context"
 	"net/http"
 
 	"github.com/labstack/echo/v4"
-	storagev1 "k8s.io/api/storage/v1"
 	v1 "k8s.io/client-go/applyconfigurations/storage/v1"
 	"k8s.io/klog/v2"
+
+	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
 )
 
 // StorageClassHandler is handler for manage storageClass.
 type StorageClassHandler struct {
-	service StorageClassService
-}
-
-// StorageClassService represents service for manage Pods.
-type StorageClassService interface {
-	Get(ctx context.Context, name string, simulatorID string) (*storagev1.StorageClass, error)
-	List(ctx context.Context, simulatorID string) (*storagev1.StorageClassList, error)
-	Apply(ctx context.Context, simulatorID string, sc *v1.StorageClassApplyConfiguration) error
-	Delete(ctx context.Context, name string, simulatorID string) error
+	service di.StorageClassService
 }
 
 // NewStorageClassHandler initializes StorageClassHandler.
-func NewStorageClassHandler(s StorageClassService) *StorageClassHandler {
+func NewStorageClassHandler(s di.StorageClassService) *StorageClassHandler {
 	return &StorageClassHandler{service: s}
 }
 

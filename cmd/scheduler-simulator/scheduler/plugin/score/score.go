@@ -48,10 +48,19 @@ func DefaultScorePlugins() []config.Plugin {
 	return defaultPlugins.Score.Enabled
 }
 
-func ScorePlugins(enabledPlugins []config.Plugin) []config.Plugin {
-	ret := make([]config.Plugin, len(enabledPlugins))
-	for i, n := range enabledPlugins {
-		ret[i] = config.Plugin{Name: ScorePluginName(n.Name), Weight: n.Weight}
+// ScorePlugins create scorePlugin for simulator.
+func ScorePlugins(disabledPlugins []config.Plugin) []config.Plugin {
+	// true means the plugin is disabled
+	disabledMap := map[string]bool{}
+	for _, p := range disabledPlugins {
+		disabledMap[p.Name] = true
+	}
+
+	var ret []config.Plugin
+	for _, dp := range DefaultScorePlugins() {
+		if !disabledMap[dp.Name] {
+			ret = append(ret, config.Plugin{Name: ScorePluginName(dp.Name), Weight: dp.Weight})
+		}
 	}
 	return ret
 }
@@ -81,6 +90,7 @@ func PluginConfigs() ([]config.PluginConfig, error) {
 	return ret, nil
 }
 
+// TODO: write doc about this.
 type scorePlugin struct {
 	// all scorePlugin should have the same manager
 	manager *scorePluginManager

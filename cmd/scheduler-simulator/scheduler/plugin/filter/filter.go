@@ -45,10 +45,20 @@ func DefaultFilterPlugins() []config.Plugin {
 	return defaultPlugins.Filter.Enabled
 }
 
-func FilterPlugins(enabledPlugins []config.Plugin) []config.Plugin {
-	ret := make([]config.Plugin, len(enabledPlugins))
-	for i, n := range enabledPlugins {
-		ret[i] = config.Plugin{Name: FilterPluginName(n.Name), Weight: n.Weight}
+// FilterPlugins create filterPlugin for simulator.
+// It ignores non-default plugin.
+func FilterPlugins(disabledPlugins []config.Plugin) []config.Plugin {
+	// true means the plugin is disabled
+	disabledMap := map[string]bool{}
+	for _, p := range disabledPlugins {
+		disabledMap[p.Name] = true
+	}
+
+	var ret []config.Plugin
+	for _, dp := range DefaultFilterPlugins() {
+		if !disabledMap[dp.Name] {
+			ret = append(ret, config.Plugin{Name: FilterPluginName(dp.Name), Weight: dp.Weight})
+		}
 	}
 	return ret
 }
