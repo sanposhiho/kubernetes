@@ -44,7 +44,7 @@ func DefaultFilterPlugins() []config.Plugin {
 	return defaultPlugins.Filter.Enabled
 }
 
-// PluginsForSimulator create filterPlugin for simulator.
+// PluginsForSimulator create filterPluginForSimulator for simulator.
 // It ignores non-default plugin.
 func PluginsForSimulator(disabledPlugins []config.Plugin) []config.Plugin {
 	// true means the plugin is disabled
@@ -87,14 +87,19 @@ func PluginConfigs() ([]config.PluginConfig, error) {
 	return ret, nil
 }
 
-type filterPlugin struct {
-	name string
-	p    framework.FilterPlugin
+// filterPluginForSimulator behave like the original plugin.
+// But it records the filtering result to store.
+type filterPluginForSimulator struct {
+	name     string
+	original framework.FilterPlugin
 
 	store *schedulingresultstore.Store
 }
 
 const (
+	// If original plugin is used for multiple phases(named A and B), we will create plugin for phase A, and the other plugin for phase B.
+	// Plugin names should be unique in one scheduler.
+	// So, we add phase name as suffix on plugin name.
 	filterPluginSuffix = "ForFilter"
 )
 
@@ -103,22 +108,22 @@ func pluginName(pluginName string) string {
 }
 
 func NewFilterRecordPlugin(s *schedulingresultstore.Store, p framework.FilterPlugin) framework.FilterPlugin {
-	return &filterPlugin{
-		name:  pluginName(p.Name()),
-		p:     p,
-		store: s,
+	return &filterPluginForSimulator{
+		name:     pluginName(p.Name()),
+		original: p,
+		store:    s,
 	}
 }
 
-func (pl *filterPlugin) Name() string { return pl.name }
+func (pl *filterPluginForSimulator) Name() string { return pl.name }
 
-func (pl *filterPlugin) Filter(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeInfo *framework.NodeInfo) *framework.Status {
-	s := pl.p.Filter(ctx, state, pod, nodeInfo)
+func (pl *filterPluginForSimulator) Filter(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeInfo *framework.NodeInfo) *framework.Status {
+	s := pl.original.Filter(ctx, state, pod, nodeInfo)
 	if s.IsSuccess() {
-		pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), schedulingresultstore.PassedFilterMessage)
+		pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.original.Name(), schedulingresultstore.PassedFilterMessage)
 		return s
 	}
 
-	pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), s.Message())
+	pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.original.Name(), s.Message())
 	return s
 }

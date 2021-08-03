@@ -46,7 +46,7 @@ func DefaultScorePlugins() []config.Plugin {
 	return defaultPlugins.Score.Enabled
 }
 
-// PluginsForSimulator create scorePlugin for simulator.
+// PluginsForSimulator create scorePluginForSimulator for simulator.
 func PluginsForSimulator(disabledPlugins []config.Plugin) []config.Plugin {
 	// true means the plugin is disabled
 	disabledMap := map[string]bool{}
@@ -88,16 +88,20 @@ func PluginConfigs() ([]config.PluginConfig, error) {
 	return ret, nil
 }
 
-// TODO: write doc about this.
-type scorePlugin struct {
-	name          string
-	p             framework.ScorePlugin
-	defaultWeight int32
+// scorePluginForSimulator behave like the original plugin.
+// But it records the scoring (and normalizedscore) result to store.
+type scorePluginForSimulator struct {
+	name     string
+	original framework.ScorePlugin
+	weight   int32
 
 	store *schedulingresultstore.Store
 }
 
 const (
+	// If original plugin is used for multiple phases(named A and B), we will create plugin for phase A, and the other plugin for phase B.
+	// Plugin names should be unique in one scheduler.
+	// So, we add phase name as suffix on plugin name.
 	scorePluginSuffix = "ForScore"
 )
 
@@ -106,42 +110,42 @@ func pluginName(pluginName string) string {
 }
 
 func NewScoreRecordPlugin(s *schedulingresultstore.Store, p framework.ScorePlugin, weight int32) framework.ScorePlugin {
-	sp := &scorePlugin{
-		name:          pluginName(p.Name()),
-		p:             p,
-		defaultWeight: weight,
-		store:         s,
+	sp := &scorePluginForSimulator{
+		name:     pluginName(p.Name()),
+		original: p,
+		weight:   weight,
+		store:    s,
 	}
 	return sp
 }
 
-func (pl *scorePlugin) Name() string { return pl.name }
-func (pl *scorePlugin) ScoreExtensions() framework.ScoreExtensions {
-	return pl.p.ScoreExtensions()
+func (pl *scorePluginForSimulator) Name() string { return pl.name }
+func (pl *scorePluginForSimulator) ScoreExtensions() framework.ScoreExtensions {
+	return pl.original.ScoreExtensions()
 }
 
-func (pl *scorePlugin) NormalizeScore(ctx context.Context, state *framework.CycleState, pod *v1.Pod, scores framework.NodeScoreList) *framework.Status {
-	s := pl.p.ScoreExtensions().NormalizeScore(ctx, state, pod, scores)
+func (pl *scorePluginForSimulator) NormalizeScore(ctx context.Context, state *framework.CycleState, pod *v1.Pod, scores framework.NodeScoreList) *framework.Status {
+	s := pl.original.ScoreExtensions().NormalizeScore(ctx, state, pod, scores)
 	if !s.IsSuccess() {
 		klog.Errorf("failed to run normalize score: %v, %v", s.Code(), s.Message())
 		return s
 	}
 
 	for _, s := range scores {
-		pl.store.AddNormalizedScoreResult(pod.Namespace, pod.Name, s.Name, pl.p.Name(), s.Score)
+		pl.store.AddNormalizedScoreResult(pod.Namespace, pod.Name, s.Name, pl.original.Name(), s.Score)
 	}
 
 	return nil
 }
 
-func (pl *scorePlugin) Score(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeName string) (int64, *framework.Status) {
-	score, s := pl.p.Score(ctx, state, pod, nodeName)
+func (pl *scorePluginForSimulator) Score(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeName string) (int64, *framework.Status) {
+	score, s := pl.original.Score(ctx, state, pod, nodeName)
 	if !s.IsSuccess() {
 		klog.Errorf("failed to run score plugin: %v, %v", s.Code(), s.Message())
 		return score, s
 	}
 
-	pl.store.AddScoreResult(pod.Namespace, pod.Name, nodeName, pl.p.Name(), score)
+	pl.store.AddScoreResult(pod.Namespace, pod.Name, nodeName, pl.original.Name(), score)
 
 	return score, s
 }
