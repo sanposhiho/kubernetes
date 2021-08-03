@@ -35,7 +35,7 @@ func NewRegistryForScoreRecord(s *schedulingresultstore.Store) map[string]schedu
 			}
 			return NewScoreRecordPlugin(s, typed, pl.Weight), nil
 		}
-		ret[ScorePluginName(pl.Name)] = factory
+		ret[pluginName(pl.Name)] = factory
 	}
 
 	return ret
@@ -46,8 +46,8 @@ func DefaultScorePlugins() []config.Plugin {
 	return defaultPlugins.Score.Enabled
 }
 
-// ScorePlugins create scorePlugin for simulator.
-func ScorePlugins(disabledPlugins []config.Plugin) []config.Plugin {
+// PluginsForSimulator create scorePlugin for simulator.
+func PluginsForSimulator(disabledPlugins []config.Plugin) []config.Plugin {
 	// true means the plugin is disabled
 	disabledMap := map[string]bool{}
 	for _, p := range disabledPlugins {
@@ -57,7 +57,7 @@ func ScorePlugins(disabledPlugins []config.Plugin) []config.Plugin {
 	var ret []config.Plugin
 	for _, dp := range DefaultScorePlugins() {
 		if !disabledMap[dp.Name] {
-			ret = append(ret, config.Plugin{Name: ScorePluginName(dp.Name), Weight: dp.Weight})
+			ret = append(ret, config.Plugin{Name: pluginName(dp.Name), Weight: dp.Weight})
 		}
 	}
 	return ret
@@ -81,7 +81,7 @@ func PluginConfigs() ([]config.PluginConfig, error) {
 		}
 
 		ret[i] = config.PluginConfig{
-			Name: ScorePluginName(name),
+			Name: pluginName(name),
 			Args: obj,
 		}
 	}
@@ -101,13 +101,13 @@ const (
 	scorePluginSuffix = "ForScore"
 )
 
-func ScorePluginName(pluginName string) string {
+func pluginName(pluginName string) string {
 	return pluginName + scorePluginSuffix
 }
 
 func NewScoreRecordPlugin(s *schedulingresultstore.Store, p framework.ScorePlugin, weight int32) framework.ScorePlugin {
 	sp := &scorePlugin{
-		name:          ScorePluginName(p.Name()),
+		name:          pluginName(p.Name()),
 		p:             p,
 		defaultWeight: weight,
 		store:         s,

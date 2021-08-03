@@ -33,7 +33,7 @@ func NewRegistryForFilterRecord(s *schedulingresultstore.Store) map[string]sched
 			}
 			return NewFilterRecordPlugin(s, typed), nil
 		}
-		ret[FilterPluginName(pl.Name)] = factory
+		ret[pluginName(pl.Name)] = factory
 	}
 
 	return ret
@@ -44,9 +44,9 @@ func DefaultFilterPlugins() []config.Plugin {
 	return defaultPlugins.Filter.Enabled
 }
 
-// FilterPlugins create filterPlugin for simulator.
+// PluginsForSimulator create filterPlugin for simulator.
 // It ignores non-default plugin.
-func FilterPlugins(disabledPlugins []config.Plugin) []config.Plugin {
+func PluginsForSimulator(disabledPlugins []config.Plugin) []config.Plugin {
 	// true means the plugin is disabled
 	disabledMap := map[string]bool{}
 	for _, p := range disabledPlugins {
@@ -56,7 +56,7 @@ func FilterPlugins(disabledPlugins []config.Plugin) []config.Plugin {
 	var ret []config.Plugin
 	for _, dp := range DefaultFilterPlugins() {
 		if !disabledMap[dp.Name] {
-			ret = append(ret, config.Plugin{Name: FilterPluginName(dp.Name), Weight: dp.Weight})
+			ret = append(ret, config.Plugin{Name: pluginName(dp.Name), Weight: dp.Weight})
 		}
 	}
 	return ret
@@ -80,7 +80,7 @@ func PluginConfigs() ([]config.PluginConfig, error) {
 		}
 
 		ret[i] = config.PluginConfig{
-			Name: FilterPluginName(name),
+			Name: pluginName(name),
 			Args: obj,
 		}
 	}
@@ -98,13 +98,13 @@ const (
 	filterPluginSuffix = "ForFilter"
 )
 
-func FilterPluginName(pluginName string) string {
+func pluginName(pluginName string) string {
 	return pluginName + filterPluginSuffix
 }
 
 func NewFilterRecordPlugin(s *schedulingresultstore.Store, p framework.FilterPlugin) framework.FilterPlugin {
 	return &filterPlugin{
-		name:  FilterPluginName(p.Name()),
+		name:  pluginName(p.Name()),
 		p:     p,
 		store: s,
 	}

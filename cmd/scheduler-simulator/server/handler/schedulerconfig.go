@@ -30,7 +30,7 @@ func (h *SchedulerConfigHandler) GetSchedulerConfig(c echo.Context) error {
 	cfg2, err := convertToOmitEmpty(cfg)
 	if err != nil {
 		klog.Errorf("failed to convert scheduler configuration to omit empty: %+v", err)
-		c.JSON(http.StatusInternalServerError, err)
+		return c.JSON(http.StatusInternalServerError, err)
 	}
 	return c.JSON(http.StatusOK, cfg2)
 }
@@ -44,7 +44,7 @@ func (h *SchedulerConfigHandler) ApplySchedulerConfig(c echo.Context) error {
 	converted, err := convertFromOmitEmpty(reqSchedulerCfg)
 	if err != nil {
 		klog.Errorf("failed to convert scheduler configuration from omit empty: %+v", err)
-		c.JSON(http.StatusInternalServerError, err)
+		return c.JSON(http.StatusInternalServerError, err)
 	}
 
 	if err := h.service.RestartScheduler(converted); err != nil {
@@ -62,8 +62,11 @@ func convertToOmitEmpty(cfg *config.KubeSchedulerConfiguration) (*config2.KubeSc
 	cfg2 := &config2.KubeSchedulerConfiguration{}
 	converter := conversion.NewConverter(conversion.DefaultNameFunc)
 	if err := converter.RegisterGeneratedUntypedConversionFunc(cfg, cfg2, func(a, b interface{}, scope conversion.Scope) error {
-		typeda := a.(*config.KubeSchedulerConfiguration)
-		typedb := b.(*config2.KubeSchedulerConfiguration)
+		typeda, ok := a.(*config.KubeSchedulerConfiguration)
+		typedb, ok2 := b.(*config2.KubeSchedulerConfiguration)
+		if !ok || !ok2 {
+			return xerrors.New("convert scheduler configuration type")
+		}
 		return v1beta1.Convert_config_KubeSchedulerConfiguration_To_v1beta1_KubeSchedulerConfiguration(typeda, typedb, scope)
 	}); err != nil {
 		return nil, xerrors.Errorf("register generated untyped conversion: %w", err)
@@ -76,15 +79,16 @@ func convertToOmitEmpty(cfg *config.KubeSchedulerConfiguration) (*config2.KubeSc
 	return cfg2, nil
 }
 
-// convertFromOmitEmpty converts config.KubeSchedulerConfiguration to config2.KubeSchedulerConfiguration
-// This is needed to omit empty.
-// (config.KubeSchedulerConfiguration doesn't have omitempty json tags on fields.)
+// convertFromOmitEmpty converts config2.KubeSchedulerConfiguration to config.KubeSchedulerConfiguration.
 func convertFromOmitEmpty(cfg *config2.KubeSchedulerConfiguration) (*config.KubeSchedulerConfiguration, error) {
 	cfg2 := &config.KubeSchedulerConfiguration{}
 	converter := conversion.NewConverter(conversion.DefaultNameFunc)
 	if err := converter.RegisterGeneratedUntypedConversionFunc(cfg, cfg2, func(a, b interface{}, scope conversion.Scope) error {
-		typeda := a.(*config2.KubeSchedulerConfiguration)
-		typedb := b.(*config.KubeSchedulerConfiguration)
+		typeda, ok := a.(*config2.KubeSchedulerConfiguration)
+		typedb, ok2 := b.(*config.KubeSchedulerConfiguration)
+		if !ok || !ok2 {
+			return xerrors.New("convert scheduler configuration type")
+		}
 		return v1beta1.Convert_v1beta1_KubeSchedulerConfiguration_To_config_KubeSchedulerConfiguration(typeda, typedb, scope)
 	}); err != nil {
 		return nil, xerrors.Errorf("register generated untyped conversion: %w", err)

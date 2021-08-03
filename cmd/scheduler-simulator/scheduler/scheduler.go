@@ -59,7 +59,8 @@ func (s *Service) StartScheduler(cfg *config.KubeSchedulerConfiguration) error {
 
 	s.currentSchedulerCfg = cfg.DeepCopy()
 
-	if err := SchedulerConfigurationForSimulator(cfg); err != nil {
+	cfg, err := convertConfigurationForSimulator(cfg)
+	if err != nil {
 		cancel()
 		return xerrors.Errorf("convert scheduler config to apply: %w", err)
 	}
@@ -117,12 +118,13 @@ func (s *Service) GetSchedulerConfig() *config.KubeSchedulerConfiguration {
 	return s.currentSchedulerCfg
 }
 
-// SchedulerConfigurationForSimulator convert KubeSchedulerConfiguration to apply scheduler on simulator
+// convertConfigurationForSimulator convert KubeSchedulerConfiguration to apply scheduler on simulator
 // (1) It excludes non-allowed changes. Now, we accept only the change of Profiles field.
 // (2) It replaces filter/score default-plugins with plugin for simulator.
-func SchedulerConfigurationForSimulator(cfg *config.KubeSchedulerConfiguration) error {
-	if len(cfg.Profiles) == 0 {
-		cfg.Profiles = []config.KubeSchedulerProfile{
+func convertConfigurationForSimulator(cfg *config.KubeSchedulerConfiguration) (*config.KubeSchedulerConfiguration, error) {
+	newcfg := cfg.DeepCopy()
+	if len(newcfg.Profiles) == 0 {
+		newcfg.Profiles = []config.KubeSchedulerProfile{
 			{
 				SchedulerName: v1.DefaultSchedulerName,
 				Plugins:       &config.Plugins{},
@@ -132,30 +134,30 @@ func SchedulerConfigurationForSimulator(cfg *config.KubeSchedulerConfiguration) 
 
 	pc, err := plugin.NewPluginConfig()
 	if err != nil {
-		return xerrors.Errorf("get plugin configs: %w", err)
+		return nil, xerrors.Errorf("get plugin configs: %w", err)
 	}
 
-	for i := range cfg.Profiles {
-		if cfg.Profiles[i].Plugins == nil {
-			cfg.Profiles[i].Plugins = &config.Plugins{}
+	for i := range newcfg.Profiles {
+		if newcfg.Profiles[i].Plugins == nil {
+			newcfg.Profiles[i].Plugins = &config.Plugins{}
 		}
 
-		cfg.Profiles[i].Plugins.Score.Enabled = score.ScorePlugins(cfg.Profiles[i].Plugins.Score.Disabled)
-		cfg.Profiles[i].Plugins.Score.Disabled = score.DefaultScorePlugins()
-		cfg.Profiles[i].Plugins.Filter.Enabled = filter.FilterPlugins(cfg.Profiles[i].Plugins.Filter.Disabled)
-		cfg.Profiles[i].Plugins.Filter.Disabled = filter.DefaultFilterPlugins()
+		newcfg.Profiles[i].Plugins.Score.Enabled = score.PluginsForSimulator(newcfg.Profiles[i].Plugins.Score.Disabled)
+		newcfg.Profiles[i].Plugins.Score.Disabled = score.DefaultScorePlugins()
+		newcfg.Profiles[i].Plugins.Filter.Enabled = filter.PluginsForSimulator(newcfg.Profiles[i].Plugins.Filter.Disabled)
+		newcfg.Profiles[i].Plugins.Filter.Disabled = filter.DefaultFilterPlugins()
 
 		// TODO: support user custom plugin config
-		cfg.Profiles[i].PluginConfig = pc
+		newcfg.Profiles[i].PluginConfig = pc
 	}
 
 	defaultCfg, err := DefaultSchedulerConfig()
 	if err != nil {
-		return xerrors.Errorf("get default scheduler config: %w", err)
+		return nil, xerrors.Errorf("get default scheduler config: %w", err)
 	}
 	// set default value to all field other than Profiles.
-	defaultCfg.Profiles = cfg.Profiles
-	cfg = defaultCfg
+	defaultCfg.Profiles = newcfg.Profiles
+	newcfg = defaultCfg
 
-	return nil
+	return newcfg, nil
 }

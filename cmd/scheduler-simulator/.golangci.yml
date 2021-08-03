@@ -55,3 +55,4 @@ issues:
       linters:
         - funlen
         - goerr113
+        - errcheck
