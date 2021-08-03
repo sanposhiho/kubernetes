@@ -118,7 +118,7 @@ func (s *Service) GetSchedulerConfig() *config.KubeSchedulerConfiguration {
 }
 
 // SchedulerConfigurationForSimulator convert KubeSchedulerConfiguration to apply scheduler on simulator
-// (1) It excludes non-allowed changes.
+// (1) It excludes non-allowed changes. Now, we accept only the change of Profiles field.
 // (2) It replaces filter/score default-plugins with plugin for simulator.
 func SchedulerConfigurationForSimulator(cfg *config.KubeSchedulerConfiguration) error {
 	if len(cfg.Profiles) == 0 {

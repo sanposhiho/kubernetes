@@ -4,7 +4,6 @@ import (
 	"context"
 	"encoding/json"
 	"strconv"
-	"strings"
 	"sync"
 
 	"golang.org/x/xerrors"
@@ -30,10 +29,6 @@ type Store struct {
 }
 
 const (
-	// DisabledMessage is used when plugin is disabled.
-	DisabledMessage = "(disabled)"
-	// DisabledScore means the scoring plugin is disabled.
-	DisabledScore int64 = -1
 	// PassedFilterMessage is used when node pass the filter plugin.
 	PassedFilterMessage = "passed"
 )
@@ -41,18 +36,15 @@ const (
 // result has a scheduling result of pod.
 type result struct {
 	// node name → plugin name → score(string)
-	// When the plugin is disabled, score will be DisabledMessage.
 	score map[string]map[string]string
 
 	// node name → plugin name → finalscore(string)
 	// This score is normalized and applied weight for each plugins.
-	// When the plugin is disabled, score will be DisabledMessage.
 	finalscore map[string]map[string]string
 
 	// node name → plugin name → filtering result
 	// When node pass the filter, filtering result will be PassedFilterMessage.
 	// When node blocked by the filter, filtering result is blocked reason.
-	// When the plugin is disabled, score will be DisabledMessage.
 	filter map[string]map[string]string
 }
 
@@ -184,12 +176,6 @@ func (s *Store) addFinalScoreResultToPod(pod *v1.Pod) error {
 
 // AddFilterResult adds filtering result to pod annotation.
 func (s *Store) AddFilterResult(namespace, podName, nodeName, pluginName, reason string) {
-	if !strings.HasSuffix(nodeName, namespace) {
-		// when suffix of nodeName don't match namespace, this node is not created by a user who creates this pod.
-		// So we don't need to record the result in this case.
-		return
-	}
-
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -207,12 +193,6 @@ func (s *Store) AddFilterResult(namespace, podName, nodeName, pluginName, reason
 
 // AddScoreResult adds scoring result to pod annotation.
 func (s *Store) AddScoreResult(namespace, podName, nodeName, pluginName string, score int64) {
-	if !strings.HasSuffix(nodeName, namespace) {
-		// when suffix of nodeName don't match namespace, this node is not created by a user who creates this pod.
-		// So we don't need to record the result in this case.
-		return
-	}
-
 	s.mu.Lock()
 	defer s.mu.Unlock()
 
@@ -225,20 +205,13 @@ func (s *Store) AddScoreResult(namespace, podName, nodeName, pluginName string, 
 		s.result[k].score[nodeName] = map[string]string{}
 	}
 
-	s.result[k].score[nodeName][pluginName] = scoreToString(score)
+	s.result[k].score[nodeName][pluginName] = strconv.FormatInt(score, 10)
+
+	// we already locked on first of this func
+	s.addNormalizedScoreResultWithoutLock(namespace, podName, nodeName, pluginName, score)
 }
 
-// AddFinalScoreResult adds final score result to pod annotation.
-func (s *Store) AddFinalScoreResult(namespace, podName, nodeName, pluginName string, finalscore int64) {
-	if !strings.HasSuffix(nodeName, namespace) {
-		// when suffix of nodeName don't match namespace, this node is not created by a user who creates this pod.
-		// So we don't need to record the result in this case.
-		return
-	}
-
-	s.mu.Lock()
-	defer s.mu.Unlock()
-
+func (s *Store) addNormalizedScoreResultWithoutLock(namespace, podName, nodeName, pluginName string, normalizedscore int64) {
 	k := newKey(namespace, podName)
 	if _, ok := s.result[k]; !ok {
 		s.result[k] = newData()
@@ -248,22 +221,23 @@ func (s *Store) AddFinalScoreResult(namespace, podName, nodeName, pluginName str
 		s.result[k].finalscore[nodeName] = map[string]string{}
 	}
 
+	finalscore := s.applyWeightOnScore(pluginName, normalizedscore)
+
 	// apply weight to calculate final score.
-	s.result[k].finalscore[nodeName][pluginName] = scoreToString(finalscore)
+	s.result[k].finalscore[nodeName][pluginName] = strconv.FormatInt(finalscore, 10)
+}
+
+// AddNormalizedScoreResult adds final score result to pod annotation.
+func (s *Store) AddNormalizedScoreResult(namespace, podName, nodeName, pluginName string, normalizedscore int64) {
+	s.mu.Lock()
+	defer s.mu.Unlock()
+
+	s.addNormalizedScoreResultWithoutLock(namespace, podName, nodeName, pluginName, normalizedscore)
 }
 
 func (s *Store) applyWeightOnScore(pluginName string, score int64) int64 {
 	weight := s.scorePluginWeight[pluginName]
 	return score * int64(weight)
-}
-
-// scoreToString convert score(int64) to string.
-// It returns DisabledMessage when score is DisabledScore.
-func scoreToString(score int64) string {
-	if score == DisabledScore {
-		return DisabledMessage
-	}
-	return strconv.FormatInt(score, 10)
 }
 
 func (s *Store) DeleteData(k key) {

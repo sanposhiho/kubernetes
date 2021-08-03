@@ -19,6 +19,7 @@ func NewRegistry(informerFactory informers.SharedInformerFactory, client clients
 		defaultScorePluginWeight[p.Name] = p.Weight
 	}
 
+	// TODO: fix plugin weight
 	store := schedulingresultstore.New(informerFactory, client, defaultScorePluginWeight)
 	sr := score.NewRegistryForScoreRecord(store)
 	fr := filter.NewRegistryForFilterRecord(store)

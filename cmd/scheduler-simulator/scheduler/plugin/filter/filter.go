@@ -8,7 +8,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/kube-scheduler/config/v1beta1"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/enabledplugin"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/schedulingresultstore"
 	"k8s.io/kubernetes/pkg/scheduler/algorithmprovider"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
@@ -114,12 +113,6 @@ func NewFilterRecordPlugin(s *schedulingresultstore.Store, p framework.FilterPlu
 func (pl *filterPlugin) Name() string { return pl.name }
 
 func (pl *filterPlugin) Filter(ctx context.Context, state *framework.CycleState, pod *v1.Pod, nodeInfo *framework.NodeInfo) *framework.Status {
-	if !enabledplugin.IsPluginEnabled(pod, pl.p.Name(), enabledplugin.Filter) {
-		pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), schedulingresultstore.DisabledMessage)
-		// return success not to affect filtering.
-		return nil
-	}
-
 	s := pl.p.Filter(ctx, state, pod, nodeInfo)
 	if s.IsSuccess() {
 		pl.store.AddFilterResult(pod.Namespace, pod.Name, nodeInfo.Node().Name, pl.p.Name(), schedulingresultstore.PassedFilterMessage)
