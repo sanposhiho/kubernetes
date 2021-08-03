@@ -8,13 +8,18 @@ import { instance } from "@/api/v1/index";
 
 export const applyPersistentVolumeClaim = async (
   req: V1PersistentVolumeClaim,
-  id: string
+  id: string,
+  onError: (msg: string) => void
 ) => {
-  const res = await instance.post<V1PersistentVolumeClaim>(
-    `/simulators/${id}/persistentvolumeclaims`,
-    req
-  );
-  return res.data;
+  try {
+    const res = await instance.post<V1PersistentVolumeClaim>(
+      `/simulators/${id}/persistentvolumeclaims`,
+      req
+    );
+    return res.data;
+  } catch (e) {
+    onError(e);
+  }
 };
 
 export const listPersistentVolumeClaim = async (id: string) => {

@@ -6,13 +6,18 @@ import { instance } from "@/api/v1/index";
 
 export const applyPersistentVolume = async (
   req: V1PersistentVolume,
-  id: string
+  id: string,
+  onError: (msg: string) => void
 ) => {
-  const res = await instance.post<V1PersistentVolume>(
-    `/simulators/${id}/persistentvolumes`,
-    req
-  );
-  return res.data;
+  try {
+    const res = await instance.post<V1PersistentVolume>(
+      `/simulators/${id}/persistentvolumes`,
+      req
+    );
+    return res.data;
+  } catch (e) {
+    onError(e);
+  }
 };
 
 export const listPersistentVolume = async (id: string) => {

@@ -79,8 +79,8 @@ export default function podStore() {
       }
     },
 
-    async apply(p: V1Pod, simulatorID: string) {
-      await applyPod(p, simulatorID);
+    async apply(p: V1Pod, simulatorID: string, onError: (msg: string) => void) {
+      await applyPod(p, simulatorID, onError);
       await this.fetchlist(simulatorID);
     },
 

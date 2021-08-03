@@ -73,8 +73,12 @@ export default function pvStore() {
       }
     },
 
-    async apply(n: V1PersistentVolume, simulatorID: string) {
-      await applyPersistentVolume(n, simulatorID);
+    async apply(
+      n: V1PersistentVolume,
+      simulatorID: string,
+      onError: (msg: string) => void
+    ) {
+      await applyPersistentVolume(n, simulatorID, onError);
       await this.fetchlist(simulatorID);
     },
 

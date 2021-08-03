@@ -61,8 +61,12 @@ export default function pvcStore() {
       state.pvcs = (await listPersistentVolumeClaim(simulatorID)).items;
     },
 
-    async apply(n: V1PersistentVolumeClaim, simulatorID: string) {
-      await applyPersistentVolumeClaim(n, simulatorID);
+    async apply(
+      n: V1PersistentVolumeClaim,
+      simulatorID: string,
+      onError: (msg: string) => void
+    ) {
+      await applyPersistentVolumeClaim(n, simulatorID, onError);
       await this.fetchlist(simulatorID);
     },
 

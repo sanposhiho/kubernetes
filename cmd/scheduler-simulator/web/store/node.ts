@@ -60,8 +60,12 @@ export default function nodeStore() {
       }
     },
 
-    async apply(n: V1Node, simulatorID: string) {
-      await applyNode(n, simulatorID);
+    async apply(
+      n: V1Node,
+      simulatorID: string,
+      onError: (msg: string) => void
+    ) {
+      await applyNode(n, simulatorID, onError);
       await this.fetchlist(simulatorID);
     },
 

@@ -4,15 +4,18 @@
       <PVStoreProvider>
         <PVCStoreProvider>
           <StorageClassStoreProvider>
-            <ResourceBar />
-            <SchedulerConfigurationBar v-model="schedulerCfgDrawer" />
-            <SchedulerConfigurationEditButton v-model="schedulerCfgDrawer" />
-            <ResourceAddButton />
-            <NodeList />
-            <UnscheduledPodList />
-            <PVList />
-            <PVCList />
-            <StorageClassList />
+            <SnackbarStoreProvider>
+              <ResourceBar />
+              <SchedulerConfigurationBar v-model="schedulerCfgDrawer" />
+              <SchedulerConfigurationEditButton v-model="schedulerCfgDrawer" />
+              <ResourceAddButton />
+              <NodeList />
+              <UnscheduledPodList />
+              <PVList />
+              <PVCList />
+              <StorageClassList />
+              <Snackbar />
+            </SnackbarStoreProvider>
           </StorageClassStoreProvider>
         </PVCStoreProvider>
       </PVStoreProvider>
@@ -34,11 +37,15 @@ import PVList from "~/components/PVList.vue";
 import PVCList from "~/components/PVCList.vue";
 import StorageClassList from "~/components/StorageClassList.vue";
 import PodStoreProvider from "~/components/StoreProvider/PodStoreProvider.vue";
+import SnackbarStoreProvider from "~/components/StoreProvider/SnackbarStoreProvider.vue";
 import ResourceAddButton from "~/components/ResourceAddButton.vue";
 import ResourceBar from "~/components/ResourceBar/ResourceBar.vue";
+import Snackbar from "~/components/Snackbar.vue";
 
 export default defineComponent({
   components: {
+    Snackbar,
+    SnackbarStoreProvider,
     NodeStoreProvider,
     PVList,
     PVCList,

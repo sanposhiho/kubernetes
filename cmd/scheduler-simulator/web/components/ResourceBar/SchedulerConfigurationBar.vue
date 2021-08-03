@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { ref, watch, defineComponent, computed } from "@nuxtjs/composition-api";
+import { ref, watch, defineComponent, inject } from "@nuxtjs/composition-api";
 import yaml from "js-yaml";
 import { getSimulatorIDFromPath } from "../lib/util";
 import YamlEditor from "./YamlEditor.vue";
@@ -29,6 +29,7 @@ import {
   getSchedulerConfiguration,
 } from "~/api/v1/schedulerconfiguration";
 import { SchedulerConfiguration } from "~/api/v1/types";
+import SnackBarStoreKey from "../StoreKey/SnackBarStoreKey";
 
 export default defineComponent({
   components: {
@@ -41,6 +42,11 @@ export default defineComponent({
     value: Boolean,
   },
   setup(props, context) {
+    const snackbarstore = inject(SnackBarStoreKey);
+    if (!snackbarstore) {
+      throw new Error(`${SnackBarStoreKey} is not provided`);
+    }
+
     const formData = ref("");
 
     const route = context.root.$route;
@@ -54,9 +60,17 @@ export default defineComponent({
       );
     };
 
+    const setServerErrorMessage = (error: string) => {
+      snackbarstore.setServerErrorMessage(error);
+    };
+
     const applyOnClick = async () => {
       const cfg = yaml.load(formData.value);
-      applySchedulerConfiguration(cfg, getSimulatorIDFromPath(route.path));
+      applySchedulerConfiguration(
+        cfg,
+        getSimulatorIDFromPath(route.path),
+        setServerErrorMessage
+      );
       d.value = false;
     };
 

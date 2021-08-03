@@ -1,9 +1,17 @@
 import { V1Node, V1NodeList, V1Pod, V1PodList } from "@kubernetes/client-node";
 import { instance } from "@/api/v1/index";
 
-export const applyNode = async (req: V1Node, id: string) => {
-  const res = await instance.post<V1Node>(`/simulators/${id}/nodes`, req);
-  return res.data;
+export const applyNode = async (
+  req: V1Node,
+  id: string,
+  onError: (msg: string) => void
+) => {
+  try {
+    const res = await instance.post<V1Node>(`/simulators/${id}/nodes`, req);
+    return res.data;
+  } catch (e) {
+    onError(e);
+  }
 };
 
 export const listNode = async (id: string) => {

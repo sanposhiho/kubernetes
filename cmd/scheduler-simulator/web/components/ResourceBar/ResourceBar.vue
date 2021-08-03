@@ -61,6 +61,7 @@ import {
   V1Pod,
   V1StorageClass,
 } from "@kubernetes/client-node";
+import SnackBarStoreKey from "../StoreKey/SnackBarStoreKey";
 
 type Resource =
   | V1Pod
@@ -72,7 +73,11 @@ type Resource =
 interface Store {
   readonly selected: object | null;
   resetSelected(): void;
-  apply(r: Resource, simulatorID: string): Promise<void>;
+  apply(
+    r: Resource,
+    simulatorID: string,
+    onServerError: (msg: string) => void
+  ): Promise<void>;
   delete(name: string, simulatorID: string): Promise<void>;
   fetchSelected(simulatorID: string): Promise<void>;
 }
@@ -113,6 +118,10 @@ export default defineComponent({
     const storageclassstore = inject(StorageClassStoreKey);
     if (!storageclassstore) {
       throw new Error(`${StorageClassStoreKey} is not provided`);
+    }
+    const snackbarstore = inject(SnackBarStoreKey);
+    if (!snackbarstore) {
+      throw new Error(`${SnackBarStoreKey} is not provided`);
     }
 
     const treeData = ref(objectToTreeViewData(null));
@@ -192,10 +201,18 @@ export default defineComponent({
       }
     };
 
+    const setServerErrorMessage = (error: string) => {
+      snackbarstore.setServerErrorMessage(error);
+    };
+
     const applyOnClick = () => {
       if (store) {
         const y = yaml.load(formData.value);
-        store.apply(y, getSimulatorIDFromPath(route.path));
+        store.apply(
+          y,
+          getSimulatorIDFromPath(route.path),
+          setServerErrorMessage
+        );
       }
       drawer.value = false;
     };

@@ -61,8 +61,12 @@ export default function storageclassStore() {
       state.storageclasses = (await listStorageClass(simulatorID)).items;
     },
 
-    async apply(n: V1StorageClass, simulatorID: string) {
-      await applyStorageClass(n, simulatorID);
+    async apply(
+      n: V1StorageClass,
+      simulatorID: string,
+      onError: (msg: string) => void
+    ) {
+      await applyStorageClass(n, simulatorID, onError);
       await this.fetchlist(simulatorID);
     },
 
