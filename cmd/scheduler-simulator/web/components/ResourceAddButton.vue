@@ -21,7 +21,7 @@ import {
   pvcTemplate,
   storageclassTemplate,
 } from "./lib/template";
-import { getSimulatorIDFromPath } from "./lib/util";
+import {   } from "./lib/util";
 import PodStoreKey from "./StoreKey/PodStoreKey";
 import NodeStoreKey from "./StoreKey/NodeStoreKey";
 import PersistentVolumeStoreKey from "./StoreKey/PVStoreKey";
@@ -88,13 +88,11 @@ export default defineComponent({
 
     const create = (rn: string) => {
       var targetTemplate: Resource | null = null;
-      const route = context.root.$route;
       switch (rn) {
         case "Pod":
           store = podstore;
           // if store.count = 0, name suffix is 1.
           targetTemplate = podTemplate(
-            getSimulatorIDFromPath(route.path),
             (store.count + 1).toString()
           );
           break;
@@ -112,7 +110,6 @@ export default defineComponent({
           store = pvcstore;
           // if store.count = 0, name suffix is 1.
           targetTemplate = pvcTemplate(
-            getSimulatorIDFromPath(route.path),
             (store.count + 1).toString()
           );
           break;

@@ -1,44 +1,71 @@
 <template>
-  <v-row justify="center" align="center">
-    <v-col cols="12" sm="8" md="6">
-      <div class="text-center">
-        <kubernetes-logo />
-      </div>
-      <v-card>
-        <v-card-title class="headline">
-          Welcome to Kubernetes scheduler simulator
-        </v-card-title>
-        <v-card-text>
-          <p>Now, it is under developping...</p>
-          <p>
-            For more information, check out
-            <a
-              href="https://github.com/kubernetes/kubernetes/issues/99605"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              the issue</a
-            >.
-          </p>
-        </v-card-text>
-        <v-card-actions>
-          <v-spacer />
-          <start-simulator-button />
-          <v-spacer />
-        </v-card-actions>
-      </v-card>
-    </v-col>
-  </v-row>
+  <PodStoreProvider>
+    <NodeStoreProvider>
+      <PVStoreProvider>
+        <PVCStoreProvider>
+          <StorageClassStoreProvider>
+            <SnackbarStoreProvider>
+              <ResourceBar />
+              <SchedulerConfigurationBar v-model="schedulerCfgDrawer" />
+              <SchedulerConfigurationEditButton v-model="schedulerCfgDrawer" />
+              <ResourceAddButton />
+              <NodeList />
+              <UnscheduledPodList />
+              <PVList />
+              <PVCList />
+              <StorageClassList />
+              <Snackbar />
+            </SnackbarStoreProvider>
+          </StorageClassStoreProvider>
+        </PVCStoreProvider>
+      </PVStoreProvider>
+    </NodeStoreProvider>
+  </PodStoreProvider>
 </template>
 
 <script>
-import KubernetesLogo from "~/components/KubernetesLogo.vue";
-import StartSimulatorButton from "~/components/StartSimulatorButton.vue";
+import { defineComponent, ref } from "@nuxtjs/composition-api";
+import SchedulerConfigurationEditButton from "~/components/SchedulerConfigurationEditButton.vue";
+import SchedulerConfigurationBar from "~/components/ResourceBar/SchedulerConfigurationBar.vue";
+import NodeStoreProvider from "~/components/StoreProvider/NodeStoreProvider.vue";
+import PVStoreProvider from "~/components/StoreProvider/PVStoreProvider.vue";
+import PVCStoreProvider from "~/components/StoreProvider/PVCStoreProvider.vue";
+import StorageClassStoreProvider from "~/components/StoreProvider/StorageClassStoreProvider.vue";
+import NodeList from "~/components/NodeList.vue";
+import UnscheduledPodList from "~/components/UnscheduledPodList.vue";
+import PVList from "~/components/PVList.vue";
+import PVCList from "~/components/PVCList.vue";
+import StorageClassList from "~/components/StorageClassList.vue";
+import PodStoreProvider from "~/components/StoreProvider/PodStoreProvider.vue";
+import SnackbarStoreProvider from "~/components/StoreProvider/SnackbarStoreProvider.vue";
+import ResourceAddButton from "~/components/ResourceAddButton.vue";
+import ResourceBar from "~/components/ResourceBar/ResourceBar.vue";
+import Snackbar from "~/components/Snackbar.vue";
 
-export default {
+export default defineComponent({
   components: {
-    KubernetesLogo,
-    StartSimulatorButton,
+    Snackbar,
+    SnackbarStoreProvider,
+    NodeStoreProvider,
+    PVList,
+    PVCList,
+    StorageClassList,
+    NodeList,
+    UnscheduledPodList,
+    PodStoreProvider,
+    ResourceAddButton,
+    ResourceBar,
+    StorageClassStoreProvider,
+    PVStoreProvider,
+    PVCStoreProvider,
+    SchedulerConfigurationEditButton,
+    SchedulerConfigurationBar,
   },
-};
+  setup() {
+    const schedulerCfgDrawer = ref(false);
+    return {
+      schedulerCfgDrawer,
+    };
+  },
+});
 </script>

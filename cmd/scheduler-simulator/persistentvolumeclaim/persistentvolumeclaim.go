@@ -22,10 +22,13 @@ func NewPersistentVolumeClaimService(client clientset.Interface) *Service {
 	}
 }
 
+const (
+	defaultNamespaceName = "default"
+)
+
 // Get returns the persistentVolumeClaims has given name.
-// use simulatorID as namespace.
-func (s *Service) Get(ctx context.Context, name string, simulatorID string) (*corev1.PersistentVolumeClaim, error) {
-	n, err := s.client.CoreV1().PersistentVolumeClaims(simulatorID).Get(ctx, name, metav1.GetOptions{})
+func (s *Service) Get(ctx context.Context, name string) (*corev1.PersistentVolumeClaim, error) {
+	n, err := s.client.CoreV1().PersistentVolumeClaims(defaultNamespaceName).Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("get persistentVolumeClaim: %w", err)
 	}
@@ -33,9 +36,8 @@ func (s *Service) Get(ctx context.Context, name string, simulatorID string) (*co
 }
 
 // List list all persistentVolumeClaims.
-// use simulatorID as namespace.
-func (s *Service) List(ctx context.Context, simulatorID string) (*corev1.PersistentVolumeClaimList, error) {
-	pl, err := s.client.CoreV1().PersistentVolumeClaims(simulatorID).List(ctx, metav1.ListOptions{})
+func (s *Service) List(ctx context.Context) (*corev1.PersistentVolumeClaimList, error) {
+	pl, err := s.client.CoreV1().PersistentVolumeClaims(defaultNamespaceName).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("list persistentVolumeClaims: %w", err)
 	}
@@ -43,12 +45,11 @@ func (s *Service) List(ctx context.Context, simulatorID string) (*corev1.Persist
 }
 
 // Apply applies the persistentVolumeClaims.
-// use simulatorID as namespace.
-func (s *Service) Apply(ctx context.Context, simulatorID string, persistentVolumeClaime *v1.PersistentVolumeClaimApplyConfiguration) error {
+func (s *Service) Apply(ctx context.Context, persistentVolumeClaime *v1.PersistentVolumeClaimApplyConfiguration) error {
 	persistentVolumeClaime.WithKind("PersistentVolumeClaim")
 	persistentVolumeClaime.WithAPIVersion("v1")
 
-	_, err := s.client.CoreV1().PersistentVolumeClaims(simulatorID).Apply(ctx, persistentVolumeClaime, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
+	_, err := s.client.CoreV1().PersistentVolumeClaims(defaultNamespaceName).Apply(ctx, persistentVolumeClaime, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
 	if err != nil {
 		return xerrors.Errorf("apply persistentVolumeClaim: %w", err)
 	}
@@ -57,9 +58,8 @@ func (s *Service) Apply(ctx context.Context, simulatorID string, persistentVolum
 }
 
 // Delete deletes the persistentVolumeClaims has given name.
-// use simulatorID as namespace.
-func (s *Service) Delete(ctx context.Context, name string, simulatorID string) error {
-	err := s.client.CoreV1().PersistentVolumeClaims(simulatorID).Delete(ctx, name, metav1.DeleteOptions{})
+func (s *Service) Delete(ctx context.Context, name string) error {
+	err := s.client.CoreV1().PersistentVolumeClaims(defaultNamespaceName).Delete(ctx, name, metav1.DeleteOptions{})
 	if err != nil {
 		return xerrors.Errorf("delete persistentVolumeClaim: %w", err)
 	}

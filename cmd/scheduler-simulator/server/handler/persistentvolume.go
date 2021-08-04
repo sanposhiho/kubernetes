@@ -24,15 +24,13 @@ func NewPersistentVolumeHandler(s di.PersistentVolumeService) *PersistentVolumeH
 func (h *PersistentVolumeHandler) ApplyPersistentVolume(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	id := c.Param("simulatorID")
-
 	persistentVolume := new(v1.PersistentVolumeApplyConfiguration)
 	if err := c.Bind(persistentVolume); err != nil {
 		klog.Errorf("failed to bind apply persistentVolume request: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
-	if err := h.service.Apply(ctx, id, persistentVolume); err != nil {
+	if err := h.service.Apply(ctx, persistentVolume); err != nil {
 		klog.Errorf("failed to apply persistentVolume: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
@@ -45,9 +43,8 @@ func (h *PersistentVolumeHandler) GetPersistentVolume(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	name := c.Param("name")
-	id := c.Param("simulatorID")
 
-	p, err := h.service.Get(ctx, name, id)
+	p, err := h.service.Get(ctx, name)
 	if err != nil {
 		klog.Errorf("failed to get persistentVolume: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
@@ -60,9 +57,7 @@ func (h *PersistentVolumeHandler) GetPersistentVolume(c echo.Context) error {
 func (h *PersistentVolumeHandler) ListPersistentVolume(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	id := c.Param("simulatorID")
-
-	ps, err := h.service.List(ctx, id)
+	ps, err := h.service.List(ctx)
 	if err != nil {
 		klog.Errorf("failed to list persistentVolumes: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
@@ -76,9 +71,7 @@ func (h *PersistentVolumeHandler) DeletePersistentVolume(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	name := c.Param("name")
-	id := c.Param("simulatorID")
-
-	if err := h.service.Delete(ctx, name, id); err != nil {
+	if err := h.service.Delete(ctx, name); err != nil {
 		klog.Errorf("failed to delete persistentVolume: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}

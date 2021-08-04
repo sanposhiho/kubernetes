@@ -33,7 +33,7 @@ import {
   PropType,
   defineComponent,
 } from "@nuxtjs/composition-api";
-import { getSimulatorIDFromPath } from "./lib/util";
+import {   } from "./lib/util";
 import StorageClassStoreKey from "./StoreKey/StorageClassStoreKey";
 export default defineComponent({
   setup(_, context) {
@@ -44,7 +44,7 @@ export default defineComponent({
 
     const getStorageClassList = async () => {
       const route = context.root.$route;
-      await store.fetchlist(getSimulatorIDFromPath(route.path));
+      await store.fetchlist(  );
     };
     const onClick = (storageclass: V1StorageClass) => {
       store.select(storageclass, false);

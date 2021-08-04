@@ -33,7 +33,7 @@ import {
   PropType,
   defineComponent,
 } from "@nuxtjs/composition-api";
-import { getSimulatorIDFromPath } from "./lib/util";
+import {   } from "./lib/util";
 import PersistentVolumeStoreKey from "./StoreKey/PVStoreKey";
 export default defineComponent({
   setup(_, context) {
@@ -44,7 +44,7 @@ export default defineComponent({
 
     const getPVList = async () => {
       const route = context.root.$route;
-      await store.fetchlist(getSimulatorIDFromPath(route.path));
+      await store.fetchlist(  );
     };
     const onClick = (pv: V1PersistentVolume) => {
       store.select(pv, false);

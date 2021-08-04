@@ -25,15 +25,13 @@ func NewNodeHandler(s di.NodeService) *NodeHandler {
 func (h *NodeHandler) ApplyNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	simulatorID := c.Param("simulatorID")
-
 	reqNode := new(v1.NodeApplyConfiguration)
 	if err := c.Bind(reqNode); err != nil {
 		klog.Errorf("failed to bind apply node request: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
-	if err := h.service.Apply(ctx, simulatorID, reqNode); err != nil {
+	if err := h.service.Apply(ctx, reqNode); err != nil {
 		klog.Errorf("failed to apply node: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
@@ -46,9 +44,8 @@ func (h *NodeHandler) GetNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	name := c.Param("name")
-	simulatorID := c.Param("simulatorID")
 
-	n, err := h.service.Get(ctx, name, simulatorID)
+	n, err := h.service.Get(ctx, name)
 	if err != nil {
 		if apierrors.IsNotFound(err) {
 			return echo.NewHTTPError(http.StatusNotFound)
@@ -64,9 +61,7 @@ func (h *NodeHandler) GetNode(c echo.Context) error {
 func (h *NodeHandler) ListNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	simulatorID := c.Param("simulatorID")
-
-	ns, err := h.service.List(ctx, simulatorID)
+	ns, err := h.service.List(ctx)
 	if err != nil {
 		klog.Errorf("failed to list nodes: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
@@ -80,9 +75,8 @@ func (h *NodeHandler) DeleteNode(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	name := c.Param("name")
-	simulatorID := c.Param("simulatorID")
 
-	if err := h.service.Delete(ctx, name, simulatorID); err != nil {
+	if err := h.service.Delete(ctx, name); err != nil {
 		klog.Errorf("failed to delete node: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}

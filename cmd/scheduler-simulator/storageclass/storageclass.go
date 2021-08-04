@@ -23,8 +23,7 @@ func NewStorageClassService(client clientset.Interface) *Service {
 }
 
 // Get returns the storageClass has given name.
-// use simulatorID as namespace.
-func (s *Service) Get(ctx context.Context, name string, simulatorID string) (*storagev1.StorageClass, error) {
+func (s *Service) Get(ctx context.Context, name string) (*storagev1.StorageClass, error) {
 	n, err := s.client.StorageV1().StorageClasses().Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("get storageClass: %w", err)
@@ -33,8 +32,7 @@ func (s *Service) Get(ctx context.Context, name string, simulatorID string) (*st
 }
 
 // List list all storageClass.
-// use simulatorID as namespace.
-func (s *Service) List(ctx context.Context, simulatorID string) (*storagev1.StorageClassList, error) {
+func (s *Service) List(ctx context.Context) (*storagev1.StorageClassList, error) {
 	pl, err := s.client.StorageV1().StorageClasses().List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("list storageClasss: %w", err)
@@ -43,8 +41,7 @@ func (s *Service) List(ctx context.Context, simulatorID string) (*storagev1.Stor
 }
 
 // Apply applies the storageClass.
-// use simulatorID as namespace.
-func (s *Service) Apply(ctx context.Context, simulatorID string, storageClass *v1.StorageClassApplyConfiguration) error {
+func (s *Service) Apply(ctx context.Context, storageClass *v1.StorageClassApplyConfiguration) error {
 	storageClass.WithKind("StorageClass")
 	storageClass.WithAPIVersion("storage.k8s.io/v1")
 
@@ -57,8 +54,7 @@ func (s *Service) Apply(ctx context.Context, simulatorID string, storageClass *v
 }
 
 // Delete deletes the storageClass has given name.
-// use simulatorID as namespace.
-func (s *Service) Delete(ctx context.Context, name string, simulatorID string) error {
+func (s *Service) Delete(ctx context.Context, name string) error {
 	err := s.client.StorageV1().StorageClasses().Delete(ctx, name, metav1.DeleteOptions{})
 	if err != nil {
 		return xerrors.Errorf("delete storageClass: %w", err)

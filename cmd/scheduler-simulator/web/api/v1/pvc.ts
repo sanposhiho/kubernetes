@@ -8,12 +8,11 @@ import { instance } from "@/api/v1/index";
 
 export const applyPersistentVolumeClaim = async (
   req: V1PersistentVolumeClaim,
-  id: string,
   onError: (msg: string) => void
 ) => {
   try {
     const res = await instance.post<V1PersistentVolumeClaim>(
-      `/simulators/${id}/persistentvolumeclaims`,
+      `/persistentvolumeclaims`,
       req
     );
     return res.data;
@@ -22,25 +21,25 @@ export const applyPersistentVolumeClaim = async (
   }
 };
 
-export const listPersistentVolumeClaim = async (id: string) => {
+export const listPersistentVolumeClaim = async () => {
   const res = await instance.get<V1PersistentVolumeClaimList>(
-    `/simulators/${id}/persistentvolumeclaims`,
+    `/persistentvolumeclaims`,
     {}
   );
   return res.data;
 };
 
-export const getPersistentVolumeClaim = async (name: string, id: string) => {
+export const getPersistentVolumeClaim = async (name: string) => {
   const res = await instance.get<V1PersistentVolumeClaim>(
-    `/simulators/${id}/persistentvolumeclaims/${name}`,
+    `/persistentvolumeclaims/${name}`,
     {}
   );
   return res.data;
 };
 
-export const deletePersistentVolumeClaim = async (name: string, id: string) => {
+export const deletePersistentVolumeClaim = async (name: string) => {
   const res = await instance.delete(
-    `/simulators/${id}/persistentvolumeclaims/${name}`,
+    `/persistentvolumeclaims/${name}`,
     {}
   );
   return res.data;

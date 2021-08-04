@@ -35,7 +35,7 @@ import NodeStoreKey from "./StoreKey/NodeStoreKey";
 import PodList from "~/components/PodList.vue";
 import { V1Node } from "@kubernetes/client-node";
 import PodStoreKey from "./StoreKey/PodStoreKey";
-import { getSimulatorIDFromPath } from "./lib/util";
+import {   } from "./lib/util";
 
 export default defineComponent({
   components: { PodList },
@@ -53,7 +53,7 @@ export default defineComponent({
     const route = context.root.$route;
 
     const getNodeList = async () => {
-      await nstore.fetchlist(getSimulatorIDFromPath(route.path));
+      await nstore.fetchlist(  );
     };
 
     onMounted(getNodeList);

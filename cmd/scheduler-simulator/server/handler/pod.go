@@ -24,15 +24,13 @@ func NewPodHandler(s di.PodService) *PodHandler {
 func (h *PodHandler) ApplyPod(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	id := c.Param("simulatorID")
-
 	pod := new(v1.PodApplyConfiguration)
 	if err := c.Bind(pod); err != nil {
 		klog.Errorf("failed to bind apply pod request: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
-	if err := h.service.Apply(ctx, id, pod); err != nil {
+	if err := h.service.Apply(ctx, pod); err != nil {
 		klog.Errorf("failed to apply pod: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
@@ -45,9 +43,8 @@ func (h *PodHandler) GetPod(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	name := c.Param("name")
-	id := c.Param("simulatorID")
 
-	p, err := h.service.Get(ctx, name, id)
+	p, err := h.service.Get(ctx, name)
 	if err != nil {
 		klog.Errorf("failed to get pod: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
@@ -60,9 +57,7 @@ func (h *PodHandler) GetPod(c echo.Context) error {
 func (h *PodHandler) ListPod(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	id := c.Param("simulatorID")
-
-	ps, err := h.service.List(ctx, id)
+	ps, err := h.service.List(ctx)
 	if err != nil {
 		klog.Errorf("failed to list pods: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
@@ -76,9 +71,8 @@ func (h *PodHandler) DeletePod(c echo.Context) error {
 	ctx := c.Request().Context()
 
 	name := c.Param("name")
-	id := c.Param("simulatorID")
 
-	if err := h.service.Delete(ctx, name, id); err != nil {
+	if err := h.service.Delete(ctx, name); err != nil {
 		klog.Errorf("failed to delete pod: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}

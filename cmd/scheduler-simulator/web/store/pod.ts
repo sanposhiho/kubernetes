@@ -54,8 +54,8 @@ export default function podStore() {
       state.selectedPod = null;
     },
 
-    async fetchlist(simulatorID: string) {
-      const pods = (await listPod(simulatorID)).items;
+    async fetchlist() {
+      const pods = (await listPod()).items;
       var result: { [key: string]: Array<V1Pod> } = {};
       result["unscheduled"] = [];
       pods.forEach((p) => {
@@ -72,21 +72,21 @@ export default function podStore() {
       state.pods = result;
     },
 
-    async fetchSelected(simulatorID: string) {
+    async fetchSelected() {
       if (this.selected?.item.metadata?.name && !this.selected?.isNew) {
-        const p = await getPod(this.selected.item.metadata.name, simulatorID);
+        const p = await getPod(this.selected.item.metadata.name, );
         this.select(p, this.selected?.isNew);
       }
     },
 
-    async apply(p: V1Pod, simulatorID: string, onError: (msg: string) => void) {
-      await applyPod(p, simulatorID, onError);
-      await this.fetchlist(simulatorID);
+    async apply(p: V1Pod, onError: (msg: string) => void) {
+      await applyPod(p, onError);
+      await this.fetchlist();
     },
 
-    async delete(name: string, simulatorID: string) {
-      await deletePod(name, simulatorID);
-      await this.fetchlist(simulatorID);
+    async delete(name: string, ) {
+      await deletePod(name, );
+      await this.fetchlist();
     },
   };
 }

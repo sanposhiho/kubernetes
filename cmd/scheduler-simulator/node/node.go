@@ -21,8 +21,8 @@ type Service struct {
 
 // PodService represents service for manage Pods.
 type PodService interface {
-	List(ctx context.Context, simulatorID string) (*corev1.PodList, error)
-	Delete(ctx context.Context, name string, simulatorID string) error
+	List(ctx context.Context) (*corev1.PodList, error)
+	Delete(ctx context.Context, name string) error
 }
 
 // NewNodeService initializes Service.
@@ -34,7 +34,7 @@ func NewNodeService(client clientset.Interface, ps PodService) *Service {
 }
 
 // Get returns the node has given name.
-func (s *Service) Get(ctx context.Context, name string, simulatorID string) (*corev1.Node, error) {
+func (s *Service) Get(ctx context.Context, name string) (*corev1.Node, error) {
 	n, err := s.client.CoreV1().Nodes().Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("get nodes: %w", err)
@@ -44,7 +44,7 @@ func (s *Service) Get(ctx context.Context, name string, simulatorID string) (*co
 }
 
 // List lists all nodes.
-func (s *Service) List(ctx context.Context, simulatorID string) (*corev1.NodeList, error) {
+func (s *Service) List(ctx context.Context) (*corev1.NodeList, error) {
 	nl, err := s.client.CoreV1().Nodes().List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("list nodes: %w", err)
@@ -54,7 +54,7 @@ func (s *Service) List(ctx context.Context, simulatorID string) (*corev1.NodeLis
 }
 
 // Apply a unique node by using the simulator ID.
-func (s *Service) Apply(ctx context.Context, simulatorID string, nac *v1.NodeApplyConfiguration) error {
+func (s *Service) Apply(ctx context.Context, nac *v1.NodeApplyConfiguration) error {
 	nac.WithAPIVersion("v1")
 	nac.WithKind("Node")
 
@@ -67,8 +67,8 @@ func (s *Service) Apply(ctx context.Context, simulatorID string, nac *v1.NodeApp
 }
 
 // Delete deletes the node has given name.
-func (s *Service) Delete(ctx context.Context, name string, simulatorID string) error {
-	pl, err := s.podService.List(ctx, simulatorID)
+func (s *Service) Delete(ctx context.Context, name string) error {
+	pl, err := s.podService.List(ctx)
 	if err != nil {
 		return xerrors.Errorf("list pods: %w", err)
 	}
@@ -80,7 +80,7 @@ func (s *Service) Delete(ctx context.Context, name string, simulatorID string) e
 			continue
 		}
 
-		if err := s.podService.Delete(ctx, pod.Name, simulatorID); err != nil {
+		if err := s.podService.Delete(ctx, pod.Name); err != nil {
 			return xerrors.Errorf("delete pod: %w", err)
 		}
 	}

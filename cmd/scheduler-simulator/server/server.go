@@ -35,7 +35,6 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 	// initialize each handler
 	nodeHandler := handler.NewNodeHandler(dic.NodeService())
 	podHandler := handler.NewPodHandler(dic.PodService())
-	namespaceHandler := handler.NewNamespaceHandler(dic.NamespaceService())
 	pvHandler := handler.NewPersistentVolumeHandler(dic.PersistentVolumeService())
 	pvcHandler := handler.NewPersistentVolumeClaimHandler(dic.PersistentVolumeClaimService())
 	storageClassHandler := handler.NewStorageClassHandler(dic.StorageClassService())
@@ -43,37 +42,34 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 
 	// register apis
 	v1 := e.Group("/api/v1")
-	v1.POST("/namespaces", namespaceHandler.CreateNamespace)
 
-	v1simulator := v1.Group("/simulators/:simulatorID")
+	v1.GET("/schedulerconfiguration", schedulercfgHandler.GetSchedulerConfig)
+	v1.POST("/schedulerconfiguration", schedulercfgHandler.ApplySchedulerConfig)
 
-	v1simulator.GET("/schedulerconfiguration", schedulercfgHandler.GetSchedulerConfig)
-	v1simulator.POST("/schedulerconfiguration", schedulercfgHandler.ApplySchedulerConfig)
+	v1.GET("/nodes", nodeHandler.ListNode)
+	v1.POST("/nodes", nodeHandler.ApplyNode)
+	v1.GET("/nodes/:name", nodeHandler.GetNode)
+	v1.DELETE("/nodes/:name", nodeHandler.DeleteNode)
 
-	v1simulator.GET("/nodes", nodeHandler.ListNode)
-	v1simulator.POST("/nodes", nodeHandler.ApplyNode)
-	v1simulator.GET("/nodes/:name", nodeHandler.GetNode)
-	v1simulator.DELETE("/nodes/:name", nodeHandler.DeleteNode)
+	v1.GET("/pods", podHandler.ListPod)
+	v1.POST("/pods", podHandler.ApplyPod)
+	v1.GET("/pods/:name", podHandler.GetPod)
+	v1.DELETE("/pods/:name", podHandler.DeletePod)
 
-	v1simulator.GET("/pods", podHandler.ListPod)
-	v1simulator.POST("/pods", podHandler.ApplyPod)
-	v1simulator.GET("/pods/:name", podHandler.GetPod)
-	v1simulator.DELETE("/pods/:name", podHandler.DeletePod)
+	v1.GET("/persistentvolumes", pvHandler.ListPersistentVolume)
+	v1.POST("/persistentvolumes", pvHandler.ApplyPersistentVolume)
+	v1.GET("/persistentvolumes/:name", pvHandler.GetPersistentVolume)
+	v1.DELETE("/persistentvolumes/:name", pvHandler.DeletePersistentVolume)
 
-	v1simulator.GET("/persistentvolumes", pvHandler.ListPersistentVolume)
-	v1simulator.POST("/persistentvolumes", pvHandler.ApplyPersistentVolume)
-	v1simulator.GET("/persistentvolumes/:name", pvHandler.GetPersistentVolume)
-	v1simulator.DELETE("/persistentvolumes/:name", pvHandler.DeletePersistentVolume)
+	v1.GET("/persistentvolumeclaims", pvcHandler.ListPersistentVolumeClaim)
+	v1.POST("/persistentvolumeclaims", pvcHandler.ApplyPersistentVolumeClaim)
+	v1.GET("/persistentvolumeclaims/:name", pvcHandler.GetPersistentVolumeClaim)
+	v1.DELETE("/persistentvolumeclaims/:name", pvcHandler.DeletePersistentVolumeClaim)
 
-	v1simulator.GET("/persistentvolumeclaims", pvcHandler.ListPersistentVolumeClaim)
-	v1simulator.POST("/persistentvolumeclaims", pvcHandler.ApplyPersistentVolumeClaim)
-	v1simulator.GET("/persistentvolumeclaims/:name", pvcHandler.GetPersistentVolumeClaim)
-	v1simulator.DELETE("/persistentvolumeclaims/:name", pvcHandler.DeletePersistentVolumeClaim)
-
-	v1simulator.GET("/storageclasses", storageClassHandler.ListStorageClass)
-	v1simulator.POST("/storageclasses", storageClassHandler.ApplyStorageClass)
-	v1simulator.GET("/storageclasses/:name", storageClassHandler.GetStorageClass)
-	v1simulator.DELETE("/storageclasses/:name", storageClassHandler.DeleteStorageClass)
+	v1.GET("/storageclasses", storageClassHandler.ListStorageClass)
+	v1.POST("/storageclasses", storageClassHandler.ApplyStorageClass)
+	v1.GET("/storageclasses/:name", storageClassHandler.GetStorageClass)
+	v1.DELETE("/storageclasses/:name", storageClassHandler.DeleteStorageClass)
 
 	// initialize SimulatorServer.
 	s := &SimulatorServer{e: e}

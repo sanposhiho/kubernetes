@@ -24,15 +24,13 @@ func NewPersistentVolumeClaimHandler(s di.PersistentVolumeClaimService) *Persist
 func (h *PersistentVolumeClaimHandler) ApplyPersistentVolumeClaim(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	id := c.Param("simulatorID")
-
 	persistentVolumeClaim := new(v1.PersistentVolumeClaimApplyConfiguration)
 	if err := c.Bind(persistentVolumeClaim); err != nil {
 		klog.Errorf("failed to bind apply persistentVolumeClaim request: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
 
-	if err := h.service.Apply(ctx, id, persistentVolumeClaim); err != nil {
+	if err := h.service.Apply(ctx, persistentVolumeClaim); err != nil {
 		klog.Errorf("failed to apply persistentVolumeClaim: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}
@@ -45,9 +43,8 @@ func (h *PersistentVolumeClaimHandler) GetPersistentVolumeClaim(c echo.Context) 
 	ctx := c.Request().Context()
 
 	name := c.Param("name")
-	id := c.Param("simulatorID")
 
-	p, err := h.service.Get(ctx, name, id)
+	p, err := h.service.Get(ctx, name)
 	if err != nil {
 		klog.Errorf("failed to get persistentVolumeClaim: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
@@ -60,9 +57,7 @@ func (h *PersistentVolumeClaimHandler) GetPersistentVolumeClaim(c echo.Context) 
 func (h *PersistentVolumeClaimHandler) ListPersistentVolumeClaim(c echo.Context) error {
 	ctx := c.Request().Context()
 
-	id := c.Param("simulatorID")
-
-	ps, err := h.service.List(ctx, id)
+	ps, err := h.service.List(ctx)
 	if err != nil {
 		klog.Errorf("failed to list persistentVolumeClaims: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
@@ -76,9 +71,8 @@ func (h *PersistentVolumeClaimHandler) DeletePersistentVolumeClaim(c echo.Contex
 	ctx := c.Request().Context()
 
 	name := c.Param("name")
-	id := c.Param("simulatorID")
 
-	if err := h.service.Delete(ctx, name, id); err != nil {
+	if err := h.service.Delete(ctx, name); err != nil {
 		klog.Errorf("failed to delete persistentVolumeClaim: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}

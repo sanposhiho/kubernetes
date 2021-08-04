@@ -45,7 +45,7 @@ import {
 } from "@nuxtjs/composition-api";
 import yaml from "js-yaml";
 import PodStoreKey from "../StoreKey/PodStoreKey";
-import { getSimulatorIDFromPath, objectToTreeViewData } from "../lib/util";
+import {objectToTreeViewData } from "../lib/util";
 import NodeStoreKey from "../StoreKey/NodeStoreKey";
 import PersistentVolumeStoreKey from "../StoreKey/PVStoreKey";
 import PersistentVolumeClaimStoreKey from "../StoreKey/PVCStoreKey";
@@ -75,11 +75,10 @@ interface Store {
   resetSelected(): void;
   apply(
     r: Resource,
-    simulatorID: string,
     onServerError: (msg: string) => void
   ): Promise<void>;
-  delete(name: string, simulatorID: string): Promise<void>;
-  fetchSelected(simulatorID: string): Promise<void>;
+  delete(name: string, ): Promise<void>;
+  fetchSelected(): Promise<void>;
 }
 
 interface SelectedItem {
@@ -193,11 +192,9 @@ export default defineComponent({
       }
     });
 
-    const route = context.root.$route;
-
     const fetchSelected = async () => {
       if (store) {
-        await store.fetchSelected(getSimulatorIDFromPath(route.path));
+        await store.fetchSelected();
       }
     };
 
@@ -210,7 +207,6 @@ export default defineComponent({
         const y = yaml.load(formData.value);
         store.apply(
           y,
-          getSimulatorIDFromPath(route.path),
           setServerErrorMessage
         );
       }
@@ -221,7 +217,6 @@ export default defineComponent({
       if (selected.value?.item.metadata?.name && store) {
         store.delete(
           selected.value.item.metadata.name,
-          getSimulatorIDFromPath(route.path)
         );
       }
       drawer.value = false;

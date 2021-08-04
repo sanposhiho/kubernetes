@@ -27,11 +27,6 @@ export const objectToTreeViewData = (ent: Object | null): Array<object> => {
   return data;
 };
 
-export const getSimulatorIDFromPath = (path: string): string => {
-  const result = path.split("/");
-  return result[1];
-};
-
 export const schedulingResultToTableData = (result: {
   [nodeName: string]: { [name: string]: string | number };
 }): Array<{ [name: string]: string | number }> => {

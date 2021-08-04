@@ -26,10 +26,13 @@ func NewPodService(client clientset.Interface) *Service {
 	}
 }
 
+const (
+	defaultNamespaceName = "default"
+)
+
 // Get returns the pod has given name.
-// use simulatorID as namespace.
-func (s *Service) Get(ctx context.Context, name string, simulatorID string) (*corev1.Pod, error) {
-	n, err := s.client.CoreV1().Pods(simulatorID).Get(ctx, name, metav1.GetOptions{})
+func (s *Service) Get(ctx context.Context, name string) (*corev1.Pod, error) {
+	n, err := s.client.CoreV1().Pods(defaultNamespaceName).Get(ctx, name, metav1.GetOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("get pod: %w", err)
 	}
@@ -37,9 +40,8 @@ func (s *Service) Get(ctx context.Context, name string, simulatorID string) (*co
 }
 
 // List list all pods.
-// use simulatorID as namespace.
-func (s *Service) List(ctx context.Context, simulatorID string) (*corev1.PodList, error) {
-	pl, err := s.client.CoreV1().Pods(simulatorID).List(ctx, metav1.ListOptions{})
+func (s *Service) List(ctx context.Context) (*corev1.PodList, error) {
+	pl, err := s.client.CoreV1().Pods(defaultNamespaceName).List(ctx, metav1.ListOptions{})
 	if err != nil {
 		return nil, xerrors.Errorf("list pods: %w", err)
 	}
@@ -47,13 +49,12 @@ func (s *Service) List(ctx context.Context, simulatorID string) (*corev1.PodList
 }
 
 // Apply applies the pod.
-// use simulatorID as namespace.
-func (s *Service) Apply(ctx context.Context, simulatorID string, pod *v1.PodApplyConfiguration) error {
+func (s *Service) Apply(ctx context.Context, pod *v1.PodApplyConfiguration) error {
 	pod.WithKind("Pod")
 	pod.WithAPIVersion("v1")
 
 	applyFunc := func() (bool, error) {
-		_, err := s.client.CoreV1().Pods(simulatorID).Apply(ctx, pod, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
+		_, err := s.client.CoreV1().Pods(defaultNamespaceName).Apply(ctx, pod, metav1.ApplyOptions{Force: true, FieldManager: "simulator"})
 		if err == nil || apierrors.IsAlreadyExists(err) {
 			return true, nil
 		}
@@ -68,11 +69,10 @@ func (s *Service) Apply(ctx context.Context, simulatorID string, pod *v1.PodAppl
 }
 
 // Delete deletes the pod has given name.
-// use simulatorID as namespace.
-func (s *Service) Delete(ctx context.Context, name string, simulatorID string) error {
+func (s *Service) Delete(ctx context.Context, name string) error {
 	noGrace := int64(0)
 	deleteFunc := func() (bool, error) {
-		err := s.client.CoreV1().Pods(simulatorID).Delete(ctx, name, metav1.DeleteOptions{
+		err := s.client.CoreV1().Pods(defaultNamespaceName).Delete(ctx, name, metav1.DeleteOptions{
 			// need to use noGrace to avoid waiting kubelet checking.
 			// > When a force deletion is performed, the API server does not wait for confirmation from the kubelet that
 			//   the Pod has been terminated on the node it was running on.

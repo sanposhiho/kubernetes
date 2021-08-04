@@ -57,34 +57,34 @@ export default function storageclassStore() {
       state.selectedStorageClass = null;
     },
 
-    async fetchlist(simulatorID: string) {
-      state.storageclasses = (await listStorageClass(simulatorID)).items;
+    async fetchlist() {
+      state.storageclasses = (await listStorageClass()).items;
     },
 
     async apply(
       n: V1StorageClass,
-      simulatorID: string,
+      
       onError: (msg: string) => void
     ) {
-      await applyStorageClass(n, simulatorID, onError);
-      await this.fetchlist(simulatorID);
+      await applyStorageClass(n, onError);
+      await this.fetchlist();
     },
 
-    async fetchSelected(simulatorID: string) {
+    async fetchSelected() {
       if (
         state.selectedStorageClass?.item.metadata?.name &&
         !this.selected?.isNew
       ) {
         state.selectedStorageClass.item = await getStorageClass(
           state.selectedStorageClass.item.metadata.name,
-          simulatorID
+         
         );
       }
     },
 
-    async delete(name: string, simulatorID: string) {
-      await deleteStorageClass(name, simulatorID);
-      await this.fetchlist(simulatorID);
+    async delete(name: string, ) {
+      await deleteStorageClass(name, );
+      await this.fetchlist();
     },
   };
 }

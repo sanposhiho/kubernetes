@@ -47,31 +47,31 @@ export default function nodeStore() {
       state.selectedNode = null;
     },
 
-    async fetchlist(simulatorID: string) {
-      state.nodes = (await listNode(simulatorID)).items;
+    async fetchlist() {
+      state.nodes = (await listNode()).items;
     },
 
-    async fetchSelected(simulatorID: string) {
+    async fetchSelected() {
       if (state.selectedNode?.item.metadata?.name && !this.selected?.isNew) {
         state.selectedNode.item = await getNode(
           state.selectedNode.item.metadata.name,
-          simulatorID
+          
         );
       }
     },
 
     async apply(
       n: V1Node,
-      simulatorID: string,
+      
       onError: (msg: string) => void
     ) {
-      await applyNode(n, simulatorID, onError);
-      await this.fetchlist(simulatorID);
+      await applyNode(n, onError);
+      await this.fetchlist();
     },
 
-    async delete(name: string, simulatorID: string) {
-      await deleteNode(name, simulatorID);
-      await this.fetchlist(simulatorID);
+    async delete(name: string, ) {
+      await deleteNode(name, );
+      await this.fetchlist();
     },
   };
 }

@@ -19,7 +19,6 @@
 <script lang="ts">
 import { ref, watch, defineComponent, inject } from "@nuxtjs/composition-api";
 import yaml from "js-yaml";
-import { getSimulatorIDFromPath } from "../lib/util";
 import YamlEditor from "./YamlEditor.vue";
 import SchedulingResults from "./SchedulingResults.vue";
 import ResourceDefinitionTree from "./DefinitionTree.vue";
@@ -52,7 +51,7 @@ export default defineComponent({
     const route = context.root.$route;
 
     const fetch = async () => {
-      getSchedulerConfiguration(getSimulatorIDFromPath(route.path)).then(
+      getSchedulerConfiguration().then(
         (value: SchedulerConfiguration) => {
           formData.value = yaml.dump(value);
           d.value = props.value;
@@ -68,7 +67,6 @@ export default defineComponent({
       const cfg = yaml.load(formData.value);
       applySchedulerConfiguration(
         cfg,
-        getSimulatorIDFromPath(route.path),
         setServerErrorMessage
       );
       d.value = false;

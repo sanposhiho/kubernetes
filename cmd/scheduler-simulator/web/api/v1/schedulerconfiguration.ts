@@ -3,12 +3,11 @@ import { SchedulerConfiguration } from "./types";
 
 export const applySchedulerConfiguration = async (
   req: SchedulerConfiguration,
-  id: string,
   onError: (msg: string) => void
 ) => {
   try {
     const res = await instance.post<SchedulerConfiguration>(
-      `/simulators/${id}/schedulerconfiguration`,
+      `/schedulerconfiguration`,
       req
     );
     return res.data;
@@ -17,9 +16,9 @@ export const applySchedulerConfiguration = async (
   }
 };
 
-export const getSchedulerConfiguration = async (id: string) => {
+export const getSchedulerConfiguration = async () => {
   const res = await instance.get<SchedulerConfiguration>(
-    `/simulators/${id}/schedulerconfiguration`
+    `/schedulerconfiguration`
   );
   return res.data;
 };

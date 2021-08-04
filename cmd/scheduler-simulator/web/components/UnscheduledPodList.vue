@@ -6,16 +6,13 @@
 </template>
 
 <script lang="ts">
-import { V1Pod } from "@kubernetes/client-node";
 import {
-  ref,
   computed,
   inject,
   onMounted,
-  PropType,
   defineComponent,
 } from "@nuxtjs/composition-api";
-import { getSimulatorIDFromPath } from "./lib/util";
+import {   } from "./lib/util";
 import PodStoreKey from "./StoreKey/PodStoreKey";
 export default defineComponent({
   setup(_, context) {
@@ -25,8 +22,7 @@ export default defineComponent({
     }
 
     const getPodList = async () => {
-      const route = context.root.$route;
-      await store.fetchlist(getSimulatorIDFromPath(route.path));
+      await store.fetchlist();
     };
     onMounted(getPodList);
 

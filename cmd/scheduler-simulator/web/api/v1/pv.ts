@@ -6,12 +6,11 @@ import { instance } from "@/api/v1/index";
 
 export const applyPersistentVolume = async (
   req: V1PersistentVolume,
-  id: string,
   onError: (msg: string) => void
 ) => {
   try {
     const res = await instance.post<V1PersistentVolume>(
-      `/simulators/${id}/persistentvolumes`,
+      `/persistentvolumes`,
       req
     );
     return res.data;
@@ -20,25 +19,25 @@ export const applyPersistentVolume = async (
   }
 };
 
-export const listPersistentVolume = async (id: string) => {
+export const listPersistentVolume = async () => {
   const res = await instance.get<V1PersistentVolumeList>(
-    `/simulators/${id}/persistentvolumes`,
+    `/persistentvolumes`,
     {}
   );
   return res.data;
 };
 
-export const getPersistentVolume = async (name: string, id: string) => {
+export const getPersistentVolume = async (name: string, ) => {
   const res = await instance.get<V1PersistentVolume>(
-    `/simulators/${id}/persistentvolumes/${name}`,
+    `/persistentvolumes/${name}`,
     {}
   );
   return res.data;
 };
 
-export const deletePersistentVolume = async (name: string, id: string) => {
+export const deletePersistentVolume = async (name: string, ) => {
   const res = await instance.delete(
-    `/simulators/${id}/persistentvolumes/${name}`,
+    `/persistentvolumes/${name}`,
     {}
   );
   return res.data;
