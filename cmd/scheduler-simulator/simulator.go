@@ -5,6 +5,8 @@ import (
 	"os/signal"
 	"syscall"
 
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/util"
+
 	"golang.org/x/xerrors"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
@@ -12,7 +14,6 @@ import (
 	"k8s.io/kubernetes/cmd/scheduler-simulator/config"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/k8sapiserver"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/pvcontroller"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
 )
@@ -44,7 +45,7 @@ func startSimulator() error {
 
 	dic := di.NewDIContainer(client, restclientCfg)
 
-	sc, err := scheduler.DefaultSchedulerConfig()
+	sc, err := util.DefaultSchedulerConfig()
 	if err != nil {
 		return xerrors.Errorf("create scheduler config")
 	}

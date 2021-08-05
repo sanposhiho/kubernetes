@@ -12,19 +12,20 @@ import (
 	schedulerRuntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
 )
 
-func NewRegistry(informerFactory informers.SharedInformerFactory, client clientset.Interface) schedulerRuntime.Registry {
+func NewRegistry(informerFactory informers.SharedInformerFactory, client clientset.Interface) (schedulerRuntime.Registry, error) {
 	defaultScorePluginWeight := map[string]int32{}
-	defaultScorePlugin := score.DefaultScorePlugins()
+	// TODO: we have to error handling after merging score and filter package.
+	defaultScorePlugin, _ := score.DefaultScorePlugins()
 	for _, p := range defaultScorePlugin {
 		defaultScorePluginWeight[p.Name] = p.Weight
 	}
 
 	// TODO: fix plugin weight
 	store := schedulingresultstore.New(informerFactory, client, defaultScorePluginWeight)
-	sr := score.NewRegistryForScoreRecord(store)
-	fr := filter.NewRegistryForFilterRecord(store)
+	sr, _ := score.NewRegistryForScoreRecord(store)
+	fr, _ := filter.NewRegistryForFilterRecord(store)
 
-	return merge(sr, fr)
+	return merge(sr, fr), nil
 }
 
 // merge merges multiple map.

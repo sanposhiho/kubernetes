@@ -3,20 +3,20 @@ package scheduler
 import (
 	"context"
 
+	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/util"
+
 	"golang.org/x/xerrors"
 	v1 "k8s.io/api/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/events"
 	"k8s.io/klog/v2"
-	"k8s.io/kube-scheduler/config/v1beta1"
 
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/filter"
 	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/score"
 	"k8s.io/kubernetes/pkg/scheduler"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	kubeschedulerscheme "k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
 	"k8s.io/kubernetes/pkg/scheduler/profile"
 )
 
@@ -65,6 +65,9 @@ func (s *Service) StartScheduler(cfg *config.KubeSchedulerConfiguration) error {
 		return xerrors.Errorf("convert scheduler config to apply: %w", err)
 	}
 
+	// TODO: error handling after refactoring
+	registry, _ := plugin.NewRegistry(informerFactory, clientSet)
+
 	sched, err := scheduler.New(
 		clientSet,
 		informerFactory,
@@ -72,13 +75,12 @@ func (s *Service) StartScheduler(cfg *config.KubeSchedulerConfiguration) error {
 		ctx.Done(),
 		scheduler.WithKubeConfig(restConfig),
 		scheduler.WithProfiles(cfg.Profiles...),
-		scheduler.WithAlgorithmSource(cfg.AlgorithmSource),
 		scheduler.WithPercentageOfNodesToScore(cfg.PercentageOfNodesToScore),
 		scheduler.WithPodMaxBackoffSeconds(cfg.PodMaxBackoffSeconds),
 		scheduler.WithPodInitialBackoffSeconds(cfg.PodInitialBackoffSeconds),
 		scheduler.WithExtenders(cfg.Extenders...),
 		scheduler.WithParallelism(cfg.Parallelism),
-		scheduler.WithFrameworkOutOfTreeRegistry(plugin.NewRegistry(informerFactory, clientSet)),
+		scheduler.WithFrameworkOutOfTreeRegistry(registry),
 	)
 	if err != nil {
 		cancel()
@@ -93,18 +95,6 @@ func (s *Service) StartScheduler(cfg *config.KubeSchedulerConfiguration) error {
 	s.shutdownfn = cancel
 
 	return nil
-}
-
-// DefaultSchedulerConfig creates KubeSchedulerConfiguration default configuration.
-func DefaultSchedulerConfig() (*config.KubeSchedulerConfiguration, error) {
-	gvk := v1beta1.SchemeGroupVersion.WithKind("KubeSchedulerConfiguration")
-	cfg := config.KubeSchedulerConfiguration{}
-	_, _, err := kubeschedulerscheme.Codecs.UniversalDecoder().Decode(nil, &gvk, &cfg)
-	if err != nil {
-		return nil, xerrors.Errorf("decode config: %w", err)
-	}
-
-	return &cfg, nil
 }
 
 func (s *Service) ShutdownScheduler() {
@@ -142,16 +132,17 @@ func convertConfigurationForSimulator(cfg *config.KubeSchedulerConfiguration) (*
 			newcfg.Profiles[i].Plugins = &config.Plugins{}
 		}
 
-		newcfg.Profiles[i].Plugins.Score.Enabled = score.PluginsForSimulator(newcfg.Profiles[i].Plugins.Score.Disabled)
-		newcfg.Profiles[i].Plugins.Score.Disabled = score.DefaultScorePlugins()
-		newcfg.Profiles[i].Plugins.Filter.Enabled = filter.PluginsForSimulator(newcfg.Profiles[i].Plugins.Filter.Disabled)
-		newcfg.Profiles[i].Plugins.Filter.Disabled = filter.DefaultFilterPlugins()
+		// TODO: error handling after refactoring
+		newcfg.Profiles[i].Plugins.Score.Enabled, _ = score.PluginsForSimulator(newcfg.Profiles[i].Plugins.Score.Disabled)
+		newcfg.Profiles[i].Plugins.Score.Disabled, _ = score.DefaultScorePlugins()
+		newcfg.Profiles[i].Plugins.Filter.Enabled, _ = filter.PluginsForSimulator(newcfg.Profiles[i].Plugins.Filter.Disabled)
+		newcfg.Profiles[i].Plugins.Filter.Disabled, _ = filter.DefaultFilterPlugins()
 
 		// TODO: support user custom plugin config
 		newcfg.Profiles[i].PluginConfig = pc
 	}
 
-	defaultCfg, err := DefaultSchedulerConfig()
+	defaultCfg, err := util.DefaultSchedulerConfig()
 	if err != nil {
 		return nil, xerrors.Errorf("get default scheduler config: %w", err)
 	}
