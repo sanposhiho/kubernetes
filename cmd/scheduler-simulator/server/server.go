@@ -11,10 +11,9 @@ import (
 	"github.com/labstack/gommon/log"
 	"golang.org/x/xerrors"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/config"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/config/env"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/server/handler"
+	"github.com/sanposhiho/k8s-scheduler-simulator/config"
+	"github.com/sanposhiho/k8s-scheduler-simulator/server/di"
+	"github.com/sanposhiho/k8s-scheduler-simulator/server/handler"
 )
 
 // SimulatorServer is server for simulator.
@@ -28,7 +27,7 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 
 	e.Use(middleware.Logger())
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
-		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowOrigins:     []string{cfg.FrontendURL},
 		AllowCredentials: true,
 	}))
 
@@ -73,18 +72,9 @@ func NewSimulatorServer(cfg *config.Config, dic *di.Container) *SimulatorServer 
 
 	// initialize SimulatorServer.
 	s := &SimulatorServer{e: e}
-	s.setLogLevel(cfg.Env)
+	s.e.Logger.SetLevel(log.INFO)
 
 	return s
-}
-
-func (s *SimulatorServer) setLogLevel(e env.Env) {
-	switch e {
-	case env.Production:
-		s.e.Logger.SetLevel(log.INFO)
-	case env.Development:
-		s.e.Logger.SetLevel(log.DEBUG)
-	}
 }
 
 // Start starts SimulatorServer.

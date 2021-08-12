@@ -4,12 +4,12 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/node"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/persistentvolume"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/persistentvolumeclaim"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/pod"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/storageclass"
+	"github.com/sanposhiho/k8s-scheduler-simulator/node"
+	"github.com/sanposhiho/k8s-scheduler-simulator/persistentvolume"
+	"github.com/sanposhiho/k8s-scheduler-simulator/persistentvolumeclaim"
+	"github.com/sanposhiho/k8s-scheduler-simulator/pod"
+	"github.com/sanposhiho/k8s-scheduler-simulator/scheduler"
+	"github.com/sanposhiho/k8s-scheduler-simulator/storageclass"
 )
 
 // Container saves dependencies for handler.

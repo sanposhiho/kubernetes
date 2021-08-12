@@ -29,36 +29,36 @@
 </template>
 
 <script lang="ts">
-import { V1PersistentVolumeClaim } from "@kubernetes/client-node";
+import { V1PersistentVolumeClaim } from '@kubernetes/client-node'
 import {
   ref,
   computed,
   inject,
   onMounted,
   defineComponent,
-} from "@nuxtjs/composition-api";
-import {   } from "./lib/util";
-import PersistentVolumeClaimStoreKey from "./StoreKey/PVCStoreKey";
+} from '@nuxtjs/composition-api'
+import {} from './lib/util'
+import PersistentVolumeClaimStoreKey from './StoreKey/PVCStoreKey'
 export default defineComponent({
   setup(_, context) {
-    const store = inject(PersistentVolumeClaimStoreKey);
+    const store = inject(PersistentVolumeClaimStoreKey)
     if (!store) {
-      throw new Error(`${PersistentVolumeClaimStoreKey} is not provided`);
+      throw new Error(`${PersistentVolumeClaimStoreKey} is not provided`)
     }
 
     const getPVCList = async () => {
-      const route = context.root.$route;
-      await store.fetchlist(  );
-    };
+      const route = context.root.$route
+      await store.fetchlist()
+    }
     const onClick = (pvc: V1PersistentVolumeClaim) => {
-      store.select(pvc, false);
-    };
-    onMounted(getPVCList);
-    const pvcs = computed(() => store.pvcs);
+      store.select(pvc, false)
+    }
+    onMounted(getPVCList)
+    const pvcs = computed(() => store.pvcs)
     return {
       pvcs,
       onClick,
-    };
+    }
   },
-});
+})
 </script>

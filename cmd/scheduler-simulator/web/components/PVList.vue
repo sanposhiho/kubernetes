@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { V1PersistentVolume } from "@kubernetes/client-node";
+import { V1PersistentVolume } from '@kubernetes/client-node'
 import {
   ref,
   computed,
@@ -32,29 +32,29 @@ import {
   onMounted,
   PropType,
   defineComponent,
-} from "@nuxtjs/composition-api";
-import {   } from "./lib/util";
-import PersistentVolumeStoreKey from "./StoreKey/PVStoreKey";
+} from '@nuxtjs/composition-api'
+import {} from './lib/util'
+import PersistentVolumeStoreKey from './StoreKey/PVStoreKey'
 export default defineComponent({
   setup(_, context) {
-    const store = inject(PersistentVolumeStoreKey);
+    const store = inject(PersistentVolumeStoreKey)
     if (!store) {
-      throw new Error(`${PersistentVolumeStoreKey} is not provided`);
+      throw new Error(`${PersistentVolumeStoreKey} is not provided`)
     }
 
     const getPVList = async () => {
-      const route = context.root.$route;
-      await store.fetchlist(  );
-    };
+      const route = context.root.$route
+      await store.fetchlist()
+    }
     const onClick = (pv: V1PersistentVolume) => {
-      store.select(pv, false);
-    };
-    onMounted(getPVList);
-    const pvs = computed(() => store.pvs);
+      store.select(pv, false)
+    }
+    onMounted(getPVList)
+    const pvs = computed(() => store.pvs)
     return {
       pvs,
       onClick,
-    };
+    }
   },
-});
+})
 </script>

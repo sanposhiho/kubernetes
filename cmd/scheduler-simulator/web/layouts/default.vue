@@ -27,23 +27,23 @@
 </template>
 
 <script>
-import { defineComponent } from "@nuxtjs/composition-api";
+import { defineComponent } from '@nuxtjs/composition-api'
 
 export default defineComponent({
   setup(_, context) {
-    const router = context.root.$router;
+    const router = context.root.$router
 
     const onClick = () => {
-      router.push(`/`);
-    };
+      router.push(`/`)
+    }
     return {
       onClick,
-    };
+    }
   },
   data() {
     return {
-      title: "Kubernetes scheduler simulator",
-    };
+      title: 'Kubernetes scheduler simulator',
+    }
   },
-});
+})
 </script>

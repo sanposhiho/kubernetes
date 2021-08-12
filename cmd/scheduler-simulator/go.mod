@@ -1,4 +1,4 @@
-module k8s.io/kubernetes/cmd/scheduler-simulator
+module github.com/sanposhiho/k8s-scheduler-simulator
 
 go 1.16
 
@@ -21,13 +21,13 @@ replace (
 	k8s.io/kube-aggregator => k8s.io/kube-aggregator v0.22.0
 	k8s.io/kube-controller-manager => k8s.io/kube-controller-manager v0.22.0
 	k8s.io/kube-proxy => k8s.io/kube-proxy v0.22.0
-	k8s.io/kube-scheduler => k8s.io/kube-scheduler v0.23.0-alpha.0
+	k8s.io/kube-scheduler => k8s.io/kube-scheduler v0.22.0
 	k8s.io/kubectl => k8s.io/kubectl v0.22.0
 	k8s.io/kubelet => k8s.io/kubelet v0.22.0
 	k8s.io/legacy-cloud-providers => k8s.io/legacy-cloud-providers v0.22.0
 	k8s.io/metrics => k8s.io/metrics v0.22.0
 	k8s.io/mount-utils => k8s.io/mount-utils v0.22.0
-	k8s.io/pod-security-admission => k8s.io/pod-security-admission v0.23.0-alpha.0
+	k8s.io/pod-security-admission => k8s.io/pod-security-admission v0.22.0
 	k8s.io/sample-apiserver => k8s.io/sample-apiserver v0.22.0
 )
 
@@ -37,12 +37,16 @@ require (
 	github.com/google/uuid v1.1.2
 	github.com/labstack/echo/v4 v4.5.0
 	github.com/labstack/gommon v0.3.0
+	github.com/stretchr/testify v1.7.0
 	golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
-	k8s.io/api v0.23.0
-	k8s.io/apimachinery v0.23.0
-	k8s.io/apiserver v0.23.0
-	k8s.io/client-go v0.23.0
+	k8s.io/api v1.22.0
+	k8s.io/apiextensions-apiserver v0.0.0
+	k8s.io/apimachinery v1.22.0
+	k8s.io/apiserver v1.22.0
+	k8s.io/client-go v1.22.0
+	k8s.io/component-base v0.22.0
 	k8s.io/klog/v2 v2.9.0
-	k8s.io/kube-scheduler v0.0.0
+	k8s.io/kube-openapi v0.0.0-20210421082810-95288971da7e
+	k8s.io/kube-scheduler v1.22.0
 	k8s.io/kubernetes v1.22.0
 )

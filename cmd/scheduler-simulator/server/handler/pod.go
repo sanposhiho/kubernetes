@@ -4,10 +4,11 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
+	"github.com/sanposhiho/k8s-scheduler-simulator/server/di"
 )
 
 // PodHandler is handler for manage pod.
@@ -46,6 +47,9 @@ func (h *PodHandler) GetPod(c echo.Context) error {
 
 	p, err := h.service.Get(ctx, name)
 	if err != nil {
+		if apierrors.IsNotFound(err) {
+			return echo.NewHTTPError(http.StatusNotFound)
+		}
 		klog.Errorf("failed to get pod: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}

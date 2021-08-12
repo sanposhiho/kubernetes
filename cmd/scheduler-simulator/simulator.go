@@ -5,17 +5,16 @@ import (
 	"os/signal"
 	"syscall"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/util"
-
 	"golang.org/x/xerrors"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/config"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/k8sapiserver"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/pvcontroller"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/server"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
+	"github.com/sanposhiho/k8s-scheduler-simulator/config"
+	"github.com/sanposhiho/k8s-scheduler-simulator/k8sapiserver"
+	"github.com/sanposhiho/k8s-scheduler-simulator/pvcontroller"
+	"github.com/sanposhiho/k8s-scheduler-simulator/scheduler/defaultconfig"
+	"github.com/sanposhiho/k8s-scheduler-simulator/server"
+	"github.com/sanposhiho/k8s-scheduler-simulator/server/di"
 )
 
 // entry point.
@@ -32,7 +31,10 @@ func startSimulator() error {
 		return xerrors.Errorf("get config: %w", err)
 	}
 
-	restclientCfg, apiShutdown := k8sapiserver.StartAPIServerOrDie(cfg.EtcdURL)
+	restclientCfg, apiShutdown, err := k8sapiserver.StartAPIServer(cfg.EtcdURL)
+	if err != nil {
+		return xerrors.Errorf("start API server: %w", err)
+	}
 	defer apiShutdown()
 
 	client := clientset.NewForConfigOrDie(restclientCfg)
@@ -45,7 +47,7 @@ func startSimulator() error {
 
 	dic := di.NewDIContainer(client, restclientCfg)
 
-	sc, err := util.DefaultSchedulerConfig()
+	sc, err := defaultconfig.DefaultSchedulerConfig()
 	if err != nil {
 		return xerrors.Errorf("create scheduler config")
 	}

@@ -7,8 +7,7 @@ import (
 	storagev1 "k8s.io/api/storage/v1"
 	configv1 "k8s.io/client-go/applyconfigurations/core/v1"
 	storageconfigv1 "k8s.io/client-go/applyconfigurations/storage/v1"
-
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
+	"k8s.io/kube-scheduler/config/v1beta2"
 )
 
 // NodeService represents service for manage Nodes.
@@ -45,9 +44,9 @@ type PodService interface {
 
 // SchedulerService represents service for manage scheduler.
 type SchedulerService interface {
-	GetSchedulerConfig() *config.KubeSchedulerConfiguration
-	RestartScheduler(cfg *config.KubeSchedulerConfiguration) error
-	StartScheduler(cfg *config.KubeSchedulerConfiguration) error
+	GetSchedulerConfig() *v1beta2.KubeSchedulerConfiguration
+	RestartScheduler(cfg *v1beta2.KubeSchedulerConfiguration) error
+	StartScheduler(cfg *v1beta2.KubeSchedulerConfiguration) error
 	ShutdownScheduler()
 }
 

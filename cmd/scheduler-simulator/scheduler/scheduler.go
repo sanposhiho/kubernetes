@@ -3,21 +3,21 @@ package scheduler
 import (
 	"context"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/util"
-
 	"golang.org/x/xerrors"
 	v1 "k8s.io/api/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/events"
 	"k8s.io/klog/v2"
-
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/filter"
-	"k8s.io/kubernetes/cmd/scheduler-simulator/scheduler/plugin/score"
+	v1beta2config "k8s.io/kube-scheduler/config/v1beta2"
 	"k8s.io/kubernetes/pkg/scheduler"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
+	"k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
+	"k8s.io/kubernetes/pkg/scheduler/apis/config/v1beta2"
 	"k8s.io/kubernetes/pkg/scheduler/profile"
+
+	"github.com/sanposhiho/k8s-scheduler-simulator/scheduler/defaultconfig"
+	"github.com/sanposhiho/k8s-scheduler-simulator/scheduler/plugin"
 )
 
 // Service manages scheduler.
@@ -27,7 +27,7 @@ type Service struct {
 
 	clientset           clientset.Interface
 	restclientCfg       *restclient.Config
-	currentSchedulerCfg *config.KubeSchedulerConfiguration
+	currentSchedulerCfg *v1beta2config.KubeSchedulerConfiguration
 }
 
 // NewSchedulerService starts scheduler and return *Service.
@@ -35,7 +35,7 @@ func NewSchedulerService(client clientset.Interface, restclientCfg *restclient.C
 	return &Service{clientset: client, restclientCfg: restclientCfg}
 }
 
-func (s *Service) RestartScheduler(cfg *config.KubeSchedulerConfiguration) error {
+func (s *Service) RestartScheduler(cfg *v1beta2config.KubeSchedulerConfiguration) error {
 	s.ShutdownScheduler()
 
 	if err := s.StartScheduler(cfg); err != nil {
@@ -45,7 +45,7 @@ func (s *Service) RestartScheduler(cfg *config.KubeSchedulerConfiguration) error
 }
 
 // StartScheduler starts scheduler.
-func (s *Service) StartScheduler(cfg *config.KubeSchedulerConfiguration) error {
+func (s *Service) StartScheduler(versionedcfg *v1beta2config.KubeSchedulerConfiguration) error {
 	clientSet := s.clientset
 	restConfig := s.restclientCfg
 	ctx, cancel := context.WithCancel(context.Background())
@@ -57,16 +57,19 @@ func (s *Service) StartScheduler(cfg *config.KubeSchedulerConfiguration) error {
 
 	evtBroadcaster.StartRecordingToSink(ctx.Done())
 
-	s.currentSchedulerCfg = cfg.DeepCopy()
+	s.currentSchedulerCfg = versionedcfg.DeepCopy()
 
-	cfg, err := convertConfigurationForSimulator(cfg)
+	cfg, err := convertConfigurationForSimulator(versionedcfg)
 	if err != nil {
 		cancel()
 		return xerrors.Errorf("convert scheduler config to apply: %w", err)
 	}
 
-	// TODO: error handling after refactoring
-	registry, _ := plugin.NewRegistry(informerFactory, clientSet)
+	registry, err := plugin.NewRegistry(informerFactory, clientSet)
+	if err != nil {
+		cancel()
+		return xerrors.Errorf("plugin registry: %w", err)
+	}
 
 	sched, err := scheduler.New(
 		clientSet,
@@ -104,51 +107,59 @@ func (s *Service) ShutdownScheduler() {
 	}
 }
 
-func (s *Service) GetSchedulerConfig() *config.KubeSchedulerConfiguration {
+func (s *Service) GetSchedulerConfig() *v1beta2config.KubeSchedulerConfiguration {
 	return s.currentSchedulerCfg
 }
 
 // convertConfigurationForSimulator convert KubeSchedulerConfiguration to apply scheduler on simulator
-// (1) It excludes non-allowed changes. Now, we accept only the change of Profiles field.
-// (2) It replaces filter/score default-plugins with plugin for simulator.
-func convertConfigurationForSimulator(cfg *config.KubeSchedulerConfiguration) (*config.KubeSchedulerConfiguration, error) {
-	newcfg := cfg.DeepCopy()
-	if len(newcfg.Profiles) == 0 {
-		newcfg.Profiles = []config.KubeSchedulerProfile{
+// (1) It excludes non-allowed changes. Now, we accept only changes to Profiles.Plugins field.
+// (2) It replaces filter/score default-plugins with plugins for simulator.
+// (3) It convert KubeSchedulerConfiguration from v1beta2config.KubeSchedulerConfiguration to config.KubeSchedulerConfiguration.
+func convertConfigurationForSimulator(versioned *v1beta2config.KubeSchedulerConfiguration) (*config.KubeSchedulerConfiguration, error) {
+	if len(versioned.Profiles) == 0 {
+		defaultSchedulerName := v1.DefaultSchedulerName
+		versioned.Profiles = []v1beta2config.KubeSchedulerProfile{
 			{
-				SchedulerName: v1.DefaultSchedulerName,
-				Plugins:       &config.Plugins{},
+				SchedulerName: &defaultSchedulerName,
+				Plugins:       &v1beta2config.Plugins{},
 			},
 		}
 	}
 
-	pc, err := plugin.NewPluginConfig()
+	pluginConfigForSimulatorPlugins, err := plugin.NewPluginConfig()
 	if err != nil {
 		return nil, xerrors.Errorf("get plugin configs: %w", err)
 	}
 
-	for i := range newcfg.Profiles {
-		if newcfg.Profiles[i].Plugins == nil {
-			newcfg.Profiles[i].Plugins = &config.Plugins{}
+	for i := range versioned.Profiles {
+		if versioned.Profiles[i].Plugins == nil {
+			versioned.Profiles[i].Plugins = &v1beta2config.Plugins{}
 		}
 
-		// TODO: error handling after refactoring
-		newcfg.Profiles[i].Plugins.Score.Enabled, _ = score.PluginsForSimulator(newcfg.Profiles[i].Plugins.Score.Disabled)
-		newcfg.Profiles[i].Plugins.Score.Disabled, _ = score.DefaultScorePlugins()
-		newcfg.Profiles[i].Plugins.Filter.Enabled, _ = filter.PluginsForSimulator(newcfg.Profiles[i].Plugins.Filter.Disabled)
-		newcfg.Profiles[i].Plugins.Filter.Disabled, _ = filter.DefaultFilterPlugins()
+		versioned.Profiles[i].Plugins, err = plugin.ConvertForSimulator(versioned.Profiles[i].Plugins)
+		if err != nil {
+			return nil, xerrors.Errorf("convert plugins for simulator: %w", err)
+		}
 
 		// TODO: support user custom plugin config
-		newcfg.Profiles[i].PluginConfig = pc
+		// Now all PluginConfigs is default values
+		versioned.Profiles[i].PluginConfig = pluginConfigForSimulatorPlugins
 	}
 
-	defaultCfg, err := util.DefaultSchedulerConfig()
+	defaultCfg, err := defaultconfig.DefaultSchedulerConfig()
 	if err != nil {
 		return nil, xerrors.Errorf("get default scheduler config: %w", err)
 	}
-	// set default value to all field other than Profiles.
-	defaultCfg.Profiles = newcfg.Profiles
-	newcfg = defaultCfg
 
-	return newcfg, nil
+	// set default value to all field other than Profiles.
+	defaultCfg.Profiles = versioned.Profiles
+	versioned = defaultCfg
+
+	v1beta2.SetDefaults_KubeSchedulerConfiguration(versioned)
+	cfg := config.KubeSchedulerConfiguration{}
+	if err := scheme.Scheme.Convert(versioned, &cfg, nil); err != nil {
+		return nil, xerrors.Errorf("convert configuration: %w", err)
+	}
+
+	return &cfg, nil
 }

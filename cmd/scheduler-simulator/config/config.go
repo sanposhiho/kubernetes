@@ -6,22 +6,16 @@ import (
 	"strconv"
 
 	"golang.org/x/xerrors"
-
-	"k8s.io/kubernetes/cmd/scheduler-simulator/config/env"
 )
 
-var (
-	// ErrEmptyEnv represents the required environment variable don't exist.
-	ErrEmptyEnv = errors.New("env is needed, but empty")
-	// ErrInvalidEnv represents the environment variable is invalid value.
-	ErrInvalidEnv = errors.New("invalid env")
-)
+// ErrEmptyEnv represents the required environment variable don't exist.
+var ErrEmptyEnv = errors.New("env is needed, but empty")
 
 // Config is configuration for simulator.
 type Config struct {
-	Env     env.Env
-	Port    int
-	EtcdURL string
+	Port        int
+	EtcdURL     string
+	FrontendURL string
 }
 
 // NewConfig gets some settings from environment variables.
@@ -31,20 +25,20 @@ func NewConfig() (*Config, error) {
 		return nil, xerrors.Errorf("get port: %w", err)
 	}
 
-	e, err := getEnv()
-	if err != nil {
-		return nil, xerrors.Errorf("get env: %w", err)
-	}
-
 	etcdurl, err := getEtcdURL()
 	if err != nil {
 		return nil, xerrors.Errorf("get etcd URL: %w", err)
 	}
 
+	frontendurl, err := getFrontendURL()
+	if err != nil {
+		return nil, xerrors.Errorf("get frontend URL: %w", err)
+	}
+
 	return &Config{
-		Env:     e,
-		Port:    port,
-		EtcdURL: etcdurl,
+		Port:        port,
+		EtcdURL:     etcdurl,
+		FrontendURL: frontendurl,
 	}, nil
 }
 
@@ -62,27 +56,19 @@ func getPort() (int, error) {
 	return port, nil
 }
 
-// getEnv gets Env from the environment variable named ENV.
-func getEnv() (env.Env, error) {
-	e := os.Getenv("ENV")
-	if e == "" {
-		return 0, xerrors.Errorf("get ENV from env: %w", ErrEmptyEnv)
-	}
-
-	switch e {
-	case "development":
-		return env.Development, nil
-	case "production":
-		return env.Production, nil
-	}
-
-	return 0, xerrors.Errorf("convert ENV of string to type Env: %w", ErrInvalidEnv)
-}
-
 func getEtcdURL() (string, error) {
 	e := os.Getenv("KUBE_SCHEDULER_SIMULATOR_ETCD_URL")
 	if e == "" {
-		return "", xerrors.Errorf("get ETCD_URL from env: %w", ErrEmptyEnv)
+		return "", xerrors.Errorf("get KUBE_SCHEDULER_SIMULATOR_ETCD_URL from env: %w", ErrEmptyEnv)
+	}
+
+	return e, nil
+}
+
+func getFrontendURL() (string, error) {
+	e := os.Getenv("FRONTEND_URL")
+	if e == "" {
+		return "", xerrors.Errorf("get FRONTEND_URL from env: %w", ErrEmptyEnv)
 	}
 
 	return e, nil

@@ -28,8 +28,8 @@
 </template>
 
 <script lang="ts">
-import { ref, defineComponent, PropType } from "@nuxtjs/composition-api";
-import ResourceDeleteButton from "./DeleteButton.vue";
+import { ref, defineComponent, PropType } from '@nuxtjs/composition-api'
+import ResourceDeleteButton from './DeleteButton.vue'
 
 export default defineComponent({
   props: {
@@ -44,10 +44,10 @@ export default defineComponent({
     ResourceDeleteButton,
   },
   setup(props, context) {
-    const dialog = ref(false);
+    const dialog = ref(false)
     return {
       dialog,
-    };
+    }
   },
-});
+})
 </script>

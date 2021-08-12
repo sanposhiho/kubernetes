@@ -4,20 +4,23 @@
   </v-btn>
 </template>
 
-<script>
-import { defineComponent } from "@nuxtjs/composition-api";
+<script lang="ts">
+import { ref, watch, inject, defineComponent } from '@nuxtjs/composition-api'
+import SchedulerConfigurationStoreKey from './StoreKey/SchedulerConfigurationStoreKey'
 
 export default defineComponent({
-  props: {
-    value: Boolean,
-  },
-  setup(props, { emit }) {
+  setup() {
+    const schedulerconfigurationstore = inject(SchedulerConfigurationStoreKey)
+    if (!schedulerconfigurationstore) {
+      throw new Error(`${SchedulerConfigurationStoreKey} is not provided`)
+    }
+
     const onClick = () => {
-      emit("input", true);
-    };
+      schedulerconfigurationstore.fetchSelected()
+    }
     return {
       onClick,
-    };
+    }
   },
-});
+})
 </script>

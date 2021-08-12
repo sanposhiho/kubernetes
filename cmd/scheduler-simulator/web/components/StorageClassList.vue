@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts">
-import { V1StorageClass } from "@kubernetes/client-node";
+import { V1StorageClass } from '@kubernetes/client-node'
 import {
   ref,
   computed,
@@ -32,29 +32,29 @@ import {
   onMounted,
   PropType,
   defineComponent,
-} from "@nuxtjs/composition-api";
-import {   } from "./lib/util";
-import StorageClassStoreKey from "./StoreKey/StorageClassStoreKey";
+} from '@nuxtjs/composition-api'
+import {} from './lib/util'
+import StorageClassStoreKey from './StoreKey/StorageClassStoreKey'
 export default defineComponent({
   setup(_, context) {
-    const store = inject(StorageClassStoreKey);
+    const store = inject(StorageClassStoreKey)
     if (!store) {
-      throw new Error(`${StorageClassStoreKey} is not provided`);
+      throw new Error(`${StorageClassStoreKey} is not provided`)
     }
 
     const getStorageClassList = async () => {
-      const route = context.root.$route;
-      await store.fetchlist(  );
-    };
+      const route = context.root.$route
+      await store.fetchlist()
+    }
     const onClick = (storageclass: V1StorageClass) => {
-      store.select(storageclass, false);
-    };
-    onMounted(getStorageClassList);
-    const storageclasses = computed(() => store.storageclasses);
+      store.select(storageclass, false)
+    }
+    onMounted(getStorageClassList)
+    const storageclasses = computed(() => store.storageclasses)
     return {
       storageclasses,
       onClick,
-    };
+    }
   },
-});
+})
 </script>

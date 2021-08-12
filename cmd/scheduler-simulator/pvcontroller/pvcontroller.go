@@ -7,7 +7,6 @@ import (
 
 	"k8s.io/client-go/informers"
 	clientset "k8s.io/client-go/kubernetes"
-
 	"k8s.io/kubernetes/pkg/controller/volume/persistentvolume"
 	"k8s.io/kubernetes/pkg/volume"
 	"k8s.io/kubernetes/pkg/volume/hostpath"

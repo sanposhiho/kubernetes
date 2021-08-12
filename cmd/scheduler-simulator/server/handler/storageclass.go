@@ -4,10 +4,11 @@ import (
 	"net/http"
 
 	"github.com/labstack/echo/v4"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	v1 "k8s.io/client-go/applyconfigurations/storage/v1"
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
+	"github.com/sanposhiho/k8s-scheduler-simulator/server/di"
 )
 
 // StorageClassHandler is handler for manage storageClass.
@@ -46,6 +47,9 @@ func (h *StorageClassHandler) GetStorageClass(c echo.Context) error {
 
 	p, err := h.service.Get(ctx, name)
 	if err != nil {
+		if apierrors.IsNotFound(err) {
+			return echo.NewHTTPError(http.StatusNotFound)
+		}
 		klog.Errorf("failed to get storageClass: %+v", err)
 		return echo.NewHTTPError(http.StatusInternalServerError)
 	}

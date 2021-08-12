@@ -17,7 +17,7 @@
 </template>
 
 <script lang="ts">
-import { V1Pod } from "@kubernetes/client-node";
+import { V1Pod } from '@kubernetes/client-node'
 import {
   ref,
   computed,
@@ -25,9 +25,9 @@ import {
   onMounted,
   PropType,
   defineComponent,
-} from "@nuxtjs/composition-api";
-import {   } from "./lib/util";
-import PodStoreKey from "./StoreKey/PodStoreKey";
+} from '@nuxtjs/composition-api'
+import {} from './lib/util'
+import PodStoreKey from './StoreKey/PodStoreKey'
 export default defineComponent({
   props: {
     nodeName: {
@@ -36,24 +36,23 @@ export default defineComponent({
     },
   },
   setup(_, context) {
-    const store = inject(PodStoreKey);
+    const store = inject(PodStoreKey)
     if (!store) {
-      throw new Error(`${PodStoreKey} is not provided`);
+      throw new Error(`${PodStoreKey} is not provided`)
     }
 
     const getPodList = async () => {
-      const route = context.root.$route;
-      await store.fetchlist(  );
-    };
+      await store.fetchlist()
+    }
     const onClick = (pod: V1Pod) => {
-      store.select(pod, false);
-    };
-    onMounted(getPodList);
-    const pods = computed(() => store.pods);
+      store.select(pod, false)
+    }
+    onMounted(getPodList)
+    const pods = computed(() => store.pods)
     return {
       pods,
       onClick,
-    };
+    }
   },
-});
+})
 </script>

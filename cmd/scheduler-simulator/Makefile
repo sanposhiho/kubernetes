@@ -23,6 +23,33 @@ test:
 build:
 	go build -o ./bin/simulator ./simulator.go
 
-.PHONY: serve
-serve: build
+.PHONY: start
+serve: openapi build
 	./hack/start_simulator.sh
+
+# generate openapi file for running api-server
+.PHONY: openapi
+openapi:
+	./hack/openapi.sh
+
+.PHONY: docker_build
+docker_build: openapi docker_build_server docker_build_front
+
+.PHONY: docker_build_server
+docker_build_server: openapi
+	docker build -t simulator-server .
+
+.PHONY: docker_build_front
+docker_build_front:
+	docker build -t simulator-frontend ./web/
+
+.PHONY: docker_up
+docker_up:
+	docker-compose up -d
+
+.PHONY: docker_build_and_up
+docker_build_and_up: docker_build docker_up
+
+.PHONY: docker_down
+docker_down:
+	docker-compose down

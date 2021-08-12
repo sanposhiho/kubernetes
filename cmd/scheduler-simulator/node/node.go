@@ -1,7 +1,6 @@
 package node
 
-//go:generate mockgen -destination=./mock_$GOPACKAGE/$GOFILE --build_flags=--mod=mod . PodService
-// --build_flags is need for https://github.com/golang/mock#reflect-vendoring-error
+//go:generate mockgen -destination=./mock_$GOPACKAGE/$GOFILE . PodService
 
 import (
 	"context"

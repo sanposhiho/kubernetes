@@ -1,6 +1,9 @@
 linters-settings:
   gci:
-    local-prefixes: k8s.io/kubernetes
+    local-prefixes: github.com/sanposhiho/k8s-scheduler-simulator
+  gocritic:
+    disabled-checks:
+      - appendAssign
 
 linters:
   disable-all: true
@@ -38,12 +41,10 @@ linters:
     - nilerr
     - nolintlint
     - paralleltest
-    - prealloc
     - predeclared
     - revive
     - rowserrcheck
     - sqlclosecheck
-    - testpackage
     - thelper
     - unconvert
     - unparam

@@ -515,16 +515,6 @@ github.com/jonboulle/clockwork
 github.com/json-iterator/go
 # github.com/karrick/godirwalk v1.16.1 => github.com/karrick/godirwalk v1.16.1
 github.com/karrick/godirwalk
-# github.com/labstack/echo/v4 v4.3.0 => github.com/labstack/echo/v4 v4.3.0
-## explicit
-github.com/labstack/echo/v4
-github.com/labstack/echo/v4/middleware
-# github.com/labstack/gommon v0.3.0 => github.com/labstack/gommon v0.3.0
-## explicit
-github.com/labstack/gommon/bytes
-github.com/labstack/gommon/color
-github.com/labstack/gommon/log
-github.com/labstack/gommon/random
 # github.com/libopenstorage/openstorage v1.0.0 => github.com/libopenstorage/openstorage v1.0.0
 ## explicit
 github.com/libopenstorage/openstorage/api
@@ -547,10 +537,6 @@ github.com/magiconair/properties
 github.com/mailru/easyjson/buffer
 github.com/mailru/easyjson/jlexer
 github.com/mailru/easyjson/jwriter
-# github.com/mattn/go-colorable v0.1.8 => github.com/mattn/go-colorable v0.0.9
-github.com/mattn/go-colorable
-# github.com/mattn/go-isatty v0.0.9 => github.com/mattn/go-isatty v0.0.4
-github.com/mattn/go-isatty
 # github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369 => github.com/matttproud/golang_protobuf_extensions v1.0.2-0.20181231171920-c182affec369
 github.com/matttproud/golang_protobuf_extensions/pbutil
 # github.com/miekg/dns v1.1.35 => github.com/miekg/dns v1.1.35
@@ -779,10 +765,6 @@ github.com/syndtr/gocapability/capability
 github.com/tmc/grpc-websocket-proxy/wsproxy
 # github.com/urfave/negroni v1.0.0 => github.com/urfave/negroni v1.0.0
 ## explicit
-# github.com/valyala/bytebufferpool v1.0.0 => github.com/valyala/bytebufferpool v1.0.0
-github.com/valyala/bytebufferpool
-# github.com/valyala/fasttemplate v1.2.1 => github.com/valyala/fasttemplate v1.2.1
-github.com/valyala/fasttemplate
 # github.com/vishvananda/netlink v1.1.0 => github.com/vishvananda/netlink v1.1.0
 ## explicit
 github.com/vishvananda/netlink
@@ -954,8 +936,6 @@ go.uber.org/zap/internal/exit
 go.uber.org/zap/zapcore
 # golang.org/x/crypto v0.0.0-20210322153248-0c34fe9e7dc2 => golang.org/x/crypto v0.0.0-20210220033148-5ea612d1eb83
 ## explicit
-golang.org/x/crypto/acme
-golang.org/x/crypto/acme/autocert
 golang.org/x/crypto/bcrypt
 golang.org/x/crypto/blowfish
 golang.org/x/crypto/chacha20
@@ -988,7 +968,6 @@ golang.org/x/net/html/atom
 golang.org/x/net/html/charset
 golang.org/x/net/http/httpguts
 golang.org/x/net/http2
-golang.org/x/net/http2/h2c
 golang.org/x/net/http2/hpack
 golang.org/x/net/idna
 golang.org/x/net/internal/iana
@@ -1008,8 +987,6 @@ golang.org/x/oauth2/internal
 golang.org/x/oauth2/jws
 golang.org/x/oauth2/jwt
 # golang.org/x/sync v0.0.0-20210220032951-036812b2e83c => golang.org/x/sync v0.0.0-20201020160332-67f06af15bc9
-## explicit
-golang.org/x/sync/errgroup
 golang.org/x/sync/singleflight
 # golang.org/x/sys v0.0.0-20210426230700-d19ff857e887 => golang.org/x/sys v0.0.0-20210426230700-d19ff857e887
 ## explicit
@@ -1071,7 +1048,6 @@ golang.org/x/tools/internal/imports
 golang.org/x/tools/internal/packagesinternal
 golang.org/x/tools/internal/typesinternal
 # golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1 => golang.org/x/xerrors v0.0.0-20200804184101-5ec99f83aff1
-## explicit
 golang.org/x/xerrors
 golang.org/x/xerrors/internal
 # gonum.org/v1/gonum v0.6.2 => gonum.org/v1/gonum v0.6.2

@@ -30,46 +30,46 @@ import {
   inject,
   onMounted,
   defineComponent,
-} from "@nuxtjs/composition-api";
-import NodeStoreKey from "./StoreKey/NodeStoreKey";
-import PodList from "~/components/PodList.vue";
-import { V1Node } from "@kubernetes/client-node";
-import PodStoreKey from "./StoreKey/PodStoreKey";
-import {   } from "./lib/util";
+} from '@nuxtjs/composition-api'
+import NodeStoreKey from './StoreKey/NodeStoreKey'
+import PodList from '~/components/PodList.vue'
+import { V1Node } from '@kubernetes/client-node'
+import PodStoreKey from './StoreKey/PodStoreKey'
+import {} from './lib/util'
 
 export default defineComponent({
   components: { PodList },
   setup(_, context) {
-    const pstore = inject(PodStoreKey);
+    const pstore = inject(PodStoreKey)
     if (!pstore) {
-      throw new Error(`${PodStoreKey} is not provided`);
+      throw new Error(`${PodStoreKey} is not provided`)
     }
 
-    const nstore = inject(NodeStoreKey);
+    const nstore = inject(NodeStoreKey)
     if (!nstore) {
-      throw new Error(`${NodeStoreKey} is not provided`);
+      throw new Error(`${NodeStoreKey} is not provided`)
     }
 
-    const route = context.root.$route;
+    const route = context.root.$route
 
     const getNodeList = async () => {
-      await nstore.fetchlist(  );
-    };
+      await nstore.fetchlist()
+    }
 
-    onMounted(getNodeList);
+    onMounted(getNodeList)
 
-    const nodes = computed(() => nstore.nodes);
-    const pods = computed(() => pstore.pods);
+    const nodes = computed(() => nstore.nodes)
+    const pods = computed(() => pstore.pods)
 
     const onClick = (node: V1Node) => {
-      nstore.select(node, false);
-    };
+      nstore.select(node, false)
+    }
 
     return {
       pods,
       nodes,
       onClick,
-    };
+    }
   },
-});
+})
 </script>

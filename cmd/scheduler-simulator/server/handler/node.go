@@ -8,7 +8,7 @@ import (
 	v1 "k8s.io/client-go/applyconfigurations/core/v1"
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/cmd/scheduler-simulator/server/di"
+	"github.com/sanposhiho/k8s-scheduler-simulator/server/di"
 )
 
 // NodeHandler is handler for manage nodes.

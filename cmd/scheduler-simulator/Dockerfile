@@ -20,5 +20,5 @@ FROM alpine:3.14.0
 COPY --from=build-env /go/src/simulator-server/bin/simulator /simulator
 RUN chmod a+x /simulator
 
-EXPOSE 8080
+EXPOSE 1212
 CMD ["/simulator"]

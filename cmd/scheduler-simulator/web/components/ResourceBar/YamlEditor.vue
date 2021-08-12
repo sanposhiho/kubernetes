@@ -8,9 +8,9 @@
 </template>
 
 <script lang="ts">
-import { defineComponent, ref, watch } from "@nuxtjs/composition-api";
+import { defineComponent, ref, watch } from '@nuxtjs/composition-api'
 //@ts-ignore // it is ok to ignore.
-import MonacoEditor from "vue-monaco";
+import MonacoEditor from 'vue-monaco'
 
 export default defineComponent({
   components: {
@@ -20,24 +20,24 @@ export default defineComponent({
     value: String,
   },
   setup(props, { emit }) {
-    const formData = ref(props.value);
+    const formData = ref(props.value)
 
     watch(props, (newvalue, _) => {
       if (newvalue.value) {
-        formData.value = newvalue.value;
+        formData.value = newvalue.value
       }
-    });
+    })
 
     const onChange = () => {
-      emit("input", formData.value);
-    };
+      emit('input', formData.value)
+    }
 
     return {
       formData,
       onChange,
-    };
+    }
   },
-});
+})
 </script>
 
 <style>

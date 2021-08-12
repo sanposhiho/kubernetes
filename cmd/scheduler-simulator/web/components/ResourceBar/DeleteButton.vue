@@ -22,17 +22,17 @@
   </v-dialog>
 </template>
 <script lang="ts">
-import { ref, defineComponent, PropType } from "@nuxtjs/composition-api";
+import { ref, defineComponent, PropType } from '@nuxtjs/composition-api'
 export default defineComponent({
   props: {
     deleteOnClick: Function,
   },
   setup(props, context) {
-    const dialog = ref(false);
+    const dialog = ref(false)
 
     return {
       dialog,
-    };
+    }
   },
-});
+})
 </script>
