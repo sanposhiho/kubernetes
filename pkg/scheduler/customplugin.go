@@ -13,7 +13,7 @@ func loadPlugins(files map[string]string) frameworkruntime.Registry {
 	for k, f := range files {
 		p, err := plugin.Open(f)
 		if err != nil {
-			klog.Fatalf("failed to open plugin file: %s", f)
+			klog.Fatalf("failed to open plugin file: %s, %v", f, err)
 		}
 
 		newfunc, err := p.Lookup("New")
