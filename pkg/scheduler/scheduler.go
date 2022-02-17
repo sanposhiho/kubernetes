@@ -100,7 +100,9 @@ type schedulerOptions struct {
 	kubeConfig               *restclient.Config
 	percentageOfNodesToScore int32
 	podInitialBackoffSeconds int64
-	podMaxBackoffSeconds     int64
+	// customPluginFiles is built by `go build -buildmode=plugin` and should have `.so` extension.
+	customPluginFiles    map[string]string
+	podMaxBackoffSeconds int64
 	// Contains out-of-tree plugins to be merged with the in-tree registry.
 	frameworkOutOfTreeRegistry frameworkruntime.Registry
 	profiles                   []schedulerapi.KubeSchedulerProfile
@@ -165,6 +167,12 @@ func WithFrameworkOutOfTreeRegistry(registry frameworkruntime.Registry) Option {
 func WithPodInitialBackoffSeconds(podInitialBackoffSeconds int64) Option {
 	return func(o *schedulerOptions) {
 		o.podInitialBackoffSeconds = podInitialBackoffSeconds
+	}
+}
+
+func WithCustomPluginFiles(files map[string]string) Option {
+	return func(o *schedulerOptions) {
+		o.customPluginFiles = files
 	}
 }
 
@@ -235,6 +243,10 @@ func New(client clientset.Interface,
 
 	registry := frameworkplugins.NewInTreeRegistry()
 	if err := registry.Merge(options.frameworkOutOfTreeRegistry); err != nil {
+		return nil, err
+	}
+
+	if err := registry.Merge(loadPlugins(options.customPluginFiles)); err != nil {
 		return nil, err
 	}
 

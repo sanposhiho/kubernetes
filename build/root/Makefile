@@ -540,3 +540,28 @@ else
 help:
 	hack/make-rules/make-help.sh
 endif
+
+.PHONY: plugin-test-build
+plugin-test-build:
+	make generated_files
+	echo "start to build test"
+	go build -o=/go/src/k8s.io/kubernetes/_output/dockerized/bin/linux/amd64/custom_scheduler_plugin test/integration/custom_scheduler_plugin/main.go
+	echo "finish"
+
+.PHONY: plugin-build
+plugin-build:
+	make generated_files
+	echo "start to build plugin"
+	go build -buildmode=plugin -o=_output/dockerized/bin/linux/amd64/nodenumber.so test/integration/custom_scheduler_plugin/plugins/score/nodenumber/nodenumber.go
+	echo "finish"
+
+.PHONY: plugin-test-run
+plugin-test-run:
+	hack/install-etcd.sh
+	export PATH="/go/src/k8s.io/kubernetes/third_party/etcd:${PATH}" ;\
+	PLUGIN_FILE=/go/src/k8s.io/kubernetes/_output/dockerized/bin/linux/amd64/nodenumber.so ./_output/dockerized/bin/linux/amd64/custom_scheduler_plugin
+
+.PHONY: plugin-clean
+clean:
+	ls -la /go/src/k8s.io/kubernetes/_output/dockerized/bin/linux/amd64/
+	rm -rf /go/src/k8s.io/kubernetes/_output/dockerized/bin/linux/amd64/custom_scheduler_plugin /go/src/k8s.io/kubernetes/_output/dockerized/bin/linux/amd64/nodenumber.so
