@@ -43,6 +43,7 @@ import (
 	"k8s.io/kubernetes/pkg/apis/core"
 	"k8s.io/kubernetes/pkg/capabilities"
 	"k8s.io/kubernetes/pkg/features"
+	"k8s.io/utils/pointer"
 	utilpointer "k8s.io/utils/pointer"
 )
 
@@ -18668,7 +18669,12 @@ func TestValidateTopologySpreadConstraints(t *testing.T) {
 		{
 			name: "all required fields ok",
 			constraints: []core.TopologySpreadConstraint{
-				{MaxSkew: 1, TopologyKey: "k8s.io/zone", WhenUnsatisfiable: core.DoNotSchedule},
+				{
+					MaxSkew:           1,
+					TopologyKey:       "k8s.io/zone",
+					WhenUnsatisfiable: core.DoNotSchedule,
+					MinDomains:        pointer.Int32(3),
+				},
 			},
 		},
 		{
@@ -18686,6 +18692,19 @@ func TestValidateTopologySpreadConstraints(t *testing.T) {
 			},
 			errtype:  field.ErrorTypeInvalid,
 			errfield: "maxSkew",
+		},
+		{
+			name: "invalid minDomains",
+			constraints: []core.TopologySpreadConstraint{
+				{
+					MaxSkew:           1,
+					TopologyKey:       "k8s.io/zone",
+					WhenUnsatisfiable: core.DoNotSchedule,
+					MinDomains:        pointer.Int32(-1),
+				},
+			},
+			errtype:  field.ErrorTypeInvalid,
+			errfield: "minDomains",
 		},
 		{
 			name: "missing TopologyKey",
@@ -18739,19 +18758,21 @@ func TestValidateTopologySpreadConstraints(t *testing.T) {
 	}
 
 	for i, tc := range testCases {
-		errs := validateTopologySpreadConstraints(tc.constraints, field.NewPath("field"))
+		t.Run(tc.name, func(t *testing.T) {
+			errs := validateTopologySpreadConstraints(tc.constraints, field.NewPath("field"))
 
-		if len(errs) > 0 && tc.errtype == "" {
-			t.Errorf("[%d: %q] unexpected error(s): %v", i, tc.name, errs)
-		} else if len(errs) == 0 && tc.errtype != "" {
-			t.Errorf("[%d: %q] expected error type %v", i, tc.name, tc.errtype)
-		} else if len(errs) >= 1 {
-			if errs[0].Type != tc.errtype {
-				t.Errorf("[%d: %q] expected error type %v, got %v", i, tc.name, tc.errtype, errs[0].Type)
-			} else if !strings.HasSuffix(errs[0].Field, "."+tc.errfield) {
-				t.Errorf("[%d: %q] expected error on field %q, got %q", i, tc.name, tc.errfield, errs[0].Field)
+			if len(errs) > 0 && tc.errtype == "" {
+				t.Errorf("[%d: %q] unexpected error(s): %v", i, tc.name, errs)
+			} else if len(errs) == 0 && tc.errtype != "" {
+				t.Errorf("[%d: %q] expected error type %v", i, tc.name, tc.errtype)
+			} else if len(errs) >= 1 {
+				if errs[0].Type != tc.errtype {
+					t.Errorf("[%d: %q] expected error type %v, got %v", i, tc.name, tc.errtype, errs[0].Type)
+				} else if !strings.HasSuffix(errs[0].Field, "."+tc.errfield) {
+					t.Errorf("[%d: %q] expected error on field %q, got %q", i, tc.name, tc.errfield, errs[0].Field)
+				}
 			}
-		}
+		})
 	}
 }
 

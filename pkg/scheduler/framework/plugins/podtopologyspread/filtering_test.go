@@ -23,13 +23,16 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
 	"k8s.io/kubernetes/pkg/scheduler/framework"
+	plfeature "k8s.io/kubernetes/pkg/scheduler/framework/plugins/feature"
 	plugintesting "k8s.io/kubernetes/pkg/scheduler/framework/plugins/testing"
+	frameworkruntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
 	"k8s.io/kubernetes/pkg/scheduler/internal/cache"
 	st "k8s.io/kubernetes/pkg/scheduler/testing"
 )
@@ -44,6 +47,8 @@ var cmpOpts = []cmp.Option{
 		return p1[0] == p2[0] && p1[1] == p2[1]
 	}),
 }
+
+var topologySpreadFactory = frameworkruntime.FactoryAdapter(plfeature.Features{}, New)
 
 func (p *criticalPaths) sort() {
 	if p[0].MatchNum == p[1].MatchNum && p[0].TopologyValue > p[1].TopologyValue {
@@ -81,6 +86,7 @@ func TestPreFilterState(t *testing.T) {
 						MaxSkew:     5,
 						TopologyKey: "zone",
 						Selector:    mustConvertLabelSelectorAsSelector(t, st.MakeLabelSelector().Label("foo", "bar").Obj()),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -116,6 +122,7 @@ func TestPreFilterState(t *testing.T) {
 						MaxSkew:     1,
 						TopologyKey: "zone",
 						Selector:    mustConvertLabelSelectorAsSelector(t, fooSelector),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -153,6 +160,7 @@ func TestPreFilterState(t *testing.T) {
 						MaxSkew:     1,
 						TopologyKey: "zone",
 						Selector:    mustConvertLabelSelectorAsSelector(t, fooSelector),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -189,6 +197,7 @@ func TestPreFilterState(t *testing.T) {
 						MaxSkew:     1,
 						TopologyKey: "zone",
 						Selector:    mustConvertLabelSelectorAsSelector(t, fooSelector),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -227,11 +236,13 @@ func TestPreFilterState(t *testing.T) {
 						MaxSkew:     1,
 						TopologyKey: "zone",
 						Selector:    mustConvertLabelSelectorAsSelector(t, fooSelector),
+						MinDomains:  1,
 					},
 					{
 						MaxSkew:     1,
 						TopologyKey: "node",
 						Selector:    mustConvertLabelSelectorAsSelector(t, fooSelector),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -276,11 +287,13 @@ func TestPreFilterState(t *testing.T) {
 						MaxSkew:     1,
 						TopologyKey: "zone",
 						Selector:    mustConvertLabelSelectorAsSelector(t, fooSelector),
+						MinDomains:  1,
 					},
 					{
 						MaxSkew:     1,
 						TopologyKey: "node",
 						Selector:    mustConvertLabelSelectorAsSelector(t, fooSelector),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -317,11 +330,13 @@ func TestPreFilterState(t *testing.T) {
 						MaxSkew:     1,
 						TopologyKey: "zone",
 						Selector:    mustConvertLabelSelectorAsSelector(t, fooSelector),
+						MinDomains:  1,
 					},
 					{
 						MaxSkew:     1,
 						TopologyKey: "node",
 						Selector:    mustConvertLabelSelectorAsSelector(t, barSelector),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -363,11 +378,13 @@ func TestPreFilterState(t *testing.T) {
 						MaxSkew:     1,
 						TopologyKey: "zone",
 						Selector:    mustConvertLabelSelectorAsSelector(t, fooSelector),
+						MinDomains:  1,
 					},
 					{
 						MaxSkew:     1,
 						TopologyKey: "node",
 						Selector:    mustConvertLabelSelectorAsSelector(t, barSelector),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -411,11 +428,13 @@ func TestPreFilterState(t *testing.T) {
 						MaxSkew:     1,
 						TopologyKey: "zone",
 						Selector:    mustConvertLabelSelectorAsSelector(t, fooSelector),
+						MinDomains:  1,
 					},
 					{
 						MaxSkew:     1,
 						TopologyKey: "node",
 						Selector:    mustConvertLabelSelectorAsSelector(t, fooSelector),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -448,11 +467,13 @@ func TestPreFilterState(t *testing.T) {
 						MaxSkew:     3,
 						TopologyKey: "node",
 						Selector:    mustConvertLabelSelectorAsSelector(t, st.MakeLabelSelector().Label("foo", "bar").Obj()),
+						MinDomains:  1,
 					},
 					{
 						MaxSkew:     5,
 						TopologyKey: "rack",
 						Selector:    mustConvertLabelSelectorAsSelector(t, st.MakeLabelSelector().Label("foo", "bar").Obj()),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -490,6 +511,7 @@ func TestPreFilterState(t *testing.T) {
 						MaxSkew:     1,
 						TopologyKey: "zone",
 						Selector:    mustConvertLabelSelectorAsSelector(t, st.MakeLabelSelector().Label("baz", "tar").Obj()),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -518,7 +540,7 @@ func TestPreFilterState(t *testing.T) {
 				DefaultConstraints: tt.defaultConstraints,
 				DefaultingType:     config.ListDefaulting,
 			}
-			p := plugintesting.SetupPluginWithInformers(ctx, t, New, args, cache.NewSnapshot(tt.existingPods, tt.nodes), tt.objs)
+			p := plugintesting.SetupPluginWithInformers(ctx, t, topologySpreadFactory, args, cache.NewSnapshot(tt.existingPods, tt.nodes), tt.objs)
 			cs := framework.NewCycleState()
 			if s := p.(*PodTopologySpread).PreFilter(ctx, cs, tt.pod); !s.IsSuccess() {
 				t.Fatal(s.AsError())
@@ -539,6 +561,7 @@ func TestPreFilterStateAddPod(t *testing.T) {
 		MaxSkew:     1,
 		TopologyKey: "node",
 		Selector:    mustConvertLabelSelectorAsSelector(t, st.MakeLabelSelector().Exists("foo").Obj()),
+		MinDomains:  1,
 	}
 	zoneConstraint := nodeConstraint
 	zoneConstraint.TopologyKey = "zone"
@@ -763,6 +786,7 @@ func TestPreFilterStateAddPod(t *testing.T) {
 						MaxSkew:     1,
 						TopologyKey: "node",
 						Selector:    mustConvertLabelSelectorAsSelector(t, st.MakeLabelSelector().Exists("bar").Obj()),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -803,6 +827,7 @@ func TestPreFilterStateAddPod(t *testing.T) {
 						MaxSkew:     1,
 						TopologyKey: "node",
 						Selector:    mustConvertLabelSelectorAsSelector(t, st.MakeLabelSelector().Exists("bar").Obj()),
+						MinDomains:  1,
 					},
 				},
 				TpKeyToCriticalPaths: map[string]*criticalPaths{
@@ -823,7 +848,7 @@ func TestPreFilterStateAddPod(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			ctx := context.Background()
 			snapshot := cache.NewSnapshot(tt.existingPods, tt.nodes)
-			pl := plugintesting.SetupPlugin(t, New, &config.PodTopologySpreadArgs{DefaultingType: config.ListDefaulting}, snapshot)
+			pl := plugintesting.SetupPlugin(t, topologySpreadFactory, &config.PodTopologySpreadArgs{DefaultingType: config.ListDefaulting}, snapshot)
 			p := pl.(*PodTopologySpread)
 			cs := framework.NewCycleState()
 			if s := p.PreFilter(ctx, cs, tt.preemptor); !s.IsSuccess() {
@@ -852,6 +877,7 @@ func TestPreFilterStateRemovePod(t *testing.T) {
 		MaxSkew:     1,
 		TopologyKey: "node",
 		Selector:    mustConvertLabelSelectorAsSelector(t, st.MakeLabelSelector().Exists("foo").Obj()),
+		MinDomains:  1,
 	}
 	zoneConstraint := nodeConstraint
 	zoneConstraint.TopologyKey = "zone"
@@ -1027,7 +1053,7 @@ func TestPreFilterStateRemovePod(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			ctx := context.Background()
 			snapshot := cache.NewSnapshot(tt.existingPods, tt.nodes)
-			pl := plugintesting.SetupPlugin(t, New, &config.PodTopologySpreadArgs{DefaultingType: config.ListDefaulting}, snapshot)
+			pl := plugintesting.SetupPlugin(t, topologySpreadFactory, &config.PodTopologySpreadArgs{DefaultingType: config.ListDefaulting}, snapshot)
 			p := pl.(*PodTopologySpread)
 			cs := framework.NewCycleState()
 			s := p.PreFilter(ctx, cs, tt.preemptor)
@@ -1101,7 +1127,7 @@ func BenchmarkFilter(b *testing.B) {
 		b.Run(tt.name, func(b *testing.B) {
 			existingPods, allNodes, _ := st.MakeNodesAndPodsForEvenPodsSpread(tt.pod.Labels, tt.existingPodsNum, tt.allNodesNum, tt.filteredNodesNum)
 			ctx := context.Background()
-			pl := plugintesting.SetupPlugin(b, New, &config.PodTopologySpreadArgs{DefaultingType: config.ListDefaulting}, cache.NewSnapshot(existingPods, allNodes))
+			pl := plugintesting.SetupPlugin(b, topologySpreadFactory, &config.PodTopologySpreadArgs{DefaultingType: config.ListDefaulting}, cache.NewSnapshot(existingPods, allNodes))
 			p := pl.(*PodTopologySpread)
 			b.ResetTimer()
 			for i := 0; i < b.N; i++ {
@@ -1429,7 +1455,7 @@ func TestSingleConstraint(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			snapshot := cache.NewSnapshot(tt.existingPods, tt.nodes)
-			pl := plugintesting.SetupPlugin(t, New, &config.PodTopologySpreadArgs{DefaultingType: config.ListDefaulting}, snapshot)
+			pl := plugintesting.SetupPlugin(t, topologySpreadFactory, &config.PodTopologySpreadArgs{DefaultingType: config.ListDefaulting}, snapshot)
 			p := pl.(*PodTopologySpread)
 			state := framework.NewCycleState()
 			preFilterStatus := p.PreFilter(context.Background(), state, tt.pod)
@@ -1656,7 +1682,7 @@ func TestMultipleConstraints(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			snapshot := cache.NewSnapshot(tt.existingPods, tt.nodes)
-			pl := plugintesting.SetupPlugin(t, New, &config.PodTopologySpreadArgs{DefaultingType: config.ListDefaulting}, snapshot)
+			pl := plugintesting.SetupPlugin(t, topologySpreadFactory, &config.PodTopologySpreadArgs{DefaultingType: config.ListDefaulting}, snapshot)
 			p := pl.(*PodTopologySpread)
 			state := framework.NewCycleState()
 			preFilterStatus := p.PreFilter(context.Background(), state, tt.pod)
@@ -1680,7 +1706,7 @@ func TestPreFilterDisabled(t *testing.T) {
 	nodeInfo := framework.NewNodeInfo()
 	node := v1.Node{}
 	nodeInfo.SetNode(&node)
-	p := plugintesting.SetupPlugin(t, New, &config.PodTopologySpreadArgs{DefaultingType: config.ListDefaulting}, cache.NewEmptySnapshot())
+	p := plugintesting.SetupPlugin(t, topologySpreadFactory, &config.PodTopologySpreadArgs{DefaultingType: config.ListDefaulting}, cache.NewEmptySnapshot())
 	cycleState := framework.NewCycleState()
 	gotStatus := p.(*PodTopologySpread).Filter(context.Background(), cycleState, pod, nodeInfo)
 	wantStatus := framework.AsStatus(fmt.Errorf(`reading "PreFilterPodTopologySpread" from cycleState: %w`, framework.ErrNotFound))

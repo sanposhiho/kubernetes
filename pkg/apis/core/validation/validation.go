@@ -6518,6 +6518,9 @@ func validateTopologySpreadConstraints(constraints []core.TopologySpreadConstrai
 		if err := ValidateMaxSkew(subFldPath.Child("maxSkew"), constraint.MaxSkew); err != nil {
 			allErrs = append(allErrs, err)
 		}
+		if err := validateMinDomains(subFldPath.Child("minDomains"), constraint.MinDomains); err != nil {
+			allErrs = append(allErrs, err)
+		}
 		if err := ValidateTopologyKey(subFldPath.Child("topologyKey"), constraint.TopologyKey); err != nil {
 			allErrs = append(allErrs, err)
 		}
@@ -6537,6 +6540,14 @@ func validateTopologySpreadConstraints(constraints []core.TopologySpreadConstrai
 func ValidateMaxSkew(fldPath *field.Path, maxSkew int32) *field.Error {
 	if maxSkew <= 0 {
 		return field.Invalid(fldPath, maxSkew, isNotPositiveErrorMsg)
+	}
+	return nil
+}
+
+// validateMinDomains tests that the argument is a valid MinDomains.
+func validateMinDomains(fldPath *field.Path, minDomains *int32) *field.Error {
+	if minDomains != nil && *minDomains <= 0 {
+		return field.Invalid(fldPath, minDomains, isNotPositiveErrorMsg)
 	}
 	return nil
 }

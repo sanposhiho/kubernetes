@@ -30,7 +30,6 @@ import (
 	v1 "k8s.io/api/core/v1"
 	policy "k8s.io/api/policy/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/informers"
@@ -53,6 +52,7 @@ import (
 	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/tainttoleration"
 	"k8s.io/kubernetes/pkg/scheduler/framework/preemption"
 	frameworkruntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
+	schedruntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
 	internalcache "k8s.io/kubernetes/pkg/scheduler/internal/cache"
 	internalqueue "k8s.io/kubernetes/pkg/scheduler/internal/queue"
 	st "k8s.io/kubernetes/pkg/scheduler/testing"
@@ -633,7 +633,7 @@ func TestDryRunPreemption(t *testing.T) {
 		{
 			name: "preemption to resolve pod topology spread filter failure",
 			registerPlugins: []st.RegisterPluginFunc{
-				st.RegisterPluginAsExtensions(podtopologyspread.Name, podtopologyspread.New, "PreFilter", "Filter"),
+				st.RegisterPluginAsExtensions(podtopologyspread.Name, schedruntime.FactoryAdapter(feature.Features{}, podtopologyspread.New), "PreFilter", "Filter"),
 			},
 			nodeNames: []string{"node-a/zone1", "node-b/zone1", "node-x/zone2"},
 			testPods: []*v1.Pod{
@@ -1492,7 +1492,7 @@ func TestPreempt(t *testing.T) {
 				st.MakePod().Name("p-x2").UID("p-x2").Namespace(v1.NamespaceDefault).Node("node-x").Label("foo", "").Priority(highPriority).Obj(),
 			},
 			nodeNames:      []string{"node-a/zone1", "node-b/zone1", "node-x/zone2"},
-			registerPlugin: st.RegisterPluginAsExtensions(podtopologyspread.Name, podtopologyspread.New, "PreFilter", "Filter"),
+			registerPlugin: st.RegisterPluginAsExtensions(podtopologyspread.Name, schedruntime.FactoryAdapter(feature.Features{}, podtopologyspread.New), "PreFilter", "Filter"),
 			want:           framework.NewPostFilterResultWithNominatedNode("node-b"),
 			expectedPods:   []string{"p-b1"},
 		},

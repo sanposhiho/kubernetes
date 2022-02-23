@@ -817,6 +817,13 @@ const (
 	//
 	// Enables GRPC probe method for {Liveness,Readiness,Startup}Probe.
 	GRPCContainerProbe featuregate.Feature = "GRPCContainerProbe"
+
+	// owner: @sanposhiho
+	// kep: http://kep.k8s.io/3022
+	// alpha: v1.24
+	//
+	// Enable MinDomains in Pod Topology Spread.
+	MinDomainsInPodTopologySpread featuregate.Feature = "MinDomainsInPodTopologySpread"
 )
 
 func init() {
@@ -937,6 +944,7 @@ var defaultKubernetesFeatureGates = map[featuregate.Feature]featuregate.FeatureS
 	HonorPVReclaimPolicy:                           {Default: false, PreRelease: featuregate.Alpha},
 	RecoverVolumeExpansionFailure:                  {Default: false, PreRelease: featuregate.Alpha},
 	GRPCContainerProbe:                             {Default: false, PreRelease: featuregate.Alpha},
+	MinDomainsInPodTopologySpread:                  {Default: false, PreRelease: featuregate.Alpha},
 
 	// inherited features from generic apiserver, relisted here to get a conflict if it is changed
 	// unintentionally on either side:
