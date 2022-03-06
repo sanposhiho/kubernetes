@@ -51,26 +51,21 @@ type preFilterState struct {
 }
 
 // minMatchNum returns the global minimum for the calculation of skew while taking MinDomains into account.
-func (s *preFilterState) minMatchNum(tpKey string, minDomainEnabled bool) (int, error) {
+func (s *preFilterState) minMatchNum(tpKey string, minDomains int32) (int, error) {
 	paths, ok := s.TpKeyToCriticalPaths[tpKey]
 	if !ok {
 		return 0, fmt.Errorf("failed to retrieve path by topology key")
 	}
 
 	minMatchNum := paths[0].MatchNum
-	if !minDomainEnabled {
-		return minMatchNum, nil
-	}
-
-	domainsNum, ok := s.TpKeyToDomainsNum[tpKey]
-	if !ok {
-		return 0, fmt.Errorf("failed to retrieve the number of domains by topology key")
-	}
-
-	if domainsNum < minMatchNum {
-		// When the number of eligible domains with matching topology keys is less than `minDomains`,
-		// it treats "global minimum" as 0.
-		minMatchNum = 0
+	if domainsNum, ok := s.TpKeyToDomainsNum[tpKey]; ok {
+		if domainsNum < int(minDomains) {
+			// When the number of eligible domains with matching topology keys is less than `minDomains`,
+			// it treats "global minimum" as 0.
+			minMatchNum = 0
+		}
+	} else {
+		klog.ErrorS(nil, "Internal error occurred while retrieving the number of eligible domains by topology key. MinDomains will be ignored.", "topologyKey", tpKey, "domainsNums", s.TpKeyToDomainsNum)
 	}
 
 	return minMatchNum, nil
@@ -339,20 +334,10 @@ func (pl *PodTopologySpread) Filter(ctx context.Context, cycleState *framework.C
 
 		// judging criteria:
 		// 'existing matching num' + 'if self-match (1 or 0)' - 'global minimum' <= 'maxSkew'
-		minMatchNum, err := s.minMatchNum(tpKey, pl.enableMinDomainsInPodTopologySpread)
+		minMatchNum, err := s.minMatchNum(tpKey, c.MinDomains)
 		if err != nil {
 			klog.ErrorS(err, "Internal error occurred while retrieving value precalculated in PreFilter", "topologyKey", tpKey, "paths", s.TpKeyToCriticalPaths)
 			continue
-		}
-
-		if domainsNum, ok := s.TpKeyToDomainsNum[c.TopologyKey]; ok {
-			if domainsNum < int(c.MinDomains) {
-				minMatchNum = 0
-			}
-		} else {
-			// When the number of eligible domains with matching topology keys is less than `minDomains`,
-			// it treats "global minimum" as 0.
-			klog.ErrorS(nil, "Internal error occurred while retrieving the number of eligible domains by topology key. MinDomains will be ignored.", "topologyKey", tpKey, "domainsNums", s.TpKeyToDomainsNum)
 		}
 
 		matchNum := 0
