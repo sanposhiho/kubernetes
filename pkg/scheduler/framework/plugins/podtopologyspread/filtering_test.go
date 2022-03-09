@@ -1535,30 +1535,6 @@ func TestSingleConstraint(t *testing.T) {
 			},
 		},
 		{
-			name: "pods spread across nodes as 2/1, maxSkew is 2, and the number of domains < minDomains, then node-b fits",
-			pod: st.MakePod().Name("p").Label("foo", "").SpreadConstraint(
-				2,
-				"node",
-				v1.DoNotSchedule,
-				st.MakeLabelSelector().Exists("foo").Obj(),
-				pointer.Int32(3), // larger than the number of domains(2)
-			).Obj(),
-			nodes: []*v1.Node{
-				st.MakeNode().Name("node-a").Label("node", "node-a").Obj(),
-				st.MakeNode().Name("node-b").Label("node", "node-b").Obj(),
-			},
-			existingPods: []*v1.Pod{
-				st.MakePod().Name("p-a1").Node("node-a").Label("foo", "").Obj(),
-				st.MakePod().Name("p-a2").Node("node-a").Label("foo", "").Obj(),
-				st.MakePod().Name("p-b1").Node("node-b").Label("foo", "").Obj(),
-			},
-			enableMinDomains: true,
-			wantStatusCode: map[string]framework.Code{
-				"node-a": framework.Unschedulable,
-				"node-b": framework.Success,
-			},
-		},
-		{
 			name: "pods spread across nodes as 2/2/1, maxSkew is 2, and the number of domains < minDomains, then the third node fits",
 			pod: st.MakePod().Name("p").Label("foo", "").SpreadConstraint(
 				2,
