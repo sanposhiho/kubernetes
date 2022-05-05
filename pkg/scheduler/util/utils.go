@@ -23,11 +23,14 @@ import (
 	"time"
 
 	v1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
+	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/kubernetes"
+	"k8s.io/client-go/util/retry"
 	corev1helpers "k8s.io/component-helpers/scheduling/corev1"
 	"k8s.io/klog/v2"
 	extenderv1 "k8s.io/kube-scheduler/extender/v1"
@@ -90,8 +93,16 @@ func MoreImportantPod(pod1, pod2 *v1.Pod) bool {
 	return GetPodStartTime(pod1).Before(GetPodStartTime(pod2))
 }
 
+const (
+	// Parameters for retrying with exponential backoff.
+	retryBackoffInitialDuration = 100 * time.Millisecond
+	retryBackoffFactor          = 1.3
+	retryBackoffJitter          = 0
+	retryBackoffSteps           = 6
+)
+
 // PatchPodStatus calculates the delta bytes change from <old.Status> to <newStatus>,
-// and then submit a request to API server to patch the pod changes.
+// and then submit a request to API server to patch the pod changes with retries.
 func PatchPodStatus(cs kubernetes.Interface, old *v1.Pod, newStatus *v1.PodStatus) error {
 	if newStatus == nil {
 		return nil
@@ -115,13 +126,48 @@ func PatchPodStatus(cs kubernetes.Interface, old *v1.Pod, newStatus *v1.PodStatu
 		return nil
 	}
 
-	_, err = cs.CoreV1().Pods(old.Namespace).Patch(context.TODO(), old.Name, types.StrategicMergePatchType, patchBytes, metav1.PatchOptions{}, "status")
-	return err
+	backoff := wait.Backoff{
+		Duration: retryBackoffInitialDuration,
+		Factor:   retryBackoffFactor,
+		Jitter:   retryBackoffJitter,
+		Steps:    retryBackoffSteps,
+	}
+
+	patchFn := func() error {
+		_, err := cs.CoreV1().Pods(old.Namespace).Patch(context.Background(), old.Name, types.StrategicMergePatchType, patchBytes, metav1.PatchOptions{}, "status")
+		return err
+	}
+
+	isRetriableFn := func(err error) bool {
+		// Check if the error is returned from kube-apiserver.
+		// If so, check retryAfterSeconds to know if kube-apiserver asked us to retry or not.
+		typedErr, ok := err.(*errors.StatusError)
+		if !ok {
+			// unknown error. e.g. api-server is unreachable
+			// let's retry it and see how it goes.
+			return true
+		}
+
+		var retryAfterSeconds int32
+		if typedErr.Status().Details != nil {
+			retryAfterSeconds = typedErr.Status().Details.RetryAfterSeconds
+		}
+		if retryAfterSeconds == 0 {
+			// we shouldn't retry since this means kube-apiserver rejected our request and didn't ask us to retry.
+			return false
+		}
+		// Otherwise we can retry after retryAfterSeconds.
+		klog.ErrorS(err, "Server rejected Pod patch (may retry after sleeping)", "pod", klog.KObj(old))
+		time.Sleep(time.Duration(retryAfterSeconds))
+		return true
+	}
+
+	return retry.OnError(backoff, isRetriableFn, patchFn)
 }
 
 // DeletePod deletes the given <pod> from API server
 func DeletePod(cs kubernetes.Interface, pod *v1.Pod) error {
-	return cs.CoreV1().Pods(pod.Namespace).Delete(context.TODO(), pod.Name, metav1.DeleteOptions{})
+	return cs.CoreV1().Pods(pod.Namespace).Delete(context.Background(), pod.Name, metav1.DeleteOptions{})
 }
 
 // ClearNominatedNodeName internally submit a patch request to API server

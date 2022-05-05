@@ -18,12 +18,15 @@ package util
 
 import (
 	"context"
+	"errors"
 	"fmt"
-	"github.com/google/go-cmp/cmp"
 	"testing"
 	"time"
 
+	"github.com/google/go-cmp/cmp"
+
 	v1 "k8s.io/api/core/v1"
+	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	clientsetfake "k8s.io/client-go/kubernetes/fake"
@@ -178,12 +181,17 @@ func TestRemoveNominatedNodeName(t *testing.T) {
 
 func TestPatchPodStatus(t *testing.T) {
 	tests := []struct {
-		name           string
-		pod            v1.Pod
+		name   string
+		pod    v1.Pod
+		client *clientsetfake.Clientset
+		// validateErr checks if error returned from PatchPodStatus is expected one or not.
+		// (true means error is expected one.)
+		validateErr    func(goterr error) bool
 		statusToUpdate v1.PodStatus
 	}{
 		{
-			name: "Should update pod conditions successfully",
+			name:   "Should update pod conditions successfully",
+			client: clientsetfake.NewSimpleClientset(),
 			pod: v1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace: "ns",
@@ -206,11 +214,12 @@ func TestPatchPodStatus(t *testing.T) {
 			// ref: #101697, #94626 - ImagePullSecrets are allowed to have empty secret names
 			// which would fail the 2-way merge patch generation on Pod patches
 			// due to the mergeKey being the name field
-			name: "Should update pod conditions successfully on a pod Spec with secrets with empty name",
+			name:   "Should update pod conditions successfully on a pod Spec with secrets with empty name",
+			client: clientsetfake.NewSimpleClientset(),
 			pod: v1.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Namespace: "ns",
-					Name:      "pod2",
+					Name:      "pod1",
 				},
 				Spec: v1.PodSpec{
 					// this will serialize to imagePullSecrets:[{}]
@@ -226,19 +235,184 @@ func TestPatchPodStatus(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "retry patch request when an unknown error is returned",
+			client: func() *clientsetfake.Clientset {
+				client := clientsetfake.NewSimpleClientset()
+
+				reqcount := 0
+				client.PrependReactor("patch", "pods", func(action clienttesting.Action) (bool, runtime.Object, error) {
+					defer func() { reqcount++ }()
+					if reqcount == 0 {
+						// return an unknown error for the first patch request.
+						return true, &v1.Pod{}, errors.New("unknown")
+					}
+					if reqcount == 1 {
+						// not return error for the second patch request.
+						return false, &v1.Pod{}, nil
+					}
+
+					// return error if requests comes in more than three times.
+					return true, nil, errors.New("requests comes in more than three times.")
+				})
+
+				return client
+			}(),
+			pod: v1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Namespace: "ns",
+					Name:      "pod1",
+				},
+				Spec: v1.PodSpec{
+					ImagePullSecrets: []v1.LocalObjectReference{{Name: "foo"}},
+				},
+			},
+			statusToUpdate: v1.PodStatus{
+				Conditions: []v1.PodCondition{
+					{
+						Type:   v1.PodScheduled,
+						Status: v1.ConditionFalse,
+					},
+				},
+			},
+		},
+		{
+			name: "doesn't retry patch request when an StatusError, which doesn't contain RetryAfterSeconds, is returned",
+			client: func() *clientsetfake.Clientset {
+				client := clientsetfake.NewSimpleClientset()
+
+				reqcount := 0
+				client.PrependReactor("patch", "pods", func(action clienttesting.Action) (bool, runtime.Object, error) {
+					defer func() { reqcount++ }()
+					if reqcount == 0 {
+						// return a BadRequest error which doesn't contain RetryAfterSeconds for the first patch request.
+						return true, &v1.Pod{}, apierrors.NewBadRequest("bad")
+					}
+
+					// return error if requests comes in more than two times.
+					return true, nil, errors.New("requests comes in more than two times.")
+				})
+
+				return client
+			}(),
+			pod: v1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Namespace: "ns",
+					Name:      "pod1",
+				},
+				Spec: v1.PodSpec{
+					ImagePullSecrets: []v1.LocalObjectReference{{Name: "foo"}},
+				},
+			},
+			validateErr: apierrors.IsBadRequest,
+			statusToUpdate: v1.PodStatus{
+				Conditions: []v1.PodCondition{
+					{
+						Type:   v1.PodScheduled,
+						Status: v1.ConditionFalse,
+					},
+				},
+			},
+		},
+		{
+			name: "retry patch request when an StatusError, which contain RetryAfterSeconds, is returned",
+			client: func() *clientsetfake.Clientset {
+				client := clientsetfake.NewSimpleClientset()
+
+				reqcount := 0
+				client.PrependReactor("patch", "pods", func(action clienttesting.Action) (bool, runtime.Object, error) {
+					defer func() { reqcount++ }()
+					if reqcount == 0 {
+						// return a TooManyRequests error which contain RetryAfterSeconds for the first patch request.
+						return true, &v1.Pod{}, apierrors.NewTooManyRequests("too many", 1)
+					}
+					if reqcount == 1 {
+						// not return error for the second patch request.
+						return false, &v1.Pod{}, nil
+					}
+
+					// return error if requests comes in more than three times.
+					return true, nil, errors.New("requests comes in more than two times.")
+				})
+
+				return client
+			}(),
+			pod: v1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Namespace: "ns",
+					Name:      "pod1",
+				},
+				Spec: v1.PodSpec{
+					ImagePullSecrets: []v1.LocalObjectReference{{Name: "foo"}},
+				},
+			},
+			statusToUpdate: v1.PodStatus{
+				Conditions: []v1.PodCondition{
+					{
+						Type:   v1.PodScheduled,
+						Status: v1.ConditionFalse,
+					},
+				},
+			},
+		},
+		{
+			name: "only 6 retries at most",
+			client: func() *clientsetfake.Clientset {
+				client := clientsetfake.NewSimpleClientset()
+
+				reqcount := 0
+				client.PrependReactor("patch", "pods", func(action clienttesting.Action) (bool, runtime.Object, error) {
+					defer func() { reqcount++ }()
+					if reqcount >= 6 {
+						// return error if requests comes in more than six times.
+						return true, nil, errors.New("requests comes in more than six times.")
+					}
+
+					// return a TooManyRequests error which contain RetryAfterSeconds.
+					return true, &v1.Pod{}, apierrors.NewTooManyRequests("too many", 1)
+				})
+
+				return client
+			}(),
+			pod: v1.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Namespace: "ns",
+					Name:      "pod1",
+				},
+				Spec: v1.PodSpec{
+					ImagePullSecrets: []v1.LocalObjectReference{{Name: "foo"}},
+				},
+			},
+			validateErr: apierrors.IsTooManyRequests,
+			statusToUpdate: v1.PodStatus{
+				Conditions: []v1.PodCondition{
+					{
+						Type:   v1.PodScheduled,
+						Status: v1.ConditionFalse,
+					},
+				},
+			},
+		},
 	}
 
-	client := clientsetfake.NewSimpleClientset()
 	for _, tc := range tests {
 		t.Run(tc.name, func(t *testing.T) {
+			client := tc.client
 			_, err := client.CoreV1().Pods(tc.pod.Namespace).Create(context.TODO(), &tc.pod, metav1.CreateOptions{})
 			if err != nil {
 				t.Fatal(err)
 			}
 
 			err = PatchPodStatus(client, &tc.pod, &tc.statusToUpdate)
-			if err != nil {
+			if err != nil && tc.validateErr == nil {
+				// shouldn't be error
 				t.Fatal(err)
+			}
+			if tc.validateErr != nil {
+				if !tc.validateErr(err) {
+					t.Fatalf("Returned unexpected error: %v", err)
+				}
+				return
 			}
 
 			retrievedPod, err := client.CoreV1().Pods(tc.pod.Namespace).Get(context.TODO(), tc.pod.Name, metav1.GetOptions{})

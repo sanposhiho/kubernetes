@@ -1225,8 +1225,17 @@ func TestUpdatePod(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			actualPatchRequests := 0
 			var actualPatchData string
+			done := make(chan struct{}, 1)
+			if test.expectedPatchRequests == 0 {
+				done <- struct{}{}
+			}
 			cs := &clientsetfake.Clientset{}
 			cs.AddReactor("patch", "pods", func(action clienttesting.Action) (bool, runtime.Object, error) {
+				defer func() {
+					if actualPatchRequests == test.expectedPatchRequests {
+						done <- struct{}{}
+					}
+				}()
 				actualPatchRequests++
 				patch := action.(clienttesting.PatchAction)
 				actualPatchData = string(patch.GetPatch())
@@ -1237,12 +1246,14 @@ func TestUpdatePod(t *testing.T) {
 
 			pod := st.MakePod().Name("foo").NominatedNodeName(test.currentNominatedNodeName).Conditions(test.currentPodConditions).Obj()
 
-			if err := updatePod(cs, pod, test.newPodCondition, test.newNominatingInfo); err != nil {
-				t.Fatalf("Error calling update: %v", err)
-			}
+			updatePod(cs, pod, test.newPodCondition, test.newNominatingInfo)
 
-			if actualPatchRequests != test.expectedPatchRequests {
-				t.Fatalf("Actual patch requests (%d) does not equal expected patch requests (%d), actual patch data: %v", actualPatchRequests, test.expectedPatchRequests, actualPatchData)
+			const timeout = 100 * time.Millisecond
+			select {
+			case <-done:
+				// fake clientset received an expected number of patch requests.
+			case <-time.After(timeout):
+				t.Fatalf("wait for the expected number of requests to come in, but they were not completed within the time. expected number: %v actual: %v ,the last received patch data: %v", test.expectedPatchRequests, actualPatchRequests, actualPatchData)
 			}
 
 			regex, err := regexp.Compile(test.expectedPatchDataPattern)

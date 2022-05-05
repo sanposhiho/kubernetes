@@ -823,14 +823,12 @@ func (sched *Scheduler) handleSchedulingFailure(fwk framework.Framework, podInfo
 	pod := podInfo.Pod
 	msg := truncateMessage(err.Error())
 	fwk.EventRecorder().Eventf(pod, nil, v1.EventTypeWarning, "FailedScheduling", "Scheduling", msg)
-	if err := updatePod(sched.client, pod, &v1.PodCondition{
+	updatePod(sched.client, pod, &v1.PodCondition{
 		Type:    v1.PodScheduled,
 		Status:  v1.ConditionFalse,
 		Reason:  reason,
 		Message: err.Error(),
-	}, nominatingInfo); err != nil {
-		klog.ErrorS(err, "Error updating pod", "pod", klog.KObj(pod))
-	}
+	}, nominatingInfo)
 }
 
 // truncateMessage truncates a message if it hits the NoteLengthLimit.
@@ -843,17 +841,22 @@ func truncateMessage(message string) string {
 	return message[:max-len(suffix)] + suffix
 }
 
-func updatePod(client clientset.Interface, pod *v1.Pod, condition *v1.PodCondition, nominatingInfo *framework.NominatingInfo) error {
+func updatePod(client clientset.Interface, pod *v1.Pod, condition *v1.PodCondition, nominatingInfo *framework.NominatingInfo) {
 	klog.V(3).InfoS("Updating pod condition", "pod", klog.KObj(pod), "conditionType", condition.Type, "conditionStatus", condition.Status, "conditionReason", condition.Reason)
 	podStatusCopy := pod.Status.DeepCopy()
 	// NominatedNodeName is updated only if we are trying to set it, and the value is
 	// different from the existing one.
 	nnnNeedsUpdate := nominatingInfo.Mode() == framework.ModeOverride && pod.Status.NominatedNodeName != nominatingInfo.NominatedNodeName
 	if !podutil.UpdatePodCondition(podStatusCopy, condition) && !nnnNeedsUpdate {
-		return nil
+		return
 	}
 	if nnnNeedsUpdate {
 		podStatusCopy.NominatedNodeName = nominatingInfo.NominatedNodeName
 	}
-	return util.PatchPodStatus(client, pod, podStatusCopy)
+	go func() {
+		// update Pod's status in goroutine because there might be retries.
+		if err := util.PatchPodStatus(client, pod, podStatusCopy); err != nil {
+			klog.ErrorS(err, "Could not update pod status after scheduling attempt", "pod", klog.KObj(pod))
+		}
+	}()
 }
