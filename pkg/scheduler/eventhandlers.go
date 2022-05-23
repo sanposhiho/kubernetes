@@ -340,8 +340,11 @@ func addAllEventHandlers(
 
 	for gvk, at := range gvkMap {
 		switch gvk {
-		case framework.Node, framework.Pod:
-			// Do nothing.
+		case framework.Node:
+		case framework.Pod:
+			informerFactory.Core().V1().Pods().Informer().AddEventHandler(
+				buildEvtResHandler(at, framework.Pod, "Pod"),
+			)
 		case framework.CSINode:
 			informerFactory.Storage().V1().CSINodes().Informer().AddEventHandler(
 				buildEvtResHandler(at, framework.CSINode, "CSINode"),
