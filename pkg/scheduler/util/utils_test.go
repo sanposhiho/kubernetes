@@ -20,15 +20,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"syscall"
 	"testing"
 	"time"
 
 	"github.com/google/go-cmp/cmp"
 
 	v1 "k8s.io/api/core/v1"
-	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
+	"k8s.io/apimachinery/pkg/util/net"
 	clientsetfake "k8s.io/client-go/kubernetes/fake"
 	clienttesting "k8s.io/client-go/testing"
 	extenderv1 "k8s.io/kube-scheduler/extender/v1"
@@ -236,7 +237,7 @@ func TestPatchPodStatus(t *testing.T) {
 			},
 		},
 		{
-			name: "retry patch request when an unknown error is returned",
+			name: "retry patch request when an 'connection refused' error is returned",
 			client: func() *clientsetfake.Clientset {
 				client := clientsetfake.NewSimpleClientset()
 
@@ -244,8 +245,8 @@ func TestPatchPodStatus(t *testing.T) {
 				client.PrependReactor("patch", "pods", func(action clienttesting.Action) (bool, runtime.Object, error) {
 					defer func() { reqcount++ }()
 					if reqcount == 0 {
-						// return an unknown error for the first patch request.
-						return true, &v1.Pod{}, errors.New("unknown")
+						// return an connection refused error for the first patch request.
+						return true, &v1.Pod{}, fmt.Errorf("connection refused: %w", syscall.ECONNREFUSED)
 					}
 					if reqcount == 1 {
 						// not return error for the second patch request.
@@ -277,99 +278,20 @@ func TestPatchPodStatus(t *testing.T) {
 			},
 		},
 		{
-			name: "doesn't retry patch request when an StatusError, which doesn't contain RetryAfterSeconds, is returned",
+			name: "only 4 retries at most",
 			client: func() *clientsetfake.Clientset {
 				client := clientsetfake.NewSimpleClientset()
 
 				reqcount := 0
 				client.PrependReactor("patch", "pods", func(action clienttesting.Action) (bool, runtime.Object, error) {
 					defer func() { reqcount++ }()
-					if reqcount == 0 {
-						// return a BadRequest error which doesn't contain RetryAfterSeconds for the first patch request.
-						return true, &v1.Pod{}, apierrors.NewBadRequest("bad")
-					}
-
-					// return error if requests comes in more than two times.
-					return true, nil, errors.New("requests comes in more than two times.")
-				})
-
-				return client
-			}(),
-			pod: v1.Pod{
-				ObjectMeta: metav1.ObjectMeta{
-					Namespace: "ns",
-					Name:      "pod1",
-				},
-				Spec: v1.PodSpec{
-					ImagePullSecrets: []v1.LocalObjectReference{{Name: "foo"}},
-				},
-			},
-			validateErr: apierrors.IsBadRequest,
-			statusToUpdate: v1.PodStatus{
-				Conditions: []v1.PodCondition{
-					{
-						Type:   v1.PodScheduled,
-						Status: v1.ConditionFalse,
-					},
-				},
-			},
-		},
-		{
-			name: "retry patch request when an StatusError, which contain RetryAfterSeconds, is returned",
-			client: func() *clientsetfake.Clientset {
-				client := clientsetfake.NewSimpleClientset()
-
-				reqcount := 0
-				client.PrependReactor("patch", "pods", func(action clienttesting.Action) (bool, runtime.Object, error) {
-					defer func() { reqcount++ }()
-					if reqcount == 0 {
-						// return a TooManyRequests error which contain RetryAfterSeconds for the first patch request.
-						return true, &v1.Pod{}, apierrors.NewTooManyRequests("too many", 1)
-					}
-					if reqcount == 1 {
-						// not return error for the second patch request.
-						return false, &v1.Pod{}, nil
-					}
-
-					// return error if requests comes in more than three times.
-					return true, nil, errors.New("requests comes in more than two times.")
-				})
-
-				return client
-			}(),
-			pod: v1.Pod{
-				ObjectMeta: metav1.ObjectMeta{
-					Namespace: "ns",
-					Name:      "pod1",
-				},
-				Spec: v1.PodSpec{
-					ImagePullSecrets: []v1.LocalObjectReference{{Name: "foo"}},
-				},
-			},
-			statusToUpdate: v1.PodStatus{
-				Conditions: []v1.PodCondition{
-					{
-						Type:   v1.PodScheduled,
-						Status: v1.ConditionFalse,
-					},
-				},
-			},
-		},
-		{
-			name: "only 6 retries at most",
-			client: func() *clientsetfake.Clientset {
-				client := clientsetfake.NewSimpleClientset()
-
-				reqcount := 0
-				client.PrependReactor("patch", "pods", func(action clienttesting.Action) (bool, runtime.Object, error) {
-					defer func() { reqcount++ }()
-					if reqcount >= 6 {
+					if reqcount >= 4 {
 						// return error if requests comes in more than six times.
 						return true, nil, errors.New("requests comes in more than six times.")
 					}
 
-					// return a TooManyRequests error which contain RetryAfterSeconds.
-					return true, &v1.Pod{}, apierrors.NewTooManyRequests("too many", 1)
+					// return an connection refused error for the first patch request.
+					return true, &v1.Pod{}, fmt.Errorf("connection refused: %w", syscall.ECONNREFUSED)
 				})
 
 				return client
@@ -383,7 +305,7 @@ func TestPatchPodStatus(t *testing.T) {
 					ImagePullSecrets: []v1.LocalObjectReference{{Name: "foo"}},
 				},
 			},
-			validateErr: apierrors.IsTooManyRequests,
+			validateErr: net.IsConnectionRefused,
 			statusToUpdate: v1.PodStatus{
 				Conditions: []v1.PodCondition{
 					{
