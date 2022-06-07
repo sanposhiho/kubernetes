@@ -72,9 +72,6 @@ type UpdatePodOptions struct {
 	StartTime time.Time
 	// Pod to update. Required.
 	Pod *v1.Pod
-	// MirrorPod is the mirror pod if Pod is a static pod. Optional when UpdateType
-	// is kill or terminated.
-	MirrorPod *v1.Pod
 	// RunningPod is a runtime pod that is no longer present in config. Required
 	// if Pod is nil, ignored if Pod is set.
 	RunningPod *kubecontainer.Pod
@@ -218,7 +215,7 @@ type PodWorkers interface {
 }
 
 // the function to invoke to perform a sync (reconcile the kubelet state to the desired shape of the pod)
-type syncPodFnType func(ctx context.Context, updateType kubetypes.SyncPodType, pod *v1.Pod, mirrorPod *v1.Pod, podStatus *kubecontainer.PodStatus) (bool, error)
+type syncPodFnType func(ctx context.Context, updateType kubetypes.SyncPodType, pod *v1.Pod, podStatus *kubecontainer.PodStatus) (bool, error)
 
 // the function to invoke to terminate a pod (ensure no running processes are present)
 type syncTerminatingPodFnType func(ctx context.Context, pod *v1.Pod, podStatus *kubecontainer.PodStatus, runningPod *kubecontainer.Pod, gracePeriod *int64, podStatusFn func(*v1.PodStatus)) error
@@ -313,10 +310,10 @@ func (s *podSyncStatus) IsDeleted() bool              { return s.deleted }
 // Once a pod is set to be "torn down" it cannot be started again for that
 // UID (corresponding to a delete or eviction) until:
 //
-// 1. The pod worker is finalized (syncTerminatingPod and
-//    syncTerminatedPod exit without error sequentially)
-// 2. The SyncKnownPods method is invoked by kubelet housekeeping and the pod
-//    is not part of the known config.
+//  1. The pod worker is finalized (syncTerminatingPod and
+//     syncTerminatedPod exit without error sequentially)
+//  2. The SyncKnownPods method is invoked by kubelet housekeeping and the pod
+//     is not part of the known config.
 //
 // Pod workers provide a consistent source of information to other kubelet
 // loops about the status of the pod and whether containers can be
@@ -332,36 +329,50 @@ func (s *podSyncStatus) IsDeleted() bool              { return s.deleted }
 // ---|                                         = kubelet config has synced at least once
 // -------|                                  |- = pod exists in apiserver config
 // --------|                  |---------------- = CouldHaveRunningContainers() is true
-//         ^- pod is observed by pod worker  .
-//         .                                 .
+//
+//	^- pod is observed by pod worker  .
+//	.                                 .
+//
 // ----------|       |------------------------- = syncPod is running
-//         . ^- pod worker loop sees change and invokes syncPod
-//         . .                               .
+//
+//	. ^- pod worker loop sees change and invokes syncPod
+//	. .                               .
+//
 // --------------|                     |------- = ShouldPodContainersBeTerminating() returns true
 // --------------|                     |------- = IsPodTerminationRequested() returns true (pod is known)
-//         . .   ^- Kubelet evicts pod       .
-//         . .                               .
+//
+//	. .   ^- Kubelet evicts pod       .
+//	. .                               .
+//
 // -------------------|       |---------------- = syncTerminatingPod runs then exits without error
-//         . .        ^ pod worker loop exits syncPod, sees pod is terminating,
-// 				 . .          invokes syncTerminatingPod
-//         . .                               .
+//
+//	        . .        ^ pod worker loop exits syncPod, sees pod is terminating,
+//					 . .          invokes syncTerminatingPod
+//	        . .                               .
+//
 // ---|    |------------------|              .  = ShouldPodRuntimeBeRemoved() returns true (post-sync)
-//           .                ^ syncTerminatingPod has exited successfully
-//           .                               .
+//
+//	.                ^ syncTerminatingPod has exited successfully
+//	.                               .
+//
 // ----------------------------|       |------- = syncTerminatedPod runs then exits without error
-//           .                         ^ other loops can tear down
-//           .                               .
+//
+//	.                         ^ other loops can tear down
+//	.                               .
+//
 // ------------------------------------|  |---- = status manager is waiting for PodResourcesAreReclaimed()
-//           .                         ^     .
+//
+//	.                         ^     .
+//
 // ----------|                               |- = status manager can be writing pod status
-//                                           ^ status manager deletes pod because no longer exists in config
+//
+//	^ status manager deletes pod because no longer exists in config
 //
 // Other components in the Kubelet can request a termination of the pod
 // via the UpdatePod method or the killPodNow wrapper - this will ensure
 // the components of the pod are stopped until the kubelet is restarted
 // or permanently (if the phase of the pod is set to a terminal phase
 // in the pod status change).
-//
 type podWorkers struct {
 	// Protects all per worker fields.
 	podLock sync.Mutex
@@ -933,7 +944,7 @@ func (p *podWorkers) managePodLoop(podUpdates <-chan podWork) {
 				err = p.syncTerminatingPodFn(ctx, pod, status, update.Options.RunningPod, gracePeriod, podStatusFn)
 
 			default:
-				isTerminal, err = p.syncPodFn(ctx, update.Options.UpdateType, pod, update.Options.MirrorPod, status)
+				isTerminal, err = p.syncPodFn(ctx, update.Options.UpdateType, pod, status)
 			}
 
 			lastSyncTime = time.Now()
