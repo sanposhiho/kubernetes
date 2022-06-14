@@ -286,8 +286,8 @@ func TestPatchPodStatus(t *testing.T) {
 				client.PrependReactor("patch", "pods", func(action clienttesting.Action) (bool, runtime.Object, error) {
 					defer func() { reqcount++ }()
 					if reqcount >= 4 {
-						// return error if requests comes in more than six times.
-						return true, nil, errors.New("requests comes in more than six times.")
+						// return error if requests comes in more than four times.
+						return true, nil, errors.New("requests comes in more than four times.")
 					}
 
 					// return an connection refused error for the first patch request.

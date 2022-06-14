@@ -93,7 +93,7 @@ func MoreImportantPod(pod1, pod2 *v1.Pod) bool {
 }
 
 // PatchPodStatus calculates the delta bytes change from <old.Status> to <newStatus>,
-// and then submit a request to API server to patch the pod changes with retries.
+// and then submit a request to API server to patch the pod changes with retries when connection is refused.
 func PatchPodStatus(cs kubernetes.Interface, old *v1.Pod, newStatus *v1.PodStatus) error {
 	if newStatus == nil {
 		return nil
