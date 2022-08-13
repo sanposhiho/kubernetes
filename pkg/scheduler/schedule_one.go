@@ -61,6 +61,8 @@ const (
 	minFeasibleNodesPercentageToFind = 5
 )
 
+var clearNominatedNode = &framework.NominatingInfo{NominatingMode: framework.ModeOverride, NominatedNodeName: ""}
+
 // scheduleOne does the entire scheduling workflow for a single pod. It is serialized on the scheduling algorithm's host fitting.
 func (sched *Scheduler) scheduleOne(ctx context.Context) {
 	podInfo := sched.NextPod()
@@ -113,8 +115,6 @@ func (sched *Scheduler) scheduleOne(ctx context.Context) {
 		}
 	}()
 }
-
-var clearNominatedNode = &framework.NominatingInfo{NominatingMode: framework.ModeOverride, NominatedNodeName: ""}
 
 // schedulingCycle tries to schedule a single Pod.
 func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.CycleState, fwk framework.Framework, podInfo *framework.QueuedPodInfo, podsToActivate *framework.PodsToActivate, start time.Time) (ScheduleResult, *framework.QueuedPodInfo, string, *framework.NominatingInfo, error) {
