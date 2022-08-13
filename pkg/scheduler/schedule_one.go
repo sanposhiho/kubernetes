@@ -93,9 +93,9 @@ func (sched *Scheduler) scheduleOne(ctx context.Context) {
 
 	schedulingCycleCtx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	scheduleResult, assumedPodInfo, err := sched.schedulingCycle(schedulingCycleCtx, state, fwk, podInfo, podsToActivate, start)
+	scheduleResult, podInfo, reason, nominatingInfo, err := sched.schedulingCycle(schedulingCycleCtx, state, fwk, podInfo, podsToActivate, start)
 	if err != nil {
-		// We don't need to do anything with a returned error here because it is properly handled in schedulingCycle().
+		sched.FailureHandler(schedulingCycleCtx, fwk, podInfo, err, reason, nominatingInfo)
 		return
 	}
 
@@ -107,14 +107,17 @@ func (sched *Scheduler) scheduleOne(ctx context.Context) {
 		metrics.SchedulerGoroutines.WithLabelValues(metrics.Binding).Inc()
 		defer metrics.SchedulerGoroutines.WithLabelValues(metrics.Binding).Dec()
 
-		sched.bindingCycle(bindingCycleCtx, state, fwk, scheduleResult, assumedPodInfo, podsToActivate, start)
+		reason, err := sched.bindingCycle(bindingCycleCtx, state, fwk, scheduleResult, podInfo, podsToActivate, start)
+		if err != nil {
+			sched.FailureHandler(ctx, fwk, podInfo, err, reason, clearNominatedNode)
+		}
 	}()
 }
 
 var clearNominatedNode = &framework.NominatingInfo{NominatingMode: framework.ModeOverride, NominatedNodeName: ""}
 
 // schedulingCycle tries to schedule a single Pod.
-func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.CycleState, fwk framework.Framework, podInfo *framework.QueuedPodInfo, podsToActivate *framework.PodsToActivate, start time.Time) (ScheduleResult, *framework.QueuedPodInfo, error) {
+func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.CycleState, fwk framework.Framework, podInfo *framework.QueuedPodInfo, podsToActivate *framework.PodsToActivate, start time.Time) (ScheduleResult, *framework.QueuedPodInfo, string, *framework.NominatingInfo, error) {
 	pod := podInfo.Pod
 	scheduleResult, err := sched.SchedulePod(ctx, fwk, state, pod)
 	if err != nil {
@@ -152,8 +155,7 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 			klog.ErrorS(err, "Error selecting node for pod", "pod", klog.KObj(pod))
 			metrics.PodScheduleError(fwk.ProfileName(), metrics.SinceInSeconds(start))
 		}
-		sched.FailureHandler(ctx, fwk, podInfo, err, v1.PodReasonUnschedulable, nominatingInfo)
-		return ScheduleResult{}, nil, err
+		return ScheduleResult{}, podInfo, v1.PodReasonUnschedulable, nominatingInfo, err
 	}
 	metrics.SchedulingAlgorithmLatency.Observe(metrics.SinceInSeconds(start))
 	// Tell the cache to assume that a pod now is running on a given node, even though it hasn't been bound yet.
@@ -169,8 +171,7 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		// This relies on the fact that Error will check if the pod has been bound
 		// to a node and if so will not add it back to the unscheduled pods queue
 		// (otherwise this would cause an infinite loop).
-		sched.FailureHandler(ctx, fwk, assumedPodInfo, err, SchedulerError, clearNominatedNode)
-		return ScheduleResult{}, nil, err
+		return ScheduleResult{}, assumedPodInfo, SchedulerError, clearNominatedNode, err
 	}
 
 	// Run the Reserve method of reserve plugins.
@@ -181,8 +182,7 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		if forgetErr := sched.Cache.ForgetPod(assumedPod); forgetErr != nil {
 			klog.ErrorS(forgetErr, "Scheduler cache ForgetPod failed")
 		}
-		sched.FailureHandler(ctx, fwk, assumedPodInfo, sts.AsError(), SchedulerError, clearNominatedNode)
-		return ScheduleResult{}, nil, sts.AsError()
+		return ScheduleResult{}, assumedPodInfo, SchedulerError, clearNominatedNode, sts.AsError()
 	}
 
 	// Run "permit" plugins.
@@ -201,8 +201,7 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		if forgetErr := sched.Cache.ForgetPod(assumedPod); forgetErr != nil {
 			klog.ErrorS(forgetErr, "Scheduler cache ForgetPod failed")
 		}
-		sched.FailureHandler(ctx, fwk, assumedPodInfo, runPermitStatus.AsError(), reason, clearNominatedNode)
-		return ScheduleResult{}, nil, runPermitStatus.AsError()
+		return ScheduleResult{}, assumedPodInfo, reason, clearNominatedNode, runPermitStatus.AsError()
 	}
 
 	// At the end of a successful scheduling cycle, pop and move up Pods if needed.
@@ -212,11 +211,11 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		podsToActivate.Map = make(map[string]*v1.Pod)
 	}
 
-	return scheduleResult, assumedPodInfo, nil
+	return scheduleResult, assumedPodInfo, "", nil, nil
 }
 
 // bindingCycle tries to bind an assumed Pod.
-func (sched *Scheduler) bindingCycle(ctx context.Context, state *framework.CycleState, fwk framework.Framework, scheduleResult ScheduleResult, assumedPodInfo *framework.QueuedPodInfo, podsToActivate *framework.PodsToActivate, start time.Time) {
+func (sched *Scheduler) bindingCycle(ctx context.Context, state *framework.CycleState, fwk framework.Framework, scheduleResult ScheduleResult, assumedPodInfo *framework.QueuedPodInfo, podsToActivate *framework.PodsToActivate, start time.Time) (string, error) {
 	assumedPod := assumedPodInfo.Pod
 
 	waitOnPermitStatus := fwk.WaitOnPermit(ctx, assumedPod)
@@ -244,8 +243,7 @@ func (sched *Scheduler) bindingCycle(ctx context.Context, state *framework.Cycle
 				return assumedPod.UID != pod.UID
 			})
 		}
-		sched.FailureHandler(ctx, fwk, assumedPodInfo, waitOnPermitStatus.AsError(), reason, clearNominatedNode)
-		return
+		return reason, waitOnPermitStatus.AsError()
 	}
 
 	// Run "prebind" plugins.
@@ -262,8 +260,7 @@ func (sched *Scheduler) bindingCycle(ctx context.Context, state *framework.Cycle
 			// TODO(#103853): de-duplicate the logic.
 			sched.SchedulingQueue.MoveAllToActiveOrBackoffQueue(internalqueue.AssignedPodDelete, nil)
 		}
-		sched.FailureHandler(ctx, fwk, assumedPodInfo, preBindStatus.AsError(), SchedulerError, clearNominatedNode)
-		return
+		return SchedulerError, preBindStatus.AsError()
 	}
 
 	err := sched.bind(ctx, fwk, assumedPod, scheduleResult.SuggestedHost, state)
@@ -279,8 +276,7 @@ func (sched *Scheduler) bindingCycle(ctx context.Context, state *framework.Cycle
 			// TODO(#103853): de-duplicate the logic.
 			sched.SchedulingQueue.MoveAllToActiveOrBackoffQueue(internalqueue.AssignedPodDelete, nil)
 		}
-		sched.FailureHandler(ctx, fwk, assumedPodInfo, fmt.Errorf("binding rejected: %w", err), SchedulerError, clearNominatedNode)
-		return
+		return SchedulerError, fmt.Errorf("binding rejected: %w", err)
 	}
 	// Calculating nodeResourceString can be heavy. Avoid it if klog verbosity is below 2.
 	klog.V(2).InfoS("Successfully bound pod to node", "pod", klog.KObj(assumedPod), "node", scheduleResult.SuggestedHost, "evaluatedNodes", scheduleResult.EvaluatedNodes, "feasibleNodes", scheduleResult.FeasibleNodes)
@@ -297,6 +293,8 @@ func (sched *Scheduler) bindingCycle(ctx context.Context, state *framework.Cycle
 		// Unlike the logic in schedulingCycle(), we don't bother deleting the entries
 		// as `podsToActivate.Map` is no longer consumed.
 	}
+
+	return "", nil
 }
 
 func (sched *Scheduler) frameworkForPod(pod *v1.Pod) (framework.Framework, error) {
