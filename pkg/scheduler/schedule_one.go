@@ -111,7 +111,7 @@ func (sched *Scheduler) scheduleOne(ctx context.Context) {
 
 		reason, err := sched.bindingCycle(bindingCycleCtx, state, fwk, scheduleResult, podInfo, podsToActivate, start)
 		if err != nil {
-			sched.FailureHandler(ctx, fwk, podInfo, err, reason, clearNominatedNode)
+			sched.FailureHandler(bindingCycleCtx, fwk, podInfo, err, reason, clearNominatedNode)
 		}
 	}()
 }
