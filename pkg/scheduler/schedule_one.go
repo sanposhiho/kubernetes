@@ -109,8 +109,19 @@ func (sched *Scheduler) scheduleOne(ctx context.Context) {
 		metrics.SchedulerGoroutines.WithLabelValues(metrics.Binding).Inc()
 		defer metrics.SchedulerGoroutines.WithLabelValues(metrics.Binding).Dec()
 
-		reason, err := sched.bindingCycle(bindingCycleCtx, state, fwk, scheduleResult, podInfo, podsToActivate, start)
+		reason, preEnqueue, after, err := sched.bindingCycle(bindingCycleCtx, state, fwk, scheduleResult, podInfo, podsToActivate, start)
 		if err != nil {
+			// "Forget"ing an assumed Pod in binding cycle should be treated as a PodDelete event,
+			// as the assumed Pod had occupied a certain amount of resources in scheduler cache.
+			if forgetErr := sched.Cache.ForgetPod(podInfo.Pod); forgetErr != nil {
+				klog.ErrorS(forgetErr, "scheduler cache ForgetPod failed")
+			} else {
+				if after {
+					defer sched.SchedulingQueue.MoveAllToActiveOrBackoffQueue(internalqueue.AssignedPodDelete, preEnqueue)
+				} else {
+					sched.SchedulingQueue.MoveAllToActiveOrBackoffQueue(internalqueue.AssignedPodDelete, preEnqueue)
+				}
+			}
 			sched.FailureHandler(bindingCycleCtx, fwk, podInfo, err, reason, clearNominatedNode)
 		}
 	}()
@@ -214,8 +225,12 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 	return scheduleResult, assumedPodInfo, "", nil, nil
 }
 
-// bindingCycle tries to bind an assumed Pod.
-func (sched *Scheduler) bindingCycle(ctx context.Context, state *framework.CycleState, fwk framework.Framework, scheduleResult ScheduleResult, assumedPodInfo *framework.QueuedPodInfo, podsToActivate *framework.PodsToActivate, start time.Time) (string, error) {
+// bindingCycle tries to bind an assumed Pod. If any error happens, it returns the followings to handle the error.
+// 1. failed reason.
+// 2. preEnqueue check function; It's intended to pass to MoveAllToActiveOrBackoffQueue() to forget an assumed Pod.
+// 3. bool; It represents whether MoveAllToActiveOrBackoffQueue() to forget an assumed Pod should be run after FailureHandler.
+// 4. error.
+func (sched *Scheduler) bindingCycle(ctx context.Context, state *framework.CycleState, fwk framework.Framework, scheduleResult ScheduleResult, assumedPodInfo *framework.QueuedPodInfo, podsToActivate *framework.PodsToActivate, start time.Time) (string, internalqueue.PreEnqueueCheck, bool, error) {
 	assumedPod := assumedPodInfo.Pod
 
 	waitOnPermitStatus := fwk.WaitOnPermit(ctx, assumedPod)
@@ -230,20 +245,11 @@ func (sched *Scheduler) bindingCycle(ctx context.Context, state *framework.Cycle
 		}
 		// trigger un-reserve plugins to clean up state associated with the reserved Pod
 		fwk.RunReservePluginsUnreserve(ctx, state, assumedPod, scheduleResult.SuggestedHost)
-		if forgetErr := sched.Cache.ForgetPod(assumedPod); forgetErr != nil {
-			klog.ErrorS(forgetErr, "scheduler cache ForgetPod failed")
-		} else {
-			// "Forget"ing an assumed Pod in binding cycle should be treated as a PodDelete event,
-			// as the assumed Pod had occupied a certain amount of resources in scheduler cache.
-			// TODO(#103853): de-duplicate the logic.
-			// Avoid moving the assumed Pod itself as it's always Unschedulable.
-			// It's intentional to "defer" this operation; otherwise MoveAllToActiveOrBackoffQueue() would
-			// update `q.moveRequest` and thus move the assumed pod to backoffQ anyways.
-			defer sched.SchedulingQueue.MoveAllToActiveOrBackoffQueue(internalqueue.AssignedPodDelete, func(pod *v1.Pod) bool {
-				return assumedPod.UID != pod.UID
-			})
-		}
-		return reason, waitOnPermitStatus.AsError()
+
+		return reason,
+			func(pod *v1.Pod) bool { return assumedPod.UID != pod.UID }, // Avoid moving the assumed Pod itself as it's always Unschedulable.
+			true, // To avoid MoveAllToActiveOrBackoffQueue() from updating `q.moveRequest` and moving the assumed pod to backoffQ.
+			waitOnPermitStatus.AsError()
 	}
 
 	// Run "prebind" plugins.
@@ -252,15 +258,7 @@ func (sched *Scheduler) bindingCycle(ctx context.Context, state *framework.Cycle
 		metrics.PodScheduleError(fwk.ProfileName(), metrics.SinceInSeconds(start))
 		// trigger un-reserve plugins to clean up state associated with the reserved Pod
 		fwk.RunReservePluginsUnreserve(ctx, state, assumedPod, scheduleResult.SuggestedHost)
-		if forgetErr := sched.Cache.ForgetPod(assumedPod); forgetErr != nil {
-			klog.ErrorS(forgetErr, "scheduler cache ForgetPod failed")
-		} else {
-			// "Forget"ing an assumed Pod in binding cycle should be treated as a PodDelete event,
-			// as the assumed Pod had occupied a certain amount of resources in scheduler cache.
-			// TODO(#103853): de-duplicate the logic.
-			sched.SchedulingQueue.MoveAllToActiveOrBackoffQueue(internalqueue.AssignedPodDelete, nil)
-		}
-		return SchedulerError, preBindStatus.AsError()
+		return SchedulerError, nil, false, preBindStatus.AsError()
 	}
 
 	err := sched.bind(ctx, fwk, assumedPod, scheduleResult.SuggestedHost, state)
@@ -268,15 +266,7 @@ func (sched *Scheduler) bindingCycle(ctx context.Context, state *framework.Cycle
 		metrics.PodScheduleError(fwk.ProfileName(), metrics.SinceInSeconds(start))
 		// trigger un-reserve plugins to clean up state associated with the reserved Pod
 		fwk.RunReservePluginsUnreserve(ctx, state, assumedPod, scheduleResult.SuggestedHost)
-		if err := sched.Cache.ForgetPod(assumedPod); err != nil {
-			klog.ErrorS(err, "scheduler cache ForgetPod failed")
-		} else {
-			// "Forget"ing an assumed Pod in binding cycle should be treated as a PodDelete event,
-			// as the assumed Pod had occupied a certain amount of resources in scheduler cache.
-			// TODO(#103853): de-duplicate the logic.
-			sched.SchedulingQueue.MoveAllToActiveOrBackoffQueue(internalqueue.AssignedPodDelete, nil)
-		}
-		return SchedulerError, fmt.Errorf("binding rejected: %w", err)
+		return SchedulerError, nil, false, fmt.Errorf("binding rejected: %w", err)
 	}
 	// Calculating nodeResourceString can be heavy. Avoid it if klog verbosity is below 2.
 	klog.V(2).InfoS("Successfully bound pod to node", "pod", klog.KObj(assumedPod), "node", scheduleResult.SuggestedHost, "evaluatedNodes", scheduleResult.EvaluatedNodes, "feasibleNodes", scheduleResult.FeasibleNodes)
@@ -294,7 +284,7 @@ func (sched *Scheduler) bindingCycle(ctx context.Context, state *framework.Cycle
 		// as `podsToActivate.Map` is no longer consumed.
 	}
 
-	return "", nil
+	return "", nil, false, nil
 }
 
 func (sched *Scheduler) frameworkForPod(pod *v1.Pod) (framework.Framework, error) {
