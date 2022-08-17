@@ -114,12 +114,12 @@ func (sched *Scheduler) scheduleOne(ctx context.Context) {
 }
 
 // schedulingCycle tries to schedule a single Pod.
-func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.CycleState, fwk framework.Framework, podInfo *framework.QueuedPodInfo, podsToActivate *framework.PodsToActivate, start time.Time) (_ ScheduleResult, _ *framework.QueuedPodInfo, reterr error) {
+func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.CycleState, fwk framework.Framework, podInfo *framework.QueuedPodInfo, podsToActivate *framework.PodsToActivate, start time.Time) (_ ScheduleResult, retPodInfo *framework.QueuedPodInfo, reterr error) {
 	failedReason := SchedulerError
 	nominatingInfo := clearNominatedNode
 	defer func() {
 		if reterr != nil {
-			sched.FailureHandler(ctx, fwk, podInfo, reterr, failedReason, nominatingInfo)
+			sched.FailureHandler(ctx, fwk, retPodInfo, reterr, failedReason, nominatingInfo)
 			return
 		}
 	}()
