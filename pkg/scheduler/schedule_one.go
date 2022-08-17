@@ -152,9 +152,11 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 			// schedule it. (hopefully)
 			metrics.PodUnschedulable(fwk.ProfileName(), metrics.SinceInSeconds(start))
 		} else if err == ErrNoNodesAvailable {
+			nominatingInfo = clearNominatedNode
 			// No nodes available is counted as unschedulable rather than an error.
 			metrics.PodUnschedulable(fwk.ProfileName(), metrics.SinceInSeconds(start))
 		} else {
+			nominatingInfo = clearNominatedNode
 			klog.ErrorS(err, "Error selecting node for pod", "pod", klog.KObj(pod))
 			metrics.PodScheduleError(fwk.ProfileName(), metrics.SinceInSeconds(start))
 		}
@@ -176,6 +178,7 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		// This relies on the fact that Error will check if the pod has been bound
 		// to a node and if so will not add it back to the unscheduled pods queue
 		// (otherwise this would cause an infinite loop).
+		nominatingInfo = clearNominatedNode
 		failedReason = SchedulerError
 		retErr = err
 		return ScheduleResult{}, assumedPodInfo
@@ -189,6 +192,7 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		if forgetErr := sched.Cache.ForgetPod(assumedPod); forgetErr != nil {
 			klog.ErrorS(forgetErr, "Scheduler cache ForgetPod failed")
 		}
+		nominatingInfo = clearNominatedNode
 		failedReason = SchedulerError
 		retErr = sts.AsError()
 		return ScheduleResult{}, assumedPodInfo
@@ -209,6 +213,7 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		if forgetErr := sched.Cache.ForgetPod(assumedPod); forgetErr != nil {
 			klog.ErrorS(forgetErr, "Scheduler cache ForgetPod failed")
 		}
+		nominatingInfo = clearNominatedNode
 		retErr = runPermitStatus.AsError()
 		return ScheduleResult{}, assumedPodInfo
 	}
