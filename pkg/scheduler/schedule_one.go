@@ -115,7 +115,7 @@ func (sched *Scheduler) scheduleOne(ctx context.Context) {
 // schedulingCycle tries to schedule a single Pod.
 func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.CycleState, fwk framework.Framework, podInfo *framework.QueuedPodInfo, podsToActivate *framework.PodsToActivate, start time.Time) (_ ScheduleResult, retPodInfo *framework.QueuedPodInfo) {
 	var retErr error
-	failedReason := SchedulerError
+	var failedReason string
 	var nominatingInfo *framework.NominatingInfo
 	defer func() {
 		if retErr != nil {
@@ -176,6 +176,7 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		// This relies on the fact that Error will check if the pod has been bound
 		// to a node and if so will not add it back to the unscheduled pods queue
 		// (otherwise this would cause an infinite loop).
+		failedReason = SchedulerError
 		retErr = err
 		return ScheduleResult{}, assumedPodInfo
 	}
@@ -188,6 +189,7 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		if forgetErr := sched.Cache.ForgetPod(assumedPod); forgetErr != nil {
 			klog.ErrorS(forgetErr, "Scheduler cache ForgetPod failed")
 		}
+		failedReason = SchedulerError
 		retErr = sts.AsError()
 		return ScheduleResult{}, assumedPodInfo
 	}
@@ -195,12 +197,12 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 	// Run "permit" plugins.
 	runPermitStatus := fwk.RunPermitPlugins(ctx, state, assumedPod, scheduleResult.SuggestedHost)
 	if !runPermitStatus.IsWait() && !runPermitStatus.IsSuccess() {
+		failedReason = SchedulerError
 		if runPermitStatus.IsUnschedulable() {
 			metrics.PodUnschedulable(fwk.ProfileName(), metrics.SinceInSeconds(start))
 			failedReason = v1.PodReasonUnschedulable
 		} else {
 			metrics.PodScheduleError(fwk.ProfileName(), metrics.SinceInSeconds(start))
-			failedReason = SchedulerError
 		}
 		// One of the plugins returned status different than success or wait.
 		fwk.RunReservePluginsUnreserve(ctx, state, assumedPod, scheduleResult.SuggestedHost)
