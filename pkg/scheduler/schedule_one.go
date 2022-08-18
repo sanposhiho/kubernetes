@@ -61,8 +61,6 @@ const (
 	minFeasibleNodesPercentageToFind = 5
 )
 
-var clearNominatedNode = &framework.NominatingInfo{NominatingMode: framework.ModeOverride, NominatedNodeName: ""}
-
 // scheduleOne does the entire scheduling workflow for a single pod. It is serialized on the scheduling algorithm's host fitting.
 func (sched *Scheduler) scheduleOne(ctx context.Context) {
 	podInfo := sched.NextPod()
@@ -95,8 +93,9 @@ func (sched *Scheduler) scheduleOne(ctx context.Context) {
 
 	schedulingCycleCtx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	scheduleResult, assumedPodInfo := sched.schedulingCycle(schedulingCycleCtx, state, fwk, podInfo, podsToActivate, start)
-	if scheduleResult.FeasibleNodes == 0 {
+	scheduleResult, assumedPodInfo, err := sched.schedulingCycle(schedulingCycleCtx, state, fwk, podInfo, podsToActivate, start)
+	if err != nil {
+		// We don't need to do anything with a returned error here because it is properly handled in schedulingCycle().
 		return
 	}
 
@@ -112,18 +111,10 @@ func (sched *Scheduler) scheduleOne(ctx context.Context) {
 	}()
 }
 
-// schedulingCycle tries to schedule a single Pod.
-func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.CycleState, fwk framework.Framework, podInfo *framework.QueuedPodInfo, podsToActivate *framework.PodsToActivate, start time.Time) (_ ScheduleResult, retPodInfo *framework.QueuedPodInfo) {
-	var retErr error
-	var failedReason string
-	var nominatingInfo *framework.NominatingInfo
-	defer func() {
-		if retErr != nil {
-			sched.FailureHandler(ctx, fwk, retPodInfo, retErr, failedReason, nominatingInfo)
-			return
-		}
-	}()
+var clearNominatedNode = &framework.NominatingInfo{NominatingMode: framework.ModeOverride, NominatedNodeName: ""}
 
+// schedulingCycle tries to schedule a single Pod.
+func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.CycleState, fwk framework.Framework, podInfo *framework.QueuedPodInfo, podsToActivate *framework.PodsToActivate, start time.Time) (ScheduleResult, *framework.QueuedPodInfo, error) {
 	pod := podInfo.Pod
 	scheduleResult, err := sched.SchedulePod(ctx, fwk, state, pod)
 	if err != nil {
@@ -131,6 +122,7 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		// preempt, with the expectation that the next time the pod is tried for scheduling it
 		// will fit due to the preemption. It is also possible that a different pod will schedule
 		// into the resources that were preempted, but this is harmless.
+		var nominatingInfo *framework.NominatingInfo
 		if fitError, ok := err.(*framework.FitError); ok {
 			if !fwk.HasPostFilterPlugins() {
 				klog.V(3).InfoS("No PostFilter plugins are registered, so no preemption will be performed")
@@ -160,9 +152,8 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 			klog.ErrorS(err, "Error selecting node for pod", "pod", klog.KObj(pod))
 			metrics.PodScheduleError(fwk.ProfileName(), metrics.SinceInSeconds(start))
 		}
-		failedReason = v1.PodReasonUnschedulable
-		retErr = err
-		return ScheduleResult{}, podInfo
+		sched.FailureHandler(ctx, fwk, podInfo, err, v1.PodReasonUnschedulable, nominatingInfo)
+		return ScheduleResult{}, nil, err
 	}
 	metrics.SchedulingAlgorithmLatency.Observe(metrics.SinceInSeconds(start))
 	// Tell the cache to assume that a pod now is running on a given node, even though it hasn't been bound yet.
@@ -178,10 +169,8 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		// This relies on the fact that Error will check if the pod has been bound
 		// to a node and if so will not add it back to the unscheduled pods queue
 		// (otherwise this would cause an infinite loop).
-		nominatingInfo = clearNominatedNode
-		failedReason = SchedulerError
-		retErr = err
-		return ScheduleResult{}, assumedPodInfo
+		sched.FailureHandler(ctx, fwk, assumedPodInfo, err, SchedulerError, clearNominatedNode)
+		return ScheduleResult{}, nil, err
 	}
 
 	// Run the Reserve method of reserve plugins.
@@ -192,30 +181,28 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		if forgetErr := sched.Cache.ForgetPod(assumedPod); forgetErr != nil {
 			klog.ErrorS(forgetErr, "Scheduler cache ForgetPod failed")
 		}
-		nominatingInfo = clearNominatedNode
-		failedReason = SchedulerError
-		retErr = sts.AsError()
-		return ScheduleResult{}, assumedPodInfo
+		sched.FailureHandler(ctx, fwk, assumedPodInfo, sts.AsError(), SchedulerError, clearNominatedNode)
+		return ScheduleResult{}, nil, sts.AsError()
 	}
 
 	// Run "permit" plugins.
 	runPermitStatus := fwk.RunPermitPlugins(ctx, state, assumedPod, scheduleResult.SuggestedHost)
 	if !runPermitStatus.IsWait() && !runPermitStatus.IsSuccess() {
-		failedReason = SchedulerError
+		var reason string
 		if runPermitStatus.IsUnschedulable() {
 			metrics.PodUnschedulable(fwk.ProfileName(), metrics.SinceInSeconds(start))
-			failedReason = v1.PodReasonUnschedulable
+			reason = v1.PodReasonUnschedulable
 		} else {
 			metrics.PodScheduleError(fwk.ProfileName(), metrics.SinceInSeconds(start))
+			reason = SchedulerError
 		}
 		// One of the plugins returned status different than success or wait.
 		fwk.RunReservePluginsUnreserve(ctx, state, assumedPod, scheduleResult.SuggestedHost)
 		if forgetErr := sched.Cache.ForgetPod(assumedPod); forgetErr != nil {
 			klog.ErrorS(forgetErr, "Scheduler cache ForgetPod failed")
 		}
-		nominatingInfo = clearNominatedNode
-		retErr = runPermitStatus.AsError()
-		return ScheduleResult{}, assumedPodInfo
+		sched.FailureHandler(ctx, fwk, assumedPodInfo, runPermitStatus.AsError(), reason, clearNominatedNode)
+		return ScheduleResult{}, nil, runPermitStatus.AsError()
 	}
 
 	// At the end of a successful scheduling cycle, pop and move up Pods if needed.
@@ -225,7 +212,7 @@ func (sched *Scheduler) schedulingCycle(ctx context.Context, state *framework.Cy
 		podsToActivate.Map = make(map[string]*v1.Pod)
 	}
 
-	return scheduleResult, assumedPodInfo
+	return scheduleResult, assumedPodInfo, nil
 }
 
 // bindingCycle tries to bind an assumed Pod.
