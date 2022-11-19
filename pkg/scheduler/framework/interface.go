@@ -29,6 +29,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 	v1 "k8s.io/api/core/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/informers"
@@ -357,6 +358,30 @@ type EnqueueExtensions interface {
 	// Note: the returned list needs to be static (not depend on configuration parameters);
 	// otherwise it would lead to undefined behavior.
 	EventsToRegister() []ClusterEvent
+}
+
+// CachedPlugin is the interface which the plugin should implement to enable pluginCacher.
+type CachedPlugin interface {
+	// It's only for the Filter plugin.
+	FilterPlugin
+	CacheExtensions
+}
+
+// CacheHandle provides ways to clean up some cache from a plugin.
+type CacheHandle interface {
+	// FlushNodeCache clean up all cache related to a given Node.
+	FlushNodeCache(nodename string)
+	// FlushPodCache clean up all cache related to a given Pod.
+	FlushPodCache(podname string)
+}
+
+type CacheExtensions interface {
+	// HandleCache informs the plugin that event happens and expects the plugin to handle cache.
+	// It should be a light-weight function so that it won’t affect the scheduler’s enqueueing performance.
+	//
+	// involvedObj: the object involved in that event.
+	// For example, the given event is "Node deleted", the involvedObj represents a deleted Node.
+	HandleCache(handle CacheHandle, event ClusterEvent, involvedObj runtime.Object)
 }
 
 // PreFilterExtensions is an interface that is included in plugins that allow specifying
