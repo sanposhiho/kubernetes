@@ -1,0 +1,23 @@
+syntax = "proto3";
+package wasmscheduling;
+
+option go_package = "github.com/kubernetes/kubernetes/pkg/scheduler/framework/plugins/proto";
+
+// The wasmscheduling service definition.
+// go:plugin type=plugin version=1
+service WasmScheduling {
+  rpc Filter(FilterRequest) returns (FilterReply) {}
+}
+
+// The request message containing the user's name.
+message FilterRequest {
+  string pod_name = 1;
+  string node_name = 2;
+}
+
+// The reply message containing the greetings
+message FilterReply {
+  // It corresponds to framework.Code.
+  int32  status_code = 1;
+  string reason = 2;
+}

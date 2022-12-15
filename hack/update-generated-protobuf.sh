@@ -27,7 +27,7 @@ KUBE_ROOT=$(dirname "${BASH_SOURCE[0]}")/..
 # source tree.  This is managed in kube::build::copy_output in build/common.sh.
 # If the output set is changed update that function.
 
-APIROOTS=${APIROOTS:-$(git grep --files-with-matches -e '// +k8s:protobuf-gen=package' cmd pkg staging | \
+APIROOTS=${APIROOTS:-$(git grep --files-with-matches -e '// swagger:model' cmd pkg staging | \
 	xargs -n 1 dirname | \
 	sed 's,^,k8s.io/kubernetes/,;s,k8s.io/kubernetes/staging/src/,,' | \
 	sort | uniq
