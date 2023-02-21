@@ -96,6 +96,7 @@ func getDefaultDefaultPreemptionArgs() *config.DefaultPreemptionArgs {
 
 var nodeResourcesFitFunc = frameworkruntime.FactoryAdapter(feature.Features{}, noderesources.NewFit)
 var podTopologySpreadFunc = frameworkruntime.FactoryAdapter(feature.Features{}, podtopologyspread.New)
+var interPodAffinityFunc = frameworkruntime.FactoryAdapter(feature.Features{}, interpodaffinity.New)
 
 // TestPlugin returns Error status when trying to `AddPod` or `RemovePod` on the nodes which have the {k,v} label pair defined on the nodes.
 type TestPlugin struct {
@@ -610,7 +611,7 @@ func TestDryRunPreemption(t *testing.T) {
 			name: "pod with anti-affinity is preempted",
 			registerPlugins: []st.RegisterPluginFunc{
 				st.RegisterPluginAsExtensions(noderesources.Name, nodeResourcesFitFunc, "Filter", "PreFilter"),
-				st.RegisterPluginAsExtensions(interpodaffinity.Name, interpodaffinity.New, "Filter", "PreFilter"),
+				st.RegisterPluginAsExtensions(interpodaffinity.Name, interPodAffinityFunc, "Filter", "PreFilter"),
 			},
 			nodeNames: []string{"node1", "node2"},
 			testPods: []*v1.Pod{

@@ -9138,586 +9138,653 @@ func TestValidatePod(t *testing.T) {
 	longPodName := strings.Repeat("a", 200)
 	longVolName := strings.Repeat("b", 60)
 
-	successCases := map[string]core.Pod{
+	successCases := map[string]struct {
+		spec core.Pod
+		opt  PodValidationOptions
+	}{
 		"basic fields": {
-			ObjectMeta: metav1.ObjectMeta{Name: "123", Namespace: "ns"},
-			Spec: core.PodSpec{
-				Volumes:       []core.Volume{{Name: "vol", VolumeSource: core.VolumeSource{EmptyDir: &core.EmptyDirVolumeSource{}}}},
-				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSClusterFirst,
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{Name: "123", Namespace: "ns"},
+				Spec: core.PodSpec{
+					Volumes:       []core.Volume{{Name: "vol", VolumeSource: core.VolumeSource{EmptyDir: &core.EmptyDirVolumeSource{}}}},
+					Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSClusterFirst,
+				},
 			},
 		},
 		"just about everything": {
-			ObjectMeta: metav1.ObjectMeta{Name: "abc.123.do-re-mi", Namespace: "ns"},
-			Spec: core.PodSpec{
-				Volumes: []core.Volume{
-					{Name: "vol", VolumeSource: core.VolumeSource{EmptyDir: &core.EmptyDirVolumeSource{}}},
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{Name: "abc.123.do-re-mi", Namespace: "ns"},
+				Spec: core.PodSpec{
+					Volumes: []core.Volume{
+						{Name: "vol", VolumeSource: core.VolumeSource{EmptyDir: &core.EmptyDirVolumeSource{}}},
+					},
+					Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSClusterFirst,
+					NodeSelector: map[string]string{
+						"key": "value",
+					},
+					NodeName: "foobar",
 				},
-				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSClusterFirst,
-				NodeSelector: map[string]string{
-					"key": "value",
-				},
-				NodeName: "foobar",
 			},
 		},
 		"serialized node affinity requirements": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-			},
-			Spec: validPodSpec(
-				// TODO: Uncomment and move this block and move inside NodeAffinity once
-				// RequiredDuringSchedulingRequiredDuringExecution is implemented
-				//		RequiredDuringSchedulingRequiredDuringExecution: &core.NodeSelector{
-				//			NodeSelectorTerms: []core.NodeSelectorTerm{
-				//				{
-				//					MatchExpressions: []core.NodeSelectorRequirement{
-				//						{
-				//							Key: "key1",
-				//							Operator: core.NodeSelectorOpExists
-				//						},
-				//					},
-				//				},
-				//			},
-				//		},
-				&core.Affinity{
-					NodeAffinity: &core.NodeAffinity{
-						RequiredDuringSchedulingIgnoredDuringExecution: &core.NodeSelector{
-							NodeSelectorTerms: []core.NodeSelectorTerm{
-								{
-									MatchExpressions: []core.NodeSelectorRequirement{
-										{
-											Key:      "key2",
-											Operator: core.NodeSelectorOpIn,
-											Values:   []string{"value1", "value2"},
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(
+					// TODO: Uncomment and move this block and move inside NodeAffinity once
+					// RequiredDuringSchedulingRequiredDuringExecution is implemented
+					//		RequiredDuringSchedulingRequiredDuringExecution: &core.NodeSelector{
+					//			NodeSelectorTerms: []core.NodeSelectorTerm{
+					//				{
+					//					MatchExpressions: []core.NodeSelectorRequirement{
+					//						{
+					//							Key: "key1",
+					//							Operator: core.NodeSelectorOpExists
+					//						},
+					//					},
+					//				},
+					//			},
+					//		},
+					&core.Affinity{
+						NodeAffinity: &core.NodeAffinity{
+							RequiredDuringSchedulingIgnoredDuringExecution: &core.NodeSelector{
+								NodeSelectorTerms: []core.NodeSelectorTerm{
+									{
+										MatchExpressions: []core.NodeSelectorRequirement{
+											{
+												Key:      "key2",
+												Operator: core.NodeSelectorOpIn,
+												Values:   []string{"value1", "value2"},
+											},
 										},
-									},
-									MatchFields: []core.NodeSelectorRequirement{
-										{
-											Key:      "metadata.name",
-											Operator: core.NodeSelectorOpIn,
-											Values:   []string{"host1"},
+										MatchFields: []core.NodeSelectorRequirement{
+											{
+												Key:      "metadata.name",
+												Operator: core.NodeSelectorOpIn,
+												Values:   []string{"host1"},
+											},
 										},
 									},
 								},
 							},
-						},
-						PreferredDuringSchedulingIgnoredDuringExecution: []core.PreferredSchedulingTerm{
-							{
-								Weight: 10,
-								Preference: core.NodeSelectorTerm{
-									MatchExpressions: []core.NodeSelectorRequirement{
-										{
-											Key:      "foo",
-											Operator: core.NodeSelectorOpIn,
-											Values:   []string{"bar"},
+							PreferredDuringSchedulingIgnoredDuringExecution: []core.PreferredSchedulingTerm{
+								{
+									Weight: 10,
+									Preference: core.NodeSelectorTerm{
+										MatchExpressions: []core.NodeSelectorRequirement{
+											{
+												Key:      "foo",
+												Operator: core.NodeSelectorOpIn,
+												Values:   []string{"bar"},
+											},
 										},
 									},
 								},
 							},
 						},
 					},
-				},
-			),
+				),
+			},
 		},
 		"serialized node affinity requirements, II": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-			},
-			Spec: validPodSpec(
-				// TODO: Uncomment and move this block and move inside NodeAffinity once
-				// RequiredDuringSchedulingRequiredDuringExecution is implemented
-				//		RequiredDuringSchedulingRequiredDuringExecution: &core.NodeSelector{
-				//			NodeSelectorTerms: []core.NodeSelectorTerm{
-				//				{
-				//					MatchExpressions: []core.NodeSelectorRequirement{
-				//						{
-				//							Key: "key1",
-				//							Operator: core.NodeSelectorOpExists
-				//						},
-				//					},
-				//				},
-				//			},
-				//		},
-				&core.Affinity{
-					NodeAffinity: &core.NodeAffinity{
-						RequiredDuringSchedulingIgnoredDuringExecution: &core.NodeSelector{
-							NodeSelectorTerms: []core.NodeSelectorTerm{
-								{
-									MatchExpressions: []core.NodeSelectorRequirement{},
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(
+					// TODO: Uncomment and move this block and move inside NodeAffinity once
+					// RequiredDuringSchedulingRequiredDuringExecution is implemented
+					//		RequiredDuringSchedulingRequiredDuringExecution: &core.NodeSelector{
+					//			NodeSelectorTerms: []core.NodeSelectorTerm{
+					//				{
+					//					MatchExpressions: []core.NodeSelectorRequirement{
+					//						{
+					//							Key: "key1",
+					//							Operator: core.NodeSelectorOpExists
+					//						},
+					//					},
+					//				},
+					//			},
+					//		},
+					&core.Affinity{
+						NodeAffinity: &core.NodeAffinity{
+							RequiredDuringSchedulingIgnoredDuringExecution: &core.NodeSelector{
+								NodeSelectorTerms: []core.NodeSelectorTerm{
+									{
+										MatchExpressions: []core.NodeSelectorRequirement{},
+									},
 								},
 							},
-						},
-						PreferredDuringSchedulingIgnoredDuringExecution: []core.PreferredSchedulingTerm{
-							{
-								Weight: 10,
-								Preference: core.NodeSelectorTerm{
-									MatchExpressions: []core.NodeSelectorRequirement{},
+							PreferredDuringSchedulingIgnoredDuringExecution: []core.PreferredSchedulingTerm{
+								{
+									Weight: 10,
+									Preference: core.NodeSelectorTerm{
+										MatchExpressions: []core.NodeSelectorRequirement{},
+									},
 								},
 							},
 						},
 					},
-				},
-			),
+				),
+			},
 		},
 		"serialized pod affinity in affinity requirements in annotations": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-				// TODO: Uncomment and move this block into Annotations map once
-				// RequiredDuringSchedulingRequiredDuringExecution is implemented
-				//		"requiredDuringSchedulingRequiredDuringExecution": [{
-				//			"labelSelector": {
-				//				"matchExpressions": [{
-				//					"key": "key2",
-				//					"operator": "In",
-				//					"values": ["value1", "value2"]
-				//				}]
-				//			},
-				//			"namespaces":["ns"],
-				//			"topologyKey": "zone"
-				//		}]
-			},
-			Spec: validPodSpec(&core.Affinity{
-				PodAffinity: &core.PodAffinity{
-					RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
-						{
-							LabelSelector: &metav1.LabelSelector{
-								MatchExpressions: []metav1.LabelSelectorRequirement{
-									{
-										Key:      "key2",
-										Operator: metav1.LabelSelectorOpIn,
-										Values:   []string{"value1", "value2"},
-									},
-								},
-							},
-							TopologyKey: "zone",
-							Namespaces:  []string{"ns"},
-							NamespaceSelector: &metav1.LabelSelector{
-								MatchExpressions: []metav1.LabelSelectorRequirement{
-									{
-										Key:      "key",
-										Operator: metav1.LabelSelectorOpIn,
-										Values:   []string{"value1", "value2"},
-									},
-								},
-							},
-						},
-					},
-					PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
-						{
-							Weight: 10,
-							PodAffinityTerm: core.PodAffinityTerm{
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					// TODO: Uncomment and move this block into Annotations map once
+					// RequiredDuringSchedulingRequiredDuringExecution is implemented
+					//		"requiredDuringSchedulingRequiredDuringExecution": [{
+					//			"labelSelector": {
+					//				"matchExpressions": [{
+					//					"key": "key2",
+					//					"operator": "In",
+					//					"values": ["value1", "value2"]
+					//				}]
+					//			},
+					//			"namespaces":["ns"],
+					//			"topologyKey": "zone"
+					//		}]
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
 								LabelSelector: &metav1.LabelSelector{
 									MatchExpressions: []metav1.LabelSelectorRequirement{
 										{
 											Key:      "key2",
-											Operator: metav1.LabelSelectorOpNotIn,
+											Operator: metav1.LabelSelectorOpIn,
 											Values:   []string{"value1", "value2"},
 										},
 									},
 								},
+								TopologyKey: "zone",
 								Namespaces:  []string{"ns"},
-								TopologyKey: "region",
-							},
-						},
-					},
-				},
-			}),
-		},
-		"serialized pod anti affinity with different Label Operators in affinity requirements in annotations": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-				// TODO: Uncomment and move this block into Annotations map once
-				// RequiredDuringSchedulingRequiredDuringExecution is implemented
-				//		"requiredDuringSchedulingRequiredDuringExecution": [{
-				//			"labelSelector": {
-				//				"matchExpressions": [{
-				//					"key": "key2",
-				//					"operator": "In",
-				//					"values": ["value1", "value2"]
-				//				}]
-				//			},
-				//			"namespaces":["ns"],
-				//			"topologyKey": "zone"
-				//		}]
-			},
-			Spec: validPodSpec(&core.Affinity{
-				PodAntiAffinity: &core.PodAntiAffinity{
-					RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
-						{
-							LabelSelector: &metav1.LabelSelector{
-								MatchExpressions: []metav1.LabelSelectorRequirement{
-									{
-										Key:      "key2",
-										Operator: metav1.LabelSelectorOpExists,
+								NamespaceSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpIn,
+											Values:   []string{"value1", "value2"},
+										},
 									},
 								},
 							},
-							TopologyKey: "zone",
-							Namespaces:  []string{"ns"},
+						},
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "key2",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1", "value2"},
+											},
+										},
+									},
+									Namespaces:  []string{"ns"},
+									TopologyKey: "region",
+								},
+							},
 						},
 					},
-					PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
-						{
-							Weight: 10,
-							PodAffinityTerm: core.PodAffinityTerm{
+				}),
+			},
+		},
+		"serialized pod anti affinity with different Label Operators in affinity requirements in annotations": {
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					// TODO: Uncomment and move this block into Annotations map once
+					// RequiredDuringSchedulingRequiredDuringExecution is implemented
+					//		"requiredDuringSchedulingRequiredDuringExecution": [{
+					//			"labelSelector": {
+					//				"matchExpressions": [{
+					//					"key": "key2",
+					//					"operator": "In",
+					//					"values": ["value1", "value2"]
+					//				}]
+					//			},
+					//			"namespaces":["ns"],
+					//			"topologyKey": "zone"
+					//		}]
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
 								LabelSelector: &metav1.LabelSelector{
 									MatchExpressions: []metav1.LabelSelectorRequirement{
 										{
 											Key:      "key2",
-											Operator: metav1.LabelSelectorOpDoesNotExist,
+											Operator: metav1.LabelSelectorOpExists,
 										},
 									},
 								},
+								TopologyKey: "zone",
 								Namespaces:  []string{"ns"},
-								TopologyKey: "region",
+							},
+						},
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "key2",
+												Operator: metav1.LabelSelectorOpDoesNotExist,
+											},
+										},
+									},
+									Namespaces:  []string{"ns"},
+									TopologyKey: "region",
+								},
 							},
 						},
 					},
-				},
-			}),
+				}),
+			},
 		},
 		"populate forgiveness tolerations with exists operator in annotations.": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Key: "foo", Operator: "Exists", Value: "", Effect: "NoExecute", TolerationSeconds: &[]int64{60}[0]}}),
 			},
-			Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Key: "foo", Operator: "Exists", Value: "", Effect: "NoExecute", TolerationSeconds: &[]int64{60}[0]}}),
 		},
 		"populate forgiveness tolerations with equal operator in annotations.": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Key: "foo", Operator: "Equal", Value: "bar", Effect: "NoExecute", TolerationSeconds: &[]int64{60}[0]}}),
 			},
-			Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Key: "foo", Operator: "Equal", Value: "bar", Effect: "NoExecute", TolerationSeconds: &[]int64{60}[0]}}),
 		},
 		"populate tolerations equal operator in annotations.": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Key: "foo", Operator: "Equal", Value: "bar", Effect: "NoSchedule"}}),
 			},
-			Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Key: "foo", Operator: "Equal", Value: "bar", Effect: "NoSchedule"}}),
 		},
 		"populate tolerations exists operator in annotations.": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(nil),
 			},
-			Spec: validPodSpec(nil),
 		},
 		"empty key with Exists operator is OK for toleration, empty toleration key means match all taint keys.": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Operator: "Exists", Effect: "NoSchedule"}}),
 			},
-			Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Operator: "Exists", Effect: "NoSchedule"}}),
 		},
 		"empty operator is OK for toleration, defaults to Equal.": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Key: "foo", Value: "bar", Effect: "NoSchedule"}}),
 			},
-			Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Key: "foo", Value: "bar", Effect: "NoSchedule"}}),
 		},
 		"empty effect is OK for toleration, empty toleration effect means match all taint effects.": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Key: "foo", Operator: "Equal", Value: "bar"}}),
 			},
-			Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Key: "foo", Operator: "Equal", Value: "bar"}}),
 		},
 		"negative tolerationSeconds is OK for toleration.": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "pod-forgiveness-invalid",
-				Namespace: "ns",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "pod-forgiveness-invalid",
+					Namespace: "ns",
+				},
+				Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Key: "node.kubernetes.io/not-ready", Operator: "Exists", Effect: "NoExecute", TolerationSeconds: &[]int64{-2}[0]}}),
 			},
-			Spec: extendPodSpecwithTolerations(validPodSpec(nil), []core.Toleration{{Key: "node.kubernetes.io/not-ready", Operator: "Exists", Effect: "NoExecute", TolerationSeconds: &[]int64{-2}[0]}}),
 		},
 		"runtime default seccomp profile": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-				Annotations: map[string]string{
-					core.SeccompPodAnnotationKey: core.SeccompProfileRuntimeDefault,
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Annotations: map[string]string{
+						core.SeccompPodAnnotationKey: core.SeccompProfileRuntimeDefault,
+					},
 				},
+				Spec: validPodSpec(nil),
 			},
-			Spec: validPodSpec(nil),
 		},
 		"docker default seccomp profile": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-				Annotations: map[string]string{
-					core.SeccompPodAnnotationKey: core.DeprecatedSeccompProfileDockerDefault,
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Annotations: map[string]string{
+						core.SeccompPodAnnotationKey: core.DeprecatedSeccompProfileDockerDefault,
+					},
 				},
+				Spec: validPodSpec(nil),
 			},
-			Spec: validPodSpec(nil),
 		},
 		"unconfined seccomp profile": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-				Annotations: map[string]string{
-					core.SeccompPodAnnotationKey: "unconfined",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Annotations: map[string]string{
+						core.SeccompPodAnnotationKey: "unconfined",
+					},
 				},
+				Spec: validPodSpec(nil),
 			},
-			Spec: validPodSpec(nil),
 		},
 		"localhost seccomp profile": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-				Annotations: map[string]string{
-					core.SeccompPodAnnotationKey: "localhost/foo",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Annotations: map[string]string{
+						core.SeccompPodAnnotationKey: "localhost/foo",
+					},
 				},
+				Spec: validPodSpec(nil),
 			},
-			Spec: validPodSpec(nil),
 		},
 		"localhost seccomp profile for a container": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-				Annotations: map[string]string{
-					core.SeccompContainerAnnotationKeyPrefix + "foo": "localhost/foo",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Annotations: map[string]string{
+						core.SeccompContainerAnnotationKeyPrefix + "foo": "localhost/foo",
+					},
 				},
+				Spec: validPodSpec(nil),
 			},
-			Spec: validPodSpec(nil),
 		},
 		"runtime default seccomp profile for a pod": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-			},
-			Spec: core.PodSpec{
-				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSDefault,
-				SecurityContext: &core.PodSecurityContext{
-					SeccompProfile: &core.SeccompProfile{
-						Type: core.SeccompProfileTypeRuntimeDefault,
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: core.PodSpec{
+					Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSDefault,
+					SecurityContext: &core.PodSecurityContext{
+						SeccompProfile: &core.SeccompProfile{
+							Type: core.SeccompProfileTypeRuntimeDefault,
+						},
 					},
 				},
 			},
 		},
 		"runtime default seccomp profile for a container": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-			},
-			Spec: core.PodSpec{
-				Containers: []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File",
-					SecurityContext: &core.SecurityContext{
-						SeccompProfile: &core.SeccompProfile{
-							Type: core.SeccompProfileTypeRuntimeDefault,
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: core.PodSpec{
+					Containers: []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File",
+						SecurityContext: &core.SecurityContext{
+							SeccompProfile: &core.SeccompProfile{
+								Type: core.SeccompProfileTypeRuntimeDefault,
+							},
 						},
-					},
-				}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSDefault,
+					}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSDefault,
+				},
 			},
 		},
 		"unconfined seccomp profile for a pod": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-			},
-			Spec: core.PodSpec{
-				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSDefault,
-				SecurityContext: &core.PodSecurityContext{
-					SeccompProfile: &core.SeccompProfile{
-						Type: core.SeccompProfileTypeUnconfined,
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: core.PodSpec{
+					Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSDefault,
+					SecurityContext: &core.PodSecurityContext{
+						SeccompProfile: &core.SeccompProfile{
+							Type: core.SeccompProfileTypeUnconfined,
+						},
 					},
 				},
 			},
 		},
 		"unconfined seccomp profile for a container": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-			},
-			Spec: core.PodSpec{
-				Containers: []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File",
-					SecurityContext: &core.SecurityContext{
-						SeccompProfile: &core.SeccompProfile{
-							Type: core.SeccompProfileTypeUnconfined,
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: core.PodSpec{
+					Containers: []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File",
+						SecurityContext: &core.SecurityContext{
+							SeccompProfile: &core.SeccompProfile{
+								Type: core.SeccompProfileTypeUnconfined,
+							},
 						},
-					},
-				}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSDefault,
-			},
-		},
-		"localhost seccomp profile for a pod": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-			},
-			Spec: core.PodSpec{
-				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSDefault,
-				SecurityContext: &core.PodSecurityContext{
-					SeccompProfile: &core.SeccompProfile{
-						Type:             core.SeccompProfileTypeLocalhost,
-						LocalhostProfile: utilpointer.String("filename.json"),
-					},
+					}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSDefault,
 				},
 			},
 		},
-		"localhost seccomp profile for a container, II": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-			},
-			Spec: core.PodSpec{
-				Containers: []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File",
-					SecurityContext: &core.SecurityContext{
+		"localhost seccomp profile for a pod": {
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: core.PodSpec{
+					Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSDefault,
+					SecurityContext: &core.PodSecurityContext{
 						SeccompProfile: &core.SeccompProfile{
 							Type:             core.SeccompProfileTypeLocalhost,
 							LocalhostProfile: utilpointer.String("filename.json"),
 						},
 					},
-				}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSDefault,
+				},
+			},
+		},
+		"localhost seccomp profile for a container, II": {
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: core.PodSpec{
+					Containers: []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File",
+						SecurityContext: &core.SecurityContext{
+							SeccompProfile: &core.SeccompProfile{
+								Type:             core.SeccompProfileTypeLocalhost,
+								LocalhostProfile: utilpointer.String("filename.json"),
+							},
+						},
+					}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSDefault,
+				},
 			},
 		},
 		"default AppArmor profile for a container": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-				Annotations: map[string]string{
-					v1.AppArmorBetaContainerAnnotationKeyPrefix + "ctr": v1.AppArmorBetaProfileRuntimeDefault,
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Annotations: map[string]string{
+						v1.AppArmorBetaContainerAnnotationKeyPrefix + "ctr": v1.AppArmorBetaProfileRuntimeDefault,
+					},
 				},
+				Spec: validPodSpec(nil),
 			},
-			Spec: validPodSpec(nil),
 		},
 		"default AppArmor profile for an init container": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-				Annotations: map[string]string{
-					v1.AppArmorBetaContainerAnnotationKeyPrefix + "init-ctr": v1.AppArmorBetaProfileRuntimeDefault,
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Annotations: map[string]string{
+						v1.AppArmorBetaContainerAnnotationKeyPrefix + "init-ctr": v1.AppArmorBetaProfileRuntimeDefault,
+					},
 				},
-			},
-			Spec: core.PodSpec{
-				InitContainers: []core.Container{{Name: "init-ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				Containers:     []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				RestartPolicy:  core.RestartPolicyAlways,
-				DNSPolicy:      core.DNSClusterFirst,
+				Spec: core.PodSpec{
+					InitContainers: []core.Container{{Name: "init-ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					Containers:     []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					RestartPolicy:  core.RestartPolicyAlways,
+					DNSPolicy:      core.DNSClusterFirst,
+				},
 			},
 		},
 		"localhost AppArmor profile for a container": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-				Annotations: map[string]string{
-					v1.AppArmorBetaContainerAnnotationKeyPrefix + "ctr": v1.AppArmorBetaProfileNamePrefix + "foo",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Annotations: map[string]string{
+						v1.AppArmorBetaContainerAnnotationKeyPrefix + "ctr": v1.AppArmorBetaProfileNamePrefix + "foo",
+					},
 				},
+				Spec: validPodSpec(nil),
 			},
-			Spec: validPodSpec(nil),
 		},
 		"syntactically valid sysctls": {
-			ObjectMeta: metav1.ObjectMeta{
-				Name:      "123",
-				Namespace: "ns",
-			},
-			Spec: core.PodSpec{
-				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSClusterFirst,
-				SecurityContext: &core.PodSecurityContext{
-					Sysctls: []core.Sysctl{
-						{
-							Name:  "kernel.shmmni",
-							Value: "32768",
-						},
-						{
-							Name:  "kernel.shmmax",
-							Value: "1000000000",
-						},
-						{
-							Name:  "knet.ipv4.route.min_pmtu",
-							Value: "1000",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: core.PodSpec{
+					Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSClusterFirst,
+					SecurityContext: &core.PodSecurityContext{
+						Sysctls: []core.Sysctl{
+							{
+								Name:  "kernel.shmmni",
+								Value: "32768",
+							},
+							{
+								Name:  "kernel.shmmax",
+								Value: "1000000000",
+							},
+							{
+								Name:  "knet.ipv4.route.min_pmtu",
+								Value: "1000",
+							},
 						},
 					},
 				},
 			},
 		},
 		"valid extended resources for init container": {
-			ObjectMeta: metav1.ObjectMeta{Name: "valid-extended", Namespace: "ns"},
-			Spec: core.PodSpec{
-				InitContainers: []core.Container{
-					{
-						Name:            "valid-extended",
-						Image:           "image",
-						ImagePullPolicy: "IfNotPresent",
-						Resources: core.ResourceRequirements{
-							Requests: core.ResourceList{
-								core.ResourceName("example.com/a"): resource.MustParse("10"),
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{Name: "valid-extended", Namespace: "ns"},
+				Spec: core.PodSpec{
+					InitContainers: []core.Container{
+						{
+							Name:            "valid-extended",
+							Image:           "image",
+							ImagePullPolicy: "IfNotPresent",
+							Resources: core.ResourceRequirements{
+								Requests: core.ResourceList{
+									core.ResourceName("example.com/a"): resource.MustParse("10"),
+								},
+								Limits: core.ResourceList{
+									core.ResourceName("example.com/a"): resource.MustParse("10"),
+								},
 							},
-							Limits: core.ResourceList{
-								core.ResourceName("example.com/a"): resource.MustParse("10"),
-							},
+							TerminationMessagePolicy: "File",
 						},
-						TerminationMessagePolicy: "File",
 					},
+					Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSClusterFirst,
 				},
-				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSClusterFirst,
 			},
 		},
 		"valid extended resources for regular container": {
-			ObjectMeta: metav1.ObjectMeta{Name: "valid-extended", Namespace: "ns"},
-			Spec: core.PodSpec{
-				InitContainers: []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				Containers: []core.Container{
-					{
-						Name:            "valid-extended",
-						Image:           "image",
-						ImagePullPolicy: "IfNotPresent",
-						Resources: core.ResourceRequirements{
-							Requests: core.ResourceList{
-								core.ResourceName("example.com/a"): resource.MustParse("10"),
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{Name: "valid-extended", Namespace: "ns"},
+				Spec: core.PodSpec{
+					InitContainers: []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					Containers: []core.Container{
+						{
+							Name:            "valid-extended",
+							Image:           "image",
+							ImagePullPolicy: "IfNotPresent",
+							Resources: core.ResourceRequirements{
+								Requests: core.ResourceList{
+									core.ResourceName("example.com/a"): resource.MustParse("10"),
+								},
+								Limits: core.ResourceList{
+									core.ResourceName("example.com/a"): resource.MustParse("10"),
+								},
 							},
-							Limits: core.ResourceList{
-								core.ResourceName("example.com/a"): resource.MustParse("10"),
-							},
+							TerminationMessagePolicy: "File",
 						},
-						TerminationMessagePolicy: "File",
 					},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSClusterFirst,
 				},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSClusterFirst,
 			},
 		},
 		"valid serviceaccount token projected volume with serviceaccount name specified": {
-			ObjectMeta: metav1.ObjectMeta{Name: "valid-extended", Namespace: "ns"},
-			Spec: core.PodSpec{
-				ServiceAccountName: "some-service-account",
-				Containers:         []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				RestartPolicy:      core.RestartPolicyAlways,
-				DNSPolicy:          core.DNSClusterFirst,
-				Volumes: []core.Volume{
-					{
-						Name: "projected-volume",
-						VolumeSource: core.VolumeSource{
-							Projected: &core.ProjectedVolumeSource{
-								Sources: []core.VolumeProjection{
-									{
-										ServiceAccountToken: &core.ServiceAccountTokenProjection{
-											Audience:          "foo-audience",
-											ExpirationSeconds: 6000,
-											Path:              "foo-path",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{Name: "valid-extended", Namespace: "ns"},
+				Spec: core.PodSpec{
+					ServiceAccountName: "some-service-account",
+					Containers:         []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					RestartPolicy:      core.RestartPolicyAlways,
+					DNSPolicy:          core.DNSClusterFirst,
+					Volumes: []core.Volume{
+						{
+							Name: "projected-volume",
+							VolumeSource: core.VolumeSource{
+								Projected: &core.ProjectedVolumeSource{
+									Sources: []core.VolumeProjection{
+										{
+											ServiceAccountToken: &core.ServiceAccountTokenProjection{
+												Audience:          "foo-audience",
+												ExpirationSeconds: 6000,
+												Path:              "foo-path",
+											},
 										},
 									},
 								},
@@ -9728,37 +9795,157 @@ func TestValidatePod(t *testing.T) {
 			},
 		},
 		"ephemeral volume + PVC, no conflict between them": {
-			ObjectMeta: metav1.ObjectMeta{Name: "123", Namespace: "ns"},
-			Spec: core.PodSpec{
-				Volumes: []core.Volume{
-					{Name: "pvc", VolumeSource: core.VolumeSource{PersistentVolumeClaim: &core.PersistentVolumeClaimVolumeSource{ClaimName: "my-pvc"}}},
-					{Name: "ephemeral", VolumeSource: core.VolumeSource{Ephemeral: &core.EphemeralVolumeSource{VolumeClaimTemplate: &validPVCTemplate}}},
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{Name: "123", Namespace: "ns"},
+				Spec: core.PodSpec{
+					Volumes: []core.Volume{
+						{Name: "pvc", VolumeSource: core.VolumeSource{PersistentVolumeClaim: &core.PersistentVolumeClaimVolumeSource{ClaimName: "my-pvc"}}},
+						{Name: "ephemeral", VolumeSource: core.VolumeSource{Ephemeral: &core.EphemeralVolumeSource{VolumeClaimTemplate: &validPVCTemplate}}},
+					},
+					Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSClusterFirst,
 				},
-				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSClusterFirst,
 			},
 		},
 		"negative pod-deletion-cost": {
-			ObjectMeta: metav1.ObjectMeta{Name: "123", Namespace: "ns", Annotations: map[string]string{core.PodDeletionCost: "-100"}},
-			Spec: core.PodSpec{
-				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSClusterFirst,
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{Name: "123", Namespace: "ns", Annotations: map[string]string{core.PodDeletionCost: "-100"}},
+				Spec: core.PodSpec{
+					Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSClusterFirst,
+				},
 			},
 		},
 		"positive pod-deletion-cost": {
-			ObjectMeta: metav1.ObjectMeta{Name: "123", Namespace: "ns", Annotations: map[string]string{core.PodDeletionCost: "100"}},
-			Spec: core.PodSpec{
-				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
-				RestartPolicy: core.RestartPolicyAlways,
-				DNSPolicy:     core.DNSClusterFirst,
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{Name: "123", Namespace: "ns", Annotations: map[string]string{core.PodDeletionCost: "100"}},
+				Spec: core.PodSpec{
+					Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
+					RestartPolicy: core.RestartPolicyAlways,
+					DNSPolicy:     core.DNSClusterFirst,
+				},
 			},
+		},
+		"ignore invalid soft pod affinity, invalid value set on MatchExpressions when AllowInvalidLabelValueInSelector is true": {
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"super_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_value", "value2"},
+											},
+										},
+									},
+									TopologyKey: "k8s.io/zone",
+								},
+							},
+						},
+					},
+				}),
+			},
+			opt: PodValidationOptions{AllowInvalidLabelValueInSelector: true},
+		},
+		"ignore invalid hard pod affinity, invalid value set on MatchExpressions when AllowInvalidLabelValueInSelector is true": {
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"super_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_value", "value2"},
+										},
+									},
+								},
+								TopologyKey: "k8s.io/zone",
+							},
+						},
+					},
+				}),
+			},
+			opt: PodValidationOptions{AllowInvalidLabelValueInSelector: true},
+		},
+		"ignore invalid soft pod anti-affinity, invalid value set on MatchExpressions when AllowInvalidLabelValueInSelector is true": {
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"super_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_value", "value2"},
+											},
+										},
+									},
+									TopologyKey: "k8s.io/zone",
+								},
+							},
+						},
+					},
+				}),
+			},
+			opt: PodValidationOptions{AllowInvalidLabelValueInSelector: true},
+		},
+		"ignore invalid hard pod anti-affinity, invalid value set on MatchExpressions when AllowInvalidLabelValueInSelector is true": {
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"super_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_value", "value2"},
+										},
+									},
+								},
+								TopologyKey: "k8s.io/zone",
+							},
+						},
+					},
+				}),
+			},
+			opt: PodValidationOptions{AllowInvalidLabelValueInSelector: true},
 		},
 	}
 	for k, v := range successCases {
 		t.Run(k, func(t *testing.T) {
-			if errs := ValidatePodCreate(&v, PodValidationOptions{}); len(errs) != 0 {
+			if errs := ValidatePodCreate(&v.spec, v.opt); len(errs) != 0 {
 				t.Errorf("expected success: %v", errs)
 			}
 		})
@@ -9767,6 +9954,7 @@ func TestValidatePod(t *testing.T) {
 	errorCases := map[string]struct {
 		spec          core.Pod
 		expectedError string
+		opt           PodValidationOptions
 	}{
 		"bad name": {
 			expectedError: "metadata.name",
@@ -10274,6 +10462,360 @@ func TestValidatePod(t *testing.T) {
 				}),
 			},
 		},
+		"invalid soft pod affinity, key in MatchLabelKeys isn't correctly defined": {
+			expectedError: "prefix part must be non-empty",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1", "value2"},
+											},
+										},
+									},
+									TopologyKey:    "k8s.io/zone",
+									MatchLabelKeys: []string{"/simple"},
+								},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid hard pod affinity, key in MatchLabelKeys isn't correctly defined": {
+			expectedError: "prefix part must be non-empty",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value1", "value2"},
+										},
+									},
+								},
+								TopologyKey:    "k8s.io/zone",
+								MatchLabelKeys: []string{"/simple"},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid soft pod anti-affinity, key in MatchLabelKeys isn't correctly defined": {
+			expectedError: "prefix part must be non-empty",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1", "value2"},
+											},
+										},
+									},
+									TopologyKey:    "k8s.io/zone",
+									MatchLabelKeys: []string{"/simple"},
+								},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid hard pod anti-affinity, key in MatchLabelKeys isn't correctly defined": {
+			expectedError: "prefix part must be non-empty",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value1", "value2"},
+										},
+									},
+								},
+								TopologyKey:    "k8s.io/zone",
+								MatchLabelKeys: []string{"/simple"},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid soft pod affinity, key exists in both matchLabelKeys and labelSelector": {
+			expectedError: "exists in both matchLabelKeys and labelSelector",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1", "value2"},
+											},
+										},
+									},
+									TopologyKey:    "k8s.io/zone",
+									MatchLabelKeys: []string{"key"},
+								},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid hard pod affinity, key exists in both matchLabelKeys and labelSelector": {
+			expectedError: "exists in both matchLabelKeys and labelSelector",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value1", "value2"},
+										},
+									},
+								},
+								TopologyKey:    "k8s.io/zone",
+								MatchLabelKeys: []string{"key"},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid soft pod anti-affinity, key exists in both matchLabelKeys and labelSelector": {
+			expectedError: "exists in both matchLabelKeys and labelSelector",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1", "value2"},
+											},
+										},
+									},
+									TopologyKey:    "k8s.io/zone",
+									MatchLabelKeys: []string{"key"},
+								},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid hard pod anti-affinity, key exists in both matchLabelKeys and labelSelector": {
+			expectedError: "exists in both matchLabelKeys and labelSelector",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value1", "value2"},
+										},
+									},
+								},
+								TopologyKey:    "k8s.io/zone",
+								MatchLabelKeys: []string{"key"},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid soft pod affinity, invalid value set on MatchExpressions when AllowInvalidLabelValueInSelector is false": {
+			expectedError: "must be no more than 63 characters",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"super_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_value", "value2"},
+											},
+										},
+									},
+									TopologyKey: "k8s.io/zone",
+								},
+							},
+						},
+					},
+				}),
+			},
+			opt: PodValidationOptions{AllowInvalidLabelValueInSelector: false},
+		},
+		"invalid hard pod affinity, invalid value set on MatchExpressions when AllowInvalidLabelValueInSelector is false": {
+			expectedError: "must be no more than 63 characters",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"super_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_value", "value2"},
+										},
+									},
+								},
+								TopologyKey: "k8s.io/zone",
+							},
+						},
+					},
+				}),
+			},
+			opt: PodValidationOptions{AllowInvalidLabelValueInSelector: false},
+		},
+		"invalid soft pod anti-affinity, invalid value set on MatchExpressions when AllowInvalidLabelValueInSelector is false": {
+			expectedError: "must be no more than 63 characters",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"super_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_value", "value2"},
+											},
+										},
+									},
+									TopologyKey: "k8s.io/zone",
+								},
+							},
+						},
+					},
+				}),
+			},
+			opt: PodValidationOptions{AllowInvalidLabelValueInSelector: false},
+		},
+		"invalid hard pod anti-affinity, invalid value set on MatchExpressions when AllowInvalidLabelValueInSelector is false": {
+			expectedError: "must be no more than 63 characters",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"super_looooooooooooooooooooooooooooooooooooooooooooooooooooooooooong_value", "value2"},
+										},
+									},
+								},
+								TopologyKey: "k8s.io/zone",
+							},
+						},
+					},
+				}),
+			},
+			opt: PodValidationOptions{AllowInvalidLabelValueInSelector: false},
+		},
 		"invalid toleration key": {
 			expectedError: "spec.tolerations[0].key",
 			spec: core.Pod{
@@ -10778,7 +11320,7 @@ func TestValidatePod(t *testing.T) {
 	}
 	for k, v := range errorCases {
 		t.Run(k, func(t *testing.T) {
-			if errs := ValidatePodCreate(&v.spec, PodValidationOptions{AllowInvalidPodDeletionCost: false}); len(errs) == 0 {
+			if errs := ValidatePodCreate(&v.spec, v.opt); len(errs) == 0 {
 				t.Errorf("expected failure")
 			} else if v.expectedError == "" {
 				t.Errorf("missing expectedError, got %q", errs.ToAggregate().Error())

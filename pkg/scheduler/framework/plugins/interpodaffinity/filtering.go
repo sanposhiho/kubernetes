@@ -164,7 +164,13 @@ func (pl *InterPodAffinity) getExistingAntiAffinityCounts(ctx context.Context, p
 		}
 		topoMap := make(topologyToMatchedTermCount)
 		for _, existingPod := range nodeInfo.PodsWithRequiredAntiAffinity {
-			topoMap.updateWithAntiAffinityTerms(existingPod.RequiredAntiAffinityTerms, pod, nsLabels, node, 1)
+			if pl.enableMatchLabelKeys {
+				for i := range existingPod.RequiredAffinityTerms {
+					pl.mergeAffinityTermMatchLabelKeys(&existingPod.RequiredAffinityTerms[i], existingPod.Pod.Labels)
+				}
+			}
+
+			topoMap.updateWithAntiAffinityTerms(existingPod.RequiredAffinityTerms, pod, nsLabels, node, 1)
 		}
 		if len(topoMap) != 0 {
 			topoMaps[atomic.AddInt32(&index, 1)] = topoMap
@@ -180,7 +186,7 @@ func (pl *InterPodAffinity) getExistingAntiAffinityCounts(ctx context.Context, p
 	return result
 }
 
-// finds existing Pods that match affinity terms of the incoming pod's (anti)affinity terms.
+// getIncomingAffinityAntiAffinityCounts finds existing Pods that match affinity terms of the incoming pod's (anti)affinity terms.
 // It returns a topologyToMatchedTermCount that are checked later by the affinity
 // predicate. With this topologyToMatchedTermCount available, the affinity predicate does not
 // need to check all the pods in the cluster.
@@ -245,11 +251,15 @@ func (pl *InterPodAffinity) PreFilter(ctx context.Context, cycleState *framework
 	}
 
 	for i := range s.podInfo.RequiredAffinityTerms {
+		pl.mergeAffinityTermMatchLabelKeys(&s.podInfo.RequiredAffinityTerms[i], pod.Labels)
+
 		if err := pl.mergeAffinityTermNamespacesIfNotEmpty(&s.podInfo.RequiredAffinityTerms[i]); err != nil {
 			return nil, framework.AsStatus(err)
 		}
 	}
 	for i := range s.podInfo.RequiredAntiAffinityTerms {
+		pl.mergeAffinityTermMatchLabelKeys(&s.podInfo.RequiredAntiAffinityTerms[i], pod.Labels)
+
 		if err := pl.mergeAffinityTermNamespacesIfNotEmpty(&s.podInfo.RequiredAntiAffinityTerms[i]); err != nil {
 			return nil, framework.AsStatus(err)
 		}
@@ -278,6 +288,18 @@ func (pl *InterPodAffinity) AddPod(ctx context.Context, cycleState *framework.Cy
 	if err != nil {
 		return framework.AsStatus(err)
 	}
+
+	if pl.enableMatchLabelKeys {
+		// The matchLabelKeys in PodAffinityTerms in state.podInfo should be handled in PreFilter.
+		// Here, we only need to handle matchLabelKeys in podInfoToAdd's PodAffinityTerms.
+		for i := range podInfoToAdd.RequiredAffinityTerms {
+			pl.mergeAffinityTermMatchLabelKeys(&podInfoToAdd.RequiredAffinityTerms[i], podInfoToAdd.Pod.Labels)
+		}
+		for i := range podInfoToAdd.RequiredAntiAffinityTerms {
+			pl.mergeAffinityTermMatchLabelKeys(&podInfoToAdd.RequiredAntiAffinityTerms[i], podInfoToAdd.Pod.Labels)
+		}
+	}
+
 	state.updateWithPod(podInfoToAdd, nodeInfo.Node(), 1)
 	return nil
 }
@@ -288,6 +310,18 @@ func (pl *InterPodAffinity) RemovePod(ctx context.Context, cycleState *framework
 	if err != nil {
 		return framework.AsStatus(err)
 	}
+
+	if pl.enableMatchLabelKeys {
+		// The matchLabelKeys in PodAffinityTerms in state.podInfo should be handled in PreFilter.
+		// Here, we only need to handle matchLabelKeys in podInfoToRemove's PodAffinityTerms.
+		for i := range podInfoToRemove.RequiredAffinityTerms {
+			pl.mergeAffinityTermMatchLabelKeys(&podInfoToRemove.RequiredAffinityTerms[i], podInfoToRemove.Pod.Labels)
+		}
+		for i := range podInfoToRemove.RequiredAntiAffinityTerms {
+			pl.mergeAffinityTermMatchLabelKeys(&podInfoToRemove.RequiredAntiAffinityTerms[i], podInfoToRemove.Pod.Labels)
+		}
+	}
+
 	state.updateWithPod(podInfoToRemove, nodeInfo.Node(), -1)
 	return nil
 }

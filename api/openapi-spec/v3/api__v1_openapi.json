@@ -4650,6 +4650,15 @@
             ],
             "description": "A label query over a set of resources, in this case pods."
           },
+          "matchLabelKeys": {
+            "description": "MatchLabelKeys is a set of pod label keys to select which pods will be taken into consideration. The keys are used to lookup values from the incoming pod labels, those key-value labels are ANDed with `LabelSelector` to select the group of existing pods which pods will be taken into consideration for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming pod labels will be ignored. The default value is empty.",
+            "items": {
+              "default": "",
+              "type": "string"
+            },
+            "type": "array",
+            "x-kubernetes-list-type": "atomic"
+          },
           "namespaceSelector": {
             "allOf": [
               {

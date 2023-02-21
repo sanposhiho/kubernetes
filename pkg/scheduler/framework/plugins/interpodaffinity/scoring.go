@@ -88,6 +88,22 @@ func (pl *InterPodAffinity) processExistingPod(
 		return
 	}
 
+	// apply matchLabelKeys
+	if pl.enableMatchLabelKeys {
+		for i := range existingPod.PreferredAffinityTerms {
+			pl.mergeAffinityTermMatchLabelKeys(&existingPod.PreferredAffinityTerms[i].AffinityTerm, existingPod.Pod.Labels)
+		}
+		for i := range existingPod.PreferredAntiAffinityTerms {
+			pl.mergeAffinityTermMatchLabelKeys(&existingPod.PreferredAntiAffinityTerms[i].AffinityTerm, existingPod.Pod.Labels)
+		}
+
+		if pl.args.HardPodAffinityWeight > 0 {
+			for i := range existingPod.RequiredAffinityTerms {
+				pl.mergeAffinityTermMatchLabelKeys(&existingPod.RequiredAffinityTerms[i], existingPod.Pod.Labels)
+			}
+		}
+	}
+
 	// For every soft pod affinity term of <pod>, if <existingPod> matches the term,
 	// increment <p.counts> for every node in the cluster with the same <term.TopologyKey>
 	// value as that of <existingPods>`s node by the term`s weight.
@@ -105,7 +121,7 @@ func (pl *InterPodAffinity) processExistingPod(
 	// For every hard pod affinity term of <existingPod>, if <pod> matches the term,
 	// increment <p.counts> for every node in the cluster with the same <term.TopologyKey>
 	// value as that of <existingPod>'s node by the constant <args.hardPodAffinityWeight>
-	if pl.args.HardPodAffinityWeight > 0 && len(existingPodNode.Labels) != 0 {
+	if pl.args.HardPodAffinityWeight > 0 {
 		for _, t := range existingPod.RequiredAffinityTerms {
 			topoScore.processTerm(&t, pl.args.HardPodAffinityWeight, incomingPod, state.namespaceLabels, existingPodNode, 1)
 		}
@@ -177,11 +193,15 @@ func (pl *InterPodAffinity) PreScore(
 	}
 
 	for i := range state.podInfo.PreferredAffinityTerms {
+		pl.mergeAffinityTermMatchLabelKeys(&state.podInfo.PreferredAffinityTerms[i].AffinityTerm, pod.Labels)
+
 		if err := pl.mergeAffinityTermNamespacesIfNotEmpty(&state.podInfo.PreferredAffinityTerms[i].AffinityTerm); err != nil {
 			return framework.AsStatus(fmt.Errorf("updating PreferredAffinityTerms: %w", err))
 		}
 	}
 	for i := range state.podInfo.PreferredAntiAffinityTerms {
+		pl.mergeAffinityTermMatchLabelKeys(&state.podInfo.PreferredAntiAffinityTerms[i].AffinityTerm, pod.Labels)
+
 		if err := pl.mergeAffinityTermNamespacesIfNotEmpty(&state.podInfo.PreferredAntiAffinityTerms[i].AffinityTerm); err != nil {
 			return framework.AsStatus(fmt.Errorf("updating PreferredAntiAffinityTerms: %w", err))
 		}

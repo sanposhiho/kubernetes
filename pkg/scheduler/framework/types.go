@@ -196,6 +196,7 @@ type AffinityTerm struct {
 	Selector          labels.Selector
 	TopologyKey       string
 	NamespaceSelector labels.Selector
+	MatchLabelKeys    []string
 }
 
 // Matches returns true if the pod matches the label selector and namespaces or namespace selector.
@@ -284,7 +285,7 @@ func newAffinityTerm(pod *v1.Pod, term *v1.PodAffinityTerm) (*AffinityTerm, erro
 		return nil, err
 	}
 
-	return &AffinityTerm{Namespaces: namespaces, Selector: selector, TopologyKey: term.TopologyKey, NamespaceSelector: nsSelector}, nil
+	return &AffinityTerm{Namespaces: namespaces, Selector: selector, TopologyKey: term.TopologyKey, NamespaceSelector: nsSelector, MatchLabelKeys: term.MatchLabelKeys}, nil
 }
 
 // getAffinityTerms receives a Pod and affinity terms and returns the namespaces and

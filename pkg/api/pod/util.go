@@ -563,7 +563,8 @@ func dropDisabledFields(
 
 	dropDisabledTopologySpreadConstraintsFields(podSpec, oldPodSpec)
 	dropDisabledNodeInclusionPolicyFields(podSpec, oldPodSpec)
-	dropDisabledMatchLabelKeysField(podSpec, oldPodSpec)
+	dropDisabledMatchLabelKeysFieldInTopologySpread(podSpec, oldPodSpec)
+	dropDisabledMatchLabelKeysFieldInPodAffinity(podSpec, oldPodSpec)
 	dropDisabledDynamicResourceAllocationFields(podSpec, oldPodSpec)
 }
 
@@ -663,19 +664,113 @@ func dropDisabledNodeInclusionPolicyFields(podSpec, oldPodSpec *api.PodSpec) {
 	}
 }
 
-// dropDisabledMatchLabelKeysField removes disabled fields from PodSpec related
-// to MatchLabelKeys only if it is not already used by the old spec.
-func dropDisabledMatchLabelKeysField(podSpec, oldPodSpec *api.PodSpec) {
-	if !utilfeature.DefaultFeatureGate.Enabled(features.MatchLabelKeysInPodTopologySpread) && !matchLabelKeysInUse(oldPodSpec) {
+// dropDisabledMatchLabelKeysFieldInPodAffinity removes disabled fields from PodSpec related
+// to MatchLabelKeys in required/preferred PodAffinity/PodAntiAffinity only if it is not already used by the old spec.
+func dropDisabledMatchLabelKeysFieldInPodAffinity(podSpec, oldPodSpec *api.PodSpec) {
+	if utilfeature.DefaultFeatureGate.Enabled(features.MatchLabelKeysInPodAffinity) || podSpec == nil || podSpec.Affinity == nil {
+		return
+	}
+
+	if podSpec.Affinity.PodAffinity != nil {
+		if !matchLabelKeysInRequiredPodAffinityInUse(oldPodSpec) {
+			for i := range podSpec.Affinity.PodAffinity.RequiredDuringSchedulingIgnoredDuringExecution {
+				podSpec.Affinity.PodAffinity.RequiredDuringSchedulingIgnoredDuringExecution[i].MatchLabelKeys = nil
+			}
+		}
+		if !matchLabelKeysInPreferredPodAffinityInUse(oldPodSpec) {
+			for i := range podSpec.Affinity.PodAffinity.PreferredDuringSchedulingIgnoredDuringExecution {
+				podSpec.Affinity.PodAffinity.PreferredDuringSchedulingIgnoredDuringExecution[i].PodAffinityTerm.MatchLabelKeys = nil
+			}
+		}
+	}
+
+	if podSpec.Affinity.PodAntiAffinity != nil {
+		if !matchLabelKeysInRequiredPodAntiAffinityInUse(oldPodSpec) {
+			for i := range podSpec.Affinity.PodAntiAffinity.RequiredDuringSchedulingIgnoredDuringExecution {
+				podSpec.Affinity.PodAntiAffinity.RequiredDuringSchedulingIgnoredDuringExecution[i].MatchLabelKeys = nil
+			}
+		}
+		if !matchLabelKeysInPreferredPodAntiAffinityInUse(oldPodSpec) {
+			for i := range podSpec.Affinity.PodAntiAffinity.PreferredDuringSchedulingIgnoredDuringExecution {
+				podSpec.Affinity.PodAntiAffinity.PreferredDuringSchedulingIgnoredDuringExecution[i].PodAffinityTerm.MatchLabelKeys = nil
+			}
+		}
+	}
+}
+
+// dropDisabledMatchLabelKeysFieldInTopologySpread removes disabled fields from PodSpec related
+// to MatchLabelKeys in TopologySpread only if it is not already used by the old spec.
+func dropDisabledMatchLabelKeysFieldInTopologySpread(podSpec, oldPodSpec *api.PodSpec) {
+	if !utilfeature.DefaultFeatureGate.Enabled(features.MatchLabelKeysInPodTopologySpread) && !matchLabelKeysInTopologySpreadInUse(oldPodSpec) {
 		for i := range podSpec.TopologySpreadConstraints {
 			podSpec.TopologySpreadConstraints[i].MatchLabelKeys = nil
 		}
 	}
 }
 
-// matchLabelKeysInUse returns true if the pod spec is non-nil
+// matchLabelKeysInRequiredPodAffinityInUse returns true if the pod spec is non-nil
+// and has MatchLabelKeys field set in required PodAffinity.
+func matchLabelKeysInRequiredPodAffinityInUse(podSpec *api.PodSpec) bool {
+	if podSpec == nil || podSpec.Affinity.PodAffinity == nil {
+		return false
+	}
+
+	for _, c := range podSpec.Affinity.PodAffinity.RequiredDuringSchedulingIgnoredDuringExecution {
+		if len(c.MatchLabelKeys) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+// matchLabelKeysInPreferredPodAffinityInUse returns true if the pod spec is non-nil
+// and has MatchLabelKeys field set in preferred PodAffinity.
+func matchLabelKeysInPreferredPodAffinityInUse(podSpec *api.PodSpec) bool {
+	if podSpec == nil || podSpec.Affinity.PodAffinity == nil {
+		return false
+	}
+
+	for _, c := range podSpec.Affinity.PodAffinity.PreferredDuringSchedulingIgnoredDuringExecution {
+		if len(c.PodAffinityTerm.MatchLabelKeys) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+// matchLabelKeysInRequiredPodAntiAffinityInUse returns true if the pod spec is non-nil
+// and has MatchLabelKeys field set in required PodAntiAffinity.
+func matchLabelKeysInRequiredPodAntiAffinityInUse(podSpec *api.PodSpec) bool {
+	if podSpec == nil || podSpec.Affinity.PodAntiAffinity == nil {
+		return false
+	}
+
+	for _, c := range podSpec.Affinity.PodAntiAffinity.RequiredDuringSchedulingIgnoredDuringExecution {
+		if len(c.MatchLabelKeys) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+// matchLabelKeysInPreferredPodAntiAffinityInUse returns true if the pod spec is non-nil
+// and has MatchLabelKeys field set in preferred PodAntiAffinity.
+func matchLabelKeysInPreferredPodAntiAffinityInUse(podSpec *api.PodSpec) bool {
+	if podSpec == nil || podSpec.Affinity.PodAntiAffinity == nil {
+		return false
+	}
+
+	for _, c := range podSpec.Affinity.PodAntiAffinity.PreferredDuringSchedulingIgnoredDuringExecution {
+		if len(c.PodAffinityTerm.MatchLabelKeys) > 0 {
+			return true
+		}
+	}
+	return false
+}
+
+// matchLabelKeysInTopologySpreadInUse returns true if the pod spec is non-nil
 // and has MatchLabelKeys field set in TopologySpreadConstraints.
-func matchLabelKeysInUse(podSpec *api.PodSpec) bool {
+func matchLabelKeysInTopologySpreadInUse(podSpec *api.PodSpec) bool {
 	if podSpec == nil {
 		return false
 	}

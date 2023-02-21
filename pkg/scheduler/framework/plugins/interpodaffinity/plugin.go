@@ -27,6 +27,7 @@ import (
 	"k8s.io/kubernetes/pkg/scheduler/apis/config/validation"
 	"k8s.io/kubernetes/pkg/scheduler/framework"
 	"k8s.io/kubernetes/pkg/scheduler/framework/parallelize"
+	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/feature"
 	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/names"
 )
 
@@ -41,10 +42,11 @@ var _ framework.EnqueueExtensions = &InterPodAffinity{}
 
 // InterPodAffinity is a plugin that checks inter pod affinity
 type InterPodAffinity struct {
-	parallelizer parallelize.Parallelizer
-	args         config.InterPodAffinityArgs
-	sharedLister framework.SharedLister
-	nsLister     listersv1.NamespaceLister
+	parallelizer         parallelize.Parallelizer
+	args                 config.InterPodAffinityArgs
+	sharedLister         framework.SharedLister
+	nsLister             listersv1.NamespaceLister
+	enableMatchLabelKeys bool
 }
 
 // Name returns name of the plugin. It is used in logs, etc.
@@ -69,7 +71,7 @@ func (pl *InterPodAffinity) EventsToRegister() []framework.ClusterEvent {
 }
 
 // New initializes a new plugin and returns it.
-func New(plArgs runtime.Object, h framework.Handle) (framework.Plugin, error) {
+func New(plArgs runtime.Object, h framework.Handle, fts feature.Features) (framework.Plugin, error) {
 	if h.SnapshotSharedLister() == nil {
 		return nil, fmt.Errorf("SnapshotSharedlister is nil")
 	}
@@ -81,10 +83,11 @@ func New(plArgs runtime.Object, h framework.Handle) (framework.Plugin, error) {
 		return nil, err
 	}
 	pl := &InterPodAffinity{
-		parallelizer: h.Parallelizer(),
-		args:         args,
-		sharedLister: h.SnapshotSharedLister(),
-		nsLister:     h.SharedInformerFactory().Core().V1().Namespaces().Lister(),
+		parallelizer:         h.Parallelizer(),
+		args:                 args,
+		sharedLister:         h.SnapshotSharedLister(),
+		nsLister:             h.SharedInformerFactory().Core().V1().Namespaces().Lister(),
+		enableMatchLabelKeys: fts.EnableMatchLabelKeysInPodAffinity,
 	}
 
 	return pl, nil
@@ -120,6 +123,25 @@ func (pl *InterPodAffinity) mergeAffinityTermNamespacesIfNotEmpty(at *framework.
 	return nil
 }
 
+func (pl *InterPodAffinity) mergeAffinityTermMatchLabelKeys(at *framework.AffinityTerm, podLabels map[string]string) {
+	if len(at.MatchLabelKeys) == 0 || !pl.enableMatchLabelKeys {
+		return
+	}
+
+	matchLabels := make(labels.Set)
+	for _, labelKey := range at.MatchLabelKeys {
+		if value, ok := podLabels[labelKey]; ok {
+			matchLabels[labelKey] = value
+		}
+	}
+	if len(matchLabels) == 0 {
+		return
+	}
+
+	at.Selector = mergeLabelSetWithSelector(matchLabels, at.Selector)
+	at.MatchLabelKeys = nil
+}
+
 // GetNamespaceLabelsSnapshot returns a snapshot of the labels associated with
 // the namespace.
 func GetNamespaceLabelsSnapshot(ns string, nsLister listersv1.NamespaceLister) (nsLabels labels.Set) {
@@ -130,4 +152,15 @@ func GetNamespaceLabelsSnapshot(ns string, nsLister listersv1.NamespaceLister) (
 	}
 	klog.V(3).InfoS("getting namespace, assuming empty set of namespace labels", "namespace", ns, "err", err)
 	return
+}
+
+func mergeLabelSetWithSelector(matchLabels labels.Set, s labels.Selector) labels.Selector {
+	mergedSelector := labels.SelectorFromSet(matchLabels)
+	if requirements, ok := s.Requirements(); ok {
+		for _, r := range requirements {
+			mergedSelector = mergedSelector.Add(r)
+		}
+	}
+
+	return mergedSelector
 }

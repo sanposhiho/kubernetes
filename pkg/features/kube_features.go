@@ -549,6 +549,13 @@ const (
 	// Enables the MultiCIDR Range allocator.
 	MultiCIDRRangeAllocator featuregate.Feature = "MultiCIDRRangeAllocator"
 
+	// owner: @sanposhiho
+	// kep: https://kep.k8s.io/3651
+	// alpha: v1.27
+	//
+	// Enables the MatchLabelKeys in PodAffinity and PodAntiAffinity.
+	MatchLabelKeysInPodAffinity featuregate.Feature = "MatchLabelKeysInPodAffinity"
+
 	// owner: @rikatz
 	// kep: https://kep.k8s.io/2943
 	// alpha: v1.24
@@ -980,6 +987,8 @@ var defaultKubernetesFeatureGates = map[featuregate.Feature]featuregate.FeatureS
 	MixedProtocolLBService: {Default: true, PreRelease: featuregate.GA, LockToDefault: true}, // remove in 1.28
 
 	MultiCIDRRangeAllocator: {Default: false, PreRelease: featuregate.Alpha},
+
+	MatchLabelKeysInPodAffinity: {Default: false, PreRelease: featuregate.Alpha},
 
 	NetworkPolicyStatus: {Default: false, PreRelease: featuregate.Alpha},
 
