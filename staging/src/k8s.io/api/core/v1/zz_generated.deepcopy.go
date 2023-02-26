@@ -3450,6 +3450,11 @@ func (in *PodAffinityTerm) DeepCopyInto(out *PodAffinityTerm) {
 		*out = new(metav1.LabelSelector)
 		(*in).DeepCopyInto(*out)
 	}
+	if in.MatchLabelKeys != nil {
+		in, out := &in.MatchLabelKeys, &out.MatchLabelKeys
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 

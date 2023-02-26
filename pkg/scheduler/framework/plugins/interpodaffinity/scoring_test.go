@@ -43,6 +43,11 @@ var namespaces = []runtime.Object{
 }
 
 func TestPreferredAffinity(t *testing.T) {
+	emptySelector, err := metav1.ParseToLabelSelector("")
+	if err != nil {
+		t.Fatalf("failed to parse empty label selector: %v", err)
+	}
+
 	labelRgChina := map[string]string{
 		"region": "China",
 	}
@@ -377,6 +382,7 @@ func TestPreferredAffinity(t *testing.T) {
 		expectedList                       framework.NodeScoreList
 		name                               string
 		ignorePreferredTermsOfExistingPods bool
+		enableMatchLabelKeys               bool
 		wantStatus                         *framework.Status
 	}{
 		{
@@ -978,5 +984,25 @@ func TestPreferredAffinityWithHardPodAffinitySymmetricWeight(t *testing.T) {
 				t.Errorf("expected:\n\t%+v,\ngot:\n\t%+v", test.expectedList, gotList)
 			}
 		})
+	}
+}
+
+func createPodWithPreferredAffinityTerms(namespace, nodeName string, labels map[string]string, affinity, antiAffinity []v1.WeightedPodAffinityTerm) *v1.Pod {
+	return &v1.Pod{
+		ObjectMeta: metav1.ObjectMeta{
+			Labels:    labels,
+			Namespace: namespace,
+		},
+		Spec: v1.PodSpec{
+			NodeName: nodeName,
+			Affinity: &v1.Affinity{
+				PodAffinity: &v1.PodAffinity{
+					PreferredDuringSchedulingIgnoredDuringExecution: affinity,
+				},
+				PodAntiAffinity: &v1.PodAntiAffinity{
+					PreferredDuringSchedulingIgnoredDuringExecution: antiAffinity,
+				},
+			},
+		},
 	}
 }

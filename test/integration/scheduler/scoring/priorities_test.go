@@ -264,14 +264,23 @@ func TestPodAffinityScoring(t *testing.T) {
 	labelKey := "service"
 	labelValue := "S1"
 	topologyKey := "node-topologykey"
-	topologyValue := "topologyvalue"
+	topologyValue := "topologyvalue1"
+	topologyValue2 := "topologyvalue2"
+	topologyValue3 := "topologyvalue3"
+	topologyValue4 := "topologyvalue4"
+	topologyValue5 := "topologyvalue5"
 	tests := []struct {
-		name      string
-		podConfig *testutils.PausePodConfig
+		name         string
+		pod          *testutils.PausePodConfig
+		existingPods []*testutils.PausePodConfig
+		nodes        []*v1.Node
+		// expectedNodeName is the list of node names. The pod should be scheduled on either of them.
+		expectedNodeName               []string
+		enableMatchLabelKeysInAffinity bool
 	}{
 		{
 			name: "pod affinity",
-			podConfig: &testutils.PausePodConfig{
+			pod: &testutils.PausePodConfig{
 				Name:      "pod1",
 				Namespace: "ns1",
 				Affinity: &v1.Affinity{
@@ -296,10 +305,33 @@ func TestPodAffinityScoring(t *testing.T) {
 					},
 				},
 			},
+			existingPods: []*testutils.PausePodConfig{
+				{
+					Name:      "attractor-pod",
+					Namespace: "ns1",
+					Labels:    map[string]string{labelKey: labelValue},
+					NodeName:  "node1",
+				},
+			},
+			nodes: []*v1.Node{
+				st.MakeNode().Name("node1").Label(topologyKey, topologyValue).Obj(),
+				st.MakeNode().Name("node2").Label(topologyKey, topologyValue2).Obj(),
+				st.MakeNode().Name("node3").Label(topologyKey, topologyValue3).Obj(),
+				st.MakeNode().Name("node4").Label(topologyKey, topologyValue4).Obj(),
+				st.MakeNode().Name("node5").Label(topologyKey, topologyValue5).Obj(),
+				st.MakeNode().Name("node6").Label(topologyKey, topologyValue).Obj(),
+				st.MakeNode().Name("node7").Label(topologyKey, topologyValue2).Obj(),
+				st.MakeNode().Name("node8").Label(topologyKey, topologyValue3).Obj(),
+				st.MakeNode().Name("node9").Label(topologyKey, topologyValue4).Obj(),
+				st.MakeNode().Name("node10").Label(topologyKey, topologyValue5).Obj(),
+				st.MakeNode().Name("other-node1").Obj(),
+				st.MakeNode().Name("other-node2").Obj(),
+			},
+			expectedNodeName: []string{"node1", "node6"},
 		},
 		{
 			name: "pod affinity with namespace selector",
-			podConfig: &testutils.PausePodConfig{
+			pod: &testutils.PausePodConfig{
 				Name:      "pod1",
 				Namespace: "ns2",
 				Affinity: &v1.Affinity{
@@ -325,47 +357,192 @@ func TestPodAffinityScoring(t *testing.T) {
 					},
 				},
 			},
+			existingPods: []*testutils.PausePodConfig{
+				{
+					Name:      "attractor-pod",
+					Namespace: "ns1",
+					Labels:    map[string]string{labelKey: labelValue},
+					NodeName:  "node1",
+				},
+			},
+			nodes: []*v1.Node{
+				st.MakeNode().Name("node1").Label(topologyKey, topologyValue).Obj(),
+				st.MakeNode().Name("node2").Label(topologyKey, topologyValue2).Obj(),
+				st.MakeNode().Name("node3").Label(topologyKey, topologyValue3).Obj(),
+				st.MakeNode().Name("node4").Label(topologyKey, topologyValue4).Obj(),
+				st.MakeNode().Name("node5").Label(topologyKey, topologyValue5).Obj(),
+				st.MakeNode().Name("node6").Label(topologyKey, topologyValue).Obj(),
+				st.MakeNode().Name("node7").Label(topologyKey, topologyValue2).Obj(),
+				st.MakeNode().Name("node8").Label(topologyKey, topologyValue3).Obj(),
+				st.MakeNode().Name("node9").Label(topologyKey, topologyValue4).Obj(),
+				st.MakeNode().Name("node10").Label(topologyKey, topologyValue5).Obj(),
+				st.MakeNode().Name("other-node1").Obj(),
+				st.MakeNode().Name("other-node2").Obj(),
+			},
+			expectedNodeName: []string{"node1", "node6"},
+		},
+		{
+			name: "anti affinity: matchLabelKeys ANDed with LabelSelector when LabelSelector isn't empty (feature flag: enabled)",
+			pod: &testutils.PausePodConfig{
+				Name:      "incoming",
+				Namespace: "ns1",
+				Labels:    map[string]string{"foo": "", "bar": "a"},
+				Affinity: &v1.Affinity{
+					PodAntiAffinity: &v1.PodAntiAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []v1.WeightedPodAffinityTerm{
+							{
+								PodAffinityTerm: v1.PodAffinityTerm{
+									TopologyKey: topologyKey,
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "foo",
+												Operator: metav1.LabelSelectorOpExists,
+											},
+										},
+									},
+									MatchLabelKeys: []string{"bar"},
+								},
+								Weight: 50,
+							},
+						},
+					},
+				},
+			},
+			existingPods: []*testutils.PausePodConfig{
+				// It matches the incoming Pod's affinity's labelSelector.
+				// BUT, the matchLabelKeys make the existing Pod's affinity's labelSelector not match with this label.
+				{
+					NodeName:  "node1",
+					Name:      "pod1",
+					Namespace: "ns1",
+					Labels:    map[string]string{"foo": "", "bar": "fuga"},
+				},
+				// It matches the incoming Pod's affinity.
+				{
+					NodeName:  "node2",
+					Name:      "pod2",
+					Namespace: "ns1",
+					Labels:    map[string]string{"foo": "", "bar": "a"},
+				},
+			},
+			nodes: []*v1.Node{
+				st.MakeNode().Name("node1").Label(topologyKey, topologyValue).Obj(),
+				st.MakeNode().Name("node2").Label(topologyKey, topologyValue2).Obj(),
+			},
+			expectedNodeName:               []string{"node1"},
+			enableMatchLabelKeysInAffinity: true,
+		},
+		{
+			name: "affinity: matchLabelKeys ANDed with LabelSelector when LabelSelector isn't empty (feature flag: enabled)",
+			pod: &testutils.PausePodConfig{
+				Affinity: &v1.Affinity{
+					PodAffinity: &v1.PodAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []v1.WeightedPodAffinityTerm{
+							{
+								// affinity with pod3.
+								PodAffinityTerm: v1.PodAffinityTerm{
+									TopologyKey: topologyKey,
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "foo",
+												Operator: metav1.LabelSelectorOpExists,
+											},
+										},
+									},
+									MatchLabelKeys: []string{"bar"},
+								},
+								Weight: 50,
+							},
+							{
+								// affinity with pod1 and pod2.
+								// schedule this Pod by this weaker affinity
+								// if `matchLabelKeys` above isn't working correctly.
+								PodAffinityTerm: v1.PodAffinityTerm{
+									TopologyKey: topologyKey,
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "bar",
+												Operator: metav1.LabelSelectorOpIn,
+												Values:   []string{"hoge"},
+											},
+										},
+									},
+								},
+								Weight: 10,
+							},
+						},
+					},
+				},
+				Name:      "incoming",
+				Namespace: "ns1",
+				Labels:    map[string]string{"foo": "", "bar": "a"},
+			},
+			existingPods: []*testutils.PausePodConfig{
+				{
+					NodeName:  "node1",
+					Name:      "pod1",
+					Namespace: "ns1",
+					Labels:    map[string]string{"foo": "", "bar": "hoge"},
+				},
+				{
+					NodeName:  "node2",
+					Name:      "pod2",
+					Namespace: "ns1",
+					Labels:    map[string]string{"foo": "", "bar": "hoge"},
+				},
+				{
+					NodeName:  "node3",
+					Name:      "pod3",
+					Namespace: "ns1",
+					Labels:    map[string]string{"foo": "", "bar": "a"},
+				},
+			},
+			enableMatchLabelKeysInAffinity: true,
+			nodes: []*v1.Node{
+				st.MakeNode().Name("node1").Label(topologyKey, topologyValue).Obj(),
+				st.MakeNode().Name("node2").Label(topologyKey, topologyValue2).Obj(),
+				st.MakeNode().Name("node3").Label(topologyKey, topologyValue3).Obj(),
+				st.MakeNode().Name("node4").Label(topologyKey, topologyValue).Obj(),
+				st.MakeNode().Name("node5").Label(topologyKey, topologyValue2).Obj(),
+				st.MakeNode().Name("node6").Label(topologyKey, topologyValue3).Obj(),
+			},
+			expectedNodeName: []string{"node3", "node6"},
 		},
 	}
+
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			testCtx := initTestSchedulerForPriorityTest(t, interpodaffinity.Name, interpodaffinity.Name)
-			// Add a few nodes.
-			nodesInTopology, err := createAndWaitForNodesInCache(testCtx, "in-topology", st.MakeNode().Label(topologyKey, topologyValue), 5)
-			if err != nil {
-				t.Fatal(err)
-			}
+			defer featuregatetesting.SetFeatureGateDuringTest(t, utilfeature.DefaultFeatureGate, features.MatchLabelKeysInPodAffinity, tt.enableMatchLabelKeysInAffinity)()
+
+			testCtx := initTestSchedulerForPriorityTest(t, interpodaffinity.Name, interpodaffinity.Name))
 			if err := createNamespacesWithLabels(testCtx.ClientSet, []string{"ns1", "ns2"}, map[string]string{"team": "team1"}); err != nil {
 				t.Fatal(err)
 			}
-			// Add a pod with a label and wait for it to schedule.
-			_, err = runPausePod(testCtx.ClientSet, initPausePod(&testutils.PausePodConfig{
-				Name:      "attractor-pod",
-				Namespace: "ns1",
-				Labels:    map[string]string{labelKey: labelValue},
-			}))
-			if err != nil {
-				t.Fatalf("Error running the attractor pod: %v", err)
+
+			for _, n := range tt.nodes {
+				if _, err := createNode(testCtx.ClientSet, n); err != nil {
+					t.Fatalf("failed to create node: %v", err)
+				}
 			}
-			// Add a few more nodes without the topology label.
-			_, err = createAndWaitForNodesInCache(testCtx, "other-node", st.MakeNode(), 5)
-			if err != nil {
-				t.Fatal(err)
+
+			for _, p := range tt.existingPods {
+				if _, err := runPausePod(testCtx.ClientSet, initPausePod(p)); err != nil {
+					t.Fatalf("failed to create existing pod: %v", err)
+				}
 			}
-			// Add a new pod with affinity to the attractor pod.
-			pod, err := runPausePod(testCtx.ClientSet, initPausePod(tt.podConfig))
+
+			pod, err := runPausePod(testCtx.ClientSet, initPausePod(tt.pod))
 			if err != nil {
 				t.Fatalf("Error running pause pod: %v", err)
 			}
-			// The new pod must be scheduled on one of the nodes with the same topology
-			// key-value as the attractor pod.
-			for _, node := range nodesInTopology {
-				if node.Name == pod.Spec.NodeName {
-					t.Logf("Pod %v got successfully scheduled on node %v.", tt.podConfig.Name, pod.Spec.NodeName)
-					return
-				}
+
+			err = wait.Poll(pollInterval, wait.ForeverTestTimeout, podScheduledIn(testCtx.ClientSet, pod.Namespace, pod.Name, tt.expectedNodeName))
+			if err != nil {
+				t.Errorf("Error while trying to wait for a pod to be scheduled: %v", err)
 			}
-			t.Errorf("Pod %v got scheduled on an unexpected node: %v.", tt.podConfig.Name, pod.Spec.NodeName)
 		})
 	}
 }

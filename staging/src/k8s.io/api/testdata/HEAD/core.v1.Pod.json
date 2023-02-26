@@ -1413,7 +1413,10 @@
                   ]
                 }
               ]
-            }
+            },
+            "matchLabelKeys": [
+              "matchLabelKeysValue"
+            ]
           }
         ],
         "preferredDuringSchedulingIgnoredDuringExecution": [
@@ -1451,7 +1454,10 @@
                     ]
                   }
                 ]
-              }
+              },
+              "matchLabelKeys": [
+                "matchLabelKeysValue"
+              ]
             }
           }
         ]
@@ -1490,7 +1496,10 @@
                   ]
                 }
               ]
-            }
+            },
+            "matchLabelKeys": [
+              "matchLabelKeysValue"
+            ]
           }
         ],
         "preferredDuringSchedulingIgnoredDuringExecution": [
@@ -1528,7 +1537,10 @@
                     ]
                   }
                 ]
-              }
+              },
+              "matchLabelKeys": [
+                "matchLabelKeysValue"
+              ]
             }
           }
         ]

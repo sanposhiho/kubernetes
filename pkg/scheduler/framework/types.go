@@ -236,22 +236,23 @@ func (pi *PodInfo) Update(pod *v1.Pod) error {
 		}
 	}
 
+	enableMatchLabelKeysInPodAffinity := utilfeature.DefaultFeatureGate.Enabled(features.MatchLabelKeysInPodAffinity)
 	// Attempt to parse the affinity terms
 	var parseErrs []error
-	requiredAffinityTerms, err := getAffinityTerms(pod, getPodAffinityTerms(pod.Spec.Affinity))
+	requiredAffinityTerms, err := getAffinityTerms(pod, getPodAffinityTerms(pod.Spec.Affinity), enableMatchLabelKeysInPodAffinity)
 	if err != nil {
 		parseErrs = append(parseErrs, fmt.Errorf("requiredAffinityTerms: %w", err))
 	}
 	requiredAntiAffinityTerms, err := getAffinityTerms(pod,
-		getPodAntiAffinityTerms(pod.Spec.Affinity))
+		getPodAntiAffinityTerms(pod.Spec.Affinity), enableMatchLabelKeysInPodAffinity)
 	if err != nil {
 		parseErrs = append(parseErrs, fmt.Errorf("requiredAntiAffinityTerms: %w", err))
 	}
-	weightedAffinityTerms, err := getWeightedAffinityTerms(pod, preferredAffinityTerms)
+	weightedAffinityTerms, err := getWeightedAffinityTerms(pod, preferredAffinityTerms, enableMatchLabelKeysInPodAffinity)
 	if err != nil {
 		parseErrs = append(parseErrs, fmt.Errorf("preferredAffinityTerms: %w", err))
 	}
-	weightedAntiAffinityTerms, err := getWeightedAffinityTerms(pod, preferredAntiAffinityTerms)
+	weightedAntiAffinityTerms, err := getWeightedAffinityTerms(pod, preferredAntiAffinityTerms, enableMatchLabelKeysInPodAffinity)
 	if err != nil {
 		parseErrs = append(parseErrs, fmt.Errorf("preferredAntiAffinityTerms: %w", err))
 	}
@@ -266,7 +267,8 @@ func (pi *PodInfo) Update(pod *v1.Pod) error {
 
 // AffinityTerm is a processed version of v1.PodAffinityTerm.
 type AffinityTerm struct {
-	Namespaces        sets.Set[string]
+	Namespaces sets.Set[string]
+	// note: matchLabelKeys is already handled and merged in Selector when initializing AffiniyTerm.
 	Selector          labels.Selector
 	TopologyKey       string
 	NamespaceSelector labels.Selector
@@ -347,7 +349,7 @@ func (f *FitError) Error() string {
 	return reasonMsg
 }
 
-func newAffinityTerm(pod *v1.Pod, term *v1.PodAffinityTerm) (*AffinityTerm, error) {
+func newAffinityTerm(pod *v1.Pod, term *v1.PodAffinityTerm, enableMatchLabelKeysInPodAffinity bool) (*AffinityTerm, error) {
 	selector, err := metav1.LabelSelectorAsSelector(term.LabelSelector)
 	if err != nil {
 		return nil, err
@@ -358,20 +360,24 @@ func newAffinityTerm(pod *v1.Pod, term *v1.PodAffinityTerm) (*AffinityTerm, erro
 	if err != nil {
 		return nil, err
 	}
+	at := &AffinityTerm{Namespaces: namespaces, Selector: selector, TopologyKey: term.TopologyKey, NamespaceSelector: nsSelector}
+	if enableMatchLabelKeysInPodAffinity {
+		mergeAffinityTermMatchLabelKeys(at, term.MatchLabelKeys, pod.GetLabels())
+	}
 
-	return &AffinityTerm{Namespaces: namespaces, Selector: selector, TopologyKey: term.TopologyKey, NamespaceSelector: nsSelector}, nil
+	return at, nil
 }
 
 // getAffinityTerms receives a Pod and affinity terms and returns the namespaces and
 // selectors of the terms.
-func getAffinityTerms(pod *v1.Pod, v1Terms []v1.PodAffinityTerm) ([]AffinityTerm, error) {
+func getAffinityTerms(pod *v1.Pod, v1Terms []v1.PodAffinityTerm, enableMatchLabelKeysInPodAffinity bool) ([]AffinityTerm, error) {
 	if v1Terms == nil {
 		return nil, nil
 	}
 
 	var terms []AffinityTerm
 	for i := range v1Terms {
-		t, err := newAffinityTerm(pod, &v1Terms[i])
+		t, err := newAffinityTerm(pod, &v1Terms[i], enableMatchLabelKeysInPodAffinity)
 		if err != nil {
 			// We get here if the label selector failed to process
 			return nil, err
@@ -382,14 +388,14 @@ func getAffinityTerms(pod *v1.Pod, v1Terms []v1.PodAffinityTerm) ([]AffinityTerm
 }
 
 // getWeightedAffinityTerms returns the list of processed affinity terms.
-func getWeightedAffinityTerms(pod *v1.Pod, v1Terms []v1.WeightedPodAffinityTerm) ([]WeightedAffinityTerm, error) {
+func getWeightedAffinityTerms(pod *v1.Pod, v1Terms []v1.WeightedPodAffinityTerm, enableMatchLabelKeysInPodAffinity bool) ([]WeightedAffinityTerm, error) {
 	if v1Terms == nil {
 		return nil, nil
 	}
 
 	var terms []WeightedAffinityTerm
 	for i := range v1Terms {
-		t, err := newAffinityTerm(pod, &v1Terms[i].PodAffinityTerm)
+		t, err := newAffinityTerm(pod, &v1Terms[i].PodAffinityTerm, enableMatchLabelKeysInPodAffinity)
 		if err != nil {
 			// We get here if the label selector failed to process
 			return nil, err
@@ -397,6 +403,38 @@ func getWeightedAffinityTerms(pod *v1.Pod, v1Terms []v1.WeightedPodAffinityTerm)
 		terms = append(terms, WeightedAffinityTerm{AffinityTerm: *t, Weight: v1Terms[i].Weight})
 	}
 	return terms, nil
+}
+
+func mergeAffinityTermMatchLabelKeys(at *AffinityTerm, matchLabelKeys []string, podLabels map[string]string) {
+	if len(matchLabelKeys) == 0 {
+		return
+	}
+
+	matchLabels := make(labels.Set)
+	for _, labelKey := range matchLabelKeys {
+		if value, ok := podLabels[labelKey]; ok {
+			matchLabels[labelKey] = value
+		}
+	}
+	if len(matchLabels) == 0 {
+		return
+	}
+
+	at.Selector = MergeLabelSetWithSelector(matchLabels, at.Selector)
+}
+
+func MergeLabelSetWithSelector(matchLabels labels.Set, s labels.Selector) labels.Selector {
+	requirements, ok := s.Requirements()
+	if !ok {
+		return s
+	}
+
+	mergedSelector := labels.SelectorFromSet(matchLabels)
+	for _, r := range requirements {
+		mergedSelector = mergedSelector.Add(r)
+	}
+
+	return mergedSelector
 }
 
 // NewPodInfo returns a new PodInfo.

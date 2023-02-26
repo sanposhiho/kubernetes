@@ -104,7 +104,7 @@ func (pl *PodTopologySpread) filterTopologySpreadConstraints(constraints []v1.To
 					}
 				}
 				if len(matchLabels) > 0 {
-					selector = mergeLabelSetWithSelector(matchLabels, selector)
+					selector = framework.MergeLabelSetWithSelector(matchLabels, selector)
 				}
 			}
 
@@ -131,21 +131,6 @@ func (pl *PodTopologySpread) filterTopologySpreadConstraints(constraints []v1.To
 		}
 	}
 	return result, nil
-}
-
-func mergeLabelSetWithSelector(matchLabels labels.Set, s labels.Selector) labels.Selector {
-	mergedSelector := labels.SelectorFromSet(matchLabels)
-
-	requirements, ok := s.Requirements()
-	if !ok {
-		return s
-	}
-
-	for _, r := range requirements {
-		mergedSelector = mergedSelector.Add(r)
-	}
-
-	return mergedSelector
 }
 
 func countPodsMatchSelector(podInfos []*framework.PodInfo, selector labels.Selector, ns string) int {
