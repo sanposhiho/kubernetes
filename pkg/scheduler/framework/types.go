@@ -87,6 +87,57 @@ type ClusterEvent struct {
 	Label      string
 }
 
+type ClusterEventWithHint struct {
+	Event ClusterEvent
+	// QueueingHintFn is executed for the plugin rejected by this plugin when the above Event happens,
+	// and filters out events to reduce useless retry of Pod's scheduling.
+	// It's the optional field. If you don't have any in this field,
+	// the scheduling of Pods will be always retried when this Event happens.
+	QueueingHintFn QueueingHintFn
+}
+
+// QueueingHintFn returns status meaning whether the event can make a Pod, which is rejected by this plugin in the past scheduling cycle, schedulable or not.
+// It's called before a Pod gets moved from unschedulableQ to backoffQ or activeQ.
+//
+// - `pod`: the Pod to be enqueued, which is rejected by this plugin in the past.
+// - `event`: By which event the pod will be moved back to schedQ/backoffQ.
+// - `oldObj` `newObj`: the object involved in that event.
+//   - For example, the given event is "Node deleted", the `oldObj` will be that deleted Node.
+//   - `oldObj` is nil if the event is add event.
+//   - `newObj` is nil if the event is delete event.
+type QueueingHintFn func(pod *v1.Pod, oldObj, newObj interface{}) QueueingHint
+
+type QueueingHint int
+
+const (
+	// QueueSkip implies that a cluster event has no impact on
+	// scheduling of a pod.
+	QueueSkip QueueingHint = iota
+
+	// QueueAfterBackoff implies that the Pod may be schedulable by the event,
+	// and worth retring the scheduling again after backoff.
+	QueueAfterBackoff
+
+	// QueueImmediately is returned only when it is highly possible that the Pod gets scheduled in the next scheduling.
+	// Note that you should return QueueImmediately when the plugin is 100% sure that the Pod gets scheduled in the next scheduling.
+	// Otherwise, it's detrimental to scheduling throughput.
+	// For example, when it depends on other plugin's decisions whether the Pod is schedulable or not by the event,
+	// the plugin should return QueueAfterBackoff instead of QueueImmediately.
+	QueueImmediately
+)
+
+func (s QueueingHint) String() string {
+	switch s {
+	case QueueSkip:
+		return "QueueSkip"
+	case QueueAfterBackoff:
+		return "QueueAfterBackoff"
+	case QueueImmediately:
+		return "QueueImmediately"
+	}
+	return ""
+}
+
 // IsWildCard returns true if ClusterEvent follows WildCard semantics
 func (ce ClusterEvent) IsWildCard() bool {
 	return ce.Resource == WildCard && ce.ActionType == All
@@ -111,6 +162,21 @@ type QueuedPodInfo struct {
 	UnschedulablePlugins sets.Set[string]
 	// Whether the Pod is scheduling gated (by PreEnqueuePlugins) or not.
 	Gated bool
+
+	// MoveRequestCycle is used by the PriorityQueue. Other queue
+	// implementations can ignore it.
+	//
+	// It caches the sequence number of scheduling cycle when we received a
+	// move request, typically because of a cluster event. When a pod
+	// scheduling attempt fails with "Unschedulable" in or before this
+	// cycle, it is placed in the backoff queue instead of the normal queue
+	// of unschedulable pods. This causes additional delays due to
+	// timeouts, but is necessary because the event that would have moved
+	// them out of the normal queue was already processed and thus the pod
+	// would be stuck in that queue unless some other event activates it.
+	// In the backoff queue it will be considered again without a cluster
+	// event.
+	MoveRequestCycle int64
 }
 
 // DeepCopy returns a deep copy of the QueuedPodInfo object.
@@ -169,11 +235,11 @@ func (pi *PodInfo) Update(pod *v1.Pod) error {
 
 	// Attempt to parse the affinity terms
 	var parseErrs []error
-	requiredAffinityTerms, err := getAffinityTerms(pod, getPodAffinityTerms(pod.Spec.Affinity))
+	requiredAffinityTerms, err := GetAffinityTerms(pod, getPodAffinityTerms(pod.Spec.Affinity))
 	if err != nil {
 		parseErrs = append(parseErrs, fmt.Errorf("requiredAffinityTerms: %w", err))
 	}
-	requiredAntiAffinityTerms, err := getAffinityTerms(pod,
+	requiredAntiAffinityTerms, err := GetAffinityTerms(pod,
 		getPodAntiAffinityTerms(pod.Spec.Affinity))
 	if err != nil {
 		parseErrs = append(parseErrs, fmt.Errorf("requiredAntiAffinityTerms: %w", err))
@@ -292,9 +358,9 @@ func newAffinityTerm(pod *v1.Pod, term *v1.PodAffinityTerm) (*AffinityTerm, erro
 	return &AffinityTerm{Namespaces: namespaces, Selector: selector, TopologyKey: term.TopologyKey, NamespaceSelector: nsSelector}, nil
 }
 
-// getAffinityTerms receives a Pod and affinity terms and returns the namespaces and
+// GetAffinityTerms receives a Pod and affinity terms and returns the namespaces and
 // selectors of the terms.
-func getAffinityTerms(pod *v1.Pod, v1Terms []v1.PodAffinityTerm) ([]AffinityTerm, error) {
+func GetAffinityTerms(pod *v1.Pod, v1Terms []v1.PodAffinityTerm) ([]AffinityTerm, error) {
 	if v1Terms == nil {
 		return nil, nil
 	}

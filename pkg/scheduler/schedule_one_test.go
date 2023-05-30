@@ -765,6 +765,7 @@ func TestSchedulerScheduleOne(t *testing.T) {
 				NextPod: func() *framework.QueuedPodInfo {
 					return &framework.QueuedPodInfo{PodInfo: mustNewPodInfo(t, item.sendPod)}
 				},
+				DonePod:         func(types.UID) {},
 				SchedulingQueue: internalqueue.NewTestQueue(ctx, nil),
 				Profiles:        profile.Map{testSchedulerName: fwk},
 			}
@@ -772,7 +773,7 @@ func TestSchedulerScheduleOne(t *testing.T) {
 			sched.SchedulePod = func(ctx context.Context, fwk framework.Framework, state *framework.CycleState, pod *v1.Pod) (ScheduleResult, error) {
 				return item.mockResult.result, item.mockResult.err
 			}
-			sched.FailureHandler = func(_ context.Context, fwk framework.Framework, p *framework.QueuedPodInfo, status *framework.Status, _ *framework.NominatingInfo, _ time.Time) {
+			sched.FailureHandler = func(_ context.Context, fwk framework.Framework, p *framework.QueuedPodInfo, status *framework.Status, _ *framework.NominatingInfo, _ sets.Set[string], _ time.Time) {
 				gotPod = p.Pod
 				gotError = status.AsError()
 
@@ -3160,12 +3161,13 @@ func setupTestScheduler(ctx context.Context, t *testing.T, queuedPodStore *clien
 		NextPod: func() *framework.QueuedPodInfo {
 			return &framework.QueuedPodInfo{PodInfo: mustNewPodInfo(t, clientcache.Pop(queuedPodStore).(*v1.Pod))}
 		},
+		DonePod:         func(types.UID) {},
 		SchedulingQueue: schedulingQueue,
 		Profiles:        profile.Map{testSchedulerName: fwk},
 	}
 
 	sched.SchedulePod = sched.schedulePod
-	sched.FailureHandler = func(_ context.Context, _ framework.Framework, p *framework.QueuedPodInfo, status *framework.Status, _ *framework.NominatingInfo, _ time.Time) {
+	sched.FailureHandler = func(_ context.Context, _ framework.Framework, p *framework.QueuedPodInfo, status *framework.Status, _ *framework.NominatingInfo, _ sets.Set[string], _ time.Time) {
 		err := status.AsError()
 		errChan <- err
 

@@ -24,6 +24,7 @@ import (
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/dynamic/dynamicinformer"
@@ -71,6 +72,9 @@ type Scheduler struct {
 	// a pod may take some amount of time and we don't want pods to get
 	// stale while they sit in a channel.
 	NextPod func() *framework.QueuedPodInfo
+
+	// DonePod must be called when the processing of the pod is completed.
+	DonePod func(pod types.UID)
 
 	// FailureHandler is called upon a scheduling failure.
 	FailureHandler FailureHandlerFn
@@ -295,7 +299,6 @@ func New(ctx context.Context,
 		frameworkruntime.WithInformerFactory(informerFactory),
 		frameworkruntime.WithSnapshotSharedLister(snapshot),
 		frameworkruntime.WithCaptureProfile(frameworkruntime.CaptureProfile(options.frameworkCapturer)),
-		frameworkruntime.WithClusterEventMap(clusterEventMap),
 		frameworkruntime.WithParallelism(int(options.parallelism)),
 		frameworkruntime.WithExtenders(extenders),
 		frameworkruntime.WithMetricsRecorder(metricsRecorder),
@@ -309,9 +312,12 @@ func New(ctx context.Context,
 	}
 
 	preEnqueuePluginMap := make(map[string][]framework.PreEnqueuePlugin)
+	queueingHintMap := make(map[string]map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction)
 	for profileName, profile := range profiles {
 		preEnqueuePluginMap[profileName] = profile.PreEnqueuePlugins()
+		queueingHintMap[profileName] = buildQueueingHintMap(profile.EnqueueExtensions(), clusterEventMap)
 	}
+
 	podQueue := internalqueue.NewSchedulingQueue(
 		profiles[options.profiles[0].SchedulerName].QueueSortFunc(),
 		informerFactory,
@@ -321,6 +327,7 @@ func New(ctx context.Context,
 		internalqueue.WithClusterEventMap(clusterEventMap),
 		internalqueue.WithPodMaxInUnschedulablePodsDuration(options.podMaxInUnschedulablePodsDuration),
 		internalqueue.WithPreEnqueuePluginMap(preEnqueuePluginMap),
+		internalqueue.WithQueueingHintMap(queueingHintMap),
 		internalqueue.WithPluginMetricsSamplePercent(pluginMetricsSamplePercent),
 		internalqueue.WithMetricsRecorder(*metricsRecorder),
 	)
@@ -341,17 +348,44 @@ func New(ctx context.Context,
 		nodeInfoSnapshot:         snapshot,
 		percentageOfNodesToScore: options.percentageOfNodesToScore,
 		Extenders:                extenders,
-		NextPod:                  internalqueue.MakeNextPodFunc(logger, podQueue),
 		StopEverything:           stopEverything,
 		SchedulingQueue:          podQueue,
 		Profiles:                 profiles,
 		logger:                   logger,
 	}
+	sched.NextPod, sched.DonePod = internalqueue.MakeNextPodFuncs(logger, podQueue)
 	sched.applyDefaultHandlers()
 
 	addAllEventHandlers(sched, informerFactory, dynInformerFactory, unionedGVKs(clusterEventMap))
 
 	return sched, nil
+}
+
+func buildQueueingHintMap(es []framework.EnqueueExtensions, eventToPlugins map[framework.ClusterEvent]sets.Set[string]) map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction {
+	queueingHintMap := make(map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction)
+	for _, e := range es {
+		events := e.EventsToRegister()
+		for _, event := range events {
+			fn := event.QueueingHintFn
+			if fn == nil {
+				fn = func(_ *v1.Pod, _, _ interface{}) framework.QueueingHint {
+					return framework.QueueAfterBackoff
+				}
+			}
+
+			queueingHintMap[event.Event] = append(queueingHintMap[event.Event], &internalqueue.QueueingHintFunction{
+				PluginName:     e.Name(),
+				QueueingHintFn: fn,
+			})
+
+			if eventToPlugins[event.Event] == nil {
+				eventToPlugins[event.Event] = sets.New(e.Name())
+			} else {
+				eventToPlugins[event.Event].Insert(e.Name())
+			}
+		}
+	}
+	return queueingHintMap
 }
 
 // Run begins watching and scheduling. It starts scheduling and blocked until the context is done.
@@ -437,7 +471,7 @@ func buildExtenders(logger klog.Logger, extenders []schedulerapi.Extender, profi
 	return fExtenders, nil
 }
 
-type FailureHandlerFn func(ctx context.Context, fwk framework.Framework, podInfo *framework.QueuedPodInfo, status *framework.Status, nominatingInfo *framework.NominatingInfo, start time.Time)
+type FailureHandlerFn func(ctx context.Context, fwk framework.Framework, podInfo *framework.QueuedPodInfo, status *framework.Status, nominatingInfo *framework.NominatingInfo, unschedulablePlugins sets.Set[string], start time.Time)
 
 func unionedGVKs(m map[framework.ClusterEvent]sets.Set[string]) map[framework.GVK]framework.ActionType {
 	gvkMap := make(map[framework.GVK]framework.ActionType)

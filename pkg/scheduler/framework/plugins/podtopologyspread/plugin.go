@@ -17,6 +17,7 @@ limitations under the License.
 package podtopologyspread
 
 import (
+	"context"
 	"fmt"
 
 	v1 "k8s.io/api/core/v1"
@@ -24,12 +25,14 @@ import (
 	"k8s.io/client-go/informers"
 	appslisters "k8s.io/client-go/listers/apps/v1"
 	corelisters "k8s.io/client-go/listers/core/v1"
+	"k8s.io/klog/v2"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config/validation"
 	"k8s.io/kubernetes/pkg/scheduler/framework"
 	"k8s.io/kubernetes/pkg/scheduler/framework/parallelize"
 	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/feature"
 	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/names"
+	"k8s.io/kubernetes/pkg/scheduler/util"
 )
 
 const (
@@ -129,10 +132,63 @@ func (pl *PodTopologySpread) setListers(factory informers.SharedInformerFactory)
 	pl.statefulSets = factory.Apps().V1().StatefulSets().Lister()
 }
 
+func (pl *PodTopologySpread) Requeue(ctx context.Context, p *v1.Pod, event framework.ClusterEvent, oldObj, obj interface{}) framework.QueueingHint {
+	switch event.Resource {
+	case framework.Pod:
+		// TODO(sanposhiho): implement it
+		return framework.QueueAfterBackoff
+	case framework.Node:
+		return pl.requeueByNodeEvent(ctx, p, event, oldObj, obj)
+	}
+
+	return framework.QueueSkip
+}
+
+func (pl *PodTopologySpread) requeueByNodeEvent(ctx context.Context, p *v1.Pod, event framework.ClusterEvent, oldObj, obj interface{}) framework.QueueingHint {
+	logger := klog.FromContext(ctx)
+
+	oldNode, newNode, err := util.AsNodes(oldObj, obj)
+	if err != nil {
+		logger.Error(err, "failed to parse Node from object passed from the scheduling queue via Requeue")
+		// This should be a bug.
+		// Here returns QueueAfterBackoff so that it won't block scheduling.
+		return framework.QueueAfterBackoff
+	}
+
+	for _, c := range p.Spec.TopologySpreadConstraints {
+		if event.ActionType&framework.Delete != 0 {
+			_, ok := oldNode.Labels[c.TopologyKey]
+			if ok {
+				// The deletion of Node with TopologyKey label may make Pod schedulable.
+				return framework.QueueAfterBackoff
+			}
+			continue
+		}
+
+		_, ok := newNode.Labels[c.TopologyKey]
+		if ok {
+			if event.ActionType&framework.UpdateNodeLabel != 0 {
+				_, ok = oldNode.Labels[c.TopologyKey]
+				if ok {
+					// This Node originally has the label.
+					// So, this update doesn't make Pod schedulable from this TopologySpread prospective.
+					continue
+				}
+			}
+
+			// Add or UpdateNodeLabel: This Node is going to be new domain for this Pod's topology spread. So, this event may make Pod schedulable.
+			return framework.QueueAfterBackoff
+		}
+	}
+
+	// This Node isn't related to this Pod's topology spread.
+	return framework.QueueSkip
+}
+
 // EventsToRegister returns the possible events that may make a Pod
 // failed by this plugin schedulable.
-func (pl *PodTopologySpread) EventsToRegister() []framework.ClusterEvent {
-	return []framework.ClusterEvent{
+func (pl *PodTopologySpread) EventsToRegister() []framework.ClusterEventWithHint {
+	return []framework.ClusterEventWithHint{
 		// All ActionType includes the following events:
 		// - Add. An unschedulable Pod may fail due to violating topology spread constraints,
 		// adding an assigned Pod may make it schedulable.
@@ -140,9 +196,9 @@ func (pl *PodTopologySpread) EventsToRegister() []framework.ClusterEvent {
 		// an unschedulable Pod schedulable.
 		// - Delete. An unschedulable Pod may fail due to violating an existing Pod's topology spread constraints,
 		// deleting an existing Pod may make it schedulable.
-		{Resource: framework.Pod, ActionType: framework.All},
+		{Event: framework.ClusterEvent{Resource: framework.Pod, ActionType: framework.All}},
 		// Node add|delete|updateLabel maybe lead an topology key changed,
 		// and make these pod in scheduling schedulable or unschedulable.
-		{Resource: framework.Node, ActionType: framework.Add | framework.Delete | framework.UpdateNodeLabel},
+		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.Delete | framework.UpdateNodeLabel}},
 	}
 }
