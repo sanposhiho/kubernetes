@@ -295,7 +295,6 @@ func New(ctx context.Context,
 		frameworkruntime.WithInformerFactory(informerFactory),
 		frameworkruntime.WithSnapshotSharedLister(snapshot),
 		frameworkruntime.WithCaptureProfile(frameworkruntime.CaptureProfile(options.frameworkCapturer)),
-		frameworkruntime.WithClusterEventMap(clusterEventMap),
 		frameworkruntime.WithParallelism(int(options.parallelism)),
 		frameworkruntime.WithExtenders(extenders),
 		frameworkruntime.WithMetricsRecorder(metricsRecorder),
@@ -309,18 +308,21 @@ func New(ctx context.Context,
 	}
 
 	preEnqueuePluginMap := make(map[string][]framework.PreEnqueuePlugin)
+	queueingHintMap := make(map[string]map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction)
 	for profileName, profile := range profiles {
 		preEnqueuePluginMap[profileName] = profile.PreEnqueuePlugins()
+		queueingHintMap[profileName] = buildQueueingHintMap(profile.EnqueueExtensions(), clusterEventMap)
 	}
+
 	podQueue := internalqueue.NewSchedulingQueue(
 		profiles[options.profiles[0].SchedulerName].QueueSortFunc(),
 		informerFactory,
 		internalqueue.WithPodInitialBackoffDuration(time.Duration(options.podInitialBackoffSeconds)*time.Second),
 		internalqueue.WithPodMaxBackoffDuration(time.Duration(options.podMaxBackoffSeconds)*time.Second),
 		internalqueue.WithPodLister(podLister),
-		internalqueue.WithClusterEventMap(clusterEventMap),
 		internalqueue.WithPodMaxInUnschedulablePodsDuration(options.podMaxInUnschedulablePodsDuration),
 		internalqueue.WithPreEnqueuePluginMap(preEnqueuePluginMap),
+		internalqueue.WithQueueingHintMap(queueingHintMap),
 		internalqueue.WithPluginMetricsSamplePercent(pluginMetricsSamplePercent),
 		internalqueue.WithMetricsRecorder(*metricsRecorder),
 	)
@@ -352,6 +354,33 @@ func New(ctx context.Context,
 	addAllEventHandlers(sched, informerFactory, dynInformerFactory, unionedGVKs(clusterEventMap))
 
 	return sched, nil
+}
+
+func buildQueueingHintMap(es []framework.EnqueueExtensions, eventToPlugins map[framework.ClusterEvent]sets.Set[string]) map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction {
+	queueingHintMap := make(map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction)
+	for _, e := range es {
+		events := e.EventsToRegister()
+		for _, event := range events {
+			fn := event.QueueingHintFn
+			if fn == nil {
+				fn = func(_ *v1.Pod, _, _ interface{}) framework.QueueingHint {
+					return framework.QueueAfterBackoff
+				}
+			}
+
+			queueingHintMap[event.Event] = append(queueingHintMap[event.Event], &internalqueue.QueueingHintFunction{
+				PluginName:     e.Name(),
+				QueueingHintFn: fn,
+			})
+
+			if eventToPlugins[event.Event] == nil {
+				eventToPlugins[event.Event] = sets.New(e.Name())
+			} else {
+				eventToPlugins[event.Event].Insert(e.Name())
+			}
+		}
+	}
+	return queueingHintMap
 }
 
 // Run begins watching and scheduling. It starts scheduling and blocked until the context is done.

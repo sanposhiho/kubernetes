@@ -159,3 +159,43 @@ func IsScalarResourceName(name v1.ResourceName) bool {
 	return v1helper.IsExtendedResourceName(name) || v1helper.IsHugePageResourceName(name) ||
 		v1helper.IsPrefixedNativeResource(name) || v1helper.IsAttachableVolumeResourceName(name)
 }
+
+func AsPods(oldObj, newobj interface{}) (*v1.Pod, *v1.Pod, error) {
+	var newPod *v1.Pod
+	var ok bool
+	if newobj != nil {
+		newPod, ok = newobj.(*v1.Pod)
+		if !ok {
+			return nil, nil, fmt.Errorf("expected Pod, but got %T", newobj)
+		}
+	}
+
+	var oldPod *v1.Pod
+	if oldObj != nil {
+		oldPod, ok = oldObj.(*v1.Pod)
+		if !ok {
+			return nil, nil, fmt.Errorf("expected Pod, but got %T", newobj)
+		}
+	}
+	return oldPod, newPod, nil
+}
+
+func AsNodes(oldObj, newobj interface{}) (*v1.Node, *v1.Node, error) {
+	var newNode *v1.Node
+	var ok bool
+	if newobj != nil {
+		newNode, ok = newobj.(*v1.Node)
+		if !ok {
+			return nil, nil, fmt.Errorf("expected Node, but got %T", newobj)
+		}
+	}
+
+	var oldNode *v1.Node
+	if oldObj != nil {
+		oldNode, ok = oldObj.(*v1.Node)
+		if !ok {
+			return nil, nil, fmt.Errorf("expected Node, but got %T", newobj)
+		}
+	}
+	return oldNode, newNode, nil
+}
