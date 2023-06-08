@@ -2284,7 +2284,7 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 			event:    NodeAdd,
 			oldObj:   nil,
 			newObj:   st.MakeNode().Node,
-			expected: framework.QueueAfterBackoff,
+			expected: framework.QueueSkip,
 			queueingHintMap: map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
 				"": {
 					// no queueing hint function for NodeAdd.

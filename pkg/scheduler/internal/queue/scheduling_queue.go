@@ -361,39 +361,39 @@ func (p *PriorityQueue) isPodWorthRequeuing(logger klog.Logger, pInfo *framework
 
 	hintMap, ok := p.queueingHintMap[pInfo.Pod.Spec.SchedulerName]
 	if !ok {
-		logger.Error(nil, "No QueueingHintMap is registered for this profile", "profile", pInfo.Pod.Spec.SchedulerName)
-		return framework.QueueAfterBackoff
-	}
-
-	queueHintFn, ok := hintMap[event]
-	if !ok {
-		// It shouldn't reach here since we put default QueueingHintFn for the plugins that doesn't have QueueingHintFn.
-		// But, return QueueAfterBackoff to keep this scheduler working.
-		logger.Error(nil, "No QueueingHintFn is registered for this event in this profile", "profile", pInfo.Pod.Spec.SchedulerName, "event", event)
+		logger.Error(nil, "No QueueingHintMap is registered for this profile", "profile", pInfo.Pod.Spec.SchedulerName, "pod", klog.KObj(pInfo.Pod))
 		return framework.QueueAfterBackoff
 	}
 
 	pod := pInfo.Pod
 	queueHint := framework.QueueSkip
-	for _, hintfn := range queueHintFn {
-		if !pInfo.UnschedulablePlugins.Has(hintfn.PluginName) {
+	for eve, hintfns := range hintMap {
+		if eve.Resource != event.Resource || eve.ActionType&event.ActionType == 0 {
 			continue
 		}
 
-		h := hintfn.QueueingHintFn(pod, oldObj, newObj)
-		if h == framework.QueueSkip {
-			continue
-		}
+		for _, hintfn := range hintfns {
+			if !pInfo.UnschedulablePlugins.Has(hintfn.PluginName) {
+				continue
+			}
 
-		if h == framework.QueueImmediately {
-			return h
-		}
+			h := hintfn.QueueingHintFn(pod, oldObj, newObj)
+			if h == framework.QueueSkip {
+				continue
+			}
 
-		// replace queueHint with the returned value,
-		// but continue to other queueHintFn to check because other plugins may want to return QueueImmediately.
-		queueHint = h
+			if h == framework.QueueImmediately {
+				return h
+			}
+
+			// replace queueHint with the returned value,
+			// but continue to other queueHintFn to check because other plugins may want to return QueueImmediately.
+			queueHint = h
+		}
 	}
 
+	// No queueing hint function is registered for this event
+	// or no queueing hint fn returns the value other than QueueSkip.
 	return queueHint
 }
 
