@@ -2256,24 +2256,29 @@ func mustNewPodInfo(pod *v1.Pod) *framework.PodInfo {
 
 // Test_isPodWorthRequeuing tests isPodWorthRequeuing function.
 func Test_isPodWorthRequeuing(t *testing.T) {
+	count := 0
 	queueHintReturnQueueImmediately := func(pod *v1.Pod, oldObj, newObj interface{}) framework.QueueingHint {
+		count++
 		return framework.QueueImmediately
 	}
 	queueHintReturnQueueSkip := func(pod *v1.Pod, oldObj, newObj interface{}) framework.QueueingHint {
+		count++
 		return framework.QueueSkip
 	}
 	queueHintReturnQueueAfterBackoff := func(pod *v1.Pod, oldObj, newObj interface{}) framework.QueueingHint {
+		count++
 		return framework.QueueAfterBackoff
 	}
 
 	tests := []struct {
-		name            string
-		podInfo         *framework.QueuedPodInfo
-		event           framework.ClusterEvent
-		oldObj          interface{}
-		newObj          interface{}
-		expected        framework.QueueingHint
-		queueingHintMap map[string]map[framework.ClusterEvent][]*QueueingHintFunction
+		name                   string
+		podInfo                *framework.QueuedPodInfo
+		event                  framework.ClusterEvent
+		oldObj                 interface{}
+		newObj                 interface{}
+		expected               framework.QueueingHint
+		expectedExecutionCount int // expected total execution count of queueing hint function
+		queueingHintMap        map[string]map[framework.ClusterEvent][]*QueueingHintFunction
 	}{
 		{
 			name: "return QueueAfterBackoff when no queueing hint function is registered for the event",
@@ -2281,10 +2286,11 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 				UnschedulablePlugins: sets.New("fooPlugin1"),
 				PodInfo:              mustNewPodInfo(st.MakePod().Name("pod1").Namespace("ns1").UID("1").Obj()),
 			},
-			event:    NodeAdd,
-			oldObj:   nil,
-			newObj:   st.MakeNode().Node,
-			expected: framework.QueueSkip,
+			event:                  NodeAdd,
+			oldObj:                 nil,
+			newObj:                 st.MakeNode().Node,
+			expected:               framework.QueueSkip,
+			expectedExecutionCount: 0,
 			queueingHintMap: map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
 				"": {
 					// no queueing hint function for NodeAdd.
@@ -2304,35 +2310,45 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 				UnschedulablePlugins: sets.New("fooPlugin1"),
 				PodInfo:              mustNewPodInfo(st.MakePod().Name("pod1").Namespace("ns1").UID("1").Obj()),
 			},
-			event:           WildCardEvent,
-			oldObj:          nil,
-			newObj:          st.MakeNode().Node,
-			expected:        framework.QueueAfterBackoff,
-			queueingHintMap: map[string]map[framework.ClusterEvent][]*QueueingHintFunction{},
+			event:                  WildCardEvent,
+			oldObj:                 nil,
+			newObj:                 st.MakeNode().Node,
+			expected:               framework.QueueAfterBackoff,
+			expectedExecutionCount: 0,
+			queueingHintMap:        map[string]map[framework.ClusterEvent][]*QueueingHintFunction{},
 		},
 		{
 			name: "QueueImmediately is the highest priority",
 			podInfo: &framework.QueuedPodInfo{
-				UnschedulablePlugins: sets.New("fooPlugin1", "fooPlugin2", "fooPlugin3"),
+				UnschedulablePlugins: sets.New("fooPlugin1", "fooPlugin2", "fooPlugin3", "fooPlugin4"),
 				PodInfo:              mustNewPodInfo(st.MakePod().Name("pod1").Namespace("ns1").UID("1").Obj()),
 			},
-			event:    NodeAdd,
-			oldObj:   nil,
-			newObj:   st.MakeNode().Node,
-			expected: framework.QueueImmediately,
+			event:                  NodeAdd,
+			oldObj:                 nil,
+			newObj:                 st.MakeNode().Node,
+			expected:               framework.QueueImmediately,
+			expectedExecutionCount: 2,
 			queueingHintMap: map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
 				"": {
 					NodeAdd: {
 						{
+							// executed
 							PluginName:     "fooPlugin1",
 							QueueingHintFn: queueHintReturnQueueAfterBackoff,
 						},
 						{
+							// executed
+							// But, no more queueing hint function is executed
+							// because the highest priority is QueueImmediately.
 							PluginName:     "fooPlugin2",
 							QueueingHintFn: queueHintReturnQueueImmediately,
 						},
 						{
 							PluginName:     "fooPlugin3",
+							QueueingHintFn: queueHintReturnQueueAfterBackoff,
+						},
+						{
+							PluginName:     "fooPlugin4",
 							QueueingHintFn: queueHintReturnQueueSkip,
 						},
 					},
@@ -2345,10 +2361,11 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 				UnschedulablePlugins: sets.New("fooPlugin1", "fooPlugin2", "fooPlugin3"),
 				PodInfo:              mustNewPodInfo(st.MakePod().Name("pod1").Namespace("ns1").UID("1").Obj()),
 			},
-			event:    NodeAdd,
-			oldObj:   nil,
-			newObj:   st.MakeNode().Node,
-			expected: framework.QueueAfterBackoff,
+			event:                  NodeAdd,
+			oldObj:                 nil,
+			newObj:                 st.MakeNode().Node,
+			expected:               framework.QueueAfterBackoff,
+			expectedExecutionCount: 3,
 			queueingHintMap: map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
 				"": {
 					NodeAdd: {
@@ -2374,10 +2391,11 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 				UnschedulablePlugins: sets.New("fooPlugin1", "fooPlugin2"),
 				PodInfo:              mustNewPodInfo(st.MakePod().Name("pod1").Namespace("ns1").UID("1").Obj()),
 			},
-			event:    NodeAdd,
-			oldObj:   nil,
-			newObj:   st.MakeNode().Node,
-			expected: framework.QueueAfterBackoff,
+			event:                  NodeAdd,
+			oldObj:                 nil,
+			newObj:                 st.MakeNode().Node,
+			expected:               framework.QueueAfterBackoff,
+			expectedExecutionCount: 2,
 			queueingHintMap: map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
 				"": {
 					NodeAdd: {
@@ -2397,15 +2415,57 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 				},
 			},
 		},
+		{
+			name: "If event is specific Node update event, queueing hint function for NodeUpdate/UpdateNodeLabel is executed",
+			podInfo: &framework.QueuedPodInfo{
+				UnschedulablePlugins: sets.New("fooPlugin1", "fooPlugin2"),
+				PodInfo:              mustNewPodInfo(st.MakePod().Name("pod1").Namespace("ns1").UID("1").Obj()),
+			},
+			event:                  framework.ClusterEvent{Resource: framework.Node, ActionType: framework.UpdateNodeLabel},
+			oldObj:                 nil,
+			newObj:                 st.MakeNode().Node,
+			expected:               framework.QueueAfterBackoff,
+			expectedExecutionCount: 3,
+			queueingHintMap: map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
+				"": {
+					framework.ClusterEvent{Resource: framework.Node, ActionType: framework.UpdateNodeLabel}: {
+						{
+							PluginName:     "fooPlugin1",
+							QueueingHintFn: queueHintReturnQueueAfterBackoff,
+						},
+						{
+							PluginName:     "fooPlugin2",
+							QueueingHintFn: queueHintReturnQueueAfterBackoff,
+						},
+					},
+					framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Update}: {
+						{
+							PluginName:     "fooPlugin1",
+							QueueingHintFn: queueHintReturnQueueAfterBackoff,
+						},
+					},
+					NodeAdd: { // not executed because NodeAdd is unrelated.
+						{
+							PluginName:     "fooPlugin1",
+							QueueingHintFn: queueHintReturnQueueAfterBackoff,
+						},
+					},
+				},
+			},
+		},
 	}
 
 	for _, test := range tests {
 		t.Run(test.name, func(t *testing.T) {
+			count = 0 // reset count every time
 			logger, ctx := ktesting.NewTestContext(t)
 			q := NewTestQueue(ctx, newDefaultQueueSort(), WithQueueingHintMap(test.queueingHintMap))
 			actual := q.isPodWorthRequeuing(logger, test.podInfo, test.event, test.oldObj, test.newObj)
 			if actual != test.expected {
 				t.Errorf("isPodWorthRequeuing() = %v, want %v", actual, test.expected)
+			}
+			if count != test.expectedExecutionCount {
+				t.Errorf("isPodWorthRequeuing() executed queueing hint functions %v times, expected: %v", count, test.expectedExecutionCount)
 			}
 		})
 	}
