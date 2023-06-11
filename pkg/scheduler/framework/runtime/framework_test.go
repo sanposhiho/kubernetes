@@ -21,6 +21,7 @@ import (
 	"errors"
 	"fmt"
 	"reflect"
+	"strconv"
 	"strings"
 	"testing"
 	"time"
@@ -1187,6 +1188,113 @@ func TestRunPreScorePlugins(t *testing.T) {
 			skipped := state.SkipScorePlugins
 			if d := cmp.Diff(skipped, tt.wantSkippedPlugins); d != "" {
 				t.Errorf("wrong skip score plugins. got: %v, want: %v, diff: %s", skipped, tt.wantSkippedPlugins, d)
+			}
+		})
+	}
+}
+
+type numericMapPlugin struct {
+	pluginName string
+}
+
+func newNumericMapPlugin(pluginName string) PluginFactory {
+	return func(_ runtime.Object, _ framework.Handle) (framework.Plugin, error) {
+		return &numericMapPlugin{pluginName: pluginName}, nil
+	}
+}
+
+func (pl *numericMapPlugin) Name() string {
+	return pl.pluginName
+}
+
+func (pl *numericMapPlugin) Score(_ context.Context, _ *framework.CycleState, _ *v1.Pod, nodeName string) (int64, *framework.Status) {
+	score, err := strconv.Atoi(nodeName)
+	if err != nil {
+		return 0, framework.NewStatus(framework.Error, fmt.Sprintf("Error converting nodename to int: %+v", nodeName))
+	}
+	return int64(score), nil
+}
+
+func (pl *numericMapPlugin) ScoreExtensions() framework.ScoreExtensions {
+	return pl
+}
+
+func (pl *numericMapPlugin) NormalizeScore(ctx context.Context, state *framework.CycleState, pod *v1.Pod, scores framework.NodeScoreList) *framework.Status {
+	// do something
+	_, err := strconv.Atoi(nodeName)
+	if err != nil {
+		return nil
+	}
+	return nil
+}
+
+func Benchmark_RunScorePlugins(b *testing.B) {
+	tests := []struct {
+		name      string
+		pluginnum int
+	}{
+		{
+			name:      "10 score plugins",
+			pluginnum: 10,
+		},
+		{
+			name:      "30 score plugins",
+			pluginnum: 30, // a user has many custom score plugins
+		},
+	}
+
+	fewnodes := []*v1.Node{
+		{ObjectMeta: metav1.ObjectMeta{Name: "1"}},
+		{ObjectMeta: metav1.ObjectMeta{Name: "2"}},
+	}
+
+	manynodes := []*v1.Node{}
+	for i := 0; i < 100; i++ {
+		manynodes = append(manynodes, &v1.Node{ObjectMeta: metav1.ObjectMeta{Name: fmt.Sprintf("%d", i)}})
+	}
+
+	for _, nodes := range [][]*v1.Node{fewnodes, manynodes} {
+		b.Run(fmt.Sprintf("nodenumber=%d", len(nodes)), func(b *testing.B) {
+			for _, tt := range tests {
+				b.Run(tt.name, func(b *testing.B) {
+					names := make([]string, tt.pluginnum)
+					pluginConfigs := make([]config.PluginConfig, tt.pluginnum)
+					for i := 0; i < tt.pluginnum; i++ {
+						pluginName := "FakeScore" + strconv.Itoa(i)
+						names[i] = pluginName
+						pluginConfigs[i].Name = pluginName
+					}
+					plugins := buildScoreConfigDefaultWeights(names...)
+
+					var registry = func() Registry {
+						r := make(Registry)
+						for _, p := range names {
+							r.Register(p, newNumericMapPlugin(p))
+						}
+						return r
+					}()
+
+					// Inject the results via Args in PluginConfig.
+					profile := config.KubeSchedulerProfile{
+						Plugins:      plugins,
+						PluginConfig: pluginConfigs,
+					}
+					ctx, cancel := context.WithCancel(context.Background())
+					defer cancel()
+					f, err := newFrameworkWithQueueSortAndBind(ctx, registry, profile)
+					if err != nil {
+						b.Fatalf("Failed to create framework for testing: %v", err)
+					}
+
+					state := framework.NewCycleState()
+					b.ResetTimer()
+					for i := 0; i < b.N; i++ {
+						_, status := f.RunScorePlugins(ctx, state, pod, nodes)
+						if !status.IsSuccess() {
+							b.Errorf("unexpected error: %v", status.AsError())
+						}
+					}
+				})
 			}
 		})
 	}
