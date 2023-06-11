@@ -354,8 +354,13 @@ func (p *PriorityQueue) Run(logger klog.Logger) {
 // If all QueueingHintFn returns QueueSkip, the scheduling queue enqueues the Pod back to unschedulable Pod pool
 // because no plugin changes the scheduling result via the event.
 func (p *PriorityQueue) isPodWorthRequeuing(logger klog.Logger, pInfo *framework.QueuedPodInfo, event framework.ClusterEvent, oldObj, newObj interface{}) framework.QueueingHint {
-	if pInfo.UnschedulablePlugins.Len() == 0 || event.IsWildCard() {
+	if pInfo.UnschedulablePlugins.Len() == 0 {
 		logger.V(6).Info("Worth requeuing because no unschedulable plugins", "pod", klog.KObj(pInfo.Pod))
+		return framework.QueueAfterBackoff
+	}
+
+	if event.IsWildCard() {
+		logger.V(6).Info("Worth requeuing because the event is wildcard", "pod", klog.KObj(pInfo.Pod))
 		return framework.QueueAfterBackoff
 	}
 
