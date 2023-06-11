@@ -285,7 +285,7 @@ func New(ctx context.Context,
 	nodeLister := informerFactory.Core().V1().Nodes().Lister()
 
 	snapshot := internalcache.NewEmptySnapshot()
-	clusterEventMap := make(map[framework.ClusterEvent]sets.Set[string])
+	eventToPlugins := make(map[framework.ClusterEvent]sets.Set[string])
 	metricsRecorder := metrics.NewMetricsAsyncRecorder(1000, time.Second, stopEverything)
 
 	profiles, err := profile.NewMap(ctx, options.profiles, registry, recorderFactory,
@@ -308,10 +308,10 @@ func New(ctx context.Context,
 	}
 
 	preEnqueuePluginMap := make(map[string][]framework.PreEnqueuePlugin)
-	queueingHintMap := make(map[string]map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction)
+	queueingHintsPerProfile := make(map[string]map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction)
 	for profileName, profile := range profiles {
 		preEnqueuePluginMap[profileName] = profile.PreEnqueuePlugins()
-		queueingHintMap[profileName] = buildQueueingHintMap(profile.EnqueueExtensions(), clusterEventMap)
+		queueingHintsPerProfile[profileName] = buildQueueingHintMap(profile.EnqueueExtensions(), eventToPlugins)
 	}
 
 	podQueue := internalqueue.NewSchedulingQueue(
@@ -322,7 +322,7 @@ func New(ctx context.Context,
 		internalqueue.WithPodLister(podLister),
 		internalqueue.WithPodMaxInUnschedulablePodsDuration(options.podMaxInUnschedulablePodsDuration),
 		internalqueue.WithPreEnqueuePluginMap(preEnqueuePluginMap),
-		internalqueue.WithQueueingHintMap(queueingHintMap),
+		internalqueue.WithQueueingHintMap(queueingHintsPerProfile),
 		internalqueue.WithPluginMetricsSamplePercent(pluginMetricsSamplePercent),
 		internalqueue.WithMetricsRecorder(*metricsRecorder),
 	)
@@ -351,9 +351,15 @@ func New(ctx context.Context,
 	}
 	sched.applyDefaultHandlers()
 
-	addAllEventHandlers(sched, informerFactory, dynInformerFactory, unionedGVKs(clusterEventMap))
+	addAllEventHandlers(sched, informerFactory, dynInformerFactory, unionedGVKs(eventToPlugins))
 
 	return sched, nil
+}
+
+// defaultQueueingHintFn is the default queueing hint function.
+// It always returns QueueAfterBackoff as the queueing hint.
+var defaultQueueingHintFn = func(_ *v1.Pod, _, _ interface{}) framework.QueueingHint {
+	return framework.QueueAfterBackoff
 }
 
 func buildQueueingHintMap(es []framework.EnqueueExtensions, eventToPlugins map[framework.ClusterEvent]sets.Set[string]) map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction {
@@ -363,9 +369,7 @@ func buildQueueingHintMap(es []framework.EnqueueExtensions, eventToPlugins map[f
 		for _, event := range events {
 			fn := event.QueueingHintFn
 			if fn == nil {
-				fn = func(_ *v1.Pod, _, _ interface{}) framework.QueueingHint {
-					return framework.QueueAfterBackoff
-				}
+				fn = defaultQueueingHintFn
 			}
 
 			queueingHintMap[event.Event] = append(queueingHintMap[event.Event], &internalqueue.QueueingHintFunction{
