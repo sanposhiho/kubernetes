@@ -24,7 +24,6 @@ import (
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/dynamic/dynamicinformer"
 	"k8s.io/client-go/informers"
@@ -285,7 +284,6 @@ func New(ctx context.Context,
 	nodeLister := informerFactory.Core().V1().Nodes().Lister()
 
 	snapshot := internalcache.NewEmptySnapshot()
-	eventToPlugins := make(map[framework.ClusterEvent]sets.Set[string])
 	metricsRecorder := metrics.NewMetricsAsyncRecorder(1000, time.Second, stopEverything)
 
 	profiles, err := profile.NewMap(ctx, options.profiles, registry, recorderFactory,
@@ -311,7 +309,7 @@ func New(ctx context.Context,
 	queueingHintsPerProfile := make(map[string]map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction)
 	for profileName, profile := range profiles {
 		preEnqueuePluginMap[profileName] = profile.PreEnqueuePlugins()
-		queueingHintsPerProfile[profileName] = buildQueueingHintMap(profile.EnqueueExtensions(), eventToPlugins)
+		queueingHintsPerProfile[profileName] = buildQueueingHintMap(profile.EnqueueExtensions())
 	}
 
 	podQueue := internalqueue.NewSchedulingQueue(
@@ -351,7 +349,7 @@ func New(ctx context.Context,
 	}
 	sched.applyDefaultHandlers()
 
-	addAllEventHandlers(sched, informerFactory, dynInformerFactory, unionedGVKs(eventToPlugins))
+	addAllEventHandlers(sched, informerFactory, dynInformerFactory, unionedGVKs(queueingHintsPerProfile))
 
 	return sched, nil
 }
@@ -362,7 +360,7 @@ var defaultQueueingHintFn = func(_ *v1.Pod, _, _ interface{}) framework.Queueing
 	return framework.QueueAfterBackoff
 }
 
-func buildQueueingHintMap(es []framework.EnqueueExtensions, eventToPlugins map[framework.ClusterEvent]sets.Set[string]) map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction {
+func buildQueueingHintMap(es []framework.EnqueueExtensions) map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction {
 	queueingHintMap := make(map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction)
 	for _, e := range es {
 		events := e.EventsToRegister()
@@ -376,12 +374,6 @@ func buildQueueingHintMap(es []framework.EnqueueExtensions, eventToPlugins map[f
 				PluginName:     e.Name(),
 				QueueingHintFn: fn,
 			})
-
-			if eventToPlugins[event.Event] == nil {
-				eventToPlugins[event.Event] = sets.New(e.Name())
-			} else {
-				eventToPlugins[event.Event].Insert(e.Name())
-			}
 		}
 	}
 	return queueingHintMap
@@ -472,13 +464,15 @@ func buildExtenders(logger klog.Logger, extenders []schedulerapi.Extender, profi
 
 type FailureHandlerFn func(ctx context.Context, fwk framework.Framework, podInfo *framework.QueuedPodInfo, status *framework.Status, nominatingInfo *framework.NominatingInfo, start time.Time)
 
-func unionedGVKs(m map[framework.ClusterEvent]sets.Set[string]) map[framework.GVK]framework.ActionType {
+func unionedGVKs(queueingHintsPerProfile map[string]map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction) map[framework.GVK]framework.ActionType {
 	gvkMap := make(map[framework.GVK]framework.ActionType)
-	for evt := range m {
-		if _, ok := gvkMap[evt.Resource]; ok {
-			gvkMap[evt.Resource] |= evt.ActionType
-		} else {
-			gvkMap[evt.Resource] = evt.ActionType
+	for _, queueingHints := range queueingHintsPerProfile {
+		for evt := range queueingHints {
+			if _, ok := gvkMap[evt.Resource]; ok {
+				gvkMap[evt.Resource] |= evt.ActionType
+			} else {
+				gvkMap[evt.Resource] = evt.ActionType
+			}
 		}
 	}
 	return gvkMap
