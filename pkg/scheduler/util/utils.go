@@ -25,6 +25,7 @@ import (
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/net"
@@ -160,42 +161,25 @@ func IsScalarResourceName(name v1.ResourceName) bool {
 		v1helper.IsPrefixedNativeResource(name) || v1helper.IsAttachableVolumeResourceName(name)
 }
 
-func AsPods(oldObj, newobj interface{}) (*v1.Pod, *v1.Pod, error) {
-	var newPod *v1.Pod
+// As converts two objects to the given type.
+// Both objects must be of the same type. If not, an error is returned.
+// nil objects are allowed and will be converted to nil.
+func As[T runtime.Object](oldObj, newobj interface{}) (T, T, error) {
+	var oldTyped T
+	var newTyped T
 	var ok bool
 	if newobj != nil {
-		newPod, ok = newobj.(*v1.Pod)
+		newTyped, ok = newobj.(T)
 		if !ok {
-			return nil, nil, fmt.Errorf("expected Pod, but got %T", newobj)
+			return oldTyped, newTyped, fmt.Errorf("expected %T, but got %T", newTyped, newobj)
 		}
 	}
 
-	var oldPod *v1.Pod
 	if oldObj != nil {
-		oldPod, ok = oldObj.(*v1.Pod)
+		oldTyped, ok = oldObj.(T)
 		if !ok {
-			return nil, nil, fmt.Errorf("expected Pod, but got %T", newobj)
+			return oldTyped, newTyped, fmt.Errorf("expected %T, but got %T", oldTyped, oldObj)
 		}
 	}
-	return oldPod, newPod, nil
-}
-
-func AsNodes(oldObj, newobj interface{}) (*v1.Node, *v1.Node, error) {
-	var newNode *v1.Node
-	var ok bool
-	if newobj != nil {
-		newNode, ok = newobj.(*v1.Node)
-		if !ok {
-			return nil, nil, fmt.Errorf("expected Node, but got %T", newobj)
-		}
-	}
-
-	var oldNode *v1.Node
-	if oldObj != nil {
-		oldNode, ok = oldObj.(*v1.Node)
-		if !ok {
-			return nil, nil, fmt.Errorf("expected Node, but got %T", newobj)
-		}
-	}
-	return oldNode, newNode, nil
+	return oldTyped, newTyped, nil
 }
