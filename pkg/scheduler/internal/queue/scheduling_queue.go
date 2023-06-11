@@ -373,8 +373,8 @@ func (p *PriorityQueue) isPodWorthRequeuing(logger klog.Logger, pInfo *framework
 
 	pod := pInfo.Pod
 	queueHint := framework.QueueSkip
-	for eve, hintfns := range hintMap {
-		if eve.Resource != event.Resource || eve.ActionType&event.ActionType == 0 {
+	for eventToMatch, hintfns := range hintMap {
+		if eventToMatch.Resource != event.Resource || eventToMatch.ActionType&event.ActionType == 0 {
 			continue
 		}
 
