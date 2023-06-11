@@ -82,12 +82,14 @@ type ClusterEventWithHint struct {
 	Event ClusterEvent
 	// QueueingHintFn is executed for the plugin rejected by this plugin when the above Event happens,
 	// and filters out events to reduce useless retry of Pod's scheduling.
-	// It's the optional field. If you don't have any in this field,
-	// the scheduling of Pods will be always retried when this Event happens.
+	// It's an optional field. If not set,
+	// the scheduling of Pods will be always retried with backoff when this Event happens.
+	// (the same as QueueAfterBackoff)
 	QueueingHintFn QueueingHintFn
 }
 
-// QueueingHintFn returns status meaning whether the event can make a Pod, which is rejected by this plugin in the past scheduling cycle, schedulable or not.
+// QueueingHintFn returns a hint that signals whether the event can make a Pod,
+// which was rejected by this plugin in the past scheduling cycle, schedulable or not.
 // It's called before a Pod gets moved from unschedulableQ to backoffQ or activeQ.
 //
 // - `pod`: the Pod to be enqueued, which is rejected by this plugin in the past.
@@ -101,8 +103,8 @@ type QueueingHintFn func(pod *v1.Pod, oldObj, newObj interface{}) QueueingHint
 type QueueingHint int
 
 const (
-	// QueueSkip implies that a cluster event has no impact on
-	// scheduling of a pod.
+	// QueueSkip implies that the cluster event has no impact on
+	// scheduling of the pod.
 	QueueSkip QueueingHint = iota
 
 	// QueueAfterBackoff implies that the Pod may be schedulable by the event,
@@ -110,10 +112,13 @@ const (
 	QueueAfterBackoff
 
 	// QueueImmediately is returned only when it is highly possible that the Pod gets scheduled in the next scheduling.
-	// Note that you should return QueueImmediately when the plugin is 100% sure that the Pod gets scheduled in the next scheduling.
+	// You should only return QueueImmediately when there is a high chance that the Pod gets scheduled in the next scheduling.
 	// Otherwise, it's detrimental to scheduling throughput.
-	// For example, when it depends on other plugin's decisions whether the Pod is schedulable or not by the event,
-	// the plugin should return QueueAfterBackoff instead of QueueImmediately.
+	// For example, when the Pod is rejected as waiting for an external resource to be provisioned, that is directly tied to the Pod,
+	// and the event is that the resource is provisioned, then you can return QueueImmediately.
+	// For another example, when the Pod is rejected as inefficient memory resource,
+	// and the event is that more memory on Node is available, then you should return QueueAfterBackoff instead of QueueImmediately
+	// because other Pods may be stucked due to the inefficient memory and the Pod may not be schedulable in the next scheduling cycle.
 	QueueImmediately
 )
 

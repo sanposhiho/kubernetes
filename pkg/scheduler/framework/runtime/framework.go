@@ -539,8 +539,6 @@ func (f *frameworkImpl) fillEnqueueExtensions(p framework.Plugin) {
 	f.enqueueExtensions = append(f.enqueueExtensions, ext)
 }
 
-var _ framework.EnqueueExtensions = &defaultEnqueueExtension{}
-
 // defaultEnqueueExtension is used when a plugin does not implement EnqueueExtensions interface.
 type defaultEnqueueExtension struct {
 	pluginName string
