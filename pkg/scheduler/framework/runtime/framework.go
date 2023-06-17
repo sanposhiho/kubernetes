@@ -531,7 +531,8 @@ func (f *frameworkImpl) fillEnqueueExtensions(p framework.Plugin) {
 	ext, ok := p.(framework.EnqueueExtensions)
 	if !ok {
 		// If interface EnqueueExtensions is not implemented, register the default enqueue extensions
-		// to the plugin. This is to ensure backward compatibility.
+		// to the plugin because we don't know which events the plugin is interested in.
+		// This is to ensure backward compatibility.
 		f.enqueueExtensions = append(f.enqueueExtensions, &defaultEnqueueExtension{pluginName: p.Name()})
 		return
 	}
@@ -554,6 +555,8 @@ func (p *defaultEnqueueExtension) EventsToRegister() []framework.ClusterEventWit
 		{Event: framework.ClusterEvent{Resource: framework.Pod, ActionType: framework.All}},
 		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.All}},
 		{Event: framework.ClusterEvent{Resource: framework.CSINode, ActionType: framework.All}},
+		{Event: framework.ClusterEvent{Resource: framework.CSIDriver, ActionType: framework.All}},
+		{Event: framework.ClusterEvent{Resource: framework.CSIStorageCapacity, ActionType: framework.All}},
 		{Event: framework.ClusterEvent{Resource: framework.PersistentVolume, ActionType: framework.All}},
 		{Event: framework.ClusterEvent{Resource: framework.PersistentVolumeClaim, ActionType: framework.All}},
 		{Event: framework.ClusterEvent{Resource: framework.StorageClass, ActionType: framework.All}},

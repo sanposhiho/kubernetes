@@ -39,7 +39,9 @@ import (
 	"k8s.io/klog/v2"
 	"k8s.io/klog/v2/ktesting"
 	schedulerapi "k8s.io/kubernetes/pkg/scheduler/apis/config"
+	"k8s.io/kubernetes/pkg/scheduler/apis/config/testing/defaults"
 	"k8s.io/kubernetes/pkg/scheduler/framework"
+	"k8s.io/kubernetes/pkg/scheduler/framework/plugins"
 	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/defaultbinder"
 	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/queuesort"
 	frameworkruntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
@@ -648,8 +650,9 @@ const (
 	fakeNoop        = "fakeNoop"
 	fakeNode        = "fakeNode"
 	fakePod         = "fakePod"
-	queueSortPlugin = "no-op-queue-sort-plugin"
-	bindPlugin      = "bind-plugin"
+	fakeNoopRuntime = "fakeNoopRuntime"
+	queueSort       = "no-op-queue-sort-plugin"
+	fakeBind        = "bind-plugin"
 )
 
 func Test_buildQueueingHintMap(t *testing.T) {
@@ -664,39 +667,49 @@ func Test_buildQueueingHintMap(t *testing.T) {
 			plugins: []framework.Plugin{&fakeNoopPlugin{}},
 			want: map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction{
 				{Resource: framework.Pod, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
 					{PluginName: fakeNoop, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 				{Resource: framework.Node, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
 					{PluginName: fakeNoop, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 				{Resource: framework.CSINode, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
 					{PluginName: fakeNoop, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
+				},
+				{Resource: framework.CSIDriver, ActionType: framework.All}: {
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeNoop, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
+				},
+				{Resource: framework.CSIStorageCapacity, ActionType: framework.All}: {
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeNoop, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 				{Resource: framework.PersistentVolume, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
 					{PluginName: fakeNoop, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 				{Resource: framework.StorageClass, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
 					{PluginName: fakeNoop, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 				{Resource: framework.PersistentVolumeClaim, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
 					{PluginName: fakeNoop, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 				{Resource: framework.PodSchedulingContext, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
 					{PluginName: fakeNoop, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 			},
 		},
@@ -705,38 +718,46 @@ func Test_buildQueueingHintMap(t *testing.T) {
 			plugins: []framework.Plugin{&fakeNodePlugin{}, &fakePodPlugin{}},
 			want: map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction{
 				{Resource: framework.Pod, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 				{Resource: framework.Pod, ActionType: framework.Add}: {
 					{PluginName: fakePod, QueueingHintFn: fakePodPluginQueueingFn},
 				},
 				{Resource: framework.Node, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 				{Resource: framework.Node, ActionType: framework.Add}: {
 					{PluginName: fakeNode, QueueingHintFn: fakeNodePluginQueueingFn},
 				},
 				{Resource: framework.CSINode, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
+				},
+				{Resource: framework.CSIDriver, ActionType: framework.All}: {
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
+				},
+				{Resource: framework.CSIStorageCapacity, ActionType: framework.All}: {
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 				{Resource: framework.PersistentVolume, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 				{Resource: framework.StorageClass, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 				{Resource: framework.PersistentVolumeClaim, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 				{Resource: framework.PodSchedulingContext, ActionType: framework.All}: {
-					{PluginName: bindPlugin, QueueingHintFn: defaultQueueingHintFn},
-					{PluginName: queueSortPlugin, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: fakeBind, QueueingHintFn: defaultQueueingHintFn},
+					{PluginName: queueSort, QueueingHintFn: defaultQueueingHintFn},
 				},
 			},
 		},
@@ -746,20 +767,21 @@ func Test_buildQueueingHintMap(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			registry := frameworkruntime.Registry{}
 			cfgPls := &schedulerapi.Plugins{}
-			for _, pl := range tt.plugins {
+			plugins := append(tt.plugins, &fakebindPlugin{}, &fakeQueueSortPlugin{})
+			for _, pl := range plugins {
 				tmpPl := pl
 				if err := registry.Register(pl.Name(), func(_ runtime.Object, _ framework.Handle) (framework.Plugin, error) {
 					return tmpPl, nil
 				}); err != nil {
 					t.Fatalf("fail to register filter plugin (%s)", pl.Name())
 				}
-				cfgPls.Filter.Enabled = append(cfgPls.Filter.Enabled, schedulerapi.Plugin{Name: pl.Name()})
+				cfgPls.MultiPoint.Enabled = append(cfgPls.MultiPoint.Enabled, schedulerapi.Plugin{Name: pl.Name()})
 			}
 
 			profile := schedulerapi.KubeSchedulerProfile{Plugins: cfgPls}
 			stopCh := make(chan struct{})
 			defer close(stopCh)
-			fwk, err := newFrameworkWithQueueSortAndBind(registry, profile, stopCh)
+			fwk, err := newFramework(registry, profile, stopCh)
 			if err != nil {
 				t.Fatal(err)
 			}
@@ -801,16 +823,25 @@ func Test_buildQueueingHintMap(t *testing.T) {
 func Test_UnionedGVKs(t *testing.T) {
 	tests := []struct {
 		name    string
-		plugins []framework.Plugin
+		plugins schedulerapi.PluginSet
 		want    map[framework.GVK]framework.ActionType
 	}{
 		{
-			name:    "no-op plugin",
-			plugins: []framework.Plugin{&fakeNoopPlugin{}},
+			name: "no-op plugin",
+			plugins: schedulerapi.PluginSet{
+				Enabled: []schedulerapi.Plugin{
+					{Name: fakeNoop},
+					{Name: queueSort},
+					{Name: fakeBind},
+				},
+				Disabled: []schedulerapi.Plugin{{Name: "*"}}, // disable default plugins
+			},
 			want: map[framework.GVK]framework.ActionType{
 				framework.Pod:                   framework.All,
 				framework.Node:                  framework.All,
 				framework.CSINode:               framework.All,
+				framework.CSIDriver:             framework.All,
+				framework.CSIStorageCapacity:    framework.All,
 				framework.PersistentVolume:      framework.All,
 				framework.PersistentVolumeClaim: framework.All,
 				framework.StorageClass:          framework.All,
@@ -818,12 +849,21 @@ func Test_UnionedGVKs(t *testing.T) {
 			},
 		},
 		{
-			name:    "node plugin",
-			plugins: []framework.Plugin{&fakeNodePlugin{}},
+			name: "node plugin",
+			plugins: schedulerapi.PluginSet{
+				Enabled: []schedulerapi.Plugin{
+					{Name: fakeNode},
+					{Name: queueSort},
+					{Name: fakeBind},
+				},
+				Disabled: []schedulerapi.Plugin{{Name: "*"}}, // disable default plugins
+			},
 			want: map[framework.GVK]framework.ActionType{
 				framework.Pod:                   framework.All,
 				framework.Node:                  framework.All,
 				framework.CSINode:               framework.All,
+				framework.CSIDriver:             framework.All,
+				framework.CSIStorageCapacity:    framework.All,
 				framework.PersistentVolume:      framework.All,
 				framework.PersistentVolumeClaim: framework.All,
 				framework.StorageClass:          framework.All,
@@ -831,12 +871,21 @@ func Test_UnionedGVKs(t *testing.T) {
 			},
 		},
 		{
-			name:    "pod plugin",
-			plugins: []framework.Plugin{&fakePodPlugin{}},
+			name: "pod plugin",
+			plugins: schedulerapi.PluginSet{
+				Enabled: []schedulerapi.Plugin{
+					{Name: fakePod},
+					{Name: queueSort},
+					{Name: fakeBind},
+				},
+				Disabled: []schedulerapi.Plugin{{Name: "*"}}, // disable default plugins
+			},
 			want: map[framework.GVK]framework.ActionType{
 				framework.Pod:                   framework.All,
 				framework.Node:                  framework.All,
 				framework.CSINode:               framework.All,
+				framework.CSIDriver:             framework.All,
+				framework.CSIStorageCapacity:    framework.All,
 				framework.PersistentVolume:      framework.All,
 				framework.PersistentVolumeClaim: framework.All,
 				framework.StorageClass:          framework.All,
@@ -844,12 +893,22 @@ func Test_UnionedGVKs(t *testing.T) {
 			},
 		},
 		{
-			name:    "node and pod plugin",
-			plugins: []framework.Plugin{&fakeNodePlugin{}, &fakePodPlugin{}},
+			name: "node and pod plugin",
+			plugins: schedulerapi.PluginSet{
+				Enabled: []schedulerapi.Plugin{
+					{Name: fakePod},
+					{Name: fakeNode},
+					{Name: queueSort},
+					{Name: fakeBind},
+				},
+				Disabled: []schedulerapi.Plugin{{Name: "*"}}, // disable default plugins
+			},
 			want: map[framework.GVK]framework.ActionType{
 				framework.Pod:                   framework.All,
 				framework.Node:                  framework.All,
 				framework.CSINode:               framework.All,
+				framework.CSIDriver:             framework.All,
+				framework.CSIStorageCapacity:    framework.All,
 				framework.PersistentVolume:      framework.All,
 				framework.PersistentVolumeClaim: framework.All,
 				framework.StorageClass:          framework.All,
@@ -857,12 +916,36 @@ func Test_UnionedGVKs(t *testing.T) {
 			},
 		},
 		{
-			name:    "no-op runtime plugin",
-			plugins: []framework.Plugin{&fakeNoopRuntimePlugin{}},
+			name: "no-op runtime plugin",
+			plugins: schedulerapi.PluginSet{
+				Enabled: []schedulerapi.Plugin{
+					{Name: fakeNoopRuntime},
+					{Name: queueSort},
+					{Name: fakeBind},
+				},
+				Disabled: []schedulerapi.Plugin{{Name: "*"}}, // disable default plugins
+			},
 			want: map[framework.GVK]framework.ActionType{
 				framework.Pod:                   framework.All,
 				framework.Node:                  framework.All,
 				framework.CSINode:               framework.All,
+				framework.CSIDriver:             framework.All,
+				framework.CSIStorageCapacity:    framework.All,
+				framework.PersistentVolume:      framework.All,
+				framework.PersistentVolumeClaim: framework.All,
+				framework.StorageClass:          framework.All,
+				framework.PodSchedulingContext:  framework.All,
+			},
+		},
+		{
+			name:    "plugins with default profile",
+			plugins: schedulerapi.PluginSet{Enabled: defaults.PluginsV1.MultiPoint.Enabled},
+			want: map[framework.GVK]framework.ActionType{
+				framework.Pod:                   framework.All,
+				framework.Node:                  framework.All,
+				framework.CSINode:               framework.All,
+				framework.CSIDriver:             framework.All,
+				framework.CSIStorageCapacity:    framework.All,
 				framework.PersistentVolume:      framework.All,
 				framework.PersistentVolumeClaim: framework.All,
 				framework.StorageClass:          framework.All,
@@ -872,27 +955,28 @@ func Test_UnionedGVKs(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			registry := frameworkruntime.Registry{}
-			cfgPls := &schedulerapi.Plugins{}
-			for _, pl := range tt.plugins {
+			registry := plugins.NewInTreeRegistry()
+
+			cfgPls := &schedulerapi.Plugins{MultiPoint: tt.plugins}
+			plugins := []framework.Plugin{&fakeNodePlugin{}, &fakePodPlugin{}, &fakeNoopPlugin{}, &fakeNoopRuntimePlugin{}, &fakeQueueSortPlugin{}, &fakebindPlugin{}}
+			for _, pl := range plugins {
 				tmpPl := pl
 				if err := registry.Register(pl.Name(), func(_ runtime.Object, _ framework.Handle) (framework.Plugin, error) {
 					return tmpPl, nil
 				}); err != nil {
 					t.Fatalf("fail to register filter plugin (%s)", pl.Name())
 				}
-				cfgPls.Filter.Enabled = append(cfgPls.Filter.Enabled, schedulerapi.Plugin{Name: pl.Name()})
 			}
 
-			profile := schedulerapi.KubeSchedulerProfile{Plugins: cfgPls}
+			profile := schedulerapi.KubeSchedulerProfile{Plugins: cfgPls, PluginConfig: defaults.PluginConfigsV1}
 			stopCh := make(chan struct{})
 			defer close(stopCh)
-			fwk, err := newFrameworkWithQueueSortAndBind(registry, profile, stopCh)
+			fwk, err := newFramework(registry, profile, stopCh)
 			if err != nil {
 				t.Fatal(err)
 			}
 
-			queueingHintsPerProfile := map[string]map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction{
+			queueingHintsPerProfile := internalqueue.QueueingHintMapPerProfile{
 				"default": buildQueueingHintMap(fwk.EnqueueExtensions()),
 			}
 			got := unionedGVKs(queueingHintsPerProfile)
@@ -904,54 +988,44 @@ func Test_UnionedGVKs(t *testing.T) {
 	}
 }
 
-func newFrameworkWithQueueSortAndBind(r frameworkruntime.Registry, profile schedulerapi.KubeSchedulerProfile, stopCh <-chan struct{}) (framework.Framework, error) {
-	if _, ok := r[queueSortPlugin]; !ok {
-		r[queueSortPlugin] = newQueueSortPlugin
-	}
-	if _, ok := r[bindPlugin]; !ok {
-		r[bindPlugin] = newBindPlugin
-	}
-
-	if len(profile.Plugins.QueueSort.Enabled) == 0 {
-		profile.Plugins.QueueSort.Enabled = append(profile.Plugins.QueueSort.Enabled, schedulerapi.Plugin{Name: queueSortPlugin})
-	}
-	if len(profile.Plugins.Bind.Enabled) == 0 {
-		profile.Plugins.Bind.Enabled = append(profile.Plugins.Bind.Enabled, schedulerapi.Plugin{Name: bindPlugin})
-	}
-	return frameworkruntime.NewFramework(context.Background(), r, &profile)
+func newFramework(r frameworkruntime.Registry, profile schedulerapi.KubeSchedulerProfile, stopCh <-chan struct{}) (framework.Framework, error) {
+	return frameworkruntime.NewFramework(context.Background(), r, &profile,
+		frameworkruntime.WithSnapshotSharedLister(internalcache.NewSnapshot(nil, nil)),
+		frameworkruntime.WithInformerFactory(informers.NewSharedInformerFactory(fake.NewSimpleClientset(), 0)),
+	)
 }
 
-var _ framework.QueueSortPlugin = &TestQueueSortPlugin{}
+var _ framework.QueueSortPlugin = &fakeQueueSortPlugin{}
 
 func newQueueSortPlugin(_ runtime.Object, _ framework.Handle) (framework.Plugin, error) {
-	return &TestQueueSortPlugin{}, nil
+	return &fakeQueueSortPlugin{}, nil
 }
 
-// TestQueueSortPlugin is a no-op implementation for QueueSort extension point.
-type TestQueueSortPlugin struct{}
+// fakeQueueSortPlugin is a no-op implementation for QueueSort extension point.
+type fakeQueueSortPlugin struct{}
 
-func (pl *TestQueueSortPlugin) Name() string {
-	return queueSortPlugin
+func (pl *fakeQueueSortPlugin) Name() string {
+	return queueSort
 }
 
-func (pl *TestQueueSortPlugin) Less(_, _ *framework.QueuedPodInfo) bool {
+func (pl *fakeQueueSortPlugin) Less(_, _ *framework.QueuedPodInfo) bool {
 	return false
 }
 
-var _ framework.BindPlugin = &TestBindPlugin{}
+var _ framework.BindPlugin = &fakebindPlugin{}
 
 func newBindPlugin(_ runtime.Object, _ framework.Handle) (framework.Plugin, error) {
-	return &TestBindPlugin{}, nil
+	return &fakebindPlugin{}, nil
 }
 
-// TestBindPlugin is a no-op implementation for Bind extension point.
-type TestBindPlugin struct{}
+// fakebindPlugin is a no-op implementation for Bind extension point.
+type fakebindPlugin struct{}
 
-func (t TestBindPlugin) Name() string {
-	return bindPlugin
+func (t *fakebindPlugin) Name() string {
+	return fakeBind
 }
 
-func (t TestBindPlugin) Bind(ctx context.Context, state *framework.CycleState, p *v1.Pod, nodeName string) *framework.Status {
+func (t *fakebindPlugin) Bind(ctx context.Context, state *framework.CycleState, p *v1.Pod, nodeName string) *framework.Status {
 	return nil
 }
 
@@ -1009,7 +1083,7 @@ func (*fakePodPlugin) EventsToRegister() []framework.ClusterEventWithHint {
 // due to some disabled feature gate.
 type fakeNoopRuntimePlugin struct{}
 
-func (*fakeNoopRuntimePlugin) Name() string { return "fakeNoopRuntime" }
+func (*fakeNoopRuntimePlugin) Name() string { return fakeNoopRuntime }
 
 func (*fakeNoopRuntimePlugin) Filter(_ context.Context, _ *framework.CycleState, _ *v1.Pod, _ *framework.NodeInfo) *framework.Status {
 	return nil

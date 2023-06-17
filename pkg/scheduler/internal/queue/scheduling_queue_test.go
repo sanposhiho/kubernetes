@@ -98,6 +98,13 @@ func getUnschedulablePod(p *PriorityQueue, pod *v1.Pod) *v1.Pod {
 	return nil
 }
 
+// makeEmptyQueueingHintMapPerProfile initializes an empty QueueingHintMapPerProfile for "" profile name.
+func makeEmptyQueueingHintMapPerProfile() QueueingHintMapPerProfile {
+	m := make(QueueingHintMapPerProfile)
+	m[""] = make(QueueingHintMap)
+	return m
+}
+
 func TestPriorityQueue_Add(t *testing.T) {
 	objs := []runtime.Object{medPriorityPodInfo.Pod, unschedulablePodInfo.Pod, highPriorityPodInfo.Pod}
 	logger, ctx := ktesting.NewTestContext(t)
@@ -616,8 +623,7 @@ func BenchmarkMoveAllToActiveOrBackoffQueue(b *testing.B) {
 					b.StopTimer()
 					c := testingclock.NewFakeClock(time.Now())
 
-					m := make(QueueingHintMapPerProfile)
-					m[""] = make(QueueingHintMap)
+					m := makeEmptyQueueingHintMapPerProfile()
 					// - All plugins registered for events[0], which is NodeAdd.
 					// - 1/2 of plugins registered for events[1]
 					// - 1/3 of plugins registered for events[2]
@@ -681,8 +687,7 @@ func TestPriorityQueue_MoveAllToActiveOrBackoffQueue(t *testing.T) {
 	logger, ctx := ktesting.NewTestContext(t)
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	m := make(QueueingHintMapPerProfile)
-	m[""] = make(QueueingHintMap)
+	m := makeEmptyQueueingHintMapPerProfile()
 	m[""][NodeAdd] = []*QueueingHintFunction{
 		{
 			PluginName:     "fooPlugin",
@@ -750,8 +755,7 @@ func TestPriorityQueue_AssignedPodAdded(t *testing.T) {
 	labelPod := st.MakePod().Name("lbp").Namespace(affinityPod.Namespace).Label("service", "securityscan").Node("node1").Obj()
 
 	c := testingclock.NewFakeClock(time.Now())
-	m := make(QueueingHintMapPerProfile)
-	m[""] = make(QueueingHintMap)
+	m := makeEmptyQueueingHintMapPerProfile()
 	m[""][AssignedPodAdd] = []*QueueingHintFunction{
 		{
 			PluginName:     "fakePlugin",
@@ -1302,8 +1306,7 @@ func TestHighPriorityBackoff(t *testing.T) {
 // activeQ after one minutes if it is in unschedulablePods.
 func TestHighPriorityFlushUnschedulablePodsLeftover(t *testing.T) {
 	c := testingclock.NewFakeClock(time.Now())
-	m := make(QueueingHintMapPerProfile)
-	m[""] = make(QueueingHintMap)
+	m := makeEmptyQueueingHintMapPerProfile()
 	m[""][NodeAdd] = []*QueueingHintFunction{
 		{
 			PluginName:     "fakePlugin",

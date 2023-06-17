@@ -306,7 +306,7 @@ func New(ctx context.Context,
 	}
 
 	preEnqueuePluginMap := make(map[string][]framework.PreEnqueuePlugin)
-	queueingHintsPerProfile := make(internalqueue.AggregatedQueueingHints)
+	queueingHintsPerProfile := make(internalqueue.QueueingHintMapPerProfile)
 	for profileName, profile := range profiles {
 		preEnqueuePluginMap[profileName] = profile.PreEnqueuePlugins()
 		queueingHintsPerProfile[profileName] = buildQueueingHintMap(profile.EnqueueExtensions())
@@ -464,7 +464,7 @@ func buildExtenders(logger klog.Logger, extenders []schedulerapi.Extender, profi
 
 type FailureHandlerFn func(ctx context.Context, fwk framework.Framework, podInfo *framework.QueuedPodInfo, status *framework.Status, nominatingInfo *framework.NominatingInfo, start time.Time)
 
-func unionedGVKs(queueingHintsPerProfile map[string]map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction) map[framework.GVK]framework.ActionType {
+func unionedGVKs(queueingHintsPerProfile internalqueue.QueueingHintMapPerProfile) map[framework.GVK]framework.ActionType {
 	gvkMap := make(map[framework.GVK]framework.ActionType)
 	for _, queueingHints := range queueingHintsPerProfile {
 		for evt := range queueingHints {
