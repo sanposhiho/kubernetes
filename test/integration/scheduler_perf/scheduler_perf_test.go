@@ -95,6 +95,10 @@ var (
 			},
 			"scheduler_scheduling_attempt_duration_seconds": nil,
 			"scheduler_pod_scheduling_duration_seconds":     nil,
+			"scheduler_goroutines": {
+				label:  "operation",
+				values: []string{"binding"},
+			},
 		},
 	}
 )
