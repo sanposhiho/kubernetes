@@ -114,11 +114,11 @@ const (
 	// QueueImmediately is returned only when it is highly possible that the Pod gets scheduled in the next scheduling.
 	// You should only return QueueImmediately when there is a high chance that the Pod gets scheduled in the next scheduling.
 	// Otherwise, it's detrimental to scheduling throughput.
-	// For example, when the Pod is rejected as waiting for an external resource to be provisioned, that is directly tied to the Pod,
+	// For example, when the Pod was rejected as waiting for an external resource to be provisioned, that is directly tied to the Pod,
 	// and the event is that the resource is provisioned, then you can return QueueImmediately.
-	// For another example, when the Pod is rejected as inefficient memory resource,
+	// As a counterexample, when the Pod was rejected due to insufficient memory resource,
 	// and the event is that more memory on Node is available, then you should return QueueAfterBackoff instead of QueueImmediately
-	// because other Pods may be stucked due to the inefficient memory and the Pod may not be schedulable in the next scheduling cycle.
+	// because other Pods may be waiting for the same resources and only a few of them would schedule in the next scheduling cycle.
 	QueueImmediately
 )
 
