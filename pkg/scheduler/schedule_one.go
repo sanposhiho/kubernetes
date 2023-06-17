@@ -113,13 +113,26 @@ func (sched *Scheduler) scheduleOne(ctx context.Context) {
 	//
 	// This goroutine becomes responsible for calling DonePod.
 	schedulingFailed = false
+	mu := sync.Mutex{}
 	go func() {
 		bindingCycleCtx, cancel := context.WithCancel(ctx)
 		defer cancel()
 		defer sched.DonePod(assumedPodInfo.Pod.UID)
 
 		metrics.Goroutines.WithLabelValues(metrics.Binding).Inc()
+		mu.Lock()
+		i++
+		if i > max {
+			max = i
+		}
+		mu.Unlock()
 		defer metrics.Goroutines.WithLabelValues(metrics.Binding).Dec()
+		defer func() {
+			time.Sleep(1 * time.Second)
+			mu.Lock()
+			i--
+			mu.Unlock()
+		}()
 
 		status := sched.bindingCycle(bindingCycleCtx, state, fwk, scheduleResult, assumedPodInfo, start, podsToActivate)
 		if !status.IsSuccess() {
@@ -127,6 +140,9 @@ func (sched *Scheduler) scheduleOne(ctx context.Context) {
 		}
 	}()
 }
+
+var max int32
+var i int32
 
 var clearNominatedNode = &framework.NominatingInfo{NominatingMode: framework.ModeOverride, NominatedNodeName: ""}
 

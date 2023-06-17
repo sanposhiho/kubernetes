@@ -164,6 +164,8 @@ type PriorityQueue struct {
 	// hasn't been called yet - in other words, all pods that are currently being
 	// processed.
 	inFlightPods map[types.UID]inFlightPod
+	// receivedEvents holds the events received by the scheduling queue.
+	receivedEvents []clusterEvent
 
 	// activeQ is heap structure that scheduler actively looks at to find pods to
 	// schedule. Head of heap is the highest priority pod.
@@ -193,14 +195,14 @@ type PriorityQueue struct {
 }
 
 type inFlightPod struct {
-	pod *v1.Pod
-	// events happened during in-flight.
-	events []clusterEvent
+	startedCycle int64
 }
 
 // clusterEvent has the event and involved objects.
 type clusterEvent struct {
 	requestCycle int64
+	// inFlightPods is the pods that are in flight when this event is received.
+	inFlightPods []types.UID
 	event        framework.ClusterEvent
 }
 

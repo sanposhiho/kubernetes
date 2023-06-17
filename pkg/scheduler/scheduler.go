@@ -373,6 +373,9 @@ func (sched *Scheduler) Run(ctx context.Context) {
 
 	<-ctx.Done()
 	sched.SchedulingQueue.Close()
+
+	// log max
+	panic(fmt.Sprintf("max=%v", max))
 }
 
 // NewInformerFactory creates a SharedInformerFactory and initializes a scheduler specific
