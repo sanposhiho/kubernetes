@@ -616,7 +616,8 @@ func BenchmarkMoveAllToActiveOrBackoffQueue(b *testing.B) {
 					b.StopTimer()
 					c := testingclock.NewFakeClock(time.Now())
 
-					m := map[string]map[framework.ClusterEvent][]*QueueingHintFunction{"": {}}
+					m := make(QueueingHintMapPerProfile)
+					m[""] = make(QueueingHintMap)
 					// - All plugins registered for events[0], which is NodeAdd.
 					// - 1/2 of plugins registered for events[1]
 					// - 1/3 of plugins registered for events[2]
@@ -634,7 +635,7 @@ func BenchmarkMoveAllToActiveOrBackoffQueue(b *testing.B) {
 
 					ctx, cancel := context.WithCancel(context.Background())
 					defer cancel()
-					q := NewTestQueue(ctx, newDefaultQueueSort(), WithClock(c), WithQueueingHintMap(m))
+					q := NewTestQueue(ctx, newDefaultQueueSort(), WithClock(c), WithQueueingHintMapPerProfile(m))
 
 					// Init pods in unschedulablePods.
 					for j := 0; j < podsInUnschedulablePods; j++ {
@@ -680,17 +681,15 @@ func TestPriorityQueue_MoveAllToActiveOrBackoffQueue(t *testing.T) {
 	logger, ctx := ktesting.NewTestContext(t)
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	m := map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
-		"": {
-			NodeAdd: {
-				{
-					PluginName:     "fooPlugin",
-					QueueingHintFn: defaultQueueingHintFn,
-				},
-			},
+	m := make(QueueingHintMapPerProfile)
+	m[""] = make(QueueingHintMap)
+	m[""][NodeAdd] = []*QueueingHintFunction{
+		{
+			PluginName:     "fooPlugin",
+			QueueingHintFn: defaultQueueingHintFn,
 		},
 	}
-	q := NewTestQueue(ctx, newDefaultQueueSort(), WithClock(c), WithQueueingHintMap(m))
+	q := NewTestQueue(ctx, newDefaultQueueSort(), WithClock(c), WithQueueingHintMapPerProfile(m))
 	q.Add(logger, medPriorityPodInfo.Pod)
 	q.AddUnschedulableIfNotPresent(logger, q.newQueuedPodInfo(unschedulablePodInfo.Pod, "fooPlugin"), q.SchedulingCycle())
 	q.AddUnschedulableIfNotPresent(logger, q.newQueuedPodInfo(highPriorityPodInfo.Pod, "fooPlugin"), q.SchedulingCycle())
@@ -751,17 +750,15 @@ func TestPriorityQueue_AssignedPodAdded(t *testing.T) {
 	labelPod := st.MakePod().Name("lbp").Namespace(affinityPod.Namespace).Label("service", "securityscan").Node("node1").Obj()
 
 	c := testingclock.NewFakeClock(time.Now())
-	m := map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
-		"": {
-			AssignedPodAdd: {
-				{
-					PluginName:     "fakePlugin",
-					QueueingHintFn: defaultQueueingHintFn,
-				},
-			},
+	m := make(QueueingHintMapPerProfile)
+	m[""] = make(QueueingHintMap)
+	m[""][AssignedPodAdd] = []*QueueingHintFunction{
+		{
+			PluginName:     "fakePlugin",
+			QueueingHintFn: defaultQueueingHintFn,
 		},
 	}
-	q := NewTestQueue(ctx, newDefaultQueueSort(), WithClock(c), WithQueueingHintMap(m))
+	q := NewTestQueue(ctx, newDefaultQueueSort(), WithClock(c), WithQueueingHintMapPerProfile(m))
 	q.Add(logger, medPriorityPodInfo.Pod)
 	// Add a couple of pods to the unschedulablePods.
 	q.AddUnschedulableIfNotPresent(logger, q.newQueuedPodInfo(unschedulablePodInfo.Pod, "fakePlugin"), q.SchedulingCycle())
@@ -1305,20 +1302,18 @@ func TestHighPriorityBackoff(t *testing.T) {
 // activeQ after one minutes if it is in unschedulablePods.
 func TestHighPriorityFlushUnschedulablePodsLeftover(t *testing.T) {
 	c := testingclock.NewFakeClock(time.Now())
-	m := map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
-		"": {
-			NodeAdd: {
-				{
-					PluginName:     "fakePlugin",
-					QueueingHintFn: defaultQueueingHintFn,
-				},
-			},
+	m := make(QueueingHintMapPerProfile)
+	m[""] = make(QueueingHintMap)
+	m[""][NodeAdd] = []*QueueingHintFunction{
+		{
+			PluginName:     "fakePlugin",
+			QueueingHintFn: defaultQueueingHintFn,
 		},
 	}
 	logger, ctx := ktesting.NewTestContext(t)
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()
-	q := NewTestQueue(ctx, newDefaultQueueSort(), WithClock(c), WithQueueingHintMap(m))
+	q := NewTestQueue(ctx, newDefaultQueueSort(), WithClock(c), WithQueueingHintMapPerProfile(m))
 	midPod := st.MakePod().Name("test-midpod").Namespace("ns1").UID("tp-mid").Priority(midPriority).NominatedNodeName("node1").Obj()
 	highPod := st.MakePod().Name("test-highpod").Namespace("ns1").UID("tp-high").Priority(highPriority).NominatedNodeName("node1").Obj()
 
@@ -2274,7 +2269,7 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 		newObj                 interface{}
 		expected               framework.QueueingHint
 		expectedExecutionCount int // expected total execution count of queueing hint function
-		queueingHintMap        map[string]map[framework.ClusterEvent][]*QueueingHintFunction
+		queueingHintMap        QueueingHintMapPerProfile
 	}{
 		{
 			name: "return QueueAfterBackoff when no queueing hint function is registered for the event",
@@ -2287,7 +2282,7 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 			newObj:                 st.MakeNode().Node,
 			expected:               framework.QueueSkip,
 			expectedExecutionCount: 0,
-			queueingHintMap: map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
+			queueingHintMap: QueueingHintMapPerProfile{
 				"": {
 					// no queueing hint function for NodeAdd.
 					AssignedPodAdd: {
@@ -2311,7 +2306,7 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 			newObj:                 st.MakeNode().Node,
 			expected:               framework.QueueAfterBackoff,
 			expectedExecutionCount: 0,
-			queueingHintMap:        map[string]map[framework.ClusterEvent][]*QueueingHintFunction{},
+			queueingHintMap:        QueueingHintMapPerProfile{},
 		},
 		{
 			name: "QueueImmediately is the highest priority",
@@ -2324,7 +2319,7 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 			newObj:                 st.MakeNode().Node,
 			expected:               framework.QueueImmediately,
 			expectedExecutionCount: 2,
-			queueingHintMap: map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
+			queueingHintMap: QueueingHintMapPerProfile{
 				"": {
 					NodeAdd: {
 						{
@@ -2362,7 +2357,7 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 			newObj:                 st.MakeNode().Node,
 			expected:               framework.QueueAfterBackoff,
 			expectedExecutionCount: 3,
-			queueingHintMap: map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
+			queueingHintMap: QueueingHintMapPerProfile{
 				"": {
 					NodeAdd: {
 						{
@@ -2392,7 +2387,7 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 			newObj:                 st.MakeNode().Node,
 			expected:               framework.QueueAfterBackoff,
 			expectedExecutionCount: 2,
-			queueingHintMap: map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
+			queueingHintMap: QueueingHintMapPerProfile{
 				"": {
 					NodeAdd: {
 						{
@@ -2422,7 +2417,7 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 			newObj:                 st.MakeNode().Node,
 			expected:               framework.QueueAfterBackoff,
 			expectedExecutionCount: 3,
-			queueingHintMap: map[string]map[framework.ClusterEvent][]*QueueingHintFunction{
+			queueingHintMap: QueueingHintMapPerProfile{
 				"": {
 					framework.ClusterEvent{Resource: framework.Node, ActionType: framework.UpdateNodeLabel}: {
 						{
@@ -2455,7 +2450,7 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 		t.Run(test.name, func(t *testing.T) {
 			count = 0 // reset count every time
 			logger, ctx := ktesting.NewTestContext(t)
-			q := NewTestQueue(ctx, newDefaultQueueSort(), WithQueueingHintMap(test.queueingHintMap))
+			q := NewTestQueue(ctx, newDefaultQueueSort(), WithQueueingHintMapPerProfile(test.queueingHintMap))
 			actual := q.isPodWorthRequeuing(logger, test.podInfo, test.event, test.oldObj, test.newObj)
 			if actual != test.expected {
 				t.Errorf("isPodWorthRequeuing() = %v, want %v", actual, test.expected)

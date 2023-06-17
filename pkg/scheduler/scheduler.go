@@ -306,7 +306,7 @@ func New(ctx context.Context,
 	}
 
 	preEnqueuePluginMap := make(map[string][]framework.PreEnqueuePlugin)
-	queueingHintsPerProfile := make(map[string]map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction)
+	queueingHintsPerProfile := make(internalqueue.AggregatedQueueingHints)
 	for profileName, profile := range profiles {
 		preEnqueuePluginMap[profileName] = profile.PreEnqueuePlugins()
 		queueingHintsPerProfile[profileName] = buildQueueingHintMap(profile.EnqueueExtensions())
@@ -320,7 +320,7 @@ func New(ctx context.Context,
 		internalqueue.WithPodLister(podLister),
 		internalqueue.WithPodMaxInUnschedulablePodsDuration(options.podMaxInUnschedulablePodsDuration),
 		internalqueue.WithPreEnqueuePluginMap(preEnqueuePluginMap),
-		internalqueue.WithQueueingHintMap(queueingHintsPerProfile),
+		internalqueue.WithQueueingHintMapPerProfile(queueingHintsPerProfile),
 		internalqueue.WithPluginMetricsSamplePercent(pluginMetricsSamplePercent),
 		internalqueue.WithMetricsRecorder(*metricsRecorder),
 	)
@@ -360,7 +360,7 @@ var defaultQueueingHintFn = func(_ *v1.Pod, _, _ interface{}) framework.Queueing
 	return framework.QueueAfterBackoff
 }
 
-func buildQueueingHintMap(es []framework.EnqueueExtensions) map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction {
+func buildQueueingHintMap(es []framework.EnqueueExtensions) internalqueue.QueueingHintMap {
 	queueingHintMap := make(map[framework.ClusterEvent][]*internalqueue.QueueingHintFunction)
 	for _, e := range es {
 		events := e.EventsToRegister()

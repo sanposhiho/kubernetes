@@ -178,7 +178,7 @@ type PriorityQueue struct {
 	// preEnqueuePluginMap is keyed with profile name, valued with registered preEnqueue plugins.
 	preEnqueuePluginMap map[string][]framework.PreEnqueuePlugin
 	// queueingHintMap is keyed with profile name, valued with registered queueing hint functions.
-	queueingHintMap map[string]map[framework.ClusterEvent][]*QueueingHintFunction
+	queueingHintMap QueueingHintMapPerProfile
 
 	// closed indicates that the queue is closed.
 	// It is mainly used to let Pop() exit its control loop while waiting for an item.
@@ -206,7 +206,7 @@ type priorityQueueOptions struct {
 	metricsRecorder                   metrics.MetricAsyncRecorder
 	pluginMetricsSamplePercent        int
 	preEnqueuePluginMap               map[string][]framework.PreEnqueuePlugin
-	queueingHintMap                   map[string]map[framework.ClusterEvent][]*QueueingHintFunction
+	queueingHintMap                   QueueingHintMapPerProfile
 }
 
 // Option configures a PriorityQueue
@@ -247,8 +247,14 @@ func WithPodMaxInUnschedulablePodsDuration(duration time.Duration) Option {
 	}
 }
 
-// WithQueueingHintMap sets preEnqueuePluginMap for PriorityQueue.
-func WithQueueingHintMap(m map[string]map[framework.ClusterEvent][]*QueueingHintFunction) Option {
+// QueueingHintMapPerProfile is keyed with profile name, valued with queueing hint map registered for the profile.
+type QueueingHintMapPerProfile map[string]QueueingHintMap
+
+// QueueingHintMap is keyed with ClusterEvent, valued with queueing hint functions registered for the event.
+type QueueingHintMap map[framework.ClusterEvent][]*QueueingHintFunction
+
+// WithQueueingHintMapPerProfile sets preEnqueuePluginMap for PriorityQueue.
+func WithQueueingHintMapPerProfile(m QueueingHintMapPerProfile) Option {
 	return func(o *priorityQueueOptions) {
 		o.queueingHintMap = m
 	}
