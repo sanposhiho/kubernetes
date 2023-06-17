@@ -248,10 +248,13 @@ func WithPodMaxInUnschedulablePodsDuration(duration time.Duration) Option {
 }
 
 // QueueingHintMapPerProfile is keyed with profile name, valued with queueing hint map registered for the profile.
-type QueueingHintMapPerProfile map[string]QueueingHintMap
+type QueueingHintMapPerProfile map[string][]*QueueingHintWithEvent
 
 // QueueingHintMap is keyed with ClusterEvent, valued with queueing hint functions registered for the event.
-type QueueingHintMap map[framework.ClusterEvent][]*QueueingHintFunction
+type QueueingHintWithEvent struct {
+	Event          framework.ClusterEvent
+	QueueingHintFn []*QueueingHintFunction
+}
 
 // WithQueueingHintMapPerProfile sets preEnqueuePluginMap for PriorityQueue.
 func WithQueueingHintMapPerProfile(m QueueingHintMapPerProfile) Option {
@@ -379,12 +382,13 @@ func (p *PriorityQueue) isPodWorthRequeuing(logger klog.Logger, pInfo *framework
 
 	pod := pInfo.Pod
 	queueHint := framework.QueueSkip
-	for eventToMatch, hintfns := range hintMap {
+	for _, hintfns := range hintMap {
+		eventToMatch := hintfns.Event
 		if eventToMatch.Resource != event.Resource || eventToMatch.ActionType&event.ActionType == 0 {
 			continue
 		}
 
-		for _, hintfn := range hintfns {
+		for _, hintfn := range hintfns.QueueingHintFn {
 			if !pInfo.UnschedulablePlugins.Has(hintfn.PluginName) {
 				continue
 			}
