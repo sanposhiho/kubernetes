@@ -83,6 +83,11 @@ var (
 		cmp.AllowUnexported(nominator{}),
 		cmpopts.IgnoreFields(nominator{}, "podLister", "lock"),
 	}
+
+	defaultQueueingHintFn = func(pod *v1.Pod, oldObj, newObj interface{}) framework.QueueingHint {
+		// always return framework.QueueAfterBackoff
+		return framework.QueueAfterBackoff
+	}
 )
 
 func getUnschedulablePod(p *PriorityQueue, pod *v1.Pod) *v1.Pod {
@@ -620,10 +625,8 @@ func BenchmarkMoveAllToActiveOrBackoffQueue(b *testing.B) {
 						for k := 0; k < len(plugins); k++ {
 							if (k+1)%(j+1) == 0 {
 								m[""][events[j]] = append(m[""][events[j]], &QueueingHintFunction{
-									PluginName: plugins[k],
-									QueueingHintFn: func(pod *v1.Pod, oldObj, newObj interface{}) framework.QueueingHint {
-										return framework.QueueAfterBackoff
-									},
+									PluginName:     plugins[k],
+									QueueingHintFn: defaultQueueingHintFn,
 								})
 							}
 						}
@@ -681,11 +684,8 @@ func TestPriorityQueue_MoveAllToActiveOrBackoffQueue(t *testing.T) {
 		"": {
 			NodeAdd: {
 				{
-					PluginName: "fooPlugin",
-					QueueingHintFn: func(pod *v1.Pod, oldObj, newObj interface{}) framework.QueueingHint {
-						t.Logf("fooPlugin is invoked with pod %v", pod.Name)
-						return framework.QueueAfterBackoff
-					},
+					PluginName:     "fooPlugin",
+					QueueingHintFn: defaultQueueingHintFn,
 				},
 			},
 		},
@@ -755,10 +755,8 @@ func TestPriorityQueue_AssignedPodAdded(t *testing.T) {
 		"": {
 			AssignedPodAdd: {
 				{
-					PluginName: "fakePlugin",
-					QueueingHintFn: func(pod *v1.Pod, oldObj, newObj interface{}) framework.QueueingHint {
-						return framework.QueueAfterBackoff
-					},
+					PluginName:     "fakePlugin",
+					QueueingHintFn: defaultQueueingHintFn,
 				},
 			},
 		},
@@ -1311,10 +1309,8 @@ func TestHighPriorityFlushUnschedulablePodsLeftover(t *testing.T) {
 		"": {
 			NodeAdd: {
 				{
-					PluginName: "fakePlugin",
-					QueueingHintFn: func(pod *v1.Pod, oldObj, newObj interface{}) framework.QueueingHint {
-						return framework.QueueAfterBackoff
-					},
+					PluginName:     "fakePlugin",
+					QueueingHintFn: defaultQueueingHintFn,
 				},
 			},
 		},
