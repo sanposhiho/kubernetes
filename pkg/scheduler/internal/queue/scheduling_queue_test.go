@@ -84,9 +84,14 @@ var (
 		cmpopts.IgnoreFields(nominator{}, "podLister", "lock"),
 	}
 
-	defaultQueueingHintFn = func(pod *v1.Pod, oldObj, newObj interface{}) framework.QueueingHint {
-		// always return framework.QueueAfterBackoff
+	queueHintReturnQueueAfterBackoff = func(pod *v1.Pod, oldObj, newObj interface{}) framework.QueueingHint {
 		return framework.QueueAfterBackoff
+	}
+	queueHintReturnQueueImmediately = func(pod *v1.Pod, oldObj, newObj interface{}) framework.QueueingHint {
+		return framework.QueueImmediately
+	}
+	queueHintReturnQueueSkip = func(pod *v1.Pod, oldObj, newObj interface{}) framework.QueueingHint {
+		return framework.QueueSkip
 	}
 )
 
@@ -633,7 +638,7 @@ func BenchmarkMoveAllToActiveOrBackoffQueue(b *testing.B) {
 							if (k+1)%(j+1) == 0 {
 								m[""][events[j]] = append(m[""][events[j]], &QueueingHintFunction{
 									PluginName:     plugins[k],
-									QueueingHintFn: defaultQueueingHintFn,
+									QueueingHintFn: queueHintReturnQueueAfterBackoff,
 								})
 							}
 						}
@@ -682,6 +687,80 @@ func BenchmarkMoveAllToActiveOrBackoffQueue(b *testing.B) {
 	}
 }
 
+func TestPriorityQueue_MoveAllToActiveOrBackoffQueueWithQueueingHint(t *testing.T) {
+	now := time.Now()
+	p := st.MakePod().Name("pod1").Namespace("ns1").UID("1").Obj()
+	tests := []struct {
+		name    string
+		podInfo *framework.QueuedPodInfo
+		hint    framework.QueueingHintFn
+		// duration is the duration that the Pod has been in the unschedulable queue.
+		duration time.Duration
+		// expectedQ is the queue name (activeQ, backoffQ, or unschedulablePods) that this Pod should be quened to.
+		expectedQ string
+	}{
+		{
+			name:      "QueueImmediately queues pod to activeQ",
+			podInfo:   &framework.QueuedPodInfo{PodInfo: mustNewPodInfo(p)},
+			hint:      queueHintReturnQueueImmediately,
+			expectedQ: activeQ,
+		},
+		{
+			name:      "QueueAfterBackoff queues pod to backoffQ if Pod is backing off",
+			podInfo:   &framework.QueuedPodInfo{PodInfo: mustNewPodInfo(p)},
+			hint:      queueHintReturnQueueAfterBackoff,
+			expectedQ: backoffQ,
+		},
+		{
+			name:      "QueueAfterBackoff queues pod to activeQ if Pod is not backing off",
+			podInfo:   &framework.QueuedPodInfo{PodInfo: mustNewPodInfo(p)},
+			hint:      queueHintReturnQueueAfterBackoff,
+			duration:  DefaultPodInitialBackoffDuration, // backoff is finished
+			expectedQ: activeQ,
+		},
+		{
+			name:      "QueueSkip queues pod to unschedulablePods",
+			podInfo:   &framework.QueuedPodInfo{PodInfo: mustNewPodInfo(p)},
+			hint:      queueHintReturnQueueSkip,
+			expectedQ: unschedulablePods,
+		},
+	}
+
+	for _, test := range tests {
+		t.Run(test.name, func(t *testing.T) {
+			logger, ctx := ktesting.NewTestContext(t)
+			m := makeEmptyQueueingHintMapPerProfile()
+			m[""][NodeAdd] = []*QueueingHintFunction{
+				{
+					PluginName:     "foo",
+					QueueingHintFn: test.hint,
+				},
+			}
+			test.podInfo.UnschedulablePlugins = sets.New("foo")
+			cl := testingclock.NewFakeClock(now)
+			q := NewTestQueue(ctx, newDefaultQueueSort(), WithQueueingHintMapPerProfile(m), WithClock(cl))
+			// add to unsched pod pool
+			q.AddUnschedulableIfNotPresent(logger, test.podInfo, q.SchedulingCycle())
+
+			cl.Step(test.duration)
+
+			q.MoveAllToActiveOrBackoffQueue(logger, NodeAdd, nil, nil, nil)
+
+			if q.podBackoffQ.Len() == 0 && test.expectedQ == backoffQ {
+				t.Fatalf("expected pod to be queued to backoffQ, but it was not")
+			}
+
+			if q.activeQ.Len() == 0 && test.expectedQ == activeQ {
+				t.Fatalf("expected pod to be queued to activeQ, but it was not")
+			}
+
+			if q.unschedulablePods.get(test.podInfo.Pod) == nil && test.expectedQ == unschedulablePods {
+				t.Fatalf("expected pod to be queued to unschedulablePods, but it was not")
+			}
+		})
+	}
+}
+
 func TestPriorityQueue_MoveAllToActiveOrBackoffQueue(t *testing.T) {
 	c := testingclock.NewFakeClock(time.Now())
 	logger, ctx := ktesting.NewTestContext(t)
@@ -691,7 +770,7 @@ func TestPriorityQueue_MoveAllToActiveOrBackoffQueue(t *testing.T) {
 	m[""][NodeAdd] = []*QueueingHintFunction{
 		{
 			PluginName:     "fooPlugin",
-			QueueingHintFn: defaultQueueingHintFn,
+			QueueingHintFn: queueHintReturnQueueAfterBackoff,
 		},
 	}
 	q := NewTestQueue(ctx, newDefaultQueueSort(), WithClock(c), WithQueueingHintMapPerProfile(m))
@@ -759,7 +838,7 @@ func TestPriorityQueue_AssignedPodAdded(t *testing.T) {
 	m[""][AssignedPodAdd] = []*QueueingHintFunction{
 		{
 			PluginName:     "fakePlugin",
-			QueueingHintFn: defaultQueueingHintFn,
+			QueueingHintFn: queueHintReturnQueueAfterBackoff,
 		},
 	}
 	q := NewTestQueue(ctx, newDefaultQueueSort(), WithClock(c), WithQueueingHintMapPerProfile(m))
@@ -1310,7 +1389,7 @@ func TestHighPriorityFlushUnschedulablePodsLeftover(t *testing.T) {
 	m[""][NodeAdd] = []*QueueingHintFunction{
 		{
 			PluginName:     "fakePlugin",
-			QueueingHintFn: defaultQueueingHintFn,
+			QueueingHintFn: queueHintReturnQueueAfterBackoff,
 		},
 	}
 	logger, ctx := ktesting.NewTestContext(t)
@@ -2460,55 +2539,6 @@ func Test_isPodWorthRequeuing(t *testing.T) {
 			}
 			if count != test.expectedExecutionCount {
 				t.Errorf("isPodWorthRequeuing() executed queueing hint functions %v times, expected: %v", count, test.expectedExecutionCount)
-			}
-		})
-	}
-}
-
-func Test_requeuePodViaQueueingHint(t *testing.T) {
-	now := time.Now()
-	p := st.MakePod().Name("pod1").Namespace("ns1").UID("1").Obj()
-	tests := []struct {
-		name    string
-		podInfo *framework.QueuedPodInfo
-		hint    framework.QueueingHint
-		// expectedQ is the queue name (activeQName, backoffQName, or unschedulablePods) that this Pod should be quened to.
-		expectedQ string
-	}{
-		{
-			name:      "QueueImmediately queues pod to activeQ",
-			podInfo:   &framework.QueuedPodInfo{PodInfo: mustNewPodInfo(p)},
-			hint:      framework.QueueImmediately,
-			expectedQ: activeQ,
-		},
-		{
-			name:      "QueueAfterBackoff queues pod to backoffQ if Pod is backing off",
-			podInfo:   &framework.QueuedPodInfo{PodInfo: mustNewPodInfo(p), Timestamp: now},
-			hint:      framework.QueueAfterBackoff,
-			expectedQ: backoffQ,
-		},
-		{
-			name:      "QueueAfterBackoff queues pod to activeQ if Pod is not backing off",
-			podInfo:   &framework.QueuedPodInfo{PodInfo: mustNewPodInfo(p), Timestamp: now.Add(-1 * time.Second)},
-			hint:      framework.QueueAfterBackoff,
-			expectedQ: activeQ,
-		},
-		{
-			name:      "QueueSkip queues pod to unschedulablePods",
-			podInfo:   &framework.QueuedPodInfo{PodInfo: mustNewPodInfo(p)},
-			hint:      framework.QueueSkip,
-			expectedQ: unschedulablePods,
-		},
-	}
-
-	for _, test := range tests {
-		t.Run(test.name, func(t *testing.T) {
-			cl := testingclock.NewFakeClock(now)
-			logger, ctx := ktesting.NewTestContext(t)
-			q := NewTestQueue(ctx, newDefaultQueueSort(), WithClock(cl))
-			actual := q.requeuePodViaQueueingHint(logger, test.podInfo, test.hint, "event")
-			if actual != test.expectedQ {
-				t.Errorf("requeuePodViaQueueingHint() = %v, want %v", actual, test.expectedQ)
 			}
 		})
 	}
