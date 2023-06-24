@@ -487,10 +487,10 @@ const (
 	LogarithmicScaleDown featuregate.Feature = "LogarithmicScaleDown"
 
 	// owner: @sanposhiho
-	// kep: https://kep.k8s.io/3651
-	// alpha: v1.27
+	// kep: https://kep.k8s.io/3633
+	// alpha: v1.28
 	//
-	// Enables the MatchLabelKeys in PodAffinity and PodAntiAffinity.
+	// Enables the MatchLabelKeys and MismatchLabelKeys in PodAffinity and PodAntiAffinity.
 	MatchLabelKeysInPodAffinity featuregate.Feature = "MatchLabelKeysInPodAffinity"
 
 	// owner: @denkensk

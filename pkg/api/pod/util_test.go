@@ -1514,7 +1514,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 		wantPodSpec *api.PodSpec
 	}{
 		{
-			name:    "[PodAffinity/required] feature disabled, both pods don't use MatchLabelKeys fields",
+			name:    "[PodAffinity/required] feature disabled, both pods don't use MatchLabelKeys/MismatchLabelKeys fields",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
@@ -1539,13 +1539,13 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAffinity/required] feature disabled, only old pod uses MatchLabelKeys field",
+			name:    "[PodAffinity/required] feature disabled, only old pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -1566,7 +1566,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAffinity/required] feature disabled, only current pod uses MatchLabelKeys field",
+			name:    "[PodAffinity/required] feature disabled, only current pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
@@ -1579,7 +1579,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -1593,13 +1593,13 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAffinity/required] feature disabled, both pods use MatchLabelKeys fields",
+			name:    "[PodAffinity/required] feature disabled, both pods use MatchLabelKeys/MismatchLabelKeys fields",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -1608,7 +1608,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -1617,20 +1617,20 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
 			},
 		},
 		{
-			name:    "[PodAffinity/required] feature enabled, only old pod uses MatchLabelKeys field",
+			name:    "[PodAffinity/required] feature enabled, only old pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: true,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -1651,7 +1651,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAffinity/required] feature enabled, only current pod uses MatchLabelKeys field",
+			name:    "[PodAffinity/required] feature enabled, only current pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: true,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
@@ -1664,7 +1664,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -1673,20 +1673,20 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
 			},
 		},
 		{
-			name:    "[PodAffinity/required] feature enabled, both pods use MatchLabelKeys fields",
+			name:    "[PodAffinity/required] feature enabled, both pods use MatchLabelKeys/MismatchLabelKeys fields",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -1695,7 +1695,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -1704,14 +1704,14 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
 			},
 		},
 		{
-			name:    "[PodAffinity/preferred] feature disabled, both pods don't use MatchLabelKeys fields",
+			name:    "[PodAffinity/preferred] feature disabled, both pods don't use MatchLabelKeys/MismatchLabelKeys fields",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
@@ -1736,14 +1736,14 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAffinity/preferred] feature disabled, only old pod uses MatchLabelKeys field",
+			name:    "[PodAffinity/preferred] feature disabled, only old pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -1765,7 +1765,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAffinity/preferred] feature disabled, only current pod uses MatchLabelKeys field",
+			name:    "[PodAffinity/preferred] feature disabled, only current pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
@@ -1779,7 +1779,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAffinity: &api.PodAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -1794,14 +1794,14 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAffinity/preferred] feature disabled, both pods use MatchLabelKeys fields",
+			name:    "[PodAffinity/preferred] feature disabled, both pods use MatchLabelKeys/MismatchLabelKeys fields",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -1812,7 +1812,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAffinity: &api.PodAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -1823,7 +1823,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAffinity: &api.PodAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -1831,14 +1831,14 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAffinity/preferred] feature enabled, only old pod uses MatchLabelKeys field",
+			name:    "[PodAffinity/preferred] feature enabled, only old pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: true,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -1860,7 +1860,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAffinity/preferred] feature enabled, only current pod uses MatchLabelKeys field",
+			name:    "[PodAffinity/preferred] feature enabled, only current pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: true,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
@@ -1874,7 +1874,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAffinity: &api.PodAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -1885,7 +1885,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAffinity: &api.PodAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -1893,14 +1893,14 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAffinity/preferred] feature enabled, both pods use MatchLabelKeys fields",
+			name:    "[PodAffinity/preferred] feature enabled, both pods use MatchLabelKeys/MismatchLabelKeys fields",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAffinity: &api.PodAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -1911,7 +1911,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAffinity: &api.PodAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -1922,7 +1922,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAffinity: &api.PodAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -1930,7 +1930,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/required] feature disabled, both pods don't use MatchLabelKeys fields",
+			name:    "[PodAntiAffinity/required] feature disabled, both pods don't use MatchLabelKeys/MismatchLabelKeys fields",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
@@ -1955,13 +1955,13 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/required] feature disabled, only old pod uses MatchLabelKeys field",
+			name:    "[PodAntiAffinity/required] feature disabled, only old pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -1982,7 +1982,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/required] feature disabled, only current pod uses MatchLabelKeys field",
+			name:    "[PodAntiAffinity/required] feature disabled, only current pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
@@ -1995,7 +1995,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -2009,13 +2009,13 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/required] feature disabled, both pods use MatchLabelKeys fields",
+			name:    "[PodAntiAffinity/required] feature disabled, both pods use MatchLabelKeys/MismatchLabelKeys fields",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -2024,7 +2024,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -2033,20 +2033,20 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/required] feature enabled, only old pod uses MatchLabelKeys field",
+			name:    "[PodAntiAffinity/required] feature enabled, only old pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: true,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -2067,7 +2067,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/required] feature enabled, only current pod uses MatchLabelKeys field",
+			name:    "[PodAntiAffinity/required] feature enabled, only current pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: true,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
@@ -2080,7 +2080,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -2089,20 +2089,20 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/required] feature enabled, both pods use MatchLabelKeys fields",
+			name:    "[PodAntiAffinity/required] feature enabled, both pods use MatchLabelKeys/MismatchLabelKeys fields",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -2111,7 +2111,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -2120,7 +2120,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						RequiredDuringSchedulingIgnoredDuringExecution: []api.PodAffinityTerm{
-							{MatchLabelKeys: []string{"foo"}},
+							{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 						},
 					},
 				},
@@ -2128,7 +2128,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 		},
 
 		{
-			name:    "[PodAntiAffinity/preferred] feature disabled, both pods don't use MatchLabelKeys fields",
+			name:    "[PodAntiAffinity/preferred] feature disabled, both pods don't use MatchLabelKeys/MismatchLabelKeys fields",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
@@ -2153,14 +2153,14 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/preferred] feature disabled, only old pod uses MatchLabelKeys field",
+			name:    "[PodAntiAffinity/preferred] feature disabled, only old pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -2182,7 +2182,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/preferred] feature disabled, only current pod uses MatchLabelKeys field",
+			name:    "[PodAntiAffinity/preferred] feature disabled, only current pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
@@ -2196,7 +2196,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAntiAffinity: &api.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -2211,14 +2211,14 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/preferred] feature disabled, both pods use MatchLabelKeys fields",
+			name:    "[PodAntiAffinity/preferred] feature disabled, both pods use MatchLabelKeys/MismatchLabelKeys fields",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -2229,7 +2229,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAntiAffinity: &api.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -2240,7 +2240,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAntiAffinity: &api.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -2248,14 +2248,14 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/preferred] feature enabled, only old pod uses MatchLabelKeys field",
+			name:    "[PodAntiAffinity/preferred] feature enabled, only old pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: true,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -2277,7 +2277,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/preferred] feature enabled, only current pod uses MatchLabelKeys field",
+			name:    "[PodAntiAffinity/preferred] feature enabled, only current pod uses MatchLabelKeys/MismatchLabelKeys field",
 			enabled: true,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
@@ -2291,7 +2291,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAntiAffinity: &api.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -2302,7 +2302,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAntiAffinity: &api.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -2310,14 +2310,14 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 			},
 		},
 		{
-			name:    "[PodAntiAffinity/preferred] feature enabled, both pods use MatchLabelKeys fields",
+			name:    "[PodAntiAffinity/preferred] feature enabled, both pods use MatchLabelKeys/MismatchLabelKeys fields",
 			enabled: false,
 			oldPodSpec: &api.PodSpec{
 				Affinity: &api.Affinity{
 					PodAntiAffinity: &api.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -2328,7 +2328,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAntiAffinity: &api.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},
@@ -2339,7 +2339,7 @@ func Test_dropDisabledMatchLabelKeysFieldInPodAffinity(t *testing.T) {
 					PodAntiAffinity: &api.PodAntiAffinity{
 						PreferredDuringSchedulingIgnoredDuringExecution: []api.WeightedPodAffinityTerm{
 							{
-								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}},
+								PodAffinityTerm: api.PodAffinityTerm{MatchLabelKeys: []string{"foo"}, MismatchLabelKeys: []string{"foo"}},
 							},
 						},
 					},

@@ -38,7 +38,7 @@ var (
 	defaultNamespace = ""
 )
 
-func createPodWithRequiredAffinityTerms(namespace, nodeName string, labels map[string]string, affinity, antiAffinity []v1.PodAffinityTerm) *v1.Pod {
+func createPodWithAffinityTerms(namespace, nodeName string, labels map[string]string, affinity, antiAffinity []v1.PodAffinityTerm) *v1.Pod {
 	return &v1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Labels:    labels,
@@ -70,13 +70,12 @@ func TestRequiredAffinitySingleNode(t *testing.T) {
 	node1 := v1.Node{ObjectMeta: metav1.ObjectMeta{Name: "node1", Labels: labels1}}
 
 	tests := []struct {
-		pod                  *v1.Pod
-		pods                 []*v1.Pod
-		node                 *v1.Node
-		name                 string
-		enableMatchLabelKeys bool
-		wantPreFilterStatus  *framework.Status
-		wantFilterStatus     *framework.Status
+		pod                 *v1.Pod
+		pods                []*v1.Pod
+		node                *v1.Node
+		name                string
+		wantPreFilterStatus *framework.Status
+		wantFilterStatus    *framework.Status
 	}{
 		{
 			name:                "A pod that has no required pod affinity scheduling rules can schedule onto a node with no existing pods",
@@ -98,7 +97,7 @@ func TestRequiredAffinitySingleNode(t *testing.T) {
 		},
 		{
 			name: "Does not satisfy the PodAffinity with labelSelector because of diff Namespace",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", podLabel2,
+			pod: createPodWithAffinityTerms(defaultNamespace, "", podLabel2,
 				[]v1.PodAffinityTerm{
 					{
 						LabelSelector: &metav1.LabelSelector{
@@ -132,7 +131,7 @@ func TestRequiredAffinitySingleNode(t *testing.T) {
 		},
 		{
 			name: "satisfies the PodAffinity with different label Operators in multiple RequiredDuringSchedulingIgnoredDuringExecution ",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", podLabel2,
+			pod: createPodWithAffinityTerms(defaultNamespace, "", podLabel2,
 				[]v1.PodAffinityTerm{
 					{
 						LabelSelector: &metav1.LabelSelector{
@@ -169,7 +168,7 @@ func TestRequiredAffinitySingleNode(t *testing.T) {
 		},
 		{
 			name: "The labelSelector requirements(items of matchExpressions) are ANDed, the pod cannot schedule onto the node because one of the matchExpression item don't match.",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", podLabel2,
+			pod: createPodWithAffinityTerms(defaultNamespace, "", podLabel2,
 				[]v1.PodAffinityTerm{
 					{
 						LabelSelector: &metav1.LabelSelector{
@@ -388,7 +387,7 @@ func TestRequiredAffinitySingleNode(t *testing.T) {
 		},
 		{
 			name: "affinity with NamespaceSelector",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", podLabel2,
+			pod: createPodWithAffinityTerms(defaultNamespace, "", podLabel2,
 				[]v1.PodAffinityTerm{
 					{
 						LabelSelector: &metav1.LabelSelector{
@@ -417,7 +416,7 @@ func TestRequiredAffinitySingleNode(t *testing.T) {
 		},
 		{
 			name: "affinity with non-matching NamespaceSelector",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", podLabel2,
+			pod: createPodWithAffinityTerms(defaultNamespace, "", podLabel2,
 				[]v1.PodAffinityTerm{
 					{
 						LabelSelector: &metav1.LabelSelector{
@@ -450,7 +449,7 @@ func TestRequiredAffinitySingleNode(t *testing.T) {
 		},
 		{
 			name: "anti-affinity with matching NamespaceSelector",
-			pod: createPodWithRequiredAffinityTerms("subteam1.team1", "", podLabel2, nil,
+			pod: createPodWithAffinityTerms("subteam1.team1", "", podLabel2, nil,
 				[]v1.PodAffinityTerm{
 					{
 						LabelSelector: &metav1.LabelSelector{
@@ -483,7 +482,7 @@ func TestRequiredAffinitySingleNode(t *testing.T) {
 		},
 		{
 			name: "anti-affinity with matching all NamespaceSelector",
-			pod: createPodWithRequiredAffinityTerms("subteam1.team1", "", podLabel2, nil,
+			pod: createPodWithAffinityTerms("subteam1.team1", "", podLabel2, nil,
 				[]v1.PodAffinityTerm{
 					{
 						LabelSelector: &metav1.LabelSelector{
@@ -508,7 +507,7 @@ func TestRequiredAffinitySingleNode(t *testing.T) {
 		},
 		{
 			name: "anti-affinity with non-matching NamespaceSelector",
-			pod: createPodWithRequiredAffinityTerms("subteam1.team1", "", podLabel2, nil,
+			pod: createPodWithAffinityTerms("subteam1.team1", "", podLabel2, nil,
 				[]v1.PodAffinityTerm{
 					{
 						LabelSelector: &metav1.LabelSelector{
@@ -534,144 +533,6 @@ func TestRequiredAffinitySingleNode(t *testing.T) {
 				}),
 			pods: []*v1.Pod{{Spec: v1.PodSpec{NodeName: "node1"}, ObjectMeta: metav1.ObjectMeta{Namespace: "subteam1.team2", Labels: podLabel}}},
 			node: &node1,
-		},
-		{
-			name: "anti affinity: matchLabelKeys ANDed with LabelSelector when LabelSelector isn't empty (feature flag: enabled)",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"}, nil,
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey: "zone",
-						LabelSelector: &metav1.LabelSelector{
-							MatchExpressions: []metav1.LabelSelectorRequirement{
-								{
-									Key:      "bar",
-									Operator: metav1.LabelSelectorOpIn,
-									Values:   []string{"hoge", "fuga", "a"},
-								},
-							},
-						},
-						MatchLabelKeys: []string{"bar"},
-					},
-				}),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("node1").Label("foo", "").Label("bar", "hoge").Obj(),
-				st.MakePod().Name("pod2").Node("node1").Label("foo", "").Label("bar", "fuga").Obj(),
-			},
-			node:                 &node1,
-			enableMatchLabelKeys: true,
-		},
-		{
-			name: "anti affinity: matchLabelKeys in existing Pod ANDed with LabelSelector when LabelSelector isn't empty (feature flag: enabled)",
-			pod:  st.MakePod().Name("pod1").Label("foo", "").Label("bar", "hoge").Obj(),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod2").Node("node1").Label("foo", "").Label("bar", "fuga").Obj(),
-				createPodWithRequiredAffinityTerms(defaultNamespace, "node1", map[string]string{"foo": "", "bar": "a"}, nil,
-					[]v1.PodAffinityTerm{
-						{
-							TopologyKey: "zone",
-							LabelSelector: &metav1.LabelSelector{
-								MatchExpressions: []metav1.LabelSelectorRequirement{
-									{
-										Key:      "bar",
-										Operator: metav1.LabelSelectorOpIn,
-										Values:   []string{"hoge", "fuga", "a"},
-									},
-								},
-							},
-							MatchLabelKeys: []string{"bar"},
-						},
-					}),
-			},
-			node:                 &node1,
-			wantPreFilterStatus:  framework.NewStatus(framework.Skip),
-			enableMatchLabelKeys: true,
-		},
-
-		{
-			name: "anti affinity: matchLabelKeys is ignored when keys in matchlabelKeys doesn't exist in pod's label (feature flag: enabled)",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"}, nil,
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey: "zone",
-						LabelSelector: &metav1.LabelSelector{
-							MatchExpressions: []metav1.LabelSelectorRequirement{
-								{
-									Key:      "bar",
-									Operator: metav1.LabelSelectorOpIn,
-									Values:   []string{"hoge", "fuga", "a"},
-								},
-							},
-						},
-						MatchLabelKeys: []string{"nonExistingLabel"},
-					},
-				}),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("node1").Label("foo", "").Label("bar", "hoge").Obj(),
-				st.MakePod().Name("pod2").Node("node1").Label("foo", "").Label("bar", "fuga").Obj(),
-			},
-			node:                 &node1,
-			enableMatchLabelKeys: true,
-			wantFilterStatus: framework.NewStatus(
-				framework.Unschedulable,
-				ErrReasonAntiAffinityRulesNotMatch,
-			),
-		},
-		{
-			name: "anti affinity: matchLabelKeys in incoming Pod is ignored (feature flag: disabled)",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"}, nil,
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey: "zone",
-						LabelSelector: &metav1.LabelSelector{
-							MatchExpressions: []metav1.LabelSelectorRequirement{
-								{
-									Key:      "bar",
-									Operator: metav1.LabelSelectorOpIn,
-									Values:   []string{"hoge", "fuga", "a"},
-								},
-							},
-						},
-						MatchLabelKeys: []string{"bar"},
-					},
-				}),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("node1").Label("foo", "").Label("bar", "hoge").Obj(),
-				st.MakePod().Name("pod2").Node("node1").Label("foo", "").Label("bar", "fuga").Obj(),
-			},
-			node: &node1,
-			wantFilterStatus: framework.NewStatus(
-				framework.Unschedulable,
-				ErrReasonAntiAffinityRulesNotMatch,
-			),
-		},
-		{
-			name: "anti affinity: matchLabelKeys in existing Pod is ignored (feature flag: disabled)",
-			pod:  st.MakePod().Name("pod1").Label("foo", "").Label("bar", "hoge").Obj(),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod2").Node("node1").Label("foo", "").Label("bar", "fuga").Obj(),
-				createPodWithRequiredAffinityTerms(defaultNamespace, "node1", map[string]string{"foo": "", "bar": "a"}, nil,
-					[]v1.PodAffinityTerm{
-						{
-							TopologyKey: "zone",
-							LabelSelector: &metav1.LabelSelector{
-								MatchExpressions: []metav1.LabelSelectorRequirement{
-									{
-										Key:      "bar",
-										Operator: metav1.LabelSelectorOpIn,
-										Values:   []string{"hoge", "fuga", "a"},
-									},
-								},
-							},
-							MatchLabelKeys: []string{"bar"},
-						},
-					}),
-			},
-			node:                 &node1,
-			enableMatchLabelKeys: false,
-			wantFilterStatus: framework.NewStatus(
-				framework.Unschedulable,
-				ErrReasonExistingAntiAffinityRulesNotMatch,
-			),
 		},
 	}
 
@@ -715,19 +576,13 @@ func TestRequiredAffinityMultipleNodes(t *testing.T) {
 		"region": "India",
 	}
 
-	emptySelector, err := metav1.ParseToLabelSelector("")
-	if err != nil {
-		t.Fatalf("failed to parse empty label selector: %v", err)
-	}
-
 	tests := []struct {
-		pod                  *v1.Pod
-		pods                 []*v1.Pod
-		nodes                []*v1.Node
-		enableMatchLabelKeys bool
-		wantFilterStatuses   []*framework.Status
-		wantPreFilterStatus  *framework.Status
-		name                 string
+		pod                 *v1.Pod
+		pods                []*v1.Pod
+		nodes               []*v1.Node
+		wantFilterStatuses  []*framework.Status
+		wantPreFilterStatus *framework.Status
+		name                string
 	}{
 		{
 			pod: st.MakePod().Namespace(defaultNamespace).PodAffinityIn("foo", "region", []string{"bar"}, st.PodAffinityWithRequiredReq).Obj(),
@@ -1091,354 +946,6 @@ func TestRequiredAffinityMultipleNodes(t *testing.T) {
 			},
 			name: "Test incoming pod's affinity: firstly check if all affinityTerms match, and then check if all topologyKeys match, and the match logic should be satisfied on the same pod",
 		},
-		{
-			name: "affinity: null LabelSelector is no-match",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"},
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey: "zone",
-					},
-				}, nil),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("nodeA").Label("foo", "").Label("bar", "hoge").Obj(),
-				st.MakePod().Name("pod2").Node("nodeB").Label("foo", "").Label("bar", "a").Obj(),
-			},
-			nodes: []*v1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeA", Labels: map[string]string{"region": "r1", "zone": "z1", "hostname": "nodeA"}}},
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeB", Labels: map[string]string{"region": "r1", "zone": "z2", "hostname": "nodeB"}}},
-			},
-			wantFilterStatuses: []*framework.Status{
-				framework.NewStatus(
-					framework.UnschedulableAndUnresolvable,
-					ErrReasonAffinityRulesNotMatch,
-				),
-				framework.NewStatus(
-					framework.UnschedulableAndUnresolvable,
-					ErrReasonAffinityRulesNotMatch,
-				),
-			},
-		},
-		{
-			// As written in the above test case, it's going to be no-match as well.
-			name: "affinity: null LabelSelector with matchLabelKeys",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"},
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey:    "zone",
-						MatchLabelKeys: []string{"bar"},
-					},
-				}, nil),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("nodeA").Label("foo", "").Label("bar", "hoge").Obj(),
-				st.MakePod().Name("pod2").Node("nodeB").Label("foo", "").Label("bar", "a").Obj(),
-			},
-			nodes: []*v1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeA", Labels: map[string]string{"region": "r1", "zone": "z1", "hostname": "nodeA"}}},
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeB", Labels: map[string]string{"region": "r1", "zone": "z2", "hostname": "nodeB"}}},
-			},
-			wantFilterStatuses: []*framework.Status{
-				framework.NewStatus(
-					framework.UnschedulableAndUnresolvable,
-					ErrReasonAffinityRulesNotMatch,
-				),
-				framework.NewStatus(
-					framework.UnschedulableAndUnresolvable,
-					ErrReasonAffinityRulesNotMatch,
-				),
-			},
-			enableMatchLabelKeys: true,
-		},
-		{
-			name: "affinity: empty LabelSelector is match-all",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"},
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey:   "zone",
-						LabelSelector: emptySelector,
-					},
-				}, nil),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("nodeA").Label("foo", "").Label("bar", "hoge").Obj(),
-				st.MakePod().Name("pod2").Node("nodeB").Label("foo", "").Label("bar", "a").Obj(),
-			},
-			nodes: []*v1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeA", Labels: map[string]string{"region": "r1", "zone": "z1", "hostname": "nodeA"}}},
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeB", Labels: map[string]string{"region": "r1", "zone": "z2", "hostname": "nodeB"}}},
-			},
-			wantFilterStatuses: []*framework.Status{
-				framework.NewStatus(
-					framework.Success,
-				),
-				framework.NewStatus(
-					framework.Success,
-				),
-			},
-		},
-		{
-			// As written in the above test case, affinity with empty LabelSelector is match-all.
-			// matchLabelKeys is ANDed with LabelSelector and thus this test case matches with a Pod which has {"bar": "a"} label.
-			name: "affinity: empty LabelSelector with MatchLabelKeys",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"},
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey:    "zone",
-						LabelSelector:  emptySelector,
-						MatchLabelKeys: []string{"bar"},
-					},
-				}, nil),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("nodeA").Label("foo", "").Label("bar", "a").Obj(),
-				st.MakePod().Name("pod2").Node("nodeB").Label("foo", "").Label("bar", "fuga").Obj(),
-			},
-			nodes: []*v1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeA", Labels: map[string]string{"region": "r1", "zone": "z1", "hostname": "nodeA"}}},
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeB", Labels: map[string]string{"region": "r1", "zone": "z2", "hostname": "nodeB"}}},
-			},
-			wantFilterStatuses: []*framework.Status{
-				framework.NewStatus(
-					framework.Success,
-				),
-				framework.NewStatus(
-					framework.UnschedulableAndUnresolvable,
-					ErrReasonAffinityRulesNotMatch,
-				),
-			},
-			enableMatchLabelKeys: true,
-		},
-		{
-			name: "anti affinity: null LabelSelector is no-op",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"}, nil,
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey: "zone",
-					},
-				}),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("nodeA").Label("foo", "").Label("bar", "hoge").Obj(),
-				st.MakePod().Name("pod2").Node("nodeB").Label("foo", "").Label("bar", "fuga").Obj(),
-			},
-			nodes: []*v1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeA", Labels: map[string]string{"region": "r1", "zone": "z1", "hostname": "nodeA"}}},
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeB", Labels: map[string]string{"region": "r1", "zone": "z2", "hostname": "nodeB"}}},
-			},
-			wantFilterStatuses: []*framework.Status{
-				framework.NewStatus(
-					framework.Success,
-				),
-				framework.NewStatus(
-					framework.Success,
-				),
-			},
-		},
-		{
-			// As written in the above test case, it's going to be no-match as well.
-			name: "anti affinity: null LabelSelector with matchLabelKeys",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"}, nil,
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey:    "zone",
-						MatchLabelKeys: []string{"bar"},
-					},
-				}),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("nodeA").Label("foo", "").Label("bar", "a").Obj(),
-				st.MakePod().Name("pod2").Node("nodeB").Label("foo", "").Label("bar", "fuga").Obj(),
-			},
-			nodes: []*v1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeA", Labels: map[string]string{"region": "r1", "zone": "z1", "hostname": "nodeA"}}},
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeB", Labels: map[string]string{"region": "r1", "zone": "z2", "hostname": "nodeB"}}},
-			},
-			wantFilterStatuses: []*framework.Status{
-				framework.NewStatus(
-					framework.Success,
-				),
-				framework.NewStatus(
-					framework.Success,
-				),
-			},
-			enableMatchLabelKeys: true,
-		},
-		{
-			name: "anti affinity: empty LabelSelector is match-all",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"}, nil,
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey:   "zone",
-						LabelSelector: emptySelector,
-					},
-				}),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("nodeA").Label("foo", "").Label("bar", "a").Obj(),
-				st.MakePod().Name("pod2").Node("nodeB").Label("foo", "").Label("bar", "fuga").Obj(),
-			},
-			nodes: []*v1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeA", Labels: map[string]string{"region": "r1", "zone": "z1", "hostname": "nodeA"}}},
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeB", Labels: map[string]string{"region": "r1", "zone": "z2", "hostname": "nodeB"}}},
-			},
-			wantFilterStatuses: []*framework.Status{
-				framework.NewStatus(
-					framework.Unschedulable,
-					ErrReasonAntiAffinityRulesNotMatch,
-				),
-				framework.NewStatus(
-					framework.Unschedulable,
-					ErrReasonAntiAffinityRulesNotMatch,
-				),
-			},
-		},
-		{
-			// As written in the above test case, affinity with empty LabelSelector is match-all.
-			// matchLabelKeys is ANDed with LabelSelector and thus this test case matches with a Pod which has {"bar": "a"} label.
-			name: "anti affinity: empty LabelSelector with MatchLabelKeys",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"}, nil,
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey:    "zone",
-						LabelSelector:  emptySelector,
-						MatchLabelKeys: []string{"bar"},
-					},
-				}),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("nodeA").Label("foo", "").Label("bar", "a").Obj(),
-				st.MakePod().Name("pod2").Node("nodeB").Label("foo", "").Label("bar", "fuga").Obj(),
-			},
-			nodes: []*v1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeA", Labels: map[string]string{"region": "r1", "zone": "z1", "hostname": "nodeA"}}},
-				{ObjectMeta: metav1.ObjectMeta{Name: "nodeB", Labels: map[string]string{"region": "r1", "zone": "z2", "hostname": "nodeB"}}},
-			},
-			wantFilterStatuses: []*framework.Status{
-				framework.NewStatus(
-					framework.Unschedulable,
-					ErrReasonAntiAffinityRulesNotMatch,
-				),
-				framework.NewStatus(
-					framework.Success,
-				),
-			},
-			enableMatchLabelKeys: true,
-		},
-		{
-			name: "affinity: matchLabelKeys ANDed with LabelSelector when LabelSelector isn't empty (feature flag: enabled)",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"},
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey: "zone",
-						LabelSelector: &metav1.LabelSelector{
-							MatchExpressions: []metav1.LabelSelectorRequirement{
-								{
-									Key:      "bar",
-									Operator: metav1.LabelSelectorOpIn,
-									Values:   []string{"hoge", "fuga", "a"},
-								},
-							},
-						},
-						MatchLabelKeys: []string{"bar"},
-					},
-				}, nil),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("node1").Label("foo", "").Label("bar", "hoge").Obj(),
-				st.MakePod().Name("pod2").Node("node1").Label("foo", "").Label("bar", "fuga").Obj(),
-				st.MakePod().Name("pod3").Node("node2").Label("foo", "").Label("bar", "a").Obj(),
-			},
-			enableMatchLabelKeys: true,
-			nodes: []*v1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "node1", Labels: map[string]string{
-					"region": "r1",
-					"zone":   "z11",
-				}}},
-				{ObjectMeta: metav1.ObjectMeta{Name: "node2", Labels: map[string]string{
-					"region": "r2",
-					"zone":   "z12",
-				}},
-				},
-			},
-			wantFilterStatuses: []*framework.Status{
-				framework.NewStatus(
-					framework.UnschedulableAndUnresolvable,
-					ErrReasonAffinityRulesNotMatch,
-				),
-				nil,
-			},
-		},
-		{
-			name: "affinity: matchLabelKeys is ignored when keys in matchlabelKeys doesn't exist in pod's label (feature flag: enabled)",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"},
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey: "zone",
-						LabelSelector: &metav1.LabelSelector{
-							MatchExpressions: []metav1.LabelSelectorRequirement{
-								{
-									Key:      "bar",
-									Operator: metav1.LabelSelectorOpIn,
-									Values:   []string{"hoge", "fuga", "a"},
-								},
-							},
-						},
-						MatchLabelKeys: []string{"nonExistingLabel"},
-					},
-				}, nil),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("node1").Label("foo", "").Label("bar", "hoge").Obj(),
-				st.MakePod().Name("pod2").Node("node1").Label("foo", "").Label("bar", "fuga").Obj(),
-				st.MakePod().Name("pod3").Node("node2").Label("foo", "").Label("bar", "a").Obj(),
-			},
-			nodes: []*v1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "node1", Labels: map[string]string{
-					"region": "r1",
-					"zone":   "z11",
-				}}},
-				{ObjectMeta: metav1.ObjectMeta{Name: "node2", Labels: map[string]string{
-					"region": "r2",
-					"zone":   "z12",
-				}},
-				},
-			},
-			enableMatchLabelKeys: true,
-			wantFilterStatuses: []*framework.Status{
-				nil,
-				nil,
-			},
-		},
-		{
-			name: "affinity: matchLabelKeys in incoming Pod is ignored (feature flag: disabled)",
-			pod: createPodWithRequiredAffinityTerms(defaultNamespace, "", map[string]string{"foo": "", "bar": "a"},
-				[]v1.PodAffinityTerm{
-					{
-						TopologyKey: "zone",
-						LabelSelector: &metav1.LabelSelector{
-							MatchExpressions: []metav1.LabelSelectorRequirement{
-								{
-									Key:      "bar",
-									Operator: metav1.LabelSelectorOpIn,
-									Values:   []string{"hoge", "fuga", "a"},
-								},
-							},
-						},
-						MatchLabelKeys: []string{"bar"},
-					},
-				}, nil),
-			pods: []*v1.Pod{
-				st.MakePod().Name("pod1").Node("node1").Label("foo", "").Label("bar", "hoge").Obj(),
-				st.MakePod().Name("pod2").Node("node1").Label("foo", "").Label("bar", "fuga").Obj(),
-				st.MakePod().Name("pod3").Node("node2").Label("foo", "").Label("bar", "a").Obj(),
-			},
-			nodes: []*v1.Node{
-				{ObjectMeta: metav1.ObjectMeta{Name: "node1", Labels: map[string]string{
-					"region": "r1",
-					"zone":   "z11",
-				}}},
-				{ObjectMeta: metav1.ObjectMeta{Name: "node2", Labels: map[string]string{
-					"region": "r2",
-					"zone":   "z12",
-				}},
-				},
-			},
-			wantFilterStatuses: []*framework.Status{
-				nil,
-				nil,
-			},
-		},
 	}
 
 	for indexTest, test := range tests {
@@ -1446,6 +953,10 @@ func TestRequiredAffinityMultipleNodes(t *testing.T) {
 			_, ctx := ktesting.NewTestContext(t)
 			ctx, cancel := context.WithCancel(ctx)
 			defer cancel()
+			snapshot := cache.NewSnapshot(test.pods, test.nodes)
+			p := plugintesting.SetupPluginWithInformers(ctx, t, New, &config.InterPodAffinityArgs{}, snapshot,
+				[]runtime.Object{
+					&v1.Namespace{ObjectMeta: metav1.ObjectMeta{Name: "NS1"}},
 				})
 			state := framework.NewCycleState()
 			_, preFilterStatus := p.(framework.PreFilterPlugin).PreFilter(ctx, state, test.pod)

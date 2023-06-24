@@ -805,7 +805,7 @@ func TestInterPodAffinity(t *testing.T) {
 			fits: false,
 		},
 		{
-			name: "anti affinity: matchLabelKeys ANDed with LabelSelector when LabelSelector isn't empty (feature flag: enabled)",
+			name: "anti affinity: matchLabelKeys is merged into LabelSelector with In operator (feature flag: enabled)",
 			pod: &v1.Pod{
 				Spec: v1.PodSpec{
 					Containers: []v1.Container{{Name: "container", Image: imageutils.GetPauseImageName()}},
@@ -857,7 +857,59 @@ func TestInterPodAffinity(t *testing.T) {
 			fits:                           true,
 		},
 		{
-			name: "affinity: matchLabelKeys ANDed with LabelSelector when LabelSelector isn't empty (feature flag: enabled)",
+			name: "anti affinity: mismatchLabelKeys is merged into LabelSelector with NotIn operator (feature flag: enabled)",
+			pod: &v1.Pod{
+				Spec: v1.PodSpec{
+					Containers: []v1.Container{{Name: "container", Image: imageutils.GetPauseImageName()}},
+					Affinity: &v1.Affinity{
+						PodAntiAffinity: &v1.PodAntiAffinity{
+							RequiredDuringSchedulingIgnoredDuringExecution: []v1.PodAffinityTerm{
+								{
+									TopologyKey: "zone",
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "foo",
+												Operator: metav1.LabelSelectorOpExists,
+											},
+										},
+									},
+									MismatchLabelKeys: []string{"bar"},
+								},
+							},
+						},
+					},
+				},
+				ObjectMeta: metav1.ObjectMeta{
+					Name:   "incoming",
+					Labels: map[string]string{"foo": "", "bar": "a"},
+				},
+			},
+			pods: []*v1.Pod{
+				// It matches the incoming Pod's anti affinity's labelSelector.
+				// BUT, the mismatchLabelKeys make the existing Pod's anti affinity's labelSelector not match with this label.
+				{
+					Spec: v1.PodSpec{
+						Containers: []v1.Container{{Name: "container", Image: imageutils.GetPauseImageName()}},
+						NodeName:   "testnode-0",
+					},
+					ObjectMeta: metav1.ObjectMeta{Name: "pod1", Labels: map[string]string{"foo": "", "bar": "a"}},
+				},
+				// It matches the incoming Pod's anti affinity's labelSelector.
+				// BUT, the mismatchLabelKeys make the existing Pod's anti affinity's labelSelector not match with this label.
+				{
+					Spec: v1.PodSpec{
+						Containers: []v1.Container{{Name: "container", Image: imageutils.GetPauseImageName()}},
+						NodeName:   "testnode-0",
+					},
+					ObjectMeta: metav1.ObjectMeta{Name: "pod2", Labels: map[string]string{"foo": "", "bar": "a"}},
+				},
+			},
+			enableMatchLabelKeysInAffinity: true,
+			fits:                           true,
+		},
+		{
+			name: "affinity: matchLabelKeys is merged into LabelSelector with In operator (feature flag: enabled)",
 			pod: &v1.Pod{
 				Spec: v1.PodSpec{
 					Containers: []v1.Container{
@@ -916,7 +968,7 @@ func TestInterPodAffinity(t *testing.T) {
 					ObjectMeta: metav1.ObjectMeta{Name: "pod1", Labels: map[string]string{"foo": "", "bar": "a"}},
 				},
 				{
-					// It doesn't match the incoming affinity.
+					// It doesn't match the incoming affinity due to matchLabelKeys.
 					Spec: v1.PodSpec{
 						Containers: []v1.Container{{Name: "container", Image: imageutils.GetPauseImageName()}},
 						NodeName:   "testnode-0",
@@ -924,12 +976,91 @@ func TestInterPodAffinity(t *testing.T) {
 					ObjectMeta: metav1.ObjectMeta{Name: "pod2", Labels: map[string]string{"foo": "", "bar": "hoge"}},
 				},
 				{
-					// It doesn't match the incoming affinity.
+					// It doesn't match the incoming affinity due to matchLabelKeys.
 					Spec: v1.PodSpec{
 						Containers: []v1.Container{{Name: "container", Image: imageutils.GetPauseImageName()}},
 						NodeName:   "testnode-0",
 					},
 					ObjectMeta: metav1.ObjectMeta{Name: "pod3", Labels: map[string]string{"foo": "", "bar": "fuga"}},
+				},
+			},
+			enableMatchLabelKeysInAffinity: true,
+			fits:                           false,
+		},
+		{
+			name: "affinity: mismatchLabelKeys is merged into LabelSelector with NotIn operator (feature flag: enabled)",
+			pod: &v1.Pod{
+				Spec: v1.PodSpec{
+					Containers: []v1.Container{
+						{
+							Name:  "container",
+							Image: imageutils.GetPauseImageName(),
+							Resources: v1.ResourceRequirements{
+								Requests: v1.ResourceList{
+									v1.ResourceMemory: resource.MustParse("1G"),
+								},
+							},
+						},
+					},
+					Affinity: &v1.Affinity{
+						PodAffinity: &v1.PodAffinity{
+							RequiredDuringSchedulingIgnoredDuringExecution: []v1.PodAffinityTerm{
+								{
+									TopologyKey: "node",
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "foo",
+												Operator: metav1.LabelSelectorOpExists,
+											},
+										},
+									},
+									MismatchLabelKeys: []string{"bar"},
+								},
+							},
+						},
+					},
+				},
+				ObjectMeta: metav1.ObjectMeta{
+					Name:   "incoming",
+					Labels: map[string]string{"foo": "", "bar": "a"},
+				},
+			},
+			pods: []*v1.Pod{
+				{
+					// It matches the incoming affinity. But, it uses all resources on nodes[1].
+					// So, the incoming Pod can no longer get scheduled on nodes[1].
+					Spec: v1.PodSpec{
+						Containers: []v1.Container{
+							{
+								Name:  "container",
+								Image: imageutils.GetPauseImageName(),
+								Resources: v1.ResourceRequirements{
+									Requests: v1.ResourceList{
+										v1.ResourceMemory: resource.MustParse("1G"),
+									},
+								},
+							},
+						},
+						NodeName: "anothernode-0",
+					},
+					ObjectMeta: metav1.ObjectMeta{Name: "pod1", Labels: map[string]string{"foo": "", "bar": "fuga"}},
+				},
+				{
+					// It doesn't match the incoming affinity due to mismatchLabelKeys.
+					Spec: v1.PodSpec{
+						Containers: []v1.Container{{Name: "container", Image: imageutils.GetPauseImageName()}},
+						NodeName:   "testnode-0",
+					},
+					ObjectMeta: metav1.ObjectMeta{Name: "pod2", Labels: map[string]string{"foo": "", "bar": "a"}},
+				},
+				{
+					// It doesn't match the incoming affinity due to mismatchLabelKeys.
+					Spec: v1.PodSpec{
+						Containers: []v1.Container{{Name: "container", Image: imageutils.GetPauseImageName()}},
+						NodeName:   "testnode-0",
+					},
+					ObjectMeta: metav1.ObjectMeta{Name: "pod3", Labels: map[string]string{"foo": "", "bar": "a"}},
 				},
 			},
 			enableMatchLabelKeysInAffinity: true,
@@ -1669,7 +1800,7 @@ func TestPodTopologySpreadFilter(t *testing.T) {
 				}
 			}
 			testPod, err := cs.CoreV1().Pods(tt.incomingPod.Namespace).Create(testCtx.Ctx, tt.incomingPod, metav1.CreateOptions{})
-			if err != nil && !apierrors.IsInvalid(err) {
+			if err != nil {
 				t.Fatalf("Error while creating pod during test: %v", err)
 			}
 

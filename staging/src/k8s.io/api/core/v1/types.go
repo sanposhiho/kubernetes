@@ -3100,16 +3100,22 @@ type PodAffinityTerm struct {
 	NamespaceSelector *metav1.LabelSelector `json:"namespaceSelector,omitempty" protobuf:"bytes,4,opt,name=namespaceSelector"`
 	// MatchLabelKeys is a set of pod label keys to select which pods will
 	// be taken into consideration. The keys are used to lookup values from the
-	// incoming pod labels. Those key-value labels are ANDed with labelSelector
+	// incoming pod labels, those key-value labels are merged with `LabelSelector` as `key in (value)`
 	// to select the group of existing pods which pods will be taken into consideration
 	// for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming
 	// pod labels will be ignored. The default value is empty.
-	// The same key is forbidden to exist in both MatchLabelKeys and LabelSelector.
-	// Also, MatchLabelKeys cannot be set when LabelSelector isn't set.
-	// This is an alpha field and requires enabling MatchLabelKeysInPodAffinity feature gate.
 	// +listType=atomic
 	// +optional
 	MatchLabelKeys []string `json:"matchLabelKeys,omitempty" protobuf:"bytes,5,opt,name=matchLabelKeys"`
+	// MismatchLabelKeys is a set of pod label keys to select which pods will
+	// be taken into consideration. The keys are used to lookup values from the
+	// incoming pod labels, those key-value labels are merged with `LabelSelector` as `key notin (value)`
+	// to select the group of existing pods which pods will be taken into consideration
+	// for the incoming pod's pod (anti) affinity. Keys that don't exist in the incoming
+	// pod labels will be ignored. The default value is empty.
+	// +listType=atomic
+	// +optional
+	MismatchLabelKeys []string `json:"mismatchLabelKeys,omitempty" protobuf:"bytes,6,opt,name=mismatchLabelKeys"`
 }
 
 // Node affinity is a group of node affinity scheduling rules.

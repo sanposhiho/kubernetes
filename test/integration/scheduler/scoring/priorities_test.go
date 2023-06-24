@@ -23,7 +23,6 @@ import (
 	"time"
 
 	v1 "k8s.io/api/core/v1"
-	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/intstr"
@@ -382,7 +381,7 @@ func TestPodAffinityScoring(t *testing.T) {
 			expectedNodeName: []string{"node1", "node6"},
 		},
 		{
-			name: "anti affinity: matchLabelKeys ANDed with LabelSelector when LabelSelector isn't empty (feature flag: enabled)",
+			name: "anti affinity: matchLabelKeys is merged into LabelSelector with In operator (feature flag: enabled)",
 			pod: &testutils.PausePodConfig{
 				Name:      "incoming",
 				Namespace: "ns1",
@@ -410,15 +409,15 @@ func TestPodAffinityScoring(t *testing.T) {
 				},
 			},
 			existingPods: []*testutils.PausePodConfig{
-				// It matches the incoming Pod's affinity's labelSelector.
-				// BUT, the matchLabelKeys make the existing Pod's affinity's labelSelector not match with this label.
+				// It matches the incoming Pod's anti affinity's labelSelector.
+				// BUT, the matchLabelKeys make the existing Pod's anti affinity's labelSelector not match with this label.
 				{
 					NodeName:  "node1",
 					Name:      "pod1",
 					Namespace: "ns1",
 					Labels:    map[string]string{"foo": "", "bar": "fuga"},
 				},
-				// It matches the incoming Pod's affinity.
+				// It matches the incoming Pod's anti affinity.
 				{
 					NodeName:  "node2",
 					Name:      "pod2",
@@ -434,7 +433,59 @@ func TestPodAffinityScoring(t *testing.T) {
 			enableMatchLabelKeysInAffinity: true,
 		},
 		{
-			name: "affinity: matchLabelKeys ANDed with LabelSelector when LabelSelector isn't empty (feature flag: enabled)",
+			name: "anti affinity: mismatchLabelKeys is merged into LabelSelector with NotIn operator  (feature flag: enabled)",
+			pod: &testutils.PausePodConfig{
+				Name:      "incoming",
+				Namespace: "ns1",
+				Labels:    map[string]string{"foo": "", "bar": "a"},
+				Affinity: &v1.Affinity{
+					PodAntiAffinity: &v1.PodAntiAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []v1.WeightedPodAffinityTerm{
+							{
+								PodAffinityTerm: v1.PodAffinityTerm{
+									TopologyKey: topologyKey,
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "foo",
+												Operator: metav1.LabelSelectorOpExists,
+											},
+										},
+									},
+									MismatchLabelKeys: []string{"bar"},
+								},
+								Weight: 50,
+							},
+						},
+					},
+				},
+			},
+			existingPods: []*testutils.PausePodConfig{
+				// It matches the incoming Pod's anti affinity's labelSelector.
+				{
+					NodeName:  "node1",
+					Name:      "pod1",
+					Namespace: "ns1",
+					Labels:    map[string]string{"foo": "", "bar": "fuga"},
+				},
+				// It matches the incoming Pod's affinity.
+				// But, the mismatchLabelKeys make the existing Pod's anti affinity's labelSelector not match with this label.
+				{
+					NodeName:  "node2",
+					Name:      "pod2",
+					Namespace: "ns1",
+					Labels:    map[string]string{"foo": "", "bar": "a"},
+				},
+			},
+			nodes: []*v1.Node{
+				st.MakeNode().Name("node1").Label(topologyKey, topologyValue).Obj(),
+				st.MakeNode().Name("node2").Label(topologyKey, topologyValue2).Obj(),
+			},
+			expectedNodeName:               []string{"node2"},
+			enableMatchLabelKeysInAffinity: true,
+		},
+		{
+			name: "affinity: matchLabelKeys is merged into LabelSelector with In operator (feature flag: enabled)",
 			pod: &testutils.PausePodConfig{
 				Affinity: &v1.Affinity{
 					PodAffinity: &v1.PodAffinity{
@@ -511,13 +562,91 @@ func TestPodAffinityScoring(t *testing.T) {
 			},
 			expectedNodeName: []string{"node3", "node6"},
 		},
+		{
+			name: "affinity: mismatchLabelKeys is merged into LabelSelector with NotIn operator (feature flag: enabled)",
+			pod: &testutils.PausePodConfig{
+				Affinity: &v1.Affinity{
+					PodAffinity: &v1.PodAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []v1.WeightedPodAffinityTerm{
+							{
+								// affinity with pod3.
+								PodAffinityTerm: v1.PodAffinityTerm{
+									TopologyKey: topologyKey,
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "foo",
+												Operator: metav1.LabelSelectorOpExists,
+											},
+										},
+									},
+									MismatchLabelKeys: []string{"bar"},
+								},
+								Weight: 50,
+							},
+							{
+								// affinity with pod1 and pod2.
+								// schedule this Pod by this weaker affinity
+								// if `matchLabelKeys` above isn't working correctly.
+								PodAffinityTerm: v1.PodAffinityTerm{
+									TopologyKey: topologyKey,
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "bar",
+												Operator: metav1.LabelSelectorOpIn,
+												Values:   []string{"hoge"},
+											},
+										},
+									},
+								},
+								Weight: 10,
+							},
+						},
+					},
+				},
+				Name:      "incoming",
+				Namespace: "ns1",
+				Labels:    map[string]string{"foo": "", "bar": "a"},
+			},
+			existingPods: []*testutils.PausePodConfig{
+				{
+					NodeName:  "node1",
+					Name:      "pod1",
+					Namespace: "ns1",
+					Labels:    map[string]string{"foo": "", "bar": "a"},
+				},
+				{
+					NodeName:  "node2",
+					Name:      "pod2",
+					Namespace: "ns1",
+					Labels:    map[string]string{"foo": "", "bar": "a"},
+				},
+				{
+					NodeName:  "node3",
+					Name:      "pod3",
+					Namespace: "ns1",
+					Labels:    map[string]string{"foo": "", "bar": "hoge"},
+				},
+			},
+			enableMatchLabelKeysInAffinity: true,
+			nodes: []*v1.Node{
+				st.MakeNode().Name("node1").Label(topologyKey, topologyValue).Obj(),
+				st.MakeNode().Name("node2").Label(topologyKey, topologyValue2).Obj(),
+				st.MakeNode().Name("node3").Label(topologyKey, topologyValue3).Obj(),
+				st.MakeNode().Name("node4").Label(topologyKey, topologyValue).Obj(),
+				st.MakeNode().Name("node5").Label(topologyKey, topologyValue2).Obj(),
+				st.MakeNode().Name("node6").Label(topologyKey, topologyValue3).Obj(),
+			},
+			expectedNodeName: []string{"node3", "node6"},
+		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			defer featuregatetesting.SetFeatureGateDuringTest(t, utilfeature.DefaultFeatureGate, features.MatchLabelKeysInPodAffinity, tt.enableMatchLabelKeysInAffinity)()
 
-			testCtx := initTestSchedulerForPriorityTest(t, interpodaffinity.Name, interpodaffinity.Name))
+			testCtx := initTestSchedulerForPriorityTest(t, interpodaffinity.Name, interpodaffinity.Name)
 			if err := createNamespacesWithLabels(testCtx.ClientSet, []string{"ns1", "ns2"}, map[string]string{"team": "team1"}); err != nil {
 				t.Fatal(err)
 			}
@@ -812,7 +941,7 @@ func TestPodTopologySpreadScoring(t *testing.T) {
 			}
 
 			testPod, err := cs.CoreV1().Pods(tt.incomingPod.Namespace).Create(testCtx.Ctx, tt.incomingPod, metav1.CreateOptions{})
-			if err != nil && !apierrors.IsInvalid(err) {
+			if err != nil {
 				t.Fatalf("Test Failed: error while creating pod during test: %v", err)
 			}
 

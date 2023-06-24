@@ -3457,6 +3457,11 @@ func (in *PodAffinityTerm) DeepCopyInto(out *PodAffinityTerm) {
 		*out = make([]string, len(*in))
 		copy(*out, *in)
 	}
+	if in.MismatchLabelKeys != nil {
+		in, out := &in.MismatchLabelKeys, &out.MismatchLabelKeys
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 

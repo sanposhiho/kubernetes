@@ -9817,7 +9817,7 @@ func TestValidatePod(t *testing.T) {
 				DNSPolicy:     core.DNSClusterFirst,
 			},
 		},
-		"MatchLabelKeys in required PodAffinity": {
+		"MatchLabelKeys/MismatchLabelKeys in required PodAffinity": {
 			ObjectMeta: metav1.ObjectMeta{Name: "123", Namespace: "ns"},
 			Spec: core.PodSpec{
 				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
@@ -9834,17 +9834,28 @@ func TestValidatePod(t *testing.T) {
 											Operator: metav1.LabelSelectorOpNotIn,
 											Values:   []string{"value1", "value2"},
 										},
+										{
+											Key:      "key2",
+											Operator: metav1.LabelSelectorOpIn,
+											Values:   []string{"value1"},
+										},
+										{
+											Key:      "key3",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value1"},
+										},
 									},
 								},
-								TopologyKey:    "k8s.io/zone",
-								MatchLabelKeys: []string{"key2"},
+								TopologyKey:       "k8s.io/zone",
+								MatchLabelKeys:    []string{"key2"},
+								MismatchLabelKeys: []string{"key3"},
 							},
 						},
 					},
 				},
 			},
 		},
-		"MatchLabelKeys in preferred PodAffinity": {
+		"MatchLabelKeys/MismatchLabelKeys in preferred PodAffinity": {
 			ObjectMeta: metav1.ObjectMeta{Name: "123", Namespace: "ns"},
 			Spec: core.PodSpec{
 				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
@@ -9863,10 +9874,21 @@ func TestValidatePod(t *testing.T) {
 												Operator: metav1.LabelSelectorOpNotIn,
 												Values:   []string{"value1", "value2"},
 											},
+											{
+												Key:      "key2",
+												Operator: metav1.LabelSelectorOpIn,
+												Values:   []string{"value1"},
+											},
+											{
+												Key:      "key3",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1"},
+											},
 										},
 									},
-									TopologyKey:    "k8s.io/zone",
-									MatchLabelKeys: []string{"key2"},
+									TopologyKey:       "k8s.io/zone",
+									MatchLabelKeys:    []string{"key2"},
+									MismatchLabelKeys: []string{"key3"},
 								},
 							},
 						},
@@ -9874,7 +9896,7 @@ func TestValidatePod(t *testing.T) {
 				},
 			},
 		},
-		"MatchLabelKeys in required PodAntiAffinity": {
+		"MatchLabelKeys/MismatchLabelKeys in required PodAntiAffinity": {
 			ObjectMeta: metav1.ObjectMeta{Name: "123", Namespace: "ns"},
 			Spec: core.PodSpec{
 				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
@@ -9891,17 +9913,28 @@ func TestValidatePod(t *testing.T) {
 											Operator: metav1.LabelSelectorOpNotIn,
 											Values:   []string{"value1", "value2"},
 										},
+										{
+											Key:      "key2",
+											Operator: metav1.LabelSelectorOpIn,
+											Values:   []string{"value1"},
+										},
+										{
+											Key:      "key3",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value1"},
+										},
 									},
 								},
-								TopologyKey:    "k8s.io/zone",
-								MatchLabelKeys: []string{"key2"},
+								TopologyKey:       "k8s.io/zone",
+								MatchLabelKeys:    []string{"key2"},
+								MismatchLabelKeys: []string{"key3"},
 							},
 						},
 					},
 				},
 			},
 		},
-		"MatchLabelKeys in preferred PodAntiAffinity": {
+		"MatchLabelKeys/MismatchLabelKeys in preferred PodAntiAffinity": {
 			ObjectMeta: metav1.ObjectMeta{Name: "123", Namespace: "ns"},
 			Spec: core.PodSpec{
 				Containers:    []core.Container{{Name: "ctr", Image: "image", ImagePullPolicy: "IfNotPresent", TerminationMessagePolicy: "File"}},
@@ -9920,10 +9953,21 @@ func TestValidatePod(t *testing.T) {
 												Operator: metav1.LabelSelectorOpNotIn,
 												Values:   []string{"value1", "value2"},
 											},
+											{
+												Key:      "key2",
+												Operator: metav1.LabelSelectorOpIn,
+												Values:   []string{"value1"},
+											},
+											{
+												Key:      "key3",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1"},
+											},
 										},
 									},
-									TopologyKey:    "k8s.io/zone",
-									MatchLabelKeys: []string{"key2"},
+									TopologyKey:       "k8s.io/zone",
+									MatchLabelKeys:    []string{"key2"},
+									MismatchLabelKeys: []string{"key3"},
 								},
 							},
 						},
@@ -10509,8 +10553,8 @@ func TestValidatePod(t *testing.T) {
 				}),
 			},
 		},
-		"invalid soft pod affinity, key exists in both matchLabelKeys and labelSelector": {
-			expectedError: "exists in both matchLabelKeys and labelSelector",
+		"invalid soft pod affinity, key in MismatchLabelKeys isn't correctly defined": {
+			expectedError: "prefix part must be non-empty",
 			spec: core.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      "123",
@@ -10528,6 +10572,131 @@ func TestValidatePod(t *testing.T) {
 												Key:      "key",
 												Operator: metav1.LabelSelectorOpNotIn,
 												Values:   []string{"value1", "value2"},
+											},
+										},
+									},
+									TopologyKey:       "k8s.io/zone",
+									MismatchLabelKeys: []string{"/simple"},
+								},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid hard pod affinity, key in MismatchLabelKeys isn't correctly defined": {
+			expectedError: "prefix part must be non-empty",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value1", "value2"},
+										},
+									},
+								},
+								TopologyKey:       "k8s.io/zone",
+								MismatchLabelKeys: []string{"/simple"},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid soft pod anti-affinity, key in MismatchLabelKeys isn't correctly defined": {
+			expectedError: "prefix part must be non-empty",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1", "value2"},
+											},
+										},
+									},
+									TopologyKey:       "k8s.io/zone",
+									MismatchLabelKeys: []string{"/simple"},
+								},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid hard pod anti-affinity, key in MismatchLabelKeys isn't correctly defined": {
+			expectedError: "prefix part must be non-empty",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value1", "value2"},
+										},
+									},
+								},
+								TopologyKey:       "k8s.io/zone",
+								MismatchLabelKeys: []string{"/simple"},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid soft pod affinity, key exists in both matchLabelKeys and labelSelector": {
+			expectedError: "exists in both matchLabelKeys and labelSelector",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Labels:    map[string]string{"key": "value1"},
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											// This one should be created from MatchLabelKeys.
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1"},
+											},
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value2"},
 											},
 										},
 									},
@@ -10546,6 +10715,292 @@ func TestValidatePod(t *testing.T) {
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      "123",
 					Namespace: "ns",
+					Labels:    map[string]string{"key": "value1"},
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										// This one should be created from MatchLabelKeys.
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value1"},
+										},
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value2"},
+										},
+									},
+								},
+								TopologyKey:    "k8s.io/zone",
+								MatchLabelKeys: []string{"key"},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid soft pod anti-affinity, key exists in both matchLabelKeys and labelSelector": {
+			expectedError: "exists in both matchLabelKeys and labelSelector",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Labels:    map[string]string{"key": "value1"},
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											// This one should be created from MatchLabelKeys.
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1"},
+											},
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value2"},
+											},
+										},
+									},
+									TopologyKey:    "k8s.io/zone",
+									MatchLabelKeys: []string{"key"},
+								},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid hard pod anti-affinity, key exists in both matchLabelKeys and labelSelector": {
+			expectedError: "exists in both matchLabelKeys and labelSelector",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Labels:    map[string]string{"key": "value1"},
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										// This one should be created from MatchLabelKeys.
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value1"},
+										},
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value2"},
+										},
+									},
+								},
+								TopologyKey:    "k8s.io/zone",
+								MatchLabelKeys: []string{"key"},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid soft pod affinity, key exists in both mismatchLabelKeys and labelSelector": {
+			expectedError: "exists in both mismatchLabelKeys and labelSelector",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Labels:    map[string]string{"key": "value1"},
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											// This one should be created from MatchLabelKeys.
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1"},
+											},
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value2"},
+											},
+										},
+									},
+									TopologyKey:       "k8s.io/zone",
+									MismatchLabelKeys: []string{"key"},
+								},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid hard pod affinity, key exists in both mismatchLabelKeys and labelSelector": {
+			expectedError: "exists in both mismatchLabelKeys and labelSelector",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Labels:    map[string]string{"key": "value1"},
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										// This one should be created from MatchLabelKeys.
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value1"},
+										},
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value2"},
+										},
+									},
+								},
+								TopologyKey:       "k8s.io/zone",
+								MismatchLabelKeys: []string{"key"},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid soft pod anti-affinity, key exists in both mismatchLabelKeys and labelSelector": {
+			expectedError: "exists in both mismatchLabelKeys and labelSelector",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Labels:    map[string]string{"key": "value1"},
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											// This one should be created from MatchLabelKeys.
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1"},
+											},
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value2"},
+											},
+										},
+									},
+									TopologyKey:       "k8s.io/zone",
+									MismatchLabelKeys: []string{"key"},
+								},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid hard pod anti-affinity, key exists in both mismatchLabelKeys and labelSelector": {
+			expectedError: "exists in both mismatchLabelKeys and labelSelector",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+					Labels:    map[string]string{"key": "value1"},
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAntiAffinity: &core.PodAntiAffinity{
+						RequiredDuringSchedulingIgnoredDuringExecution: []core.PodAffinityTerm{
+							{
+								LabelSelector: &metav1.LabelSelector{
+									MatchExpressions: []metav1.LabelSelectorRequirement{
+										// This one should be created from MatchLabelKeys.
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value1"},
+										},
+										{
+											Key:      "key",
+											Operator: metav1.LabelSelectorOpNotIn,
+											Values:   []string{"value2"},
+										},
+									},
+								},
+								TopologyKey:       "k8s.io/zone",
+								MismatchLabelKeys: []string{"key"},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid soft pod affinity, key exists in both MatchLabelKeys and MismatchLabelKeys": {
+			expectedError: "exists in both matchLabelKeys and mismatchLabelKeys",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
+				},
+				Spec: validPodSpec(&core.Affinity{
+					PodAffinity: &core.PodAffinity{
+						PreferredDuringSchedulingIgnoredDuringExecution: []core.WeightedPodAffinityTerm{
+							{
+								Weight: 10,
+								PodAffinityTerm: core.PodAffinityTerm{
+									LabelSelector: &metav1.LabelSelector{
+										MatchExpressions: []metav1.LabelSelectorRequirement{
+											{
+												Key:      "key",
+												Operator: metav1.LabelSelectorOpNotIn,
+												Values:   []string{"value1", "value2"},
+											},
+										},
+									},
+									TopologyKey:       "k8s.io/zone",
+									MatchLabelKeys:    []string{"samekey"},
+									MismatchLabelKeys: []string{"samekey"},
+								},
+							},
+						},
+					},
+				}),
+			},
+		},
+		"invalid hard pod affinity, key exists in both MatchLabelKeys and MismatchLabelKeys": {
+			expectedError: "exists in both matchLabelKeys and mismatchLabelKeys",
+			spec: core.Pod{
+				ObjectMeta: metav1.ObjectMeta{
+					Name:      "123",
+					Namespace: "ns",
 				},
 				Spec: validPodSpec(&core.Affinity{
 					PodAffinity: &core.PodAffinity{
@@ -10560,16 +11015,17 @@ func TestValidatePod(t *testing.T) {
 										},
 									},
 								},
-								TopologyKey:    "k8s.io/zone",
-								MatchLabelKeys: []string{"key"},
+								TopologyKey:       "k8s.io/zone",
+								MatchLabelKeys:    []string{"samekey"},
+								MismatchLabelKeys: []string{"samekey"},
 							},
 						},
 					},
 				}),
 			},
 		},
-		"invalid soft pod anti-affinity, key exists in both matchLabelKeys and labelSelector": {
-			expectedError: "exists in both matchLabelKeys and labelSelector",
+		"invalid soft pod anti-affinity, key exists in both MatchLabelKeys and MismatchLabelKeys": {
+			expectedError: "exists in both matchLabelKeys and mismatchLabelKeys",
 			spec: core.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      "123",
@@ -10590,8 +11046,9 @@ func TestValidatePod(t *testing.T) {
 											},
 										},
 									},
-									TopologyKey:    "k8s.io/zone",
-									MatchLabelKeys: []string{"key"},
+									TopologyKey:       "k8s.io/zone",
+									MatchLabelKeys:    []string{"samekey"},
+									MismatchLabelKeys: []string{"samekey"},
 								},
 							},
 						},
@@ -10599,8 +11056,8 @@ func TestValidatePod(t *testing.T) {
 				}),
 			},
 		},
-		"invalid hard pod anti-affinity, key exists in both matchLabelKeys and labelSelector": {
-			expectedError: "exists in both matchLabelKeys and labelSelector",
+		"invalid hard pod anti-affinity, key exists in both MatchLabelKeys and MismatchLabelKeys": {
+			expectedError: "exists in both matchLabelKeys and mismatchLabelKeys",
 			spec: core.Pod{
 				ObjectMeta: metav1.ObjectMeta{
 					Name:      "123",
@@ -10619,8 +11076,9 @@ func TestValidatePod(t *testing.T) {
 										},
 									},
 								},
-								TopologyKey:    "k8s.io/zone",
-								MatchLabelKeys: []string{"key"},
+								TopologyKey:       "k8s.io/zone",
+								MatchLabelKeys:    []string{"samekey"},
+								MismatchLabelKeys: []string{"samekey"},
 							},
 						},
 					},
@@ -21411,11 +21869,19 @@ func TestValidateTopologySpreadConstraints(t *testing.T) {
 			WhenUnsatisfiable: core.DoNotSchedule,
 			MatchLabelKeys:    []string{"foo"},
 			LabelSelector: &metav1.LabelSelector{
-				MatchExpressions: []metav1.LabelSelectorRequirement{{
-					Key:      "foo",
-					Operator: metav1.LabelSelectorOpNotIn,
-					Values:   []string{"value1", "value2"},
-				}},
+				MatchExpressions: []metav1.LabelSelectorRequirement{
+					{
+						Key:      "foo",
+						Operator: metav1.LabelSelectorOpNotIn,
+						Values:   []string{"value1", "value2"},
+					},
+					{
+						// This one should be created from MatchLabelKeys.
+						Key:      "foo",
+						Operator: metav1.LabelSelectorOpNotIn,
+						Values:   []string{"value1"},
+					},
+				},
 			},
 		}},
 		wantFieldErrors: field.ErrorList{field.Invalid(fieldPathMatchLabelKeys.Index(0), "foo", "exists in both matchLabelKeys and labelSelector")},
