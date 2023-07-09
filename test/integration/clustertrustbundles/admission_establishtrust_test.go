@@ -23,6 +23,8 @@ import (
 	"math/big"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/test/integration/authutil"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	certsv1alpha1 "k8s.io/api/certificates/v1alpha1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -30,8 +32,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/authutil"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 // Verifies that the ClusterTrustBundle attest admission plugin correctly

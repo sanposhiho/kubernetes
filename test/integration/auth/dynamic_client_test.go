@@ -24,6 +24,7 @@ import (
 
 	utiltesting "k8s.io/client-go/util/testing"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apiserver/pkg/authentication/authenticator"
 	clientset "k8s.io/client-go/kubernetes"
@@ -31,7 +32,6 @@ import (
 	"k8s.io/controller-manager/pkg/clientbuilder"
 	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
 	kubeoptions "k8s.io/kubernetes/pkg/kubeapiserver/options"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/kubernetes/test/utils/ktesting"
 )
 

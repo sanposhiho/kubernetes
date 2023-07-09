@@ -23,8 +23,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 func runBasicSecureAPIServer(t *testing.T, ciphers []string) (kubeapiservertesting.TearDownFunc, int) {

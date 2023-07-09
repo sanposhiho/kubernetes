@@ -23,6 +23,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	"k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/apiextensions-apiserver/test/integration/fixtures"
@@ -32,7 +33,6 @@ import (
 	kubernetes "k8s.io/client-go/kubernetes"
 	"k8s.io/kube-openapi/pkg/validation/spec"
 	apiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 func TestOpenAPIV2CRDMergeNoDuplicateTypes(t *testing.T) {

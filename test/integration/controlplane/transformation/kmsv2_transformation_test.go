@@ -32,6 +32,8 @@ import (
 	"github.com/gogo/protobuf/proto"
 	clientv3 "go.etcd.io/etcd/client/v3"
 
+	"github.com/sanposhiho/kubernetes/test/integration"
+	"github.com/sanposhiho/kubernetes/test/integration/etcd"
 	corev1 "k8s.io/api/core/v1"
 	apiextensionsclientset "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -54,8 +56,6 @@ import (
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	kmsv2api "k8s.io/kms/apis/v2"
 	kmsv2svc "k8s.io/kms/pkg/service"
-	"k8s.io/kubernetes/test/integration"
-	"k8s.io/kubernetes/test/integration/etcd"
 )
 
 type envelopekmsv2 struct {

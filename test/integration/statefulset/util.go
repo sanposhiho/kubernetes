@@ -40,8 +40,8 @@ import (
 	api "k8s.io/kubernetes/pkg/apis/core"
 
 	//svc "k8s.io/kubernetes/pkg/api/v1/service"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	"k8s.io/kubernetes/pkg/controller/statefulset"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 const (

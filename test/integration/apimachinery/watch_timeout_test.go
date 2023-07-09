@@ -31,6 +31,7 @@ import (
 
 	"golang.org/x/net/websocket"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -40,7 +41,6 @@ import (
 	"k8s.io/client-go/tools/cache"
 	kubectlproxy "k8s.io/kubectl/pkg/proxy"
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 type extractRT struct {
