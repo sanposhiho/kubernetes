@@ -22,6 +22,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	testutils "github.com/sanposhiho/kubernetes/test/integration/util"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -33,7 +34,6 @@ import (
 	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
 	"k8s.io/kubernetes/pkg/controller/podgc"
 	"k8s.io/kubernetes/pkg/features"
-	testutils "k8s.io/kubernetes/test/integration/util"
 	"k8s.io/utils/pointer"
 )
 

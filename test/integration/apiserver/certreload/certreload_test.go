@@ -32,6 +32,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	authorizationv1 "k8s.io/api/authorization/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -42,7 +43,6 @@ import (
 	"k8s.io/client-go/util/cert"
 	"k8s.io/component-base/cli/flag"
 	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/kubernetes/test/utils/ktesting"
 )
 

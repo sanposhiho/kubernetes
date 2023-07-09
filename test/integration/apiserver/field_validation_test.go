@@ -38,7 +38,7 @@ import (
 	"k8s.io/klog/v2"
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
 
-	"k8s.io/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 )
 
 var (

@@ -23,6 +23,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	apiserverinternalv1alpha1 "k8s.io/api/apiserverinternal/v1alpha1"
 	coordinationv1 "k8s.io/api/coordination/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -37,7 +38,6 @@ import (
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
 	"k8s.io/kubernetes/pkg/controller/storageversiongc"
 	"k8s.io/kubernetes/pkg/controlplane"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/utils/pointer"
 )
 

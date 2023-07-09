@@ -28,6 +28,7 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	"k8s.io/apiserver/pkg/server"
 	"k8s.io/apiserver/pkg/server/options"
 	cloudprovider "k8s.io/cloud-provider"
@@ -37,7 +38,6 @@ import (
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
 	kubectrlmgrtesting "k8s.io/kubernetes/cmd/kube-controller-manager/app/testing"
 	kubeschedulertesting "k8s.io/kubernetes/cmd/kube-scheduler/app/testing"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 type componentTester interface {

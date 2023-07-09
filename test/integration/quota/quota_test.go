@@ -24,6 +24,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -43,7 +44,6 @@ import (
 	replicationcontroller "k8s.io/kubernetes/pkg/controller/replication"
 	resourcequotacontroller "k8s.io/kubernetes/pkg/controller/resourcequota"
 	quotainstall "k8s.io/kubernetes/pkg/quota/v1/install"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 const (

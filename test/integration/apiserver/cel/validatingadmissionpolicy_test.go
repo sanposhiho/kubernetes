@@ -36,10 +36,10 @@ import (
 	"k8s.io/client-go/rest"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 
+	"github.com/sanposhiho/kubernetes/test/integration/authutil"
+	"github.com/sanposhiho/kubernetes/test/integration/etcd"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	apiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/authutil"
-	"k8s.io/kubernetes/test/integration/etcd"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/kubernetes/test/utils"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

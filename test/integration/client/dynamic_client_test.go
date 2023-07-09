@@ -24,6 +24,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -39,7 +40,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	clientscheme "k8s.io/client-go/kubernetes/scheme"
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 func TestDynamicClient(t *testing.T) {

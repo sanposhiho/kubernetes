@@ -22,6 +22,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	corev1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -31,7 +32,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
 	"k8s.io/kubernetes/pkg/controller/endpointslice"
-	"k8s.io/kubernetes/test/integration/framework"
 	utilpointer "k8s.io/utils/pointer"
 )
 

@@ -22,6 +22,7 @@ import (
 	"net/http"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	"k8s.io/apiserver/pkg/features"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/apiserver/pkg/util/openapi"
@@ -31,7 +32,6 @@ import (
 	"k8s.io/kube-openapi/pkg/validation/spec"
 	"k8s.io/kubernetes/pkg/controlplane"
 	generated "k8s.io/kubernetes/pkg/generated/openapi"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/kubernetes/test/utils/ktesting"
 )
 

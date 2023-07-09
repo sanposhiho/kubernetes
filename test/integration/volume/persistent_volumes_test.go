@@ -28,7 +28,8 @@ import (
 	"testing"
 	"time"
 
-	"k8s.io/api/core/v1"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	v1 "k8s.io/api/core/v1"
 	storage "k8s.io/api/storage/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -44,7 +45,6 @@ import (
 	"k8s.io/kubernetes/pkg/volume"
 	volumetest "k8s.io/kubernetes/pkg/volume/testing"
 	"k8s.io/kubernetes/pkg/volume/util"
-	"k8s.io/kubernetes/test/integration/framework"
 
 	"k8s.io/klog/v2"
 	"k8s.io/klog/v2/ktesting"

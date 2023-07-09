@@ -28,6 +28,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	rbacapi "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -58,7 +59,6 @@ import (
 	"k8s.io/kubernetes/pkg/registry/rbac/rolebinding"
 	rolebindingstore "k8s.io/kubernetes/pkg/registry/rbac/rolebinding/storage"
 	"k8s.io/kubernetes/plugin/pkg/auth/authorizer/rbac"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/kubernetes/test/utils/ktesting"
 )
 

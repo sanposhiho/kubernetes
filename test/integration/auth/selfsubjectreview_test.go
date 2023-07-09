@@ -25,6 +25,7 @@ import (
 	"sync/atomic"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	authenticationv1 "k8s.io/api/authentication/v1"
 	authenticationv1alpha1 "k8s.io/api/authentication/v1alpha1"
 	authenticationv1beta1 "k8s.io/api/authentication/v1beta1"
@@ -36,7 +37,6 @@ import (
 	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
 	"k8s.io/kubernetes/pkg/controlplane"
 	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/kubernetes/test/utils/ktesting"
 )
 

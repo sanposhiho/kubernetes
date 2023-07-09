@@ -45,6 +45,9 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
+	"github.com/sanposhiho/kubernetes/test/integration"
+	"github.com/sanposhiho/kubernetes/test/integration/authutil"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	authenticationv1beta1 "k8s.io/api/authentication/v1beta1"
 	certificatesv1 "k8s.io/api/certificates/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -71,9 +74,6 @@ import (
 	api "k8s.io/kubernetes/pkg/apis/core"
 	"k8s.io/kubernetes/pkg/apis/extensions"
 	"k8s.io/kubernetes/pkg/controlplane"
-	"k8s.io/kubernetes/test/integration"
-	"k8s.io/kubernetes/test/integration/authutil"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/kubernetes/test/utils/ktesting"
 )
 

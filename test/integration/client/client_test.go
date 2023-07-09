@@ -48,10 +48,10 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/utils/pointer"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	"k8s.io/component-base/version"
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
 	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/test/integration/framework"
 	imageutils "k8s.io/kubernetes/test/utils/image"
 )
 

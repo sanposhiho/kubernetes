@@ -17,7 +17,7 @@ limitations under the License.
 package scheduler
 
 import (
-	testutils "k8s.io/kubernetes/test/integration/util"
+	testutils "github.com/sanposhiho/kubernetes/test/integration/util"
 )
 
 var (

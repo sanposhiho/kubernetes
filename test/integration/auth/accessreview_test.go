@@ -24,6 +24,7 @@ import (
 	"sync"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	authorizationapi "k8s.io/api/authorization/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apiserver/pkg/authentication/authenticator"
@@ -31,7 +32,6 @@ import (
 	"k8s.io/apiserver/pkg/authorization/authorizer"
 	api "k8s.io/kubernetes/pkg/apis/core"
 	"k8s.io/kubernetes/pkg/controlplane"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/kubernetes/test/utils/ktesting"
 )
 

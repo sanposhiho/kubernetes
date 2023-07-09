@@ -37,6 +37,8 @@ import (
 	clientv3 "go.etcd.io/etcd/client/v3"
 	"golang.org/x/crypto/cryptobyte"
 
+	"github.com/sanposhiho/kubernetes/test/integration"
+	"github.com/sanposhiho/kubernetes/test/integration/etcd"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
@@ -47,8 +49,6 @@ import (
 	"k8s.io/client-go/dynamic"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	kmsapi "k8s.io/kms/apis/v1beta1"
-	"k8s.io/kubernetes/test/integration"
-	"k8s.io/kubernetes/test/integration/etcd"
 )
 
 const (

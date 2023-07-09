@@ -29,10 +29,10 @@ import (
 	"k8s.io/client-go/kubernetes"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
 	"k8s.io/kubernetes/pkg/api/legacyscheme"
 	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 func Test_UpgradePVC(t *testing.T) {

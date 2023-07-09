@@ -33,6 +33,7 @@ import (
 	tracev1 "go.opentelemetry.io/proto/otlp/trace/v1"
 	"google.golang.org/grpc"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -40,7 +41,6 @@ import (
 	client "k8s.io/client-go/kubernetes"
 	utiltesting "k8s.io/client-go/util/testing"
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 func TestAPIServerTracingWithEgressSelector(t *testing.T) {

@@ -31,6 +31,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	certificatesv1 "k8s.io/api/certificates/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -45,7 +46,6 @@ import (
 	"k8s.io/client-go/util/keyutil"
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
 	"k8s.io/kubernetes/pkg/controller/certificates/signer"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/utils/pointer"
 )
 

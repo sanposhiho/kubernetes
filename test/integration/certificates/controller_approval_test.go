@@ -24,6 +24,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/integration/authutil"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	certv1 "k8s.io/api/certificates/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -35,8 +37,6 @@ import (
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
 	"k8s.io/kubernetes/pkg/controller/certificates"
 	"k8s.io/kubernetes/pkg/controller/certificates/approver"
-	"k8s.io/kubernetes/test/integration/authutil"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 // Integration tests that verify the behaviour of the CSR auto-approving controller.

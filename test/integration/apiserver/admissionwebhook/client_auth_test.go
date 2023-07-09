@@ -33,6 +33,7 @@ import (
 
 	utiltesting "k8s.io/client-go/util/testing"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	"k8s.io/api/admission/v1beta1"
 	admissionregistrationv1 "k8s.io/api/admissionregistration/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -42,7 +43,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 const (

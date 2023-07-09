@@ -29,6 +29,7 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	batchv1 "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
 	eventsv1 "k8s.io/api/events/v1"
@@ -61,7 +62,6 @@ import (
 	jobcontroller "k8s.io/kubernetes/pkg/controller/job"
 	"k8s.io/kubernetes/pkg/controller/job/metrics"
 	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/utils/pointer"
 )
 

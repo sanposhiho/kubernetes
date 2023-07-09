@@ -21,9 +21,9 @@ import (
 	"flag"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/kubernetes/test/utils/ktesting"
 )
 

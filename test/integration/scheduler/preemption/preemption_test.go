@@ -25,6 +25,7 @@ import (
 	"testing"
 	"time"
 
+	testutils "github.com/sanposhiho/kubernetes/test/integration/util"
 	v1 "k8s.io/api/core/v1"
 	policy "k8s.io/api/policy/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -51,7 +52,6 @@ import (
 	frameworkruntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
 	st "k8s.io/kubernetes/pkg/scheduler/testing"
 	"k8s.io/kubernetes/plugin/pkg/admission/priority"
-	testutils "k8s.io/kubernetes/test/integration/util"
 	"k8s.io/utils/pointer"
 )
 

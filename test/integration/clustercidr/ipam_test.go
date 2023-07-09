@@ -23,6 +23,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	v1 "k8s.io/api/core/v1"
 	networkingv1alpha1 "k8s.io/api/networking/v1alpha1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -38,7 +39,6 @@ import (
 	"k8s.io/kubernetes/pkg/controller/nodeipam"
 	"k8s.io/kubernetes/pkg/controller/nodeipam/ipam"
 	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/test/integration/framework"
 	netutils "k8s.io/utils/net"
 )
 
