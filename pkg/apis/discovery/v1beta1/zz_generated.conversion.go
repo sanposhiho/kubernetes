@@ -28,8 +28,8 @@ import (
 	v1beta1 "k8s.io/api/discovery/v1beta1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	core "k8s.io/kubernetes/pkg/apis/core"
-	discovery "k8s.io/kubernetes/pkg/apis/discovery"
+	core "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	discovery "github.com/sanposhiho/kubernetes/pkg/apis/discovery"
 )
 
 func init() {

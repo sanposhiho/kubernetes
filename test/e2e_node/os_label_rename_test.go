@@ -27,14 +27,14 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/wait"
 	v1core "k8s.io/client-go/kubernetes/typed/core/v1"
 	nodeutil "k8s.io/component-helpers/node/util"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

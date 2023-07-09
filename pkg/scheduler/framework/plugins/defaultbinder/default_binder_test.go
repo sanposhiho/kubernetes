@@ -22,14 +22,14 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	frameworkruntime "github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/kubernetes/fake"
 	clienttesting "k8s.io/client-go/testing"
 	"k8s.io/klog/v2/ktesting"
-	frameworkruntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
 )
 
 func TestDefaultBinder(t *testing.T) {

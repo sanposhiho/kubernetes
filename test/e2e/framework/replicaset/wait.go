@@ -21,11 +21,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 // WaitForReadyReplicaSet waits until the replicaset has all of its replicas ready.

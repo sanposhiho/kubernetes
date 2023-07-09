@@ -24,6 +24,13 @@ import (
 	"testing"
 	"time"
 
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/controller/replicaset"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	testutil "github.com/sanposhiho/kubernetes/test/utils"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -41,13 +48,6 @@ import (
 	"k8s.io/client-go/util/retry"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	"k8s.io/klog/v2/ktesting"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/controller/replicaset"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/test/integration/framework"
-	testutil "k8s.io/kubernetes/test/utils"
 	"k8s.io/utils/pointer"
 )
 

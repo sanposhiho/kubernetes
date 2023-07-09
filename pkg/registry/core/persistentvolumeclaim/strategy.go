@@ -29,10 +29,10 @@ import (
 	"k8s.io/apiserver/pkg/storage/names"
 	"sigs.k8s.io/structured-merge-diff/v4/fieldpath"
 
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	pvcutil "k8s.io/kubernetes/pkg/api/persistentvolumeclaim"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/core/validation"
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	pvcutil "github.com/sanposhiho/kubernetes/pkg/api/persistentvolumeclaim"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
 )
 
 // persistentvolumeclaimStrategy implements behavior for PersistentVolumeClaim objects

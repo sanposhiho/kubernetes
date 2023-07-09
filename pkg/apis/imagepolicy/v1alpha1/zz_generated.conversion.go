@@ -27,7 +27,7 @@ import (
 	v1alpha1 "k8s.io/api/imagepolicy/v1alpha1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	imagepolicy "k8s.io/kubernetes/pkg/apis/imagepolicy"
+	imagepolicy "github.com/sanposhiho/kubernetes/pkg/apis/imagepolicy"
 )
 
 func init() {

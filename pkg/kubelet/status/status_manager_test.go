@@ -30,6 +30,14 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"github.com/stretchr/testify/assert"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	kubepod "github.com/sanposhiho/kubernetes/pkg/kubelet/pod"
+	statustest "github.com/sanposhiho/kubernetes/pkg/kubelet/status/testing"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -40,14 +48,6 @@ import (
 	"k8s.io/client-go/kubernetes/fake"
 	core "k8s.io/client-go/testing"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/features"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	kubepod "k8s.io/kubernetes/pkg/kubelet/pod"
-	statustest "k8s.io/kubernetes/pkg/kubelet/status/testing"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
-	"k8s.io/kubernetes/pkg/kubelet/util"
 )
 
 type mutablePodManager interface {

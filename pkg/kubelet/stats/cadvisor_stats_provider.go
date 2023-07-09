@@ -26,16 +26,16 @@ import (
 	cadvisorapiv2 "github.com/google/cadvisor/info/v2"
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cadvisor"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/leaky"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/status"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	"k8s.io/kubernetes/pkg/kubelet/cadvisor"
-	"k8s.io/kubernetes/pkg/kubelet/cm"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/leaky"
-	"k8s.io/kubernetes/pkg/kubelet/server/stats"
-	"k8s.io/kubernetes/pkg/kubelet/status"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 )
 
 // cadvisorStatsProvider implements the containerStatsProvider interface by

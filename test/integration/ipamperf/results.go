@@ -23,14 +23,14 @@ import (
 	"sync"
 	"time"
 
-	"k8s.io/api/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam"
+	controllerutil "github.com/sanposhiho/kubernetes/pkg/controller/util/node"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/informers"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
 	cloudprovider "k8s.io/cloud-provider"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller/nodeipam/ipam"
-	controllerutil "k8s.io/kubernetes/pkg/controller/util/node"
 )
 
 // Config represents the test configuration that is being run

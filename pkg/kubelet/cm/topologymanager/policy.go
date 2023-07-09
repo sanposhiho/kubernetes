@@ -17,8 +17,8 @@ limitations under the License.
 package topologymanager
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
 )
 
 // Policy interface for Topology Manager Pod Admit Result

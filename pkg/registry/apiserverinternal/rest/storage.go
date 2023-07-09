@@ -17,14 +17,14 @@ limitations under the License.
 package rest
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/apiserverinternal"
+	storageversionstorage "github.com/sanposhiho/kubernetes/pkg/registry/apiserverinternal/storageversion/storage"
 	apiserverv1alpha1 "k8s.io/api/apiserverinternal/v1alpha1"
 	"k8s.io/apiserver/pkg/registry/generic"
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/apiserverinternal"
-	storageversionstorage "k8s.io/kubernetes/pkg/registry/apiserverinternal/storageversion/storage"
 )
 
 // StorageProvider is a REST storage provider for internal.apiserver.k8s.io

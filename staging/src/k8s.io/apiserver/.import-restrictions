@@ -1,5 +1,5 @@
 rules:
-  # prevent import of k8s.io/kubernetes
+  # prevent import of github.com/sanposhiho/kubernetes
   - selectorRegexp: k8s[.]io/kubernetes
     forbiddenPrefixes:
       - ''

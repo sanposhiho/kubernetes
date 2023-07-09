@@ -27,6 +27,8 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/utils"
 	certificatesv1 "k8s.io/api/certificates/v1"
 	v1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -40,8 +42,6 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/util/cert"
 	"k8s.io/client-go/util/certificate/csr"
-	"k8s.io/kubernetes/test/e2e/framework"
-	"k8s.io/kubernetes/test/utils"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

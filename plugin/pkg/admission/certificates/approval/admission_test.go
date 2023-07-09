@@ -28,7 +28,7 @@ import (
 	"k8s.io/apiserver/pkg/authentication/user"
 	"k8s.io/apiserver/pkg/authorization/authorizer"
 
-	certificatesapi "k8s.io/kubernetes/pkg/apis/certificates"
+	certificatesapi "github.com/sanposhiho/kubernetes/pkg/apis/certificates"
 )
 
 func TestPlugin_Validate(t *testing.T) {

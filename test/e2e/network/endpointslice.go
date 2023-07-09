@@ -23,6 +23,10 @@ import (
 	"net"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	"github.com/sanposhiho/kubernetes/test/e2e/network/common"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
 	discoveryv1 "k8s.io/api/discovery/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -34,10 +38,6 @@ import (
 	"k8s.io/apimachinery/pkg/watch"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/util/retry"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	"k8s.io/kubernetes/test/e2e/network/common"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	admissionapi "k8s.io/pod-security-admission/api"
 	"k8s.io/utils/pointer"
 

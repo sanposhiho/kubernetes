@@ -37,8 +37,8 @@ import (
 	"k8s.io/mount-utils"
 	"k8s.io/utils/pointer"
 
-	"k8s.io/kubernetes/pkg/volume"
-	volumetest "k8s.io/kubernetes/pkg/volume/testing"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	volumetest "github.com/sanposhiho/kubernetes/pkg/volume/testing"
 	"k8s.io/legacy-cloud-providers/azure"
 )
 

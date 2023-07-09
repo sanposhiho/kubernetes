@@ -27,9 +27,9 @@ import (
 
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/test/e2e_node/builder"
-	"k8s.io/kubernetes/test/e2e_node/system"
-	"k8s.io/kubernetes/test/utils"
+	"github.com/sanposhiho/kubernetes/test/e2e_node/builder"
+	"github.com/sanposhiho/kubernetes/test/e2e_node/system"
+	"github.com/sanposhiho/kubernetes/test/utils"
 )
 
 // NodeE2ERemote contains the specific functions in the node e2e test suite.

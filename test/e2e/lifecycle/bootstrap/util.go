@@ -23,13 +23,13 @@ import (
 	"errors"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
 	bootstrapapi "k8s.io/cluster-bootstrap/token/api"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 func newTokenSecret(tokenID, tokenSecret string) *v1.Secret {

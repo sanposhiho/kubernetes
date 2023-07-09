@@ -21,13 +21,13 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/apiserver/pkg/registry/rest"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
 	utilpointer "k8s.io/utils/pointer"
 )
 

@@ -21,6 +21,7 @@ import (
 	"reflect"
 	"testing"
 
+	flowcontrolapisv1beta3 "github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol/v1beta3"
 	flowcontrolv1beta3 "k8s.io/api/flowcontrol/v1beta3"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,7 +29,6 @@ import (
 	"k8s.io/client-go/kubernetes/fake"
 	flowcontrollisters "k8s.io/client-go/listers/flowcontrol/v1beta3"
 	toolscache "k8s.io/client-go/tools/cache"
-	flowcontrolapisv1beta3 "k8s.io/kubernetes/pkg/apis/flowcontrol/v1beta3"
 	"k8s.io/utils/pointer"
 
 	"github.com/google/go-cmp/cmp"

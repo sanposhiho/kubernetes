@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controlplane"
 	apiserverinternalv1alpha1 "k8s.io/api/apiserverinternal/v1alpha1"
 	coordinationv1 "k8s.io/api/coordination/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -35,7 +36,6 @@ import (
 	coordlisters "k8s.io/client-go/listers/coordination/v1"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
-	"k8s.io/kubernetes/pkg/controlplane"
 
 	"k8s.io/klog/v2"
 )

@@ -21,15 +21,15 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/internal/cache"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/runtime"
-	"k8s.io/kubernetes/pkg/scheduler/internal/cache"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
 )
 
 // TODO: Add test case for RequiredDuringSchedulingRequiredDuringExecution after it's implemented.

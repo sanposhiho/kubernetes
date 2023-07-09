@@ -21,14 +21,14 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/util/slice"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ejob "github.com/sanposhiho/kubernetes/test/e2e/framework/job"
 	batchv1 "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/pkg/util/slice"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ejob "k8s.io/kubernetes/test/e2e/framework/job"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

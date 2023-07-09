@@ -21,15 +21,15 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	plfeature "github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/feature"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/internal/cache"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	plfeature "k8s.io/kubernetes/pkg/scheduler/framework/plugins/feature"
-	"k8s.io/kubernetes/pkg/scheduler/framework/runtime"
-	"k8s.io/kubernetes/pkg/scheduler/internal/cache"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
 )
 
 func TestMostAllocatedScoringStrategy(t *testing.T) {

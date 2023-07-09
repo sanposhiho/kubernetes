@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/conversion"
-	"k8s.io/kubernetes/pkg/apis/apps"
-	"k8s.io/kubernetes/pkg/apis/core"
 )
 
 // Convert_apps_DeploymentSpec_To_v1_DeploymentSpec is defined here, because public

@@ -20,9 +20,9 @@ limitations under the License.
 package kuberuntime
 
 import (
-	"k8s.io/api/core/v1"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	v1 "k8s.io/api/core/v1"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 // applyPlatformSpecificContainerConfig applies platform specific configurations to runtimeapi.ContainerConfig.

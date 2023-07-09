@@ -23,8 +23,8 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/probe"
 	utilnet "k8s.io/apimachinery/pkg/util/net"
-	"k8s.io/kubernetes/pkg/probe"
 
 	"k8s.io/klog/v2"
 	utilio "k8s.io/utils/io"

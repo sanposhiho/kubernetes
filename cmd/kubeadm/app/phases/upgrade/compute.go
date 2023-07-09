@@ -24,9 +24,9 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
 
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/phases/addons/dns"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/output"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/addons/dns"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/output"
 )
 
 // Upgrade defines an upgrade possibility to upgrade from a current version to a new one

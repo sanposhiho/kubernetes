@@ -17,10 +17,10 @@ limitations under the License.
 package cache
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
 // Cache collects pods' information and provides node-level aggregated information.

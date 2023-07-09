@@ -36,14 +36,14 @@ import (
 
 	"k8s.io/client-go/tools/clientcmd"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmapiv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	certsphase "k8s.io/kubernetes/cmd/kubeadm/app/phases/certs"
-	kubeconfigphase "k8s.io/kubernetes/cmd/kubeadm/app/phases/kubeconfig"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/pkiutil"
-	testutil "k8s.io/kubernetes/cmd/kubeadm/test"
-	cmdtestutil "k8s.io/kubernetes/cmd/kubeadm/test/cmd"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmapiv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	certsphase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/certs"
+	kubeconfigphase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/kubeconfig"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/pkiutil"
+	testutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/test"
+	cmdtestutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/test/cmd"
 )
 
 func TestCommandsGenerated(t *testing.T) {

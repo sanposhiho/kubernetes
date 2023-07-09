@@ -25,6 +25,7 @@ import (
 
 	"fmt"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -38,7 +39,6 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	bootstrapapi "k8s.io/cluster-bootstrap/token/api"
 	jws "k8s.io/cluster-bootstrap/token/jws"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 // SignerOptions contains options for the Signer

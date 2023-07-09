@@ -19,8 +19,8 @@ package winkernel
 import (
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/pkg/proxy/metrics"
 	"k8s.io/component-base/metrics/legacyregistry"
-	"k8s.io/kubernetes/pkg/proxy/metrics"
 )
 
 var registerMetricsOnce sync.Once

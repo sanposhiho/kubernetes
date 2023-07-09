@@ -25,16 +25,16 @@ import (
 
 	"k8s.io/klog/v2"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	sc "github.com/sanposhiho/kubernetes/pkg/securitycontext"
+	hashutil "github.com/sanposhiho/kubernetes/pkg/util/hash"
+	"github.com/sanposhiho/kubernetes/third_party/forked/golang/expansion"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/tools/record"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	sc "k8s.io/kubernetes/pkg/securitycontext"
-	hashutil "k8s.io/kubernetes/pkg/util/hash"
-	"k8s.io/kubernetes/third_party/forked/golang/expansion"
 	utilsnet "k8s.io/utils/net"
 )
 

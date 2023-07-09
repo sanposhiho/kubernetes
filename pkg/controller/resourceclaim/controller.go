@@ -22,6 +22,8 @@ import (
 	"strings"
 	"time"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/pkg/controller/resourceclaim/metrics"
 	v1 "k8s.io/api/core/v1"
 	resourcev1alpha2 "k8s.io/api/resource/v1alpha2"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -40,8 +42,6 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/dynamic-resource-allocation/resourceclaim"
 	"k8s.io/klog/v2"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/pkg/controller/resourceclaim/metrics"
 )
 
 const (

@@ -21,11 +21,11 @@ import (
 	"context"
 	"time"
 
+	evictionapi "github.com/sanposhiho/kubernetes/pkg/kubelet/eviction/api"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	evictionapi "k8s.io/kubernetes/pkg/kubelet/eviction/api"
 )
 
 // fsStatsType defines the types of filesystem stats to collect.

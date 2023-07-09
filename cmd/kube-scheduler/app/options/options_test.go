@@ -29,6 +29,11 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/assert"
 
+	kubeschedulerconfig "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/latest"
+	configtesting "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/testing"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/testing/defaults"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/names"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	apiserveroptions "k8s.io/apiserver/pkg/server/options"
@@ -37,11 +42,6 @@ import (
 	"k8s.io/klog/v2/ktesting"
 	v1 "k8s.io/kube-scheduler/config/v1"
 	"k8s.io/kube-scheduler/config/v1beta3"
-	kubeschedulerconfig "k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config/latest"
-	configtesting "k8s.io/kubernetes/pkg/scheduler/apis/config/testing"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config/testing/defaults"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/names"
 	"k8s.io/utils/pointer"
 )
 

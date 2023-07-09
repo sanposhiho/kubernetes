@@ -29,7 +29,7 @@ import (
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	types "k8s.io/apimachinery/pkg/types"
-	authentication "k8s.io/kubernetes/pkg/apis/authentication"
+	authentication "github.com/sanposhiho/kubernetes/pkg/apis/authentication"
 )
 
 func init() {

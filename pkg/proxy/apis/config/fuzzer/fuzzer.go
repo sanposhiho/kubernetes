@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/google/gofuzz"
+	fuzz "github.com/google/gofuzz"
 
+	kubeproxyconfig "github.com/sanposhiho/kubernetes/pkg/proxy/apis/config"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtimeserializer "k8s.io/apimachinery/pkg/runtime/serializer"
-	kubeproxyconfig "k8s.io/kubernetes/pkg/proxy/apis/config"
 	"k8s.io/utils/pointer"
 )
 

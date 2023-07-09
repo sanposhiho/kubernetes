@@ -17,9 +17,9 @@ limitations under the License.
 package v1alpha1
 
 import (
+	node "github.com/sanposhiho/kubernetes/pkg/apis/node"
 	v1alpha1 "k8s.io/api/node/v1alpha1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
-	node "k8s.io/kubernetes/pkg/apis/node"
 )
 
 // Convert_v1alpha1_RuntimeClass_To_node_RuntimeClass must override the automatic

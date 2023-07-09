@@ -31,7 +31,7 @@ import (
 	"google.golang.org/grpc"
 	grpchealth "google.golang.org/grpc/health/grpc_health_v1"
 
-	"k8s.io/kubernetes/pkg/probe"
+	"github.com/sanposhiho/kubernetes/pkg/probe"
 )
 
 func TestNew(t *testing.T) {

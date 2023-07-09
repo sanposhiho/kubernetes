@@ -20,6 +20,8 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/apiserverinternal"
+	"github.com/sanposhiho/kubernetes/pkg/registry/registrytest"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/labels"
@@ -27,11 +29,9 @@ import (
 	"k8s.io/apiserver/pkg/registry/generic"
 	genericregistrytest "k8s.io/apiserver/pkg/registry/generic/testing"
 	etcd3testing "k8s.io/apiserver/pkg/storage/etcd3/testing"
-	"k8s.io/kubernetes/pkg/apis/apiserverinternal"
-	"k8s.io/kubernetes/pkg/registry/registrytest"
 
 	// Ensure that admissionregistration package is initialized.
-	_ "k8s.io/kubernetes/pkg/apis/apiserverinternal/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/apiserverinternal/install"
 )
 
 func TestCreate(t *testing.T) {

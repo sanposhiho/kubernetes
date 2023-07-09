@@ -28,8 +28,8 @@ import (
 	cloudprovider "k8s.io/cloud-provider"
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/pkg/controller/nodeipam/ipam"
-	nodesync "k8s.io/kubernetes/pkg/controller/nodeipam/ipam/sync"
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam"
+	nodesync "github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam/sync"
 )
 
 func createLegacyIPAM(

@@ -19,9 +19,9 @@ package validation
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/rbac"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/rbac"
 )
 
 func TestValidateClusterRoleBinding(t *testing.T) {

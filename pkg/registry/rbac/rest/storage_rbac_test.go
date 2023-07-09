@@ -19,8 +19,8 @@ package rest
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/plugin/pkg/auth/authorizer/rbac/bootstrappolicy"
 	"k8s.io/client-go/kubernetes/fake"
-	"k8s.io/kubernetes/plugin/pkg/auth/authorizer/rbac/bootstrappolicy"
 )
 
 func BenchmarkEnsureRBACPolicy(b *testing.B) {

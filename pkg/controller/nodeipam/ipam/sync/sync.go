@@ -25,8 +25,8 @@ import (
 	"k8s.io/klog/v2"
 	netutils "k8s.io/utils/net"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam/cidrset"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/controller/nodeipam/ipam/cidrset"
 )
 
 const (

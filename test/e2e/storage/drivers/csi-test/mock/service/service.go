@@ -24,9 +24,9 @@ import (
 	"sync/atomic"
 
 	"github.com/container-storage-interface/spec/lib/go/csi"
+	"github.com/sanposhiho/kubernetes/test/e2e/storage/drivers/csi-test/mock/cache"
 	"golang.org/x/net/context"
 	"google.golang.org/grpc/codes"
-	"k8s.io/kubernetes/test/e2e/storage/drivers/csi-test/mock/cache"
 
 	"google.golang.org/protobuf/types/known/timestamppb"
 )

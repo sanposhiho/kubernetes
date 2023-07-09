@@ -25,12 +25,12 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2eoutput "k8s.io/kubernetes/test/e2e/framework/pod/output"
-	e2eservice "k8s.io/kubernetes/test/e2e/framework/service"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	"k8s.io/kubernetes/test/e2e/network/common"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2eoutput "github.com/sanposhiho/kubernetes/test/e2e/framework/pod/output"
+	e2eservice "github.com/sanposhiho/kubernetes/test/e2e/framework/service"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	"github.com/sanposhiho/kubernetes/test/e2e/network/common"
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

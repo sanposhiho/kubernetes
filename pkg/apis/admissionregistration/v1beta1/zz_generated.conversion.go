@@ -29,8 +29,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	admissionregistration "k8s.io/kubernetes/pkg/apis/admissionregistration"
-	v1 "k8s.io/kubernetes/pkg/apis/admissionregistration/v1"
+	admissionregistration "github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration"
+	v1 "github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration/v1"
 )
 
 func init() {

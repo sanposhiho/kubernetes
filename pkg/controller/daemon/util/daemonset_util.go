@@ -20,12 +20,12 @@ import (
 	"fmt"
 	"strconv"
 
+	v1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	extensions "k8s.io/api/extensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	intstrutil "k8s.io/apimachinery/pkg/util/intstr"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
 )
 
 // GetTemplateGeneration gets the template generation associated with a v1.DaemonSet by extracting it from the

@@ -23,11 +23,11 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/cluster/ports"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ekubelet "github.com/sanposhiho/kubernetes/test/e2e/framework/kubelet"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/cluster/ports"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ekubelet "k8s.io/kubernetes/test/e2e/framework/kubelet"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

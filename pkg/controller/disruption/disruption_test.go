@@ -29,6 +29,8 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 	apps "k8s.io/api/apps/v1"
 	autoscalingapi "k8s.io/api/autoscaling/v1"
 	v1 "k8s.io/api/core/v1"
@@ -52,8 +54,6 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
-	"k8s.io/kubernetes/pkg/controller"
 	clocktesting "k8s.io/utils/clock/testing"
 	"k8s.io/utils/pointer"
 )

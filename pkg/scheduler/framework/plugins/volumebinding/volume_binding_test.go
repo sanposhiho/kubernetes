@@ -22,6 +22,10 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/feature"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"
@@ -31,10 +35,6 @@ import (
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes/fake"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/feature"
-	"k8s.io/kubernetes/pkg/scheduler/framework/runtime"
 )
 
 var (

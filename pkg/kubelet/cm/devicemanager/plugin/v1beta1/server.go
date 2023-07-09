@@ -27,13 +27,13 @@ import (
 	"github.com/opencontainers/selinux/go-selinux"
 	"google.golang.org/grpc"
 
+	v1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/cache"
 	core "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
 	api "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	"k8s.io/kubernetes/pkg/kubelet/config"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
-	"k8s.io/kubernetes/pkg/kubelet/pluginmanager/cache"
 )
 
 // Server interface provides methods for Device plugin registration server.

@@ -19,11 +19,11 @@ limitations under the License.
 package install
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/resource"
+	"github.com/sanposhiho/kubernetes/pkg/apis/resource/v1alpha2"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/resource"
-	"k8s.io/kubernetes/pkg/apis/resource/v1alpha2"
 )
 
 func init() {

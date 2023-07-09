@@ -21,11 +21,11 @@ import (
 	"path"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2econfig "github.com/sanposhiho/kubernetes/test/e2e/framework/config"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 	utilversion "k8s.io/apimachinery/pkg/util/version"
 	"k8s.io/client-go/discovery"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2econfig "k8s.io/kubernetes/test/e2e/framework/config"
-	"k8s.io/kubernetes/test/e2e/upgrades"
 )
 
 var (

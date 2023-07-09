@@ -1125,7 +1125,7 @@ Before upgrading to Kubernetes 1.13, you must keep the following in mind:
 - kubeadm
   - The DynamicKubeletConfig feature gate is deprecated. The functionality is still accessible by using the kubeadm alpha kubelet enable-dynamic command.
   - The command `kubeadm config print-defaults` is deprecated in favor of `kubeadm config print init-defaults` and `kubeadm config print join-defaults` ([#69617](https://github.com/kubernetes/kubernetes/pull/69617), [@rosti](https://github.com/rosti))
-  - support for the `v1alpha3` configuration file format is deprecated and will be removed in 1.14. Use `kubeadm config migrate` to migrate `v1alpha3` configuration files to `v1beta1`, which provides improvements in image repository management, addons configuration, and other areas. The documentation for `v1beta1` can be found here: https://godoc.org/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta1
+  - support for the `v1alpha3` configuration file format is deprecated and will be removed in 1.14. Use `kubeadm config migrate` to migrate `v1alpha3` configuration files to `v1beta1`, which provides improvements in image repository management, addons configuration, and other areas. The documentation for `v1beta1` can be found here: https://godoc.org/github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta1
 - The `node.status.volumes.attached.devicePath` field is deprecated for CSI volumes and will not be set in future releases ([#71095](https://github.com/kubernetes/kubernetes/pull/71095), [@msau42](https://github.com/msau42))
 - kubectl
   - The `kubectl convert` command is deprecated and will be removed in a future release ([#70820](https://github.com/kubernetes/kubernetes/pull/70820), [@seans3](https://github.com/seans3))
@@ -1171,7 +1171,7 @@ Over the course of 1.13 release SIG CLI mostly focused on stabilizing the items 
 
 For v1.13, SIG Cloud Provider has been focused on stabilizing the common APIs and interfaces consumed by cloud providers today. This involved auditing the cloud provider APIs for anything that should be deprecated as well as adding changes where necessary. In addition, SIG Cloud Provider has begun exploratory work around having a “cloud provider” e2e test suite which can be used to test common cloud provider functionalities with resources such as nodes and load balancers.
 
-We are also continuing our long running effort to extract all the existing cloud providers that live in k8s.io/kubernetes into their own respective repos. Along with this migration, we are slowly transitioning users to use the cloud-controller-manager for any cloud provider features instead of the kube-controller-manager.
+We are also continuing our long running effort to extract all the existing cloud providers that live in github.com/sanposhiho/kubernetes into their own respective repos. Along with this migration, we are slowly transitioning users to use the cloud-controller-manager for any cloud provider features instead of the kube-controller-manager.
 
 ### SIG Cluster Lifecycle
 
@@ -1180,7 +1180,7 @@ In this release the SIG again focused on further improving the user experience o
 
 Some notable changes in kubeadm since Kubernetes 1.12:
 
-- kubeadm’s configuration API is now `v1beta1`. The new configuration format provides improvements in - image repository management, addons configuration, and other areas. We encourage `v1alpha3` users to migrate to this configuration API using `kubeadm config migrate`, as `v1alpha3` will be removed in 1.14. The documentation for `v1beta1` can be found here: https://godoc.org/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta1
+- kubeadm’s configuration API is now `v1beta1`. The new configuration format provides improvements in - image repository management, addons configuration, and other areas. We encourage `v1alpha3` users to migrate to this configuration API using `kubeadm config migrate`, as `v1alpha3` will be removed in 1.14. The documentation for `v1beta1` can be found here: https://godoc.org/github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta1
 - kubeadm has graduated `kubeadm alpha phase` commands to `kubeadm init phase`. This means that the phases of creating a control-plane node are now tightly integrated as part of the `init` command. Alpha features, not yet ready for GA are still kept under `kubeadm alpha` and we appreciate feedback on them.
 - `kubeadm init` and `kubeadm init phase` now have a `--image-repository` flag, improving support for environments with limited access to official kubernetes repository.
 - The DynamicKubeletConfig and SelfHosting functionality was moved outside of `kubeadm init` and feature gates and is now exposed under `kubeadm alpha`.

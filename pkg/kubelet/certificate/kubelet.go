@@ -26,6 +26,8 @@ import (
 	"sort"
 	"time"
 
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
 	certificates "k8s.io/api/certificates/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -33,8 +35,6 @@ import (
 	"k8s.io/client-go/util/certificate"
 	compbasemetrics "k8s.io/component-base/metrics"
 	"k8s.io/component-base/metrics/legacyregistry"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
 	netutils "k8s.io/utils/net"
 )
 

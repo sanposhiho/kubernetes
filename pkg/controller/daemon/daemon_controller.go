@@ -26,6 +26,9 @@ import (
 
 	"k8s.io/klog/v2"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/controller/daemon/util"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
@@ -49,9 +52,6 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	v1helper "k8s.io/component-helpers/scheduling/corev1"
 	"k8s.io/component-helpers/scheduling/corev1/nodeaffinity"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/pkg/controller"
-	"k8s.io/kubernetes/pkg/controller/daemon/util"
 	"k8s.io/utils/integer"
 )
 

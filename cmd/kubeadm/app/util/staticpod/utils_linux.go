@@ -28,10 +28,10 @@ import (
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/utils/pointer"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	certphase "k8s.io/kubernetes/cmd/kubeadm/app/phases/certs"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/users"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	certphase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/certs"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/users"
 )
 
 type pathOwnerAndPermissionsUpdaterFunc func(path string, uid, gid int64, perms uint32) error

@@ -26,11 +26,11 @@ import (
 	"k8s.io/apimachinery/pkg/util/uuid"
 	admissionapi "k8s.io/pod-security-admission/api"
 
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	"k8s.io/kubernetes/pkg/kubelet/cm"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	imageutils "k8s.io/kubernetes/test/utils/image"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 
 	"github.com/onsi/ginkgo/v2"
 )

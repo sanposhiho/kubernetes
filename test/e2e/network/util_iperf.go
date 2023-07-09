@@ -25,7 +25,7 @@ import (
 	"strconv"
 	"strings"
 
-	"k8s.io/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 )
 
 const (

@@ -30,7 +30,7 @@ import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	v1alpha1 "k8s.io/component-base/config/v1alpha1"
 	v1beta3 "k8s.io/kube-scheduler/config/v1beta3"
-	config "k8s.io/kubernetes/pkg/scheduler/apis/config"
+	config "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
 )
 
 func init() {

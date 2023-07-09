@@ -21,13 +21,13 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/testing/defaults"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	v1 "k8s.io/kube-scheduler/config/v1"
 	"k8s.io/kube-scheduler/config/v1beta3"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config/testing/defaults"
 	"k8s.io/utils/pointer"
 	"sigs.k8s.io/yaml"
 )

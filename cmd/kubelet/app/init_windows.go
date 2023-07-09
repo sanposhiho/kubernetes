@@ -26,7 +26,7 @@ import (
 	"golang.org/x/sys/windows"
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/pkg/windows/service"
+	"github.com/sanposhiho/kubernetes/pkg/windows/service"
 )
 
 const (

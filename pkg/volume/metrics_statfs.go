@@ -19,10 +19,10 @@ package volume
 import (
 	"time"
 
+	servermetrics "github.com/sanposhiho/kubernetes/pkg/kubelet/server/metrics"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/fs"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	servermetrics "k8s.io/kubernetes/pkg/kubelet/server/metrics"
-	"k8s.io/kubernetes/pkg/volume/util/fs"
 )
 
 var _ MetricsProvider = &metricsStatFS{}

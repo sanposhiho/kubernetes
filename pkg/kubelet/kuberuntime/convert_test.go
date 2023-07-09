@@ -21,8 +21,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 func TestConvertToKubeContainerImageSpec(t *testing.T) {

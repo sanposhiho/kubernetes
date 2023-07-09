@@ -21,13 +21,13 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2edaemonset "github.com/sanposhiho/kubernetes/test/e2e/framework/daemonset"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2edaemonset "k8s.io/kubernetes/test/e2e/framework/daemonset"
-	"k8s.io/kubernetes/test/e2e/upgrades"
 )
 
 // DaemonSetUpgradeTest tests that a DaemonSet is running before and after

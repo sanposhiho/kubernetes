@@ -25,13 +25,13 @@ import (
 	utilnet "k8s.io/apimachinery/pkg/util/net"
 	cliflag "k8s.io/component-base/cli/flag"
 
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/cluster/ports"
-	controlplaneapiserver "k8s.io/kubernetes/pkg/controlplane/apiserver/options"
-	"k8s.io/kubernetes/pkg/controlplane/reconcilers"
-	_ "k8s.io/kubernetes/pkg/features" // add the kubernetes feature gates
-	kubeoptions "k8s.io/kubernetes/pkg/kubeapiserver/options"
-	kubeletclient "k8s.io/kubernetes/pkg/kubelet/client"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/cluster/ports"
+	controlplaneapiserver "github.com/sanposhiho/kubernetes/pkg/controlplane/apiserver/options"
+	"github.com/sanposhiho/kubernetes/pkg/controlplane/reconcilers"
+	_ "github.com/sanposhiho/kubernetes/pkg/features" // add the kubernetes feature gates
+	kubeoptions "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/options"
+	kubeletclient "github.com/sanposhiho/kubernetes/pkg/kubelet/client"
 )
 
 // ServerRunOptions runs a kubernetes api server.

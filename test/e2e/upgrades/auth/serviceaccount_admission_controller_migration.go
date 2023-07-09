@@ -22,14 +22,14 @@ import (
 	"time"
 
 	"github.com/onsi/ginkgo/v2"
+	e2eauth "github.com/sanposhiho/kubernetes/test/e2e/auth"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
-	e2eauth "k8s.io/kubernetes/test/e2e/auth"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	"k8s.io/kubernetes/test/e2e/upgrades"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 )
 
 const (

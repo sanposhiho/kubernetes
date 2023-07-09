@@ -23,6 +23,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	testutil "github.com/sanposhiho/kubernetes/test/integration/util"
 	v1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -30,8 +32,6 @@ import (
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/features"
-	testutil "k8s.io/kubernetes/test/integration/util"
 )
 
 var (

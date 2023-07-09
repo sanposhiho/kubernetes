@@ -22,12 +22,12 @@ import (
 	"net/http"
 	"net/url"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/capabilities"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/net"
 	"k8s.io/apimachinery/pkg/util/proxy"
 	"k8s.io/apiserver/pkg/registry/rest"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/capabilities"
 )
 
 // ProxyREST implements the proxy subresource for a Service

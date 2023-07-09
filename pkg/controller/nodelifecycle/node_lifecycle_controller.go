@@ -29,6 +29,10 @@ import (
 
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodelifecycle/scheduler"
+	controllerutil "github.com/sanposhiho/kubernetes/pkg/controller/util/node"
+	taintutils "github.com/sanposhiho/kubernetes/pkg/util/taints"
 	coordv1 "k8s.io/api/coordination/v1"
 	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
@@ -52,10 +56,6 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	nodetopology "k8s.io/component-helpers/node/topology"
 	kubeletapis "k8s.io/kubelet/pkg/apis"
-	"k8s.io/kubernetes/pkg/controller"
-	"k8s.io/kubernetes/pkg/controller/nodelifecycle/scheduler"
-	controllerutil "k8s.io/kubernetes/pkg/controller/util/node"
-	taintutils "k8s.io/kubernetes/pkg/util/taints"
 )
 
 func init() {

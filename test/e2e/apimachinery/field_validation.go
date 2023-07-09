@@ -24,6 +24,7 @@ import (
 	"strings"
 
 	"github.com/onsi/ginkgo/v2"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	_ "github.com/stretchr/testify/assert"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	apiextensionclientset "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
@@ -33,7 +34,6 @@ import (
 	"k8s.io/client-go/dynamic"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/test/e2e/framework"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

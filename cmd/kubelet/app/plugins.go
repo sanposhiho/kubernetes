@@ -22,24 +22,24 @@ import (
 	"k8s.io/utils/exec"
 
 	// Volume plugins
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/cephfs"
-	"k8s.io/kubernetes/pkg/volume/configmap"
-	"k8s.io/kubernetes/pkg/volume/csi"
-	"k8s.io/kubernetes/pkg/volume/downwardapi"
-	"k8s.io/kubernetes/pkg/volume/emptydir"
-	"k8s.io/kubernetes/pkg/volume/fc"
-	"k8s.io/kubernetes/pkg/volume/flexvolume"
-	"k8s.io/kubernetes/pkg/volume/git_repo"
-	"k8s.io/kubernetes/pkg/volume/hostpath"
-	"k8s.io/kubernetes/pkg/volume/iscsi"
-	"k8s.io/kubernetes/pkg/volume/local"
-	"k8s.io/kubernetes/pkg/volume/nfs"
-	"k8s.io/kubernetes/pkg/volume/projected"
-	"k8s.io/kubernetes/pkg/volume/secret"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/cephfs"
+	"github.com/sanposhiho/kubernetes/pkg/volume/configmap"
+	"github.com/sanposhiho/kubernetes/pkg/volume/csi"
+	"github.com/sanposhiho/kubernetes/pkg/volume/downwardapi"
+	"github.com/sanposhiho/kubernetes/pkg/volume/emptydir"
+	"github.com/sanposhiho/kubernetes/pkg/volume/fc"
+	"github.com/sanposhiho/kubernetes/pkg/volume/flexvolume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/git_repo"
+	"github.com/sanposhiho/kubernetes/pkg/volume/hostpath"
+	"github.com/sanposhiho/kubernetes/pkg/volume/iscsi"
+	"github.com/sanposhiho/kubernetes/pkg/volume/local"
+	"github.com/sanposhiho/kubernetes/pkg/volume/nfs"
+	"github.com/sanposhiho/kubernetes/pkg/volume/projected"
+	"github.com/sanposhiho/kubernetes/pkg/volume/secret"
 
 	// Cloud providers
-	_ "k8s.io/kubernetes/pkg/cloudprovider/providers"
+	_ "github.com/sanposhiho/kubernetes/pkg/cloudprovider/providers"
 )
 
 // ProbeVolumePlugins collects all volume plugins into an easy to use list.

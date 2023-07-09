@@ -25,6 +25,7 @@ import (
 	"testing"
 	"time"
 
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/apiextensions-apiserver/test/integration/fixtures"
@@ -36,9 +37,8 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
 
-	"k8s.io/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 )
 
 var (

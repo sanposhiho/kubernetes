@@ -22,11 +22,11 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/lifecycle"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	bootstrapapi "k8s.io/cluster-bootstrap/token/api"
-	"k8s.io/kubernetes/test/e2e/framework"
-	"k8s.io/kubernetes/test/e2e/lifecycle"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

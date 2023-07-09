@@ -23,18 +23,18 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/validation"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/feature"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/helper"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/names"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	corelisters "k8s.io/client-go/listers/core/v1"
 	"k8s.io/component-helpers/storage/ephemeral"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config/validation"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/feature"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/helper"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/names"
 )
 
 const (

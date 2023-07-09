@@ -30,10 +30,10 @@ import (
 	jsonpatch "github.com/evanphx/json-patch"
 	"github.com/pkg/errors"
 
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	utilyaml "k8s.io/apimachinery/pkg/util/yaml"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
 	"sigs.k8s.io/yaml"
 )
 

@@ -24,13 +24,13 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/klog/v2"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmscheme "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/scheme"
-	kubeadmapiv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
-	"k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/validation"
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	kubeadmutil "k8s.io/kubernetes/cmd/kubeadm/app/util"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/config/strict"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmscheme "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/scheme"
+	kubeadmapiv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/validation"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	kubeadmutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/config/strict"
 )
 
 // SetJoinDynamicDefaults checks and sets configuration values for the JoinConfiguration object

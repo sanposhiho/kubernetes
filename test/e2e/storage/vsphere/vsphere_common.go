@@ -21,7 +21,7 @@ import (
 	"strconv"
 
 	"github.com/onsi/gomega"
-	"k8s.io/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 )
 
 // VSphereCSIMigrationEnabled is the environment variables to help

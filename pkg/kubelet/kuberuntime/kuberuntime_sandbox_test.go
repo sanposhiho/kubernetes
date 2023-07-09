@@ -23,6 +23,10 @@ import (
 	"path/filepath"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	containertest "github.com/sanposhiho/kubernetes/pkg/kubelet/container/testing"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/runtimeclass"
+	rctest "github.com/sanposhiho/kubernetes/pkg/kubelet/runtimeclass/testing"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	v1 "k8s.io/api/core/v1"
@@ -30,10 +34,6 @@ import (
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	"k8s.io/kubernetes/pkg/features"
-	containertest "k8s.io/kubernetes/pkg/kubelet/container/testing"
-	"k8s.io/kubernetes/pkg/kubelet/runtimeclass"
-	rctest "k8s.io/kubernetes/pkg/kubelet/runtimeclass/testing"
 	"k8s.io/utils/pointer"
 )
 

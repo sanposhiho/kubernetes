@@ -27,6 +27,13 @@ import (
 	"testing"
 	"time"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/scheduling"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/controller/daemon/util"
+	"github.com/sanposhiho/kubernetes/pkg/securitycontext"
+	labelsutil "github.com/sanposhiho/kubernetes/pkg/util/labels"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -45,13 +52,6 @@ import (
 	"k8s.io/client-go/util/flowcontrol"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2/ktesting"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/scheduling"
-	"k8s.io/kubernetes/pkg/controller"
-	"k8s.io/kubernetes/pkg/controller/daemon/util"
-	"k8s.io/kubernetes/pkg/securitycontext"
-	labelsutil "k8s.io/kubernetes/pkg/util/labels"
 	testingclock "k8s.io/utils/clock/testing"
 )
 

@@ -17,14 +17,14 @@ limitations under the License.
 package v1beta3
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apiserver/pkg/util/feature"
 	componentbaseconfigv1alpha1 "k8s.io/component-base/config/v1alpha1"
 	"k8s.io/kube-scheduler/config/v1beta3"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
 	"k8s.io/utils/pointer"
 )
 

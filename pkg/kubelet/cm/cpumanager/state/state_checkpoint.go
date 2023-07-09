@@ -21,10 +21,10 @@ import (
 	"path/filepath"
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager/errors"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/containermap"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager/errors"
-	"k8s.io/kubernetes/pkg/kubelet/cm/containermap"
 	"k8s.io/utils/cpuset"
 )
 

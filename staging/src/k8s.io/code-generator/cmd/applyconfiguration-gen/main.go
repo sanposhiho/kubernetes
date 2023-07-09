@@ -31,7 +31,7 @@ func main() {
 	klog.InitFlags(nil)
 	genericArgs, customArgs := generatorargs.NewDefaults()
 	genericArgs.AddFlags(pflag.CommandLine)
-	customArgs.AddFlags(pflag.CommandLine, "k8s.io/kubernetes/pkg/apis") // TODO: move this input path out of applyconfiguration-gen
+	customArgs.AddFlags(pflag.CommandLine, "github.com/sanposhiho/kubernetes/pkg/apis") // TODO: move this input path out of applyconfiguration-gen
 	if err := flag.Set("logtostderr", "true"); err != nil {
 		klog.Fatalf("Error: %v", err)
 	}

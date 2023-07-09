@@ -20,8 +20,8 @@ import (
 	"os"
 	"strconv"
 
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/util"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util"
 	"k8s.io/utils/exec"
 )
 

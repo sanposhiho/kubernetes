@@ -41,9 +41,9 @@ import (
 	cliflag "k8s.io/component-base/cli/flag"
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/test/e2e/framework/internal/junit"
-	"k8s.io/kubernetes/test/utils/image"
-	"k8s.io/kubernetes/test/utils/kubeconfig"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework/internal/junit"
+	"github.com/sanposhiho/kubernetes/test/utils/image"
+	"github.com/sanposhiho/kubernetes/test/utils/kubeconfig"
 )
 
 const (

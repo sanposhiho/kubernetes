@@ -25,12 +25,12 @@ import (
 	"k8s.io/client-go/tools/events"
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/proxy/metrics"
+	proxyutil "github.com/sanposhiho/kubernetes/pkg/proxy/util"
 	v1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/kubernetes/pkg/proxy/metrics"
-	proxyutil "k8s.io/kubernetes/pkg/proxy/util"
 )
 
 var supportedEndpointSliceAddressTypes = sets.New[string](

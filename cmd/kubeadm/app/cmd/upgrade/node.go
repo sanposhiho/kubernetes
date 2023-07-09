@@ -27,13 +27,13 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	clientset "k8s.io/client-go/kubernetes"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	"k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/validation"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	phases "k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/upgrade/node"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	configutil "k8s.io/kubernetes/cmd/kubeadm/app/util/config"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/validation"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	phases "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/upgrade/node"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	configutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/config"
 )
 
 // nodeOptions defines all the options exposed via flags by kubeadm upgrade node.

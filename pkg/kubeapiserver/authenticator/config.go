@@ -44,9 +44,9 @@ import (
 	"k8s.io/kube-openapi/pkg/validation/spec"
 
 	// Initialize all known client auth plugins.
+	"github.com/sanposhiho/kubernetes/pkg/serviceaccount"
 	_ "k8s.io/client-go/plugin/pkg/client/auth"
 	"k8s.io/client-go/util/keyutil"
-	"k8s.io/kubernetes/pkg/serviceaccount"
 )
 
 // Config contains the data on how to authenticate a request to the Kube API Server

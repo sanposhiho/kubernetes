@@ -19,11 +19,11 @@ package secret
 import (
 	"testing"
 
-	apitesting "k8s.io/kubernetes/pkg/api/testing"
-	api "k8s.io/kubernetes/pkg/apis/core"
+	apitesting "github.com/sanposhiho/kubernetes/pkg/api/testing"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 
 	// ensure types are installed
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
 )
 
 func TestSelectableFieldLabelConversions(t *testing.T) {

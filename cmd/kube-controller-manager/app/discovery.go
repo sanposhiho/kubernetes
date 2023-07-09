@@ -22,9 +22,9 @@ package app
 import (
 	"context"
 
+	endpointslicecontroller "github.com/sanposhiho/kubernetes/pkg/controller/endpointslice"
+	endpointslicemirroringcontroller "github.com/sanposhiho/kubernetes/pkg/controller/endpointslicemirroring"
 	"k8s.io/controller-manager/controller"
-	endpointslicecontroller "k8s.io/kubernetes/pkg/controller/endpointslice"
-	endpointslicemirroringcontroller "k8s.io/kubernetes/pkg/controller/endpointslicemirroring"
 )
 
 func startEndpointSliceController(ctx context.Context, controllerContext ControllerContext) (controller.Interface, bool, error) {

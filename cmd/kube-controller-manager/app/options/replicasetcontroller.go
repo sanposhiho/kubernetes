@@ -19,7 +19,7 @@ package options
 import (
 	"github.com/spf13/pflag"
 
-	replicasetconfig "k8s.io/kubernetes/pkg/controller/replicaset/config"
+	replicasetconfig "github.com/sanposhiho/kubernetes/pkg/controller/replicaset/config"
 )
 
 // ReplicaSetControllerOptions holds the ReplicaSetController options.

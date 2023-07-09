@@ -20,6 +20,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/discovery/validation"
+	endpointutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpoint"
 	corev1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -27,8 +29,6 @@ import (
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/leaderelection/resourcelock"
-	"k8s.io/kubernetes/pkg/apis/discovery/validation"
-	endpointutil "k8s.io/kubernetes/pkg/controller/util/endpoint"
 	netutils "k8s.io/utils/net"
 )
 

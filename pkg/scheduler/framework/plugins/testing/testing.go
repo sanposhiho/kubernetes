@@ -20,13 +20,13 @@ import (
 	"context"
 	"testing"
 
-	"k8s.io/api/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	frameworkruntime "github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes/fake"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	frameworkruntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
 )
 
 // SetupPluginWithInformers creates a plugin using a framework handle that includes

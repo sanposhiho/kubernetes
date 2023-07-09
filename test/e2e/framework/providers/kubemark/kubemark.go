@@ -20,11 +20,11 @@ import (
 	"flag"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubemark"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	"k8s.io/client-go/informers"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/clientcmd"
-	"k8s.io/kubernetes/pkg/kubemark"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 var (

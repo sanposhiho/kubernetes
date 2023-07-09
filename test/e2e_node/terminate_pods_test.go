@@ -28,8 +28,8 @@ import (
 	"k8s.io/apimachinery/pkg/util/uuid"
 	admissionapi "k8s.io/pod-security-admission/api"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
 )
 
 var _ = SIGDescribe("Terminate Pods", func() {

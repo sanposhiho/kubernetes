@@ -19,13 +19,13 @@ package controllerrevision
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps/validation"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apiserver/pkg/registry/rest"
 	"k8s.io/apiserver/pkg/storage/names"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/apps"
-	"k8s.io/kubernetes/pkg/apis/apps/validation"
 )
 
 // strategy implements behavior for ConfigMap objects

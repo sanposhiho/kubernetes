@@ -22,6 +22,10 @@ import (
 	"strings"
 	"testing"
 
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/test/integration"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -29,10 +33,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	typedv1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/test/integration"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 func TestPodUpdateActiveDeadlineSeconds(t *testing.T) {

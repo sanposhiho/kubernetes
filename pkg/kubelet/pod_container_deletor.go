@@ -20,9 +20,9 @@ import (
 	"context"
 	"sort"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/klog/v2"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 const (

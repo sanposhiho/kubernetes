@@ -20,15 +20,15 @@ import (
 	"sync"
 	"time"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/prober/results"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/status"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/component-base/metrics"
 	"k8s.io/klog/v2"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/prober/results"
-	"k8s.io/kubernetes/pkg/kubelet/status"
 	"k8s.io/utils/clock"
 )
 

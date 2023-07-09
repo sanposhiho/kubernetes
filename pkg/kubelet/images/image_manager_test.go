@@ -24,6 +24,8 @@ import (
 	"testing"
 	"time"
 
+	. "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	ctest "github.com/sanposhiho/kubernetes/pkg/kubelet/container/testing"
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -31,8 +33,6 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/flowcontrol"
 	crierrors "k8s.io/cri-api/pkg/errors"
-	. "k8s.io/kubernetes/pkg/kubelet/container"
-	ctest "k8s.io/kubernetes/pkg/kubelet/container/testing"
 	testingclock "k8s.io/utils/clock/testing"
 	utilpointer "k8s.io/utils/pointer"
 )

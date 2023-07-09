@@ -23,9 +23,9 @@ import (
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/ginkgo/v2/reporters"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	"k8s.io/kubernetes/test/e2e/framework/internal/output"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework/internal/output"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
 )
 
 // The line number of the following code is checked in TestFailureOutput below.

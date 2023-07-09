@@ -23,17 +23,17 @@ import (
 	"testing"
 	"time"
 
-	"k8s.io/api/core/v1"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	k8s_api_v1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	clientscheme "k8s.io/client-go/kubernetes/scheme"
 	utiltesting "k8s.io/client-go/util/testing"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	k8s_api_v1 "k8s.io/kubernetes/pkg/apis/core/v1"
-	"k8s.io/kubernetes/pkg/apis/core/validation"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 )
 
 func TestURLErrorNotExistNoUpdate(t *testing.T) {

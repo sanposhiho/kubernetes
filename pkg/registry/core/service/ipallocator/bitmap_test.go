@@ -21,9 +21,9 @@ import (
 	"net"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/component-base/metrics/testutil"
-	api "k8s.io/kubernetes/pkg/apis/core"
 	netutils "k8s.io/utils/net"
 )
 

@@ -28,6 +28,8 @@ import (
 	"testing"
 	"time"
 
+	apiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	admissionv1 "k8s.io/api/admission/v1"
 	admissionregistrationv1 "k8s.io/api/admissionregistration/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -39,8 +41,6 @@ import (
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	clientset "k8s.io/client-go/kubernetes"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	apiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 type admissionRecorder struct {

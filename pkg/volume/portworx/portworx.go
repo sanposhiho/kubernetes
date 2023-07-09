@@ -27,14 +27,14 @@ import (
 	utilstrings "k8s.io/utils/strings"
 
 	volumeclient "github.com/libopenstorage/openstorage/api/client/volume"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/util"
 )
 
 const (

@@ -17,8 +17,8 @@ limitations under the License.
 package sliceutils
 
 import (
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	v1 "k8s.io/api/core/v1"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 // PodsByCreationTime makes an array of pods sortable by their creation

@@ -24,11 +24,18 @@ import (
 	"sync"
 	"time"
 
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
 
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2epv "github.com/sanposhiho/kubernetes/test/e2e/framework/pv"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	e2evolume "github.com/sanposhiho/kubernetes/test/e2e/framework/volume"
+	storageframework "github.com/sanposhiho/kubernetes/test/e2e/storage/framework"
+	storageutils "github.com/sanposhiho/kubernetes/test/e2e/storage/utils"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"
@@ -39,13 +46,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2epv "k8s.io/kubernetes/test/e2e/framework/pv"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	e2evolume "k8s.io/kubernetes/test/e2e/framework/volume"
-	storageframework "k8s.io/kubernetes/test/e2e/storage/framework"
-	storageutils "k8s.io/kubernetes/test/e2e/storage/utils"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

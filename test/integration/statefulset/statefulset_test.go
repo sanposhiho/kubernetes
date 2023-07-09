@@ -24,6 +24,12 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	apiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/pkg/controller/statefulset"
+	"github.com/sanposhiho/kubernetes/pkg/controlplane"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -37,12 +43,6 @@ import (
 	restclient "k8s.io/client-go/rest"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	"k8s.io/klog/v2/ktesting"
-	apiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/pkg/controller/statefulset"
-	"k8s.io/kubernetes/pkg/controlplane"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 const (

@@ -22,10 +22,10 @@ import (
 	"net/http"
 	"time"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"

@@ -33,6 +33,11 @@ import (
 
 	"sigs.k8s.io/yaml"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/test/integration"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/utils/ktesting"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -42,11 +47,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	clienttypedv1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	restclient "k8s.io/client-go/rest"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration"
-	"k8s.io/kubernetes/test/integration/framework"
-	"k8s.io/kubernetes/test/utils/ktesting"
 )
 
 const (

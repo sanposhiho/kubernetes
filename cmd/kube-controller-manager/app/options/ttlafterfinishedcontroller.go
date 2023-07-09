@@ -21,8 +21,8 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"k8s.io/kubernetes/cmd/kube-controller-manager/names"
-	ttlafterfinishedconfig "k8s.io/kubernetes/pkg/controller/ttlafterfinished/config"
+	"github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/names"
+	ttlafterfinishedconfig "github.com/sanposhiho/kubernetes/pkg/controller/ttlafterfinished/config"
 )
 
 // TTLAfterFinishedControllerOptions holds the TTLAfterFinishedController options.

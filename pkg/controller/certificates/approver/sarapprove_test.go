@@ -28,13 +28,13 @@ import (
 	"net"
 	"testing"
 
+	k8s_certificates_v1 "github.com/sanposhiho/kubernetes/pkg/apis/certificates/v1"
 	authorization "k8s.io/api/authorization/v1"
 	capi "k8s.io/api/certificates/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/kubernetes/fake"
 	testclient "k8s.io/client-go/testing"
-	k8s_certificates_v1 "k8s.io/kubernetes/pkg/apis/certificates/v1"
 )
 
 func TestHandle(t *testing.T) {

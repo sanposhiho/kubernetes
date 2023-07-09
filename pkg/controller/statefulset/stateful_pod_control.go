@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -33,7 +34,6 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/retry"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/features"
 )
 
 // StatefulPodControlObjectManager abstracts the manipulation of Pods and PVCs. The real controller implements this

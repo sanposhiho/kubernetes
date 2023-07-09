@@ -29,6 +29,9 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	libcontainercgroups "github.com/opencontainers/runc/libcontainer/cgroups"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	kubelettypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -36,9 +39,6 @@ import (
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	"k8s.io/kubernetes/pkg/features"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	kubelettypes "k8s.io/kubernetes/pkg/kubelet/types"
 )
 
 func makeExpectedConfig(m *kubeGenericRuntimeManager, pod *v1.Pod, containerIndex int, enforceMemoryQoS bool) *runtimeapi.ContainerConfig {

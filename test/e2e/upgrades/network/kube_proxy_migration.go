@@ -21,16 +21,16 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2edaemonset "github.com/sanposhiho/kubernetes/test/e2e/framework/daemonset"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2edaemonset "k8s.io/kubernetes/test/e2e/framework/daemonset"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
-	"k8s.io/kubernetes/test/e2e/upgrades"
 
 	"github.com/onsi/ginkgo/v2"
 )

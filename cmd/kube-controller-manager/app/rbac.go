@@ -19,9 +19,9 @@ package app
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/clusterroleaggregation"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/controller-manager/controller"
-	"k8s.io/kubernetes/pkg/controller/clusterroleaggregation"
 )
 
 func startClusterRoleAggregrationController(ctx context.Context, controllerContext ControllerContext) (controller.Interface, bool, error) {

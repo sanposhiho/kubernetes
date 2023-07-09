@@ -19,7 +19,7 @@ package options
 import (
 	"github.com/spf13/pflag"
 
-	podgcconfig "k8s.io/kubernetes/pkg/controller/podgc/config"
+	podgcconfig "github.com/sanposhiho/kubernetes/pkg/controller/podgc/config"
 )
 
 // PodGCControllerOptions holds the PodGCController options.

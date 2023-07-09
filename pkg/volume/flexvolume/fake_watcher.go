@@ -18,7 +18,7 @@ package flexvolume
 
 import (
 	"github.com/fsnotify/fsnotify"
-	utilfs "k8s.io/kubernetes/pkg/util/filesystem"
+	utilfs "github.com/sanposhiho/kubernetes/pkg/util/filesystem"
 )
 
 // Mock filesystem watcher

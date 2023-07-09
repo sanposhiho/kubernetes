@@ -19,18 +19,19 @@ package netpol
 import (
 	"context"
 	"fmt"
+	"net"
+	"strconv"
+	"strings"
+	"time"
+
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
 	v1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
 	netutils "k8s.io/utils/net"
-	"net"
-	"strconv"
-	"strings"
-	"time"
 )
 
 // defaultPollIntervalSeconds [seconds] is the default value for which the Prober will wait before attempting next attempt.

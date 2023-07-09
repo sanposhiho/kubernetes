@@ -19,7 +19,7 @@ package util
 import (
 	"testing"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
 )
 
 func TestGetControlPlaneEndpoint(t *testing.T) {

@@ -28,9 +28,9 @@ import (
 	certutil "k8s.io/client-go/util/cert"
 	"k8s.io/klog/v2"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/pkiutil"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/pkiutil"
 )
 
 const (

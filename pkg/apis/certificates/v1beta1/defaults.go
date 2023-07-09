@@ -19,11 +19,11 @@ package v1beta1
 import (
 	"crypto/x509"
 
+	certificates "github.com/sanposhiho/kubernetes/pkg/apis/certificates"
 	certificatesv1beta1 "k8s.io/api/certificates/v1beta1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/sets"
-	certificates "k8s.io/kubernetes/pkg/apis/certificates"
 )
 
 func addDefaultingFuncs(scheme *runtime.Scheme) error {

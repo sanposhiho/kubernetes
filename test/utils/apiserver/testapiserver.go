@@ -21,6 +21,8 @@ import (
 	"testing"
 
 	"github.com/google/uuid"
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/test/utils/kubeconfig"
 	"k8s.io/apiserver/pkg/server/dynamiccertificates"
 	etcdserver "k8s.io/apiserver/pkg/storage/etcd3/testserver"
 	"k8s.io/apiserver/pkg/storage/storagebackend"
@@ -28,8 +30,6 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 	"k8s.io/client-go/util/cert"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/utils/kubeconfig"
 )
 
 // TestAPIServer provides access to a running apiserver instance.

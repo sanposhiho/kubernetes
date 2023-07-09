@@ -21,8 +21,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	"k8s.io/component-base/metrics/testutil"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 const (

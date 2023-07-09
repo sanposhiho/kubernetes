@@ -24,7 +24,7 @@ import (
 	"github.com/google/go-cmp/cmp/cmpopts"
 	"k8s.io/apimachinery/pkg/util/sets"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
 )
 
 func TestNewResetData(t *testing.T) {

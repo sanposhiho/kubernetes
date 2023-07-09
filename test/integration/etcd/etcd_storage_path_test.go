@@ -28,6 +28,7 @@ import (
 	"github.com/google/go-cmp/cmp"
 	clientv3 "go.etcd.io/etcd/client/v3"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
 	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -38,7 +39,6 @@ import (
 	"k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/client-go/dynamic"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
 )
 
 // Only add kinds to this list when this a virtual resource with get and create verbs that doesn't actually

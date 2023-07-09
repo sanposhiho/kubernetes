@@ -20,15 +20,15 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/helper"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/names"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	appslisters "k8s.io/client-go/listers/apps/v1"
 	corelisters "k8s.io/client-go/listers/core/v1"
 	utilnode "k8s.io/component-helpers/node/topology"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/helper"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/names"
 )
 
 // SelectorSpread is a plugin that calculates selector spread priority.

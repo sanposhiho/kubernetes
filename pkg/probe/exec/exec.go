@@ -19,10 +19,10 @@ package exec
 import (
 	"bytes"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util/ioutils"
+	"github.com/sanposhiho/kubernetes/pkg/probe"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/kubelet/util/ioutils"
-	"k8s.io/kubernetes/pkg/probe"
 
 	"k8s.io/klog/v2"
 	"k8s.io/utils/exec"

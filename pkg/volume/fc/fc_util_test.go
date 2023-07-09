@@ -22,7 +22,7 @@ import (
 	"testing"
 	"time"
 
-	"k8s.io/kubernetes/pkg/volume/util"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util"
 )
 
 type fakeFileInfo struct {

@@ -24,6 +24,11 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	fakeframework "github.com/sanposhiho/kubernetes/pkg/scheduler/framework/fake"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
+	volumeutil "github.com/sanposhiho/kubernetes/pkg/volume/util"
+	"github.com/sanposhiho/kubernetes/test/utils/ktesting"
 	v1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -32,11 +37,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	csitrans "k8s.io/csi-translation-lib"
 	csilibplugins "k8s.io/csi-translation-lib/plugins"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	fakeframework "k8s.io/kubernetes/pkg/scheduler/framework/fake"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
-	volumeutil "k8s.io/kubernetes/pkg/volume/util"
-	"k8s.io/kubernetes/test/utils/ktesting"
 	"k8s.io/utils/pointer"
 )
 

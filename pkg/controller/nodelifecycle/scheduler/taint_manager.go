@@ -25,6 +25,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/helper"
+	v1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -38,9 +41,6 @@ import (
 	corelisters "k8s.io/client-go/listers/core/v1"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
-	"k8s.io/kubernetes/pkg/apis/core/helper"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	"k8s.io/kubernetes/pkg/features"
 
 	"k8s.io/klog/v2"
 )

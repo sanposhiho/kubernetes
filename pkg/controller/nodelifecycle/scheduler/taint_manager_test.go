@@ -23,6 +23,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/testutil"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/labels"
@@ -34,8 +36,6 @@ import (
 	clienttesting "k8s.io/client-go/testing"
 	"k8s.io/client-go/tools/cache"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	"k8s.io/kubernetes/pkg/controller/testutil"
-	"k8s.io/kubernetes/pkg/features"
 
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )

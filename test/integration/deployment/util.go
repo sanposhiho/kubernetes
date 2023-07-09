@@ -23,6 +23,13 @@ import (
 	"testing"
 	"time"
 
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/pkg/controller/deployment"
+	deploymentutil "github.com/sanposhiho/kubernetes/pkg/controller/deployment/util"
+	"github.com/sanposhiho/kubernetes/pkg/controller/replicaset"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	testutil "github.com/sanposhiho/kubernetes/test/utils"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -32,13 +39,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/klog/v2/ktesting"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/pkg/controller/deployment"
-	deploymentutil "k8s.io/kubernetes/pkg/controller/deployment/util"
-	"k8s.io/kubernetes/pkg/controller/replicaset"
-	"k8s.io/kubernetes/test/integration/framework"
-	testutil "k8s.io/kubernetes/test/utils"
 )
 
 const (

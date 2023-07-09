@@ -19,7 +19,7 @@ package options
 import (
 	"github.com/spf13/pflag"
 
-	deploymentconfig "k8s.io/kubernetes/pkg/controller/deployment/config"
+	deploymentconfig "github.com/sanposhiho/kubernetes/pkg/controller/deployment/config"
 )
 
 // DeploymentControllerOptions holds the DeploymentController options.

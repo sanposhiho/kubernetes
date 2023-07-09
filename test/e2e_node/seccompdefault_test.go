@@ -24,12 +24,12 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eoutput "github.com/sanposhiho/kubernetes/test/e2e/framework/pod/output"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/uuid"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eoutput "k8s.io/kubernetes/test/e2e/framework/pod/output"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

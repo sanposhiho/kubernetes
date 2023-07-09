@@ -21,16 +21,16 @@ import (
 
 	"sigs.k8s.io/structured-merge-diff/v4/fieldpath"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration"
+	"github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration/validation"
+	"github.com/sanposhiho/kubernetes/pkg/registry/admissionregistration/resolver"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apiserver/pkg/authorization/authorizer"
 	"k8s.io/apiserver/pkg/storage/names"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/admissionregistration"
-	"k8s.io/kubernetes/pkg/apis/admissionregistration/validation"
-	"k8s.io/kubernetes/pkg/registry/admissionregistration/resolver"
 )
 
 // validatingAdmissionPolicyStrategy implements verification logic for ValidatingAdmissionPolicy.

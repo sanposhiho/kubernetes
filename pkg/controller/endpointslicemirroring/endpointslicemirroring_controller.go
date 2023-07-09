@@ -22,6 +22,9 @@ import (
 
 	"golang.org/x/time/rate"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/controller/endpointslicemirroring/metrics"
+	endpointsliceutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpointslice"
 	v1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -39,9 +42,6 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller"
-	"k8s.io/kubernetes/pkg/controller/endpointslicemirroring/metrics"
-	endpointsliceutil "k8s.io/kubernetes/pkg/controller/util/endpointslice"
 )
 
 const (

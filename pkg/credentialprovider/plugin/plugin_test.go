@@ -24,6 +24,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/credentialprovider"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -33,8 +35,6 @@ import (
 	credentialproviderv1 "k8s.io/kubelet/pkg/apis/credentialprovider/v1"
 	credentialproviderv1alpha1 "k8s.io/kubelet/pkg/apis/credentialprovider/v1alpha1"
 	credentialproviderv1beta1 "k8s.io/kubelet/pkg/apis/credentialprovider/v1beta1"
-	"k8s.io/kubernetes/pkg/credentialprovider"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
 	"k8s.io/utils/clock"
 	testingclock "k8s.io/utils/clock/testing"
 )

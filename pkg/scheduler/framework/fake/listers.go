@@ -19,6 +19,7 @@ package fake
 import (
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"
@@ -28,7 +29,6 @@ import (
 	appslisters "k8s.io/client-go/listers/apps/v1"
 	corelisters "k8s.io/client-go/listers/core/v1"
 	storagelisters "k8s.io/client-go/listers/storage/v1"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
 var _ corelisters.ServiceLister = &ServiceLister{}

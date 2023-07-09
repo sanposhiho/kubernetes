@@ -29,6 +29,19 @@ import (
 	"k8s.io/klog/v2"
 	"k8s.io/mount-utils"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/volumemanager/cache"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/volumemanager/metrics"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/volumemanager/populator"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/volumemanager/reconciler"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/csimigration"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/hostutil"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/operationexecutor"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/types"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/volumepathhandler"
 	v1 "k8s.io/api/core/v1"
 	k8stypes "k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/runtime"
@@ -37,19 +50,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/record"
 	csitrans "k8s.io/csi-translation-lib"
-	"k8s.io/kubernetes/pkg/kubelet/config"
-	"k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/volumemanager/cache"
-	"k8s.io/kubernetes/pkg/kubelet/volumemanager/metrics"
-	"k8s.io/kubernetes/pkg/kubelet/volumemanager/populator"
-	"k8s.io/kubernetes/pkg/kubelet/volumemanager/reconciler"
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/csimigration"
-	"k8s.io/kubernetes/pkg/volume/util"
-	"k8s.io/kubernetes/pkg/volume/util/hostutil"
-	"k8s.io/kubernetes/pkg/volume/util/operationexecutor"
-	"k8s.io/kubernetes/pkg/volume/util/types"
-	"k8s.io/kubernetes/pkg/volume/util/volumepathhandler"
 )
 
 const (
@@ -156,7 +156,7 @@ type PodStateProvider interface {
 }
 
 // PodManager is the subset of methods the manager needs to observe the actual state of the kubelet.
-// See pkg/k8s.io/kubernetes/pkg/kubelet/pod.Manager for method godoc.
+// See pkg/github.com/sanposhiho/kubernetes/pkg/kubelet/pod.Manager for method godoc.
 type PodManager interface {
 	GetPodByUID(k8stypes.UID) (*v1.Pod, bool)
 	GetPods() []*v1.Pod

@@ -492,7 +492,7 @@ var _ = metrics.NewCounter(
 			src: `
 package test
 import compbasemetrics "k8s.io/component-base/metrics"
-import "k8s.io/kubernetes/pkg/kubelet/metrics"
+import "github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
 var _ = compbasemetrics.NewCounter(
 	&compbasemetrics.CounterOpts{
 			Name: "importedCounter",
@@ -591,7 +591,7 @@ var _ = metrics.NewCounter(
 			src: `
 package test
 import "k8s.io/component-base/metrics"
-import "k8s.io/kubernetes/utils"
+import "github.com/sanposhiho/kubernetes/utils"
 var _ = metrics.NewCounter(
 		&metrics.CounterOpts{
 			Name:           utils.getMetricName(),
@@ -747,7 +747,7 @@ var _ = metrics.NewHistogram(
 }
 
 func Test_localImportPath(t *testing.T) {
-	KUBE_ROOT = "/home/pchristopher/go/src/k8s.io/kubernetes"
+	KUBE_ROOT = "/home/pchristopher/go/src/github.com/sanposhiho/kubernetes"
 	GOROOT := os.Getenv("GOROOT")
 
 	for _, test := range []struct {
@@ -758,7 +758,7 @@ func Test_localImportPath(t *testing.T) {
 	}{
 		{
 			name:         "k8s local package",
-			importExpr:   "k8s.io/kubernetes/pkg/kubelet/metrics",
+			importExpr:   "github.com/sanposhiho/kubernetes/pkg/kubelet/metrics",
 			expectedPath: strings.Join([]string{KUBE_ROOT, "pkg", "kubelet", "metrics"}, string(os.PathSeparator)),
 			errorExp:     false,
 		},

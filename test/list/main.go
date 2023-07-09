@@ -70,7 +70,7 @@ func collect(filename string, src interface{}) []Test {
 		if filepath.Base(dirName) != packageName && *warn {
 			log.Printf("Warning: strange path/package mismatch %s %s\n", filename, packageName)
 		}
-		testPath := "k8s.io/kubernetes/" + dirName[:len(dirName)-1]
+		testPath := "github.com/sanposhiho/kubernetes/" + dirName[:len(dirName)-1]
 		for _, decl := range f.Decls {
 			funcdecl, ok := decl.(*ast.FuncDecl)
 			if !ok {

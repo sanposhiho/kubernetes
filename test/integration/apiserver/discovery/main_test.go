@@ -19,7 +19,7 @@ package discovery
 import (
 	"testing"
 
-	"k8s.io/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 )
 
 func TestMain(m *testing.M) {

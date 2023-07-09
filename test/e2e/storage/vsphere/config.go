@@ -22,8 +22,8 @@ import (
 	"io"
 	"os"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	"gopkg.in/gcfg.v1"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 const (

@@ -23,9 +23,9 @@ import (
 	"path"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2emetrics "github.com/sanposhiho/kubernetes/test/e2e/framework/metrics"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2emetrics "k8s.io/kubernetes/test/e2e/framework/metrics"
 )
 
 // AfterSuiteActions are actions that are run on ginkgo's SynchronizedAfterSuite

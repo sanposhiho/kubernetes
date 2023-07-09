@@ -37,11 +37,11 @@ import (
 	"k8s.io/apimachinery/pkg/util/dump"
 	"k8s.io/apimachinery/pkg/util/intstr"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	kubeadmutil "k8s.io/kubernetes/cmd/kubeadm/app/util"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/patches"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/users"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	kubeadmutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/patches"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/users"
 )
 
 const (
@@ -395,7 +395,7 @@ func GetUsersAndGroups() (*users.UsersAndGroups, error) {
 // DeepHashObject writes specified object to hash using the spew library
 // which follows pointers and prints actual values of the nested objects
 // ensuring the hash does not change when a pointer changes.
-// Copied from k8s.io/kubernetes/pkg/util/hash/hash.go#DeepHashObject
+// Copied from github.com/sanposhiho/kubernetes/pkg/util/hash/hash.go#DeepHashObject
 func DeepHashObject(hasher hash.Hash, objectToWrite interface{}) {
 	hasher.Reset()
 	fmt.Fprintf(hasher, "%v", dump.ForHash(objectToWrite))

@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"path/filepath"
 
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	kubeletscheme "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/scheme"
+	utilcodec "github.com/sanposhiho/kubernetes/pkg/kubelet/kubeletconfig/util/codec"
+	utilfs "github.com/sanposhiho/kubernetes/pkg/util/filesystem"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	kubeletscheme "k8s.io/kubernetes/pkg/kubelet/apis/config/scheme"
-	utilcodec "k8s.io/kubernetes/pkg/kubelet/kubeletconfig/util/codec"
-	utilfs "k8s.io/kubernetes/pkg/util/filesystem"
 )
 
 // Loader loads configuration from a storage layer

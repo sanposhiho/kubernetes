@@ -30,6 +30,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	. "github.com/sanposhiho/kubernetes/pkg/controller/testutil"
+	"github.com/sanposhiho/kubernetes/pkg/securitycontext"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
@@ -50,9 +53,6 @@ import (
 	utiltesting "k8s.io/client-go/util/testing"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/controller"
-	. "k8s.io/kubernetes/pkg/controller/testutil"
-	"k8s.io/kubernetes/pkg/securitycontext"
 	"k8s.io/utils/pointer"
 )
 

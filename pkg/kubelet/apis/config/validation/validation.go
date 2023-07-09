@@ -20,6 +20,10 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	utiltaints "github.com/sanposhiho/kubernetes/pkg/util/taints"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	utilvalidation "k8s.io/apimachinery/pkg/util/validation"
@@ -28,10 +32,6 @@ import (
 	logsapi "k8s.io/component-base/logs/api/v1"
 	"k8s.io/component-base/metrics"
 	tracingapi "k8s.io/component-base/tracing/api/v1"
-	"k8s.io/kubernetes/pkg/features"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
-	utiltaints "k8s.io/kubernetes/pkg/util/taints"
 	"k8s.io/utils/cpuset"
 )
 

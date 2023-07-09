@@ -17,10 +17,10 @@ limitations under the License.
 package v1beta1
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/policy"
 	"k8s.io/api/policy/v1beta1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/conversion"
-	"k8s.io/kubernetes/pkg/apis/policy"
 )
 
 func Convert_v1beta1_PodDisruptionBudget_To_policy_PodDisruptionBudget(in *v1beta1.PodDisruptionBudget, out *policy.PodDisruptionBudget, s conversion.Scope) error {

@@ -19,10 +19,10 @@ package v1
 import (
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/batch"
 	v1 "k8s.io/api/batch/v1"
 	"k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/kubernetes/pkg/apis/batch"
 )
 
 func addConversionFuncs(scheme *runtime.Scheme) error {

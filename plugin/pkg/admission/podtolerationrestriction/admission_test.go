@@ -22,6 +22,8 @@ import (
 	"testing"
 	"time"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	pluginapi "github.com/sanposhiho/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction"
 	"github.com/stretchr/testify/assert"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -32,8 +34,6 @@ import (
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	pluginapi "k8s.io/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction"
 )
 
 // TestPodAdmission verifies various scenarios involving pod/namespace tolerations

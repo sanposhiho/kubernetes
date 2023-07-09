@@ -19,8 +19,8 @@ package fuzzer
 import (
 	fuzz "github.com/google/gofuzz"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/resource"
 	runtimeserializer "k8s.io/apimachinery/pkg/runtime/serializer"
-	"k8s.io/kubernetes/pkg/apis/resource"
 )
 
 // Funcs contains the fuzzer functions for the resource group.

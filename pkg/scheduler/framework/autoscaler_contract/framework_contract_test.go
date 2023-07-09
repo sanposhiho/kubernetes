@@ -24,11 +24,11 @@ import (
 	"context"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/runtime"
 )
 
 type frameworkContract interface {

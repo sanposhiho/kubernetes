@@ -22,11 +22,11 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes/fake"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
 )
 
 func TestGetPodServices(t *testing.T) {

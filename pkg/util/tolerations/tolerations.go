@@ -17,9 +17,9 @@ limitations under the License.
 package tolerations
 
 import (
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/klog/v2"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 // VerifyAgainstWhitelist checks if the provided tolerations

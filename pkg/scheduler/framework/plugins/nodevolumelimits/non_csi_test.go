@@ -25,13 +25,13 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	fakeframework "github.com/sanposhiho/kubernetes/pkg/scheduler/framework/fake"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/feature"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	csilibplugins "k8s.io/csi-translation-lib/plugins"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	fakeframework "k8s.io/kubernetes/pkg/scheduler/framework/fake"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/feature"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
 	"k8s.io/utils/pointer"
 )
 

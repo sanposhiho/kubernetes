@@ -22,6 +22,12 @@ import (
 
 	"golang.org/x/time/rate"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	endpointslicemetrics "github.com/sanposhiho/kubernetes/pkg/controller/endpointslice/metrics"
+	"github.com/sanposhiho/kubernetes/pkg/controller/endpointslice/topologycache"
+	endpointutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpoint"
+	endpointsliceutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpointslice"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	v1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -40,12 +46,6 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller"
-	endpointslicemetrics "k8s.io/kubernetes/pkg/controller/endpointslice/metrics"
-	"k8s.io/kubernetes/pkg/controller/endpointslice/topologycache"
-	endpointutil "k8s.io/kubernetes/pkg/controller/util/endpoint"
-	endpointsliceutil "k8s.io/kubernetes/pkg/controller/util/endpointslice"
-	"k8s.io/kubernetes/pkg/features"
 )
 
 const (

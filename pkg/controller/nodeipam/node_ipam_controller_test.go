@@ -26,6 +26,9 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam"
+	"github.com/sanposhiho/kubernetes/pkg/controller/testutil"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
@@ -33,9 +36,6 @@ import (
 	"k8s.io/client-go/kubernetes/fake"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/controller/nodeipam/ipam"
-	"k8s.io/kubernetes/pkg/controller/testutil"
-	"k8s.io/kubernetes/pkg/features"
 	"k8s.io/legacy-cloud-providers/gce"
 	netutils "k8s.io/utils/net"
 )

@@ -34,20 +34,20 @@ import (
 	"k8s.io/cli-runtime/pkg/genericclioptions"
 	utilsexec "k8s.io/utils/exec"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmscheme "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/scheme"
-	kubeadmapiv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
-	outputapischeme "k8s.io/kubernetes/cmd/kubeadm/app/apis/output/scheme"
-	outputapiv1alpha2 "k8s.io/kubernetes/cmd/kubeadm/app/apis/output/v1alpha2"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	cmdutil "k8s.io/kubernetes/cmd/kubeadm/app/cmd/util"
-	"k8s.io/kubernetes/cmd/kubeadm/app/componentconfigs"
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/features"
-	"k8s.io/kubernetes/cmd/kubeadm/app/images"
-	configutil "k8s.io/kubernetes/cmd/kubeadm/app/util/config"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/output"
-	utilruntime "k8s.io/kubernetes/cmd/kubeadm/app/util/runtime"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmscheme "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/scheme"
+	kubeadmapiv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
+	outputapischeme "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/output/scheme"
+	outputapiv1alpha2 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/output/v1alpha2"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	cmdutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/util"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/componentconfigs"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/features"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/images"
+	configutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/config"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/output"
+	utilruntime "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/runtime"
 )
 
 // newCmdConfig returns cobra.Command for "kubeadm config" command
@@ -88,7 +88,7 @@ func newCmdConfigPrint(out io.Writer) *cobra.Command {
 		Short: "Print configuration",
 		Long: dedent.Dedent(`
 			This command prints configurations for subcommands provided.
-			For details, see: https://pkg.go.dev/k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm#section-directories`),
+			For details, see: https://pkg.go.dev/github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm#section-directories`),
 		Run: cmdutil.SubCmdRun(),
 	}
 	cmd.AddCommand(newCmdConfigPrintInitDefaults(out))

@@ -24,6 +24,6 @@ in order to enforce naming consistency across different commands and to control 
 In addition to defining the flags, the package also contains set of utilities for flag management.
 
 For additional details about how flags are managed in phases, please refer to the
-"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow" package.
+"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow" package.
 */
 package options

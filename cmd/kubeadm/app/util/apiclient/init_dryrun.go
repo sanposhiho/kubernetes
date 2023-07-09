@@ -27,7 +27,7 @@ import (
 	core "k8s.io/client-go/testing"
 	netutils "k8s.io/utils/net"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
 )
 
 // InitDryRunGetter implements the DryRunGetter interface and can be used to GET/LIST values in the dryrun fake clientset

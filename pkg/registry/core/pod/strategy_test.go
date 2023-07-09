@@ -39,13 +39,13 @@ import (
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	utilpointer "k8s.io/utils/pointer"
 
-	apitesting "k8s.io/kubernetes/pkg/api/testing"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/kubelet/client"
+	apitesting "github.com/sanposhiho/kubernetes/pkg/api/testing"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/client"
 
 	// ensure types are installed
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
 )
 
 func TestMatchPod(t *testing.T) {

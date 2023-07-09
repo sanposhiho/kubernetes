@@ -24,6 +24,9 @@ import (
 	"sync"
 	"time"
 
+	c "github.com/sanposhiho/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/controller/apis/config/scheme"
+	"github.com/sanposhiho/kubernetes/pkg/controller/garbagecollector/metrics"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -44,9 +47,6 @@ import (
 	"k8s.io/controller-manager/controller"
 	"k8s.io/controller-manager/pkg/informerfactory"
 	"k8s.io/klog/v2"
-	c "k8s.io/kubernetes/pkg/controller"
-	"k8s.io/kubernetes/pkg/controller/apis/config/scheme"
-	"k8s.io/kubernetes/pkg/controller/garbagecollector/metrics"
 )
 
 // ResourceResyncTime defines the resync period of the garbage collector's informers.

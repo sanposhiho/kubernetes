@@ -21,14 +21,14 @@ import (
 	"os/exec"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2edeployment "github.com/sanposhiho/kubernetes/test/e2e/framework/deployment"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2edeployment "k8s.io/kubernetes/test/e2e/framework/deployment"
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 
 	gcm "google.golang.org/api/monitoring/v3"
 )

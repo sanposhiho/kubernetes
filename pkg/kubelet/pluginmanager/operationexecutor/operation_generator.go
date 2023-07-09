@@ -29,11 +29,11 @@ import (
 
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/cache"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"k8s.io/client-go/tools/record"
 	registerapi "k8s.io/kubelet/pkg/apis/pluginregistration/v1"
-	"k8s.io/kubernetes/pkg/kubelet/pluginmanager/cache"
 )
 
 const (

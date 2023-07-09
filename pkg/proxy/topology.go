@@ -17,10 +17,10 @@ limitations under the License.
 package proxy
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	v1 "k8s.io/api/core/v1"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/features"
 )
 
 // CategorizeEndpoints returns:

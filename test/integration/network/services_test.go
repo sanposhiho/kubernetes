@@ -21,16 +21,16 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
+	"github.com/sanposhiho/kubernetes/pkg/controlplane"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/util/wait"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
-	"k8s.io/kubernetes/pkg/controlplane"
 
-	"k8s.io/kubernetes/test/integration/framework"
-	"k8s.io/kubernetes/test/utils/ktesting"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/utils/ktesting"
 )
 
 // TestServicesFinalizersRepairLoop tests that Services participate in the object

@@ -32,6 +32,14 @@ import (
 	vim25types "github.com/vmware/govmomi/vim25/types"
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
+	e2eoutput "github.com/sanposhiho/kubernetes/test/e2e/framework/pod/output"
+	e2epv "github.com/sanposhiho/kubernetes/test/e2e/framework/pv"
+	e2essh "github.com/sanposhiho/kubernetes/test/e2e/framework/ssh"
+	"github.com/sanposhiho/kubernetes/test/e2e/storage/utils"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -40,14 +48,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/uuid"
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
-	e2eoutput "k8s.io/kubernetes/test/e2e/framework/pod/output"
-	e2epv "k8s.io/kubernetes/test/e2e/framework/pv"
-	e2essh "k8s.io/kubernetes/test/e2e/framework/ssh"
-	"k8s.io/kubernetes/test/e2e/storage/utils"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 )
 
 const (

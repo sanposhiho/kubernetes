@@ -20,11 +20,11 @@ import (
 	"os"
 
 	"github.com/onsi/ginkgo/v2"
-	"k8s.io/kubernetes/test/e2e/framework"
-	"k8s.io/kubernetes/test/e2e/storage/drivers"
-	storageframework "k8s.io/kubernetes/test/e2e/storage/framework"
-	"k8s.io/kubernetes/test/e2e/storage/testsuites"
-	"k8s.io/kubernetes/test/e2e/storage/utils"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/storage/drivers"
+	storageframework "github.com/sanposhiho/kubernetes/test/e2e/storage/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/storage/testsuites"
+	"github.com/sanposhiho/kubernetes/test/e2e/storage/utils"
 )
 
 // List of testDrivers to be executed in below loop

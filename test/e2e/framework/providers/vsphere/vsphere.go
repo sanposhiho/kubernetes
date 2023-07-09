@@ -17,7 +17,7 @@ limitations under the License.
 package vsphere
 
 import (
-	"k8s.io/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 )
 
 func init() {

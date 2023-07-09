@@ -19,11 +19,11 @@ package collectors
 import (
 	"context"
 
+	kubeletmetrics "github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
+	serverstats "github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/component-base/metrics"
 	stats "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	kubeletmetrics "k8s.io/kubernetes/pkg/kubelet/metrics"
-	serverstats "k8s.io/kubernetes/pkg/kubelet/server/stats"
 )
 
 var (

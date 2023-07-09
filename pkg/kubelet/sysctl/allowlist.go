@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"strings"
 
-	"k8s.io/kubernetes/pkg/apis/core/validation"
-	policyvalidation "k8s.io/kubernetes/pkg/apis/policy/validation"
-	"k8s.io/kubernetes/pkg/kubelet/lifecycle"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
+	policyvalidation "github.com/sanposhiho/kubernetes/pkg/apis/policy/validation"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/lifecycle"
 )
 
 const (

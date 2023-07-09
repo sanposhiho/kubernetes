@@ -29,8 +29,8 @@ import (
 	corelisters "k8s.io/client-go/listers/core/v1"
 	"k8s.io/component-base/metrics"
 
-	v1resource "k8s.io/kubernetes/pkg/api/v1/resource"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
+	v1resource "github.com/sanposhiho/kubernetes/pkg/api/v1/resource"
+	v1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
 )
 
 type resourceLifecycleDescriptors struct {

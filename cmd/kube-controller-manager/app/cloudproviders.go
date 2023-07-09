@@ -19,9 +19,9 @@ package app
 import (
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/features"
 
 	"k8s.io/client-go/informers"
 	cloudprovider "k8s.io/cloud-provider"

@@ -23,11 +23,11 @@ import (
 	"strconv"
 	"strings"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 	"k8s.io/klog/v2"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 type podsByID []*kubecontainer.Pod

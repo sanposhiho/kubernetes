@@ -17,8 +17,8 @@ limitations under the License.
 package cm
 
 import (
-	"k8s.io/api/core/v1"
-	evictionapi "k8s.io/kubernetes/pkg/kubelet/eviction/api"
+	evictionapi "github.com/sanposhiho/kubernetes/pkg/kubelet/eviction/api"
+	v1 "k8s.io/api/core/v1"
 )
 
 // hardEvictionReservation returns a resourcelist that includes reservation of resources based on hard eviction thresholds.

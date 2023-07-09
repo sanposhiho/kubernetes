@@ -17,6 +17,13 @@ limitations under the License.
 package rest
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration"
+	mutatingwebhookconfigurationstorage "github.com/sanposhiho/kubernetes/pkg/registry/admissionregistration/mutatingwebhookconfiguration/storage"
+	"github.com/sanposhiho/kubernetes/pkg/registry/admissionregistration/resolver"
+	validatingadmissionpolicystorage "github.com/sanposhiho/kubernetes/pkg/registry/admissionregistration/validatingadmissionpolicy/storage"
+	policybindingstorage "github.com/sanposhiho/kubernetes/pkg/registry/admissionregistration/validatingadmissionpolicybinding/storage"
+	validatingwebhookconfigurationstorage "github.com/sanposhiho/kubernetes/pkg/registry/admissionregistration/validatingwebhookconfiguration/storage"
 	admissionregistrationv1 "k8s.io/api/admissionregistration/v1"
 	admissionregistrationv1alpha1 "k8s.io/api/admissionregistration/v1alpha1"
 	"k8s.io/apiserver/pkg/authorization/authorizer"
@@ -25,13 +32,6 @@ import (
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
 	"k8s.io/client-go/discovery"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/admissionregistration"
-	mutatingwebhookconfigurationstorage "k8s.io/kubernetes/pkg/registry/admissionregistration/mutatingwebhookconfiguration/storage"
-	"k8s.io/kubernetes/pkg/registry/admissionregistration/resolver"
-	validatingadmissionpolicystorage "k8s.io/kubernetes/pkg/registry/admissionregistration/validatingadmissionpolicy/storage"
-	policybindingstorage "k8s.io/kubernetes/pkg/registry/admissionregistration/validatingadmissionpolicybinding/storage"
-	validatingwebhookconfigurationstorage "k8s.io/kubernetes/pkg/registry/admissionregistration/validatingwebhookconfiguration/storage"
 )
 
 type RESTStorageProvider struct {
@@ -41,7 +41,7 @@ type RESTStorageProvider struct {
 
 func (p RESTStorageProvider) NewRESTStorage(apiResourceConfigSource serverstorage.APIResourceConfigSource, restOptionsGetter generic.RESTOptionsGetter) (genericapiserver.APIGroupInfo, error) {
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(admissionregistration.GroupName, legacyscheme.Scheme, legacyscheme.ParameterCodec, legacyscheme.Codecs)
-	// If you add a version here, be sure to add an entry in `k8s.io/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
+	// If you add a version here, be sure to add an entry in `github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
 	// TODO refactor the plumbing to provide the information in the APIGroupInfo
 
 	if storageMap, err := p.v1Storage(apiResourceConfigSource, restOptionsGetter); err != nil {

@@ -17,10 +17,10 @@ limitations under the License.
 package fake
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	internalcache "github.com/sanposhiho/kubernetes/pkg/scheduler/internal/cache"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	internalcache "k8s.io/kubernetes/pkg/scheduler/internal/cache"
 )
 
 // Cache is used for testing

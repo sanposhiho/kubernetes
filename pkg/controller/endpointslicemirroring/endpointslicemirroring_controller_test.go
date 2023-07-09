@@ -32,8 +32,8 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/leaderelection/resourcelock"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller"
 )
 
 // Most of the tests related to EndpointSlice allocation can be found in reconciler_test.go

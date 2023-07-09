@@ -17,12 +17,12 @@ limitations under the License.
 package topologymanager
 
 import (
-	"k8s.io/api/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/admission"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/containermap"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/lifecycle"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/kubelet/cm/admission"
-	"k8s.io/kubernetes/pkg/kubelet/cm/containermap"
-	"k8s.io/kubernetes/pkg/kubelet/lifecycle"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
 )
 
 type podScope struct {

@@ -25,14 +25,14 @@ import (
 	"github.com/onsi/gomega"
 	"github.com/spf13/pflag"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2econfig "k8s.io/kubernetes/test/e2e/framework/config"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2econfig "github.com/sanposhiho/kubernetes/test/e2e/framework/config"
 
 	// reconfigure framework
-	_ "k8s.io/kubernetes/test/e2e/framework/debug/init"
-	_ "k8s.io/kubernetes/test/e2e/framework/metrics/init"
-	_ "k8s.io/kubernetes/test/e2e/framework/node/init"
-	_ "k8s.io/kubernetes/test/utils/format"
+	_ "github.com/sanposhiho/kubernetes/test/e2e/framework/debug/init"
+	_ "github.com/sanposhiho/kubernetes/test/e2e/framework/metrics/init"
+	_ "github.com/sanposhiho/kubernetes/test/e2e/framework/node/init"
+	_ "github.com/sanposhiho/kubernetes/test/utils/format"
 )
 
 func TestMain(m *testing.M) {

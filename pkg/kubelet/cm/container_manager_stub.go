@@ -22,19 +22,19 @@ import (
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/memorymanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/lifecycle"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/cache"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/status"
+	schedulerframework "github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/types"
 	internalapi "k8s.io/cri-api/pkg/apis"
 	podresourcesapi "k8s.io/kubelet/pkg/apis/podresources/v1"
-	"k8s.io/kubernetes/pkg/kubelet/cm/cpumanager"
-	"k8s.io/kubernetes/pkg/kubelet/cm/memorymanager"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
-	"k8s.io/kubernetes/pkg/kubelet/config"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/lifecycle"
-	"k8s.io/kubernetes/pkg/kubelet/pluginmanager/cache"
-	"k8s.io/kubernetes/pkg/kubelet/status"
-	schedulerframework "k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
 type containerManagerStub struct {

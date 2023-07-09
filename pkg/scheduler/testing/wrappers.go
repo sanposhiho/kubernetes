@@ -19,13 +19,13 @@ package testing
 import (
 	"fmt"
 
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
 	resourcev1alpha2 "k8s.io/api/resource/v1alpha2"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	"k8s.io/utils/pointer"
 )
 

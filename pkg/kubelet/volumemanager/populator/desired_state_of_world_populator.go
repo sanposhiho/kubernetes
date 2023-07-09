@@ -29,6 +29,14 @@ import (
 
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/volumemanager/cache"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/csimigration"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util"
+	volumetypes "github.com/sanposhiho/kubernetes/pkg/volume/util/types"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -37,14 +45,6 @@ import (
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/component-helpers/storage/ephemeral"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/kubelet/config"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/volumemanager/cache"
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/csimigration"
-	"k8s.io/kubernetes/pkg/volume/util"
-	volumetypes "k8s.io/kubernetes/pkg/volume/util/types"
 )
 
 // DesiredStateOfWorldPopulator periodically loops through the list of active
@@ -76,7 +76,7 @@ type PodStateProvider interface {
 }
 
 // PodManager is the subset of methods the manager needs to observe the actual state of the kubelet.
-// See pkg/k8s.io/kubernetes/pkg/kubelet/pod.Manager for method godoc.
+// See pkg/github.com/sanposhiho/kubernetes/pkg/kubelet/pod.Manager for method godoc.
 type PodManager interface {
 	GetPodByUID(types.UID) (*v1.Pod, bool)
 	GetPods() []*v1.Pod

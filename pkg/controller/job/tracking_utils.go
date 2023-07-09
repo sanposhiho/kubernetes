@@ -20,12 +20,12 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/job/metrics"
 	batch "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller/job/metrics"
 )
 
 // uidSetKeyFunc to parse out the key from a uidSet.

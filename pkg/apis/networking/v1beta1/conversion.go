@@ -17,10 +17,10 @@ limitations under the License.
 package v1beta1
 
 import (
+	networking "github.com/sanposhiho/kubernetes/pkg/apis/networking"
 	v1beta1 "k8s.io/api/networking/v1beta1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	networking "k8s.io/kubernetes/pkg/apis/networking"
 )
 
 func Convert_v1beta1_IngressBackend_To_networking_IngressBackend(in *v1beta1.IngressBackend, out *networking.IngressBackend, s conversion.Scope) error {

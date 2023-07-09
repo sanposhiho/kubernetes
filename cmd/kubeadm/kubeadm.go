@@ -17,8 +17,8 @@ limitations under the License.
 package main
 
 import (
-	"k8s.io/kubernetes/cmd/kubeadm/app"
-	kubeadmutil "k8s.io/kubernetes/cmd/kubeadm/app/util"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app"
+	kubeadmutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util"
 )
 
 func main() {

@@ -23,6 +23,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -42,7 +43,6 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/controller-manager/pkg/informerfactory"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller"
 )
 
 // NamespacedResourcesFunc knows how to discover namespaced resources.

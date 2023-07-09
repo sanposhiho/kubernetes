@@ -38,7 +38,7 @@ export KUBE_ROOT
 # Runs benchmark integration tests, producing pretty-printed results
 # in ${WORKSPACE}/artifacts. This script can also be run within a
 # kubekins-test container with a kubernetes repo mounted (at the path
-# /go/src/k8s.io/kubernetes).
+# /go/src/github.com/sanposhiho/kubernetes).
 
 export PATH=${GOPATH}/bin:${PWD}/third_party/etcd:/usr/local/go/bin:${PATH}
 
@@ -61,7 +61,7 @@ export ARTIFACTS=${ARTIFACTS:-"${WORKSPACE}/artifacts"}
 export FULL_LOG="true"
 
 mkdir -p "${ARTIFACTS}"
-cd "${GOPATH}/src/k8s.io/kubernetes"
+cd "${GOPATH}/src/github.com/sanposhiho/kubernetes"
 
 ./hack/install-etcd.sh
 

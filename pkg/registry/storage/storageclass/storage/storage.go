@@ -17,15 +17,15 @@ limitations under the License.
 package storage
 
 import (
+	storageapi "github.com/sanposhiho/kubernetes/pkg/apis/storage"
+	"github.com/sanposhiho/kubernetes/pkg/printers"
+	printersinternal "github.com/sanposhiho/kubernetes/pkg/printers/internalversion"
+	printerstorage "github.com/sanposhiho/kubernetes/pkg/printers/storage"
+	"github.com/sanposhiho/kubernetes/pkg/registry/storage/storageclass"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
 	genericregistry "k8s.io/apiserver/pkg/registry/generic/registry"
 	"k8s.io/apiserver/pkg/registry/rest"
-	storageapi "k8s.io/kubernetes/pkg/apis/storage"
-	"k8s.io/kubernetes/pkg/printers"
-	printersinternal "k8s.io/kubernetes/pkg/printers/internalversion"
-	printerstorage "k8s.io/kubernetes/pkg/printers/storage"
-	"k8s.io/kubernetes/pkg/registry/storage/storageclass"
 )
 
 // REST implements a RESTStorage for storage classes.

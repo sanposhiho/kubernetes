@@ -31,11 +31,11 @@ import (
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/wait"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2emetrics "github.com/sanposhiho/kubernetes/test/e2e/framework/metrics"
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 	kubeletstatsv1alpha1 "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2emetrics "k8s.io/kubernetes/test/e2e/framework/metrics"
 )
 
 const (
@@ -43,15 +43,15 @@ const (
 	proxyTimeout = 2 * time.Minute
 
 	// dockerOperationsKey is the key for docker operation metrics.
-	// copied from k8s.io/kubernetes/pkg/kubelet/dockershim/metrics
+	// copied from github.com/sanposhiho/kubernetes/pkg/kubelet/dockershim/metrics
 	dockerOperationsKey = "docker_operations_total"
 
 	// dockerOperationsErrorsKey is the key for the operation error metrics.
-	// copied from k8s.io/kubernetes/pkg/kubelet/dockershim/metrics
+	// copied from github.com/sanposhiho/kubernetes/pkg/kubelet/dockershim/metrics
 	dockerOperationsErrorsKey = "docker_operations_errors_total"
 
 	// dockerOperationsTimeoutKey is the key for the operation timeout metrics.
-	// copied from k8s.io/kubernetes/pkg/kubelet/dockershim/metrics
+	// copied from github.com/sanposhiho/kubernetes/pkg/kubelet/dockershim/metrics
 	dockerOperationsTimeoutKey = "docker_operations_timeout_total"
 )
 

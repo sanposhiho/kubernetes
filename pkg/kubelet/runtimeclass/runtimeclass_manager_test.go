@@ -22,8 +22,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	"k8s.io/kubernetes/pkg/kubelet/runtimeclass"
-	rctest "k8s.io/kubernetes/pkg/kubelet/runtimeclass/testing"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/runtimeclass"
+	rctest "github.com/sanposhiho/kubernetes/pkg/kubelet/runtimeclass/testing"
 	"k8s.io/utils/pointer"
 )
 

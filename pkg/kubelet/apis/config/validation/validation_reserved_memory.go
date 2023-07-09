@@ -19,9 +19,9 @@ package validation
 import (
 	"fmt"
 
+	corev1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
 	v1 "k8s.io/api/core/v1"
-	corev1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
 )
 
 // validateReservedMemory validates the reserved memory configuration and returns an error if it is invalid.

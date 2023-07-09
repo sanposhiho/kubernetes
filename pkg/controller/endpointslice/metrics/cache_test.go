@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/util/endpoint"
 	discovery "k8s.io/api/discovery/v1"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/kubernetes/pkg/controller/util/endpoint"
 	"k8s.io/utils/pointer"
 )
 

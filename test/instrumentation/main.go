@@ -36,7 +36,7 @@ const (
 	// Should equal to final directory name of kubeMetricImportPath
 	kubeMetricsDefaultImportName = "metrics"
 
-	kubeURLRoot = "k8s.io/kubernetes/"
+	kubeURLRoot = "github.com/sanposhiho/kubernetes/"
 )
 
 var (

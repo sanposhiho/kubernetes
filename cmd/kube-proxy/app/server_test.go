@@ -26,11 +26,11 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/assert"
 
+	kubeproxyconfig "github.com/sanposhiho/kubernetes/pkg/proxy/apis/config"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientsetfake "k8s.io/client-go/kubernetes/fake"
 	componentbaseconfig "k8s.io/component-base/config"
-	kubeproxyconfig "k8s.io/kubernetes/pkg/proxy/apis/config"
 	"k8s.io/utils/pointer"
 )
 
@@ -533,7 +533,7 @@ func Test_detectNodeIPs(t *testing.T) {
 		},
 		// Disabled because the GetNodeIP method has a backoff retry mechanism
 		// and the test takes more than 30 seconds
-		// ok  	k8s.io/kubernetes/cmd/kube-proxy/app	34.136s
+		// ok  	github.com/sanposhiho/kubernetes/cmd/kube-proxy/app	34.136s
 		// {
 		//	name:           "No Valid IP found and unspecified bind address",
 		//	nodeInfo:       makeNodeWithAddresses("", "", ""),

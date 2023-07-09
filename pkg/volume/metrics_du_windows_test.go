@@ -20,7 +20,7 @@ limitations under the License.
 package volume_test
 
 import (
-	"k8s.io/kubernetes/pkg/volume/util/fs"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/fs"
 )
 
 func getExpectedBlockSize(path string) int64 {

@@ -23,9 +23,9 @@ import (
 
 	utilsexec "k8s.io/utils/exec"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
-	"k8s.io/kubernetes/cmd/kubeadm/app/preflight"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/preflight"
 )
 
 // NewPreflightPhase creates a kubeadm workflow phase that implements preflight checks for a new node join

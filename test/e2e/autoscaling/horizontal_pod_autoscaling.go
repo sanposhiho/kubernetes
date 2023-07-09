@@ -23,11 +23,11 @@ import (
 	"github.com/onsi/ginkgo/v2"
 	"k8s.io/pod-security-admission/api"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eautoscaling "github.com/sanposhiho/kubernetes/test/e2e/framework/autoscaling"
 	autoscalingv2 "k8s.io/api/autoscaling/v2"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eautoscaling "k8s.io/kubernetes/test/e2e/framework/autoscaling"
 )
 
 const (

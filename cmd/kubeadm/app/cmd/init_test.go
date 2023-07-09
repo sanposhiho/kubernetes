@@ -27,11 +27,11 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 
-	bootstraptokenv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/bootstraptoken/v1"
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmapiv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
+	bootstraptokenv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/bootstraptoken/v1"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmapiv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
 )
 
 var testInitConfig = fmt.Sprintf(`---

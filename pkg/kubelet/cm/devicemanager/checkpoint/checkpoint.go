@@ -19,9 +19,9 @@ package checkpoint
 import (
 	"encoding/json"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager/checksum"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager/checksum"
 )
 
 // DeviceManagerCheckpoint defines the operations to retrieve pod devices

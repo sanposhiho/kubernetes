@@ -21,12 +21,12 @@ import (
 	"fmt"
 	"time"
 
+	authenticationapi "github.com/sanposhiho/kubernetes/pkg/apis/authentication"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/apiserver/pkg/registry/rest"
-	authenticationapi "k8s.io/kubernetes/pkg/apis/authentication"
 )
 
 var _ interface {

@@ -17,11 +17,11 @@ limitations under the License.
 package scheme
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/proxy/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/proxy/apis/config/v1alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	"k8s.io/kubernetes/pkg/proxy/apis/config"
-	"k8s.io/kubernetes/pkg/proxy/apis/config/v1alpha1"
 )
 
 var (

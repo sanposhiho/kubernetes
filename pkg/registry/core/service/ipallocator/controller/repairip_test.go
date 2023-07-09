@@ -22,6 +22,7 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/registry/core/service/ipallocator"
 	v1 "k8s.io/api/core/v1"
 	networkingv1alpha1 "k8s.io/api/networking/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -32,7 +33,6 @@ import (
 	k8stesting "k8s.io/client-go/testing"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/events"
-	"k8s.io/kubernetes/pkg/registry/core/service/ipallocator"
 	netutils "k8s.io/utils/net"
 )
 

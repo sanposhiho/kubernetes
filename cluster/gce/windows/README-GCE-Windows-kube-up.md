@@ -184,7 +184,7 @@ use the steps below to run K8s e2e tests. These steps are based on
     ```
 
     The e2e test scripts make some annoying assumptions about the path to the
-    k8s repository. If your `~/go/src/k8s.io/kubernetes` directory is actually
+    k8s repository. If your `~/go/src/github.com/sanposhiho/kubernetes` directory is actually
     a symlink to `~/go/src/github.com/<username>/kubernetes`, create this
     additional symlink:
 

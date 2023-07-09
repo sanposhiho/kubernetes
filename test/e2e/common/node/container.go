@@ -21,12 +21,12 @@ import (
 	"fmt"
 	"time"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/uuid"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
 )
 
 const (

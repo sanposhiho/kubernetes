@@ -100,7 +100,7 @@ for repo in $(kube::util::list_staging_repos); do
   popd >/dev/null 2>&1
 done
 pushd "${_kubetmp}" >/dev/null 2>&1
-  echo "Tidying k8s.io/kubernetes..."
+  echo "Tidying github.com/sanposhiho/kubernetes..."
   GODEBUG=gocacheverify=1 go mod tidy
 popd >/dev/null 2>&1
 

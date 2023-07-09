@@ -28,13 +28,13 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
+	e2essh "github.com/sanposhiho/kubernetes/test/e2e/framework/ssh"
+	"github.com/sanposhiho/kubernetes/test/e2e/storage/podlogs"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
-	e2essh "k8s.io/kubernetes/test/e2e/framework/ssh"
-	"k8s.io/kubernetes/test/e2e/storage/podlogs"
 )
 
 // StartPodLogs begins capturing log output and events from current

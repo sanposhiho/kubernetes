@@ -22,6 +22,13 @@ import (
 	"time"
 
 	cadvisorapi "github.com/google/cadvisor/info/v1"
+	"github.com/sanposhiho/kubernetes/pkg/credentialprovider"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/images"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/lifecycle"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/logs"
+	proberesults "github.com/sanposhiho/kubernetes/pkg/kubelet/prober/results"
 	"go.opentelemetry.io/otel/trace"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -31,13 +38,6 @@ import (
 	"k8s.io/client-go/util/flowcontrol"
 	"k8s.io/component-base/logs/logreduction"
 	internalapi "k8s.io/cri-api/pkg/apis"
-	"k8s.io/kubernetes/pkg/credentialprovider"
-	"k8s.io/kubernetes/pkg/kubelet/cm"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/images"
-	"k8s.io/kubernetes/pkg/kubelet/lifecycle"
-	"k8s.io/kubernetes/pkg/kubelet/logs"
-	proberesults "k8s.io/kubernetes/pkg/kubelet/prober/results"
 	utilpointer "k8s.io/utils/pointer"
 )
 

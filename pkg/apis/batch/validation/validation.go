@@ -24,6 +24,9 @@ import (
 
 	"github.com/robfig/cron/v3"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	apivalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	unversionedvalidation "k8s.io/apimachinery/pkg/apis/meta/v1/validation"
@@ -31,9 +34,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	apimachineryvalidation "k8s.io/apimachinery/pkg/util/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/batch"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	apivalidation "k8s.io/kubernetes/pkg/apis/core/validation"
 	"k8s.io/utils/pointer"
 )
 

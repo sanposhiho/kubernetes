@@ -25,6 +25,7 @@ import (
 	"testing"
 	"time"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	networkingv1alpha1 "k8s.io/api/networking/v1alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -32,7 +33,6 @@ import (
 	"k8s.io/client-go/kubernetes/fake"
 	k8stesting "k8s.io/client-go/testing"
 	"k8s.io/component-base/metrics/testutil"
-	api "k8s.io/kubernetes/pkg/apis/core"
 	netutils "k8s.io/utils/net"
 )
 

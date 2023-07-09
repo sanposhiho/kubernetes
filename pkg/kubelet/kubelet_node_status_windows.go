@@ -20,8 +20,8 @@ limitations under the License.
 package kubelet
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/winstats"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/kubelet/winstats"
 )
 
 func getOSSpecificLabels() (map[string]string, error) {

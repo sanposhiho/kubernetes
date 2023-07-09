@@ -34,9 +34,9 @@ import (
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
 
-	"k8s.io/kubernetes/pkg/features"
-	evictionapi "k8s.io/kubernetes/pkg/kubelet/eviction/api"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	evictionapi "github.com/sanposhiho/kubernetes/pkg/kubelet/eviction/api"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 )
 
 func quantityMustParse(value string) *resource.Quantity {

@@ -22,6 +22,7 @@ import (
 	"net"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	coreinformers "k8s.io/client-go/informers/core/v1"
 	networkinginformers "k8s.io/client-go/informers/networking/v1alpha1"
@@ -33,7 +34,6 @@ import (
 	cloudprovider "k8s.io/cloud-provider"
 	controllersmetrics "k8s.io/component-base/metrics/prometheus/controllers"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller/nodeipam/ipam"
 )
 
 const (

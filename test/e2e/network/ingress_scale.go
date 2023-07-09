@@ -19,10 +19,10 @@ package network
 import (
 	"context"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	"k8s.io/kubernetes/test/e2e/network/common"
-	"k8s.io/kubernetes/test/e2e/network/scale"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	"github.com/sanposhiho/kubernetes/test/e2e/network/common"
+	"github.com/sanposhiho/kubernetes/test/e2e/network/scale"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

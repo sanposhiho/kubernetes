@@ -22,13 +22,13 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	frameworkruntime "github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/tools/events"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	frameworkruntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
 )
 
 var fakeRegistry = frameworkruntime.Registry{

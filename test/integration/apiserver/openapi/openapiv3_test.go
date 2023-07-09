@@ -27,6 +27,9 @@ import (
 	"time"
 
 	openapi_v3 "github.com/google/gnostic-models/openapiv3"
+	apiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/utils/ktesting"
 	"google.golang.org/protobuf/proto"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	"k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
@@ -39,9 +42,6 @@ import (
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	"k8s.io/kube-openapi/pkg/handler3"
 	"k8s.io/kube-openapi/pkg/spec3"
-	apiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/framework"
-	"k8s.io/kubernetes/test/utils/ktesting"
 	"sigs.k8s.io/yaml"
 )
 

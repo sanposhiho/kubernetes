@@ -21,7 +21,7 @@ import (
 
 	runtimeserializer "k8s.io/apimachinery/pkg/runtime/serializer"
 
-	"k8s.io/kubernetes/pkg/apis/admissionregistration"
+	"github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration"
 )
 
 // Funcs returns the fuzzer functions for the admissionregistration api group.

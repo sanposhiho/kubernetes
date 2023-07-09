@@ -17,10 +17,9 @@ limitations under the License.
 package cpumanager
 
 import (
-	"k8s.io/api/core/v1"
-
-	"k8s.io/kubernetes/pkg/kubelet/cm/cpumanager/state"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager/state"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/utils/cpuset"
 )
 

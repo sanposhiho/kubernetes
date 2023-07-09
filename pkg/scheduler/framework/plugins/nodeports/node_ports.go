@@ -20,10 +20,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/names"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/names"
 )
 
 // NodePorts is a plugin that checks if a node has free ports for the requested pod ports.

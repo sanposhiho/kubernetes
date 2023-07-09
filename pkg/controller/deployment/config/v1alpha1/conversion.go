@@ -17,9 +17,9 @@ limitations under the License.
 package v1alpha1
 
 import (
+	deploymentconfig "github.com/sanposhiho/kubernetes/pkg/controller/deployment/config"
 	"k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/kube-controller-manager/config/v1alpha1"
-	deploymentconfig "k8s.io/kubernetes/pkg/controller/deployment/config"
 )
 
 // Important! The public back-and-forth conversion functions for the types in this package

@@ -24,14 +24,14 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util/format"
 	v1 "k8s.io/api/core/v1"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	utilvalidation "k8s.io/apimachinery/pkg/util/validation"
 	"k8s.io/client-go/tools/record"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	"k8s.io/kubernetes/pkg/apis/core/validation"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/util/format"
 
 	"k8s.io/klog/v2"
 	utilio "k8s.io/utils/io"

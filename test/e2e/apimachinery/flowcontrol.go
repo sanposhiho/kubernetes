@@ -31,6 +31,7 @@ import (
 	"github.com/prometheus/common/expfmt"
 	"github.com/prometheus/common/model"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	flowcontrol "k8s.io/api/flowcontrol/v1beta3"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
@@ -38,7 +39,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	clientsideflowcontrol "k8s.io/client-go/util/flowcontrol"
-	"k8s.io/kubernetes/test/e2e/framework"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

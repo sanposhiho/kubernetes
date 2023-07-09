@@ -19,15 +19,15 @@ package interpodaffinity
 import (
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/validation"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/parallelize"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/names"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
 	listersv1 "k8s.io/client-go/listers/core/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config/validation"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/parallelize"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/names"
 )
 
 // Name is the name of the plugin used in the plugin registry and configurations.

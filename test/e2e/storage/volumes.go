@@ -22,12 +22,12 @@ import (
 	"context"
 
 	"github.com/onsi/ginkgo/v2"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2evolume "github.com/sanposhiho/kubernetes/test/e2e/framework/volume"
+	"github.com/sanposhiho/kubernetes/test/e2e/storage/utils"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2evolume "k8s.io/kubernetes/test/e2e/framework/volume"
-	"k8s.io/kubernetes/test/e2e/storage/utils"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

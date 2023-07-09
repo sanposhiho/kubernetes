@@ -182,9 +182,9 @@ func getConformanceData(targetFrame frame) (*ConformanceData, error) {
 	// filenames are in one of two special GOPATHs depending on if they were
 	// built dockerized or with the host go
 	// we want to trim this prefix to produce portable relative paths
-	k8sSRC := *k8sPath + "/_output/local/go/src/k8s.io/kubernetes/"
+	k8sSRC := *k8sPath + "/_output/local/go/src/github.com/sanposhiho/kubernetes/"
 	trimmedFile := strings.TrimPrefix(targetFrame.File, k8sSRC)
-	trimmedFile = strings.TrimPrefix(trimmedFile, "/go/src/k8s.io/kubernetes/_output/dockerized/go/src/k8s.io/kubernetes/")
+	trimmedFile = strings.TrimPrefix(trimmedFile, "/go/src/github.com/sanposhiho/kubernetes/_output/dockerized/go/src/github.com/sanposhiho/kubernetes/")
 	targetFrame.File = trimmedFile
 
 	freader, err := os.Open(targetFrame.File)

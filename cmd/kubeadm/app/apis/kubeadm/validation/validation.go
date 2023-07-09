@@ -36,14 +36,14 @@ import (
 	"k8s.io/klog/v2"
 	netutils "k8s.io/utils/net"
 
-	bootstraptokenv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/bootstraptoken/v1"
-	"k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmapiv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
-	kubeadmcmdoptions "k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/componentconfigs"
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/features"
-	kubeadmutil "k8s.io/kubernetes/cmd/kubeadm/app/util"
+	bootstraptokenv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/bootstraptoken/v1"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmapiv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
+	kubeadmcmdoptions "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/componentconfigs"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/features"
+	kubeadmutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util"
 )
 
 // ValidateInitConfiguration validates an InitConfiguration object and collects all encountered errors

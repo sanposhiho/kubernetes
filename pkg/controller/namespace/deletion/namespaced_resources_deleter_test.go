@@ -25,6 +25,7 @@ import (
 	"sync"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -39,7 +40,6 @@ import (
 	restclient "k8s.io/client-go/rest"
 	core "k8s.io/client-go/testing"
 	"k8s.io/klog/v2/ktesting"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 func TestFinalized(t *testing.T) {

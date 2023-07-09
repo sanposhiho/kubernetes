@@ -21,9 +21,9 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	e2evolume "k8s.io/kubernetes/test/e2e/framework/volume"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	e2evolume "github.com/sanposhiho/kubernetes/test/e2e/framework/volume"
 )
 
 // TestSuite represents an interface for a set of tests which works with TestDriver.

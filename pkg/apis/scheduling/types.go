@@ -17,8 +17,8 @@ limitations under the License.
 package scheduling
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/pkg/apis/core"
 )
 
 const (

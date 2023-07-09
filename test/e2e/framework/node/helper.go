@@ -23,13 +23,13 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
-	testutils "k8s.io/kubernetes/test/utils"
 
-	"k8s.io/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 )
 
 const (

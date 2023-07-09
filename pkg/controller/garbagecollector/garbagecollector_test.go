@@ -35,10 +35,12 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/assert"
 
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
-	"k8s.io/kubernetes/pkg/controller/garbagecollector/metaonly"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
+	"github.com/sanposhiho/kubernetes/pkg/controller/garbagecollector/metaonly"
 	"k8s.io/utils/pointer"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	c "github.com/sanposhiho/kubernetes/pkg/controller"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/api/meta/testrestmapper"
@@ -61,8 +63,6 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/controller-manager/pkg/informerfactory"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	c "k8s.io/kubernetes/pkg/controller"
 )
 
 type testRESTMapper struct {

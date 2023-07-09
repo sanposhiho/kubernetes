@@ -28,7 +28,7 @@ import (
 	_ "k8s.io/component-base/logs/testinit"
 	"k8s.io/klog/v2"
 	"k8s.io/klog/v2/ktesting"
-	// "k8s.io/kubernetes/test/utils/format"
+	// "github.com/sanposhiho/kubernetes/test/utils/format"
 )
 
 func init() {

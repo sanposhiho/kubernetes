@@ -21,7 +21,7 @@ import (
 
 	"github.com/lithammer/dedent"
 
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
 )
 
 func TestEncryptAndDecryptData(t *testing.T) {

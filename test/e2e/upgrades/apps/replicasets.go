@@ -20,16 +20,16 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ereplicaset "github.com/sanposhiho/kubernetes/test/e2e/framework/replicaset"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ereplicaset "k8s.io/kubernetes/test/e2e/framework/replicaset"
-	"k8s.io/kubernetes/test/e2e/upgrades"
 
 	"github.com/onsi/ginkgo/v2"
-	imageutils "k8s.io/kubernetes/test/utils/image"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 )
 
 const (

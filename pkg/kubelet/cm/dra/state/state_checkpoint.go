@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager/errors"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager/errors"
 )
 
 var _ CheckpointState = &stateCheckpoint{}

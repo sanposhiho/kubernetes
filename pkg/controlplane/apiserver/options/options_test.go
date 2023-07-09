@@ -37,7 +37,7 @@ import (
 	"k8s.io/component-base/metrics"
 	netutils "k8s.io/utils/net"
 
-	kubeoptions "k8s.io/kubernetes/pkg/kubeapiserver/options"
+	kubeoptions "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/options"
 )
 
 func TestAddFlags(t *testing.T) {

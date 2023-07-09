@@ -33,10 +33,10 @@ import (
 	tracing "k8s.io/component-base/tracing"
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util"
 	internalapi "k8s.io/cri-api/pkg/apis"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/kubelet/util"
 )
 
 // remoteImageService is a gRPC implementation of internalapi.ImageManagerService.

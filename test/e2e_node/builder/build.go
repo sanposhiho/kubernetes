@@ -24,8 +24,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/test/utils"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/test/utils"
 )
 
 var k8sBinDir = flag.String("k8s-bin-dir", "", "Directory containing k8s kubelet binaries.")

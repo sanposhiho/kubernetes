@@ -22,8 +22,8 @@ import (
 	"os/exec"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/utils"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/test/utils"
 )
 
 // CAdvisorE2ERemote contains the specific functions in the cadvisor e2e test suite.

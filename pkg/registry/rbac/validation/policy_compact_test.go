@@ -21,9 +21,9 @@ import (
 	"sort"
 	"testing"
 
+	rbacv1helpers "github.com/sanposhiho/kubernetes/pkg/apis/rbac/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	"k8s.io/component-helpers/auth/rbac/validation"
-	rbacv1helpers "k8s.io/kubernetes/pkg/apis/rbac/v1"
 )
 
 func TestCompactRules(t *testing.T) {

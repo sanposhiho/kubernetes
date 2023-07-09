@@ -24,6 +24,7 @@ import (
 	"strings"
 	"time"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"golang.org/x/sync/singleflight"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -37,7 +38,6 @@ import (
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	corev1listers "k8s.io/client-go/listers/core/v1"
-	api "k8s.io/kubernetes/pkg/apis/core"
 	"k8s.io/utils/lru"
 )
 

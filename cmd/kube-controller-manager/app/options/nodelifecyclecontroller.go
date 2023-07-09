@@ -21,8 +21,8 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"k8s.io/kubernetes/cmd/kube-controller-manager/names"
-	nodelifecycleconfig "k8s.io/kubernetes/pkg/controller/nodelifecycle/config"
+	"github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/names"
+	nodelifecycleconfig "github.com/sanposhiho/kubernetes/pkg/controller/nodelifecycle/config"
 )
 
 // NodeLifecycleControllerOptions holds the NodeLifecycleController options.

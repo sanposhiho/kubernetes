@@ -19,10 +19,10 @@ package bind
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
+	testutil "github.com/sanposhiho/kubernetes/test/integration/util"
 	corev1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
-	testutil "k8s.io/kubernetes/test/integration/util"
 )
 
 // TestDefaultBinder tests the binding process in the scheduler.

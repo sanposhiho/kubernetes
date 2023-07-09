@@ -27,17 +27,17 @@ import (
 	"testing"
 	"time"
 
+	kubepod "github.com/sanposhiho/kubernetes/pkg/kubelet/pod"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/prober/results"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/status"
+	statustest "github.com/sanposhiho/kubernetes/pkg/kubelet/status/testing"
+	kubeletutil "github.com/sanposhiho/kubernetes/pkg/kubelet/util"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/kubernetes/fake"
 	"k8s.io/client-go/tools/record"
-	kubepod "k8s.io/kubernetes/pkg/kubelet/pod"
-	"k8s.io/kubernetes/pkg/kubelet/prober/results"
-	"k8s.io/kubernetes/pkg/kubelet/status"
-	statustest "k8s.io/kubernetes/pkg/kubelet/status/testing"
-	kubeletutil "k8s.io/kubernetes/pkg/kubelet/util"
 	utilpointer "k8s.io/utils/pointer"
 )
 

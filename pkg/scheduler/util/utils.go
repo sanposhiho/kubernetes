@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"time"
 
+	v1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -35,7 +36,6 @@ import (
 	corev1helpers "k8s.io/component-helpers/scheduling/corev1"
 	"k8s.io/klog/v2"
 	extenderv1 "k8s.io/kube-scheduler/extender/v1"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
 )
 
 // GetPodFullName returns a name that uniquely identifies a pod.

@@ -24,6 +24,7 @@ import (
 
 	"k8s.io/klog/v2"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -34,7 +35,6 @@ import (
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	corev1listers "k8s.io/client-go/listers/core/v1"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 // NamespaceNodeSelectors is for assigning node selectors labels to

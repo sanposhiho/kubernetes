@@ -21,10 +21,10 @@ import (
 	"strings"
 	"time"
 
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 )
 
 // npbISWorkload defines a workload to run the integer sort (IS) workload

@@ -17,11 +17,11 @@ limitations under the License.
 package ensurer
 
 import (
+	flowcontrolapisv1beta3 "github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol/v1beta3"
 	flowcontrolv1beta3 "k8s.io/api/flowcontrol/v1beta3"
 	"k8s.io/apimachinery/pkg/api/equality"
 	flowcontrolclient "k8s.io/client-go/kubernetes/typed/flowcontrol/v1beta3"
 	flowcontrollisters "k8s.io/client-go/listers/flowcontrol/v1beta3"
-	flowcontrolapisv1beta3 "k8s.io/kubernetes/pkg/apis/flowcontrol/v1beta3"
 )
 
 func NewPriorityLevelConfigurationOps(client flowcontrolclient.PriorityLevelConfigurationInterface, lister flowcontrollisters.PriorityLevelConfigurationLister) ObjectOps[*flowcontrolv1beta3.PriorityLevelConfiguration] {

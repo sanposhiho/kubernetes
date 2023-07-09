@@ -23,13 +23,13 @@ import (
 
 	"github.com/google/cel-go/cel"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apimachinery/pkg/util/version"
 	plugincel "k8s.io/apiserver/pkg/admission/plugin/cel"
 	"k8s.io/apiserver/pkg/cel/environment"
 	"k8s.io/apiserver/pkg/cel/library"
-	"k8s.io/kubernetes/pkg/apis/admissionregistration"
 )
 
 func strPtr(s string) *string { return &s }

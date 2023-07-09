@@ -20,10 +20,10 @@ import (
 	"context"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
-	api "k8s.io/kubernetes/pkg/apis/core"
 	utilpointer "k8s.io/utils/pointer"
 )
 

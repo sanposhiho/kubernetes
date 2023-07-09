@@ -28,11 +28,11 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	admissionapi "k8s.io/pod-security-admission/api"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
-	e2epv "k8s.io/kubernetes/test/e2e/framework/pv"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	"k8s.io/kubernetes/test/e2e/storage/utils"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
+	e2epv "github.com/sanposhiho/kubernetes/test/e2e/framework/pv"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	"github.com/sanposhiho/kubernetes/test/e2e/storage/utils"
 )
 
 const (

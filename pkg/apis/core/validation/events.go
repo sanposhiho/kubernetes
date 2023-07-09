@@ -21,6 +21,7 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
 	v1 "k8s.io/api/core/v1"
 	eventsv1beta1 "k8s.io/api/events/v1beta1"
 	apimachineryvalidation "k8s.io/apimachinery/pkg/api/validation"
@@ -28,7 +29,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/core"
 )
 
 const (

@@ -30,9 +30,9 @@ import (
 	// Enable pprof HTTP handlers.
 	_ "net/http/pprof"
 
-	"k8s.io/kubernetes/pkg/proxy"
-	proxyconfigapi "k8s.io/kubernetes/pkg/proxy/apis/config"
-	"k8s.io/kubernetes/pkg/proxy/winkernel"
+	"github.com/sanposhiho/kubernetes/pkg/proxy"
+	proxyconfigapi "github.com/sanposhiho/kubernetes/pkg/proxy/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/proxy/winkernel"
 )
 
 // platformApplyDefaults is called after parsing command-line flags and/or reading the

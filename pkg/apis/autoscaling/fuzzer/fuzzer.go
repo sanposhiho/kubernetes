@@ -19,11 +19,11 @@ package fuzzer
 import (
 	fuzz "github.com/google/gofuzz"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtimeserializer "k8s.io/apimachinery/pkg/runtime/serializer"
-	"k8s.io/kubernetes/pkg/apis/autoscaling"
-	api "k8s.io/kubernetes/pkg/apis/core"
 	"k8s.io/utils/pointer"
 )
 

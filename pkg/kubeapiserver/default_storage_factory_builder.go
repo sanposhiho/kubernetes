@@ -19,21 +19,21 @@ package kubeapiserver
 import (
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration"
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	"github.com/sanposhiho/kubernetes/pkg/apis/certificates"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/events"
+	"github.com/sanposhiho/kubernetes/pkg/apis/extensions"
+	"github.com/sanposhiho/kubernetes/pkg/apis/networking"
+	"github.com/sanposhiho/kubernetes/pkg/apis/policy"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	serveroptions "k8s.io/apiserver/pkg/server/options"
 	"k8s.io/apiserver/pkg/server/resourceconfig"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
 	"k8s.io/apiserver/pkg/storage/storagebackend"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/admissionregistration"
-	"k8s.io/kubernetes/pkg/apis/apps"
-	"k8s.io/kubernetes/pkg/apis/certificates"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/events"
-	"k8s.io/kubernetes/pkg/apis/extensions"
-	"k8s.io/kubernetes/pkg/apis/networking"
-	"k8s.io/kubernetes/pkg/apis/policy"
 )
 
 // SpecialDefaultResourcePrefixes are prefixes compiled into Kubernetes.

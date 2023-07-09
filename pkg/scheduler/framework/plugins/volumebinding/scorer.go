@@ -19,7 +19,7 @@ package volumebinding
 import (
 	"math"
 
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/helper"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/helper"
 )
 
 // classResourceMap holds a map of storage class to resource.

@@ -22,10 +22,10 @@ package app
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/disruption"
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/scale"
 	"k8s.io/controller-manager/controller"
-	"k8s.io/kubernetes/pkg/controller/disruption"
 )
 
 func startDisruptionController(ctx context.Context, controllerContext ControllerContext) (controller.Interface, bool, error) {

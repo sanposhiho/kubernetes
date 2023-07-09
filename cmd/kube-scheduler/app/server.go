@@ -26,6 +26,14 @@ import (
 
 	"github.com/spf13/cobra"
 
+	schedulerserverconfig "github.com/sanposhiho/kubernetes/cmd/kube-scheduler/app/config"
+	"github.com/sanposhiho/kubernetes/cmd/kube-scheduler/app/options"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler"
+	kubeschedulerconfig "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/latest"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/metrics/resources"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/profile"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apiserver/pkg/authentication/authenticator"
@@ -54,14 +62,6 @@ import (
 	"k8s.io/component-base/version"
 	"k8s.io/component-base/version/verflag"
 	"k8s.io/klog/v2"
-	schedulerserverconfig "k8s.io/kubernetes/cmd/kube-scheduler/app/config"
-	"k8s.io/kubernetes/cmd/kube-scheduler/app/options"
-	"k8s.io/kubernetes/pkg/scheduler"
-	kubeschedulerconfig "k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config/latest"
-	"k8s.io/kubernetes/pkg/scheduler/framework/runtime"
-	"k8s.io/kubernetes/pkg/scheduler/metrics/resources"
-	"k8s.io/kubernetes/pkg/scheduler/profile"
 )
 
 func init() {

@@ -161,8 +161,8 @@ status:
     - nginx:latest
     sizeBytes: 109357355
   - names:
-    - registry.k8s.io/kubernetes-dashboard-amd64@sha256:dc4026c1b595435ef5527ca598e1e9c4343076926d7d62b365c44831395adbd0
-    - registry.k8s.io/kubernetes-dashboard-amd64:v1.8.3
+    - registry.github.com/sanposhiho/kubernetes-dashboard-amd64@sha256:dc4026c1b595435ef5527ca598e1e9c4343076926d7d62b365c44831395adbd0
+    - registry.github.com/sanposhiho/kubernetes-dashboard-amd64:v1.8.3
     sizeBytes: 102319441
   - names:
     - gcr.io/google_containers/kube-proxy:v1.11.10-gke.5

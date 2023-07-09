@@ -21,6 +21,14 @@ import (
 	"testing"
 	"time"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodelifecycle"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/plugin/pkg/admission/defaulttolerationseconds"
+	"github.com/sanposhiho/kubernetes/plugin/pkg/admission/podtolerationrestriction"
+	pluginapi "github.com/sanposhiho/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction"
+	testutils "github.com/sanposhiho/kubernetes/test/integration/util"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -32,14 +40,6 @@ import (
 	restclient "k8s.io/client-go/rest"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	"k8s.io/klog/v2"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/pkg/controller/nodelifecycle"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/plugin/pkg/admission/defaulttolerationseconds"
-	"k8s.io/kubernetes/plugin/pkg/admission/podtolerationrestriction"
-	pluginapi "k8s.io/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction"
-	testutils "k8s.io/kubernetes/test/integration/util"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 )
 
 // TestEvictionForNoExecuteTaintAddedByUser tests taint-based eviction for a node tainted NoExecute

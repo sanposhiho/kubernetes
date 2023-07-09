@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"os"
 
+	v1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/cache"
 	core "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
 	api "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	"k8s.io/kubernetes/pkg/kubelet/pluginmanager/cache"
 )
 
 func (s *server) GetPluginHandler() cache.PluginHandler {

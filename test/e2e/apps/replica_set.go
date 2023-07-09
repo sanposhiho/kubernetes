@@ -31,6 +31,11 @@ import (
 	watchtools "k8s.io/client-go/tools/watch"
 	"k8s.io/client-go/util/retry"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/replicaset"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2ereplicaset "github.com/sanposhiho/kubernetes/test/e2e/framework/replicaset"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -40,15 +45,10 @@ import (
 	"k8s.io/apimachinery/pkg/util/rand"
 	"k8s.io/apimachinery/pkg/util/uuid"
 	"k8s.io/apimachinery/pkg/util/wait"
-	"k8s.io/kubernetes/pkg/controller/replicaset"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2ereplicaset "k8s.io/kubernetes/test/e2e/framework/replicaset"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"
-	imageutils "k8s.io/kubernetes/test/utils/image"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 )
 
 const (

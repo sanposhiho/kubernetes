@@ -20,7 +20,7 @@ import (
 	"container/heap"
 	"testing"
 
-	"k8s.io/kubernetes/pkg/controller/nodeipam/ipam/multicidrset"
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam/multicidrset"
 	utilnet "k8s.io/utils/net"
 )
 

@@ -29,7 +29,7 @@ var SchemeGroupVersion = schema.GroupVersion{Group: GroupName, Version: "v1alpha
 
 var (
 	// TODO: move SchemeBuilder with zz_generated.deepcopy.go to k8s.io/api.
-	// localSchemeBuilder and AddToScheme will stay in k8s.io/kubernetes.
+	// localSchemeBuilder and AddToScheme will stay in github.com/sanposhiho/kubernetes.
 
 	// SchemeBuilder is a pointer used to call AddToScheme
 	SchemeBuilder      runtime.SchemeBuilder

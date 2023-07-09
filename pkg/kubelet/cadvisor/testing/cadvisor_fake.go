@@ -20,7 +20,7 @@ import (
 	"github.com/google/cadvisor/events"
 	cadvisorapi "github.com/google/cadvisor/info/v1"
 	cadvisorapiv2 "github.com/google/cadvisor/info/v2"
-	"k8s.io/kubernetes/pkg/kubelet/cadvisor"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cadvisor"
 )
 
 // Fake cadvisor.Interface implementation.

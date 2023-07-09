@@ -19,7 +19,7 @@ package options
 import (
 	"github.com/spf13/pflag"
 
-	serviceaccountconfig "k8s.io/kubernetes/pkg/controller/serviceaccount/config"
+	serviceaccountconfig "github.com/sanposhiho/kubernetes/pkg/controller/serviceaccount/config"
 )
 
 // LegacySATokenCleanerOptions holds the LegacySATokenCleaner options.

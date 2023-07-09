@@ -17,12 +17,12 @@ limitations under the License.
 package validation
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
+	corevalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
+	"github.com/sanposhiho/kubernetes/pkg/apis/node"
 	apivalidation "k8s.io/apimachinery/pkg/api/validation"
 	unversionedvalidation "k8s.io/apimachinery/pkg/apis/meta/v1/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/core"
-	corevalidation "k8s.io/kubernetes/pkg/apis/core/validation"
-	"k8s.io/kubernetes/pkg/apis/node"
 )
 
 // ValidateRuntimeClass validates the RuntimeClass

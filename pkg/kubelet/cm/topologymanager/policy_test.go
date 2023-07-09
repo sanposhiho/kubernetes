@@ -20,8 +20,8 @@ import (
 	"reflect"
 	"testing"
 
-	"k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
+	v1 "k8s.io/api/core/v1"
 )
 
 type policyMergeTestCase struct {

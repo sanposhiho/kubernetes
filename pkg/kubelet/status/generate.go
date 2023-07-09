@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"strings"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	runtimeutil "github.com/sanposhiho/kubernetes/pkg/kubelet/kuberuntime/util"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	v1 "k8s.io/api/core/v1"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	runtimeutil "k8s.io/kubernetes/pkg/kubelet/kuberuntime/util"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 )
 
 const (

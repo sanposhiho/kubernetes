@@ -19,9 +19,9 @@ package v1
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/scheduling"
 	v1 "k8s.io/api/scheduling/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/pkg/apis/scheduling"
 )
 
 func TestIsKnownSystemPriorityClass(t *testing.T) {

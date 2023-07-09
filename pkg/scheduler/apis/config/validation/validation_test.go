@@ -21,12 +21,12 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	configv1 "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/v1"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/v1beta3"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	componentbaseconfig "k8s.io/component-base/config"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	configv1 "k8s.io/kubernetes/pkg/scheduler/apis/config/v1"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config/v1beta3"
 	"k8s.io/utils/pointer"
 )
 

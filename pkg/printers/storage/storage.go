@@ -20,9 +20,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/printers"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/kubernetes/pkg/printers"
 )
 
 // TableConvertor struct - converts objects to metav1.Table using printers.TableGenerator

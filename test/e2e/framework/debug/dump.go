@@ -24,14 +24,14 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2emetrics "github.com/sanposhiho/kubernetes/test/e2e/framework/metrics"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2emetrics "k8s.io/kubernetes/test/e2e/framework/metrics"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
 )
 
 // EventsLister is a func that lists events.

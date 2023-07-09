@@ -20,7 +20,7 @@ import (
 	"errors"
 	"fmt"
 
-	"k8s.io/kubernetes/pkg/kubelet/lifecycle"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/lifecycle"
 )
 
 const (

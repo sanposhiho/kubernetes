@@ -24,13 +24,13 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	instrumentation "github.com/sanposhiho/kubernetes/test/e2e/instrumentation/common"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	instrumentation "k8s.io/kubernetes/test/e2e/instrumentation/common"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

@@ -20,6 +20,9 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	apivalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	apimachineryvalidation "k8s.io/apimachinery/pkg/api/validation"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,9 +31,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/util/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/apps"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	apivalidation "k8s.io/kubernetes/pkg/apis/core/validation"
 )
 
 // ValidateStatefulSetName can be used to check whether the given StatefulSet name is valid.

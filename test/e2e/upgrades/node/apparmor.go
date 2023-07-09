@@ -19,14 +19,14 @@ package node
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2esecurity "github.com/sanposhiho/kubernetes/test/e2e/framework/security"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2esecurity "k8s.io/kubernetes/test/e2e/framework/security"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	"k8s.io/kubernetes/test/e2e/upgrades"
 
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"

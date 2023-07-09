@@ -19,6 +19,9 @@ package storage
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/registry/registrytest"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/internalversion"
@@ -32,9 +35,6 @@ import (
 	"k8s.io/apiserver/pkg/registry/rest"
 	etcd3testing "k8s.io/apiserver/pkg/storage/etcd3/testing"
 	"k8s.io/apiserver/pkg/warning"
-	"k8s.io/kubernetes/pkg/apis/batch"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/registry/registrytest"
 )
 
 func newStorage(t *testing.T) (*JobStorage, *etcd3testing.EtcdTestServer) {

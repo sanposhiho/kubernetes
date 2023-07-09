@@ -20,15 +20,15 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	autoscaling "github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
 	appsv1beta2 "k8s.io/api/apps/v1beta2"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/kubernetes/pkg/apis/apps"
-	autoscaling "k8s.io/kubernetes/pkg/apis/autoscaling"
-	"k8s.io/kubernetes/pkg/apis/core"
 )
 
 func addConversionFuncs(scheme *runtime.Scheme) error {

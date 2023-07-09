@@ -33,14 +33,14 @@ import (
 	"k8s.io/klog/v2"
 	utilsnet "k8s.io/utils/net"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/features"
-	"k8s.io/kubernetes/cmd/kubeadm/app/images"
-	kubeadmutil "k8s.io/kubernetes/cmd/kubeadm/app/util"
-	etcdutil "k8s.io/kubernetes/cmd/kubeadm/app/util/etcd"
-	staticpodutil "k8s.io/kubernetes/cmd/kubeadm/app/util/staticpod"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/users"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/features"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/images"
+	kubeadmutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util"
+	etcdutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/etcd"
+	staticpodutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/staticpod"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/users"
 )
 
 const (

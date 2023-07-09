@@ -21,10 +21,10 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/resource"
 	"k8s.io/utils/pointer"
 )
 

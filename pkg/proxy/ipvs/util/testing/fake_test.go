@@ -19,7 +19,7 @@ package testing
 import (
 	"testing"
 
-	utilipvs "k8s.io/kubernetes/pkg/proxy/ipvs/util"
+	utilipvs "github.com/sanposhiho/kubernetes/pkg/proxy/ipvs/util"
 	netutils "k8s.io/utils/net"
 )
 

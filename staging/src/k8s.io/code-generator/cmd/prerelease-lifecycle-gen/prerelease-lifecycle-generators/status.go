@@ -243,7 +243,7 @@ func Packages(context *generator.Context, arguments *args.GeneratorArgs) generat
 		if pkgNeedsGeneration {
 			path := pkg.Path
 			// if the source path is within a /vendor/ directory (for example,
-			// k8s.io/kubernetes/vendor/k8s.io/apimachinery/pkg/apis/meta/v1), allow
+			// github.com/sanposhiho/kubernetes/vendor/k8s.io/apimachinery/pkg/apis/meta/v1), allow
 			// generation to output to the proper relative path (under vendor).
 			// Otherwise, the generator will create the file in the wrong location
 			// in the output directory.

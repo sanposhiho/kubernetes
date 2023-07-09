@@ -20,14 +20,14 @@ import (
 	"context"
 	"fmt"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 )
 
 // MirrorClient knows how to create/delete a mirror pod in the API server.

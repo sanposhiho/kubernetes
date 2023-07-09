@@ -23,14 +23,14 @@ import (
 	"strconv"
 	"strings"
 
+	apivalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
+	kubeproxyconfig "github.com/sanposhiho/kubernetes/pkg/proxy/apis/config"
 	utilnet "k8s.io/apimachinery/pkg/util/net"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	componentbaseconfig "k8s.io/component-base/config"
 	"k8s.io/component-base/metrics"
-	apivalidation "k8s.io/kubernetes/pkg/apis/core/validation"
-	kubeproxyconfig "k8s.io/kubernetes/pkg/proxy/apis/config"
 	netutils "k8s.io/utils/net"
 )
 

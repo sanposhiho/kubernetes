@@ -22,12 +22,12 @@ import (
 
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/admission"
 	"k8s.io/apiserver/pkg/authentication/user"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 func Test_nodeTaints(t *testing.T) {

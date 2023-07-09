@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"testing"
 
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
 )
 
 func TestValidateReservedMemoryConfiguration(t *testing.T) {

@@ -20,10 +20,10 @@ import (
 	"context"
 	"fmt"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	"k8s.io/kubernetes/test/e2e/storage/utils"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	"github.com/sanposhiho/kubernetes/test/e2e/storage/utils"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

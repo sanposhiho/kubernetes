@@ -21,12 +21,12 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/internal/cache"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/runtime"
-	"k8s.io/kubernetes/pkg/scheduler/internal/cache"
 )
 
 func nodeWithTaints(nodeName string, taints []v1.Taint) *v1.Node {

@@ -21,12 +21,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eautoscaling "github.com/sanposhiho/kubernetes/test/e2e/framework/autoscaling"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eautoscaling "k8s.io/kubernetes/test/e2e/framework/autoscaling"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

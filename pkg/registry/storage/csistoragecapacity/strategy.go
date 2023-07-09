@@ -19,14 +19,14 @@ package csistoragecapacity
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	storageutil "github.com/sanposhiho/kubernetes/pkg/api/storage"
+	"github.com/sanposhiho/kubernetes/pkg/apis/storage"
+	"github.com/sanposhiho/kubernetes/pkg/apis/storage/validation"
 	metav1validation "k8s.io/apimachinery/pkg/apis/meta/v1/validation"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apiserver/pkg/storage/names"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	storageutil "k8s.io/kubernetes/pkg/api/storage"
-	"k8s.io/kubernetes/pkg/apis/storage"
-	"k8s.io/kubernetes/pkg/apis/storage/validation"
 )
 
 // csiStorageCapacityStrategy implements behavior for CSIStorageCapacity objects

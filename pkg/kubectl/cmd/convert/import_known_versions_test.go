@@ -21,10 +21,10 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/kubernetes/scheme"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
 )
 
 func TestKnownVersions(t *testing.T) {

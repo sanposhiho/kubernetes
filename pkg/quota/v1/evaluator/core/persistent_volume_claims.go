@@ -20,6 +20,9 @@ import (
 	"fmt"
 	"strings"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	k8s_api_v1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
+	k8sfeatures "github.com/sanposhiho/kubernetes/pkg/features"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -29,9 +32,6 @@ import (
 	"k8s.io/apiserver/pkg/quota/v1/generic"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	storagehelpers "k8s.io/component-helpers/storage/volume"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	k8s_api_v1 "k8s.io/kubernetes/pkg/apis/core/v1"
-	k8sfeatures "k8s.io/kubernetes/pkg/features"
 )
 
 // the name used for object count quota

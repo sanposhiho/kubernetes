@@ -24,13 +24,13 @@ import (
 
 	"k8s.io/mount-utils"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cadvisor"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/status"
 	v1 "k8s.io/api/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/record"
 	internalapi "k8s.io/cri-api/pkg/apis"
-	"k8s.io/kubernetes/pkg/kubelet/cadvisor"
-	"k8s.io/kubernetes/pkg/kubelet/config"
-	"k8s.io/kubernetes/pkg/kubelet/status"
 )
 
 type unsupportedContainerManager struct {

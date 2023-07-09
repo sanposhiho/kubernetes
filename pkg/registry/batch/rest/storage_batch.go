@@ -17,22 +17,22 @@ limitations under the License.
 package rest
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	cronjobstore "github.com/sanposhiho/kubernetes/pkg/registry/batch/cronjob/storage"
+	jobstore "github.com/sanposhiho/kubernetes/pkg/registry/batch/job/storage"
 	batchapiv1 "k8s.io/api/batch/v1"
 	"k8s.io/apiserver/pkg/registry/generic"
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/batch"
-	cronjobstore "k8s.io/kubernetes/pkg/registry/batch/cronjob/storage"
-	jobstore "k8s.io/kubernetes/pkg/registry/batch/job/storage"
 )
 
 type RESTStorageProvider struct{}
 
 func (p RESTStorageProvider) NewRESTStorage(apiResourceConfigSource serverstorage.APIResourceConfigSource, restOptionsGetter generic.RESTOptionsGetter) (genericapiserver.APIGroupInfo, error) {
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(batch.GroupName, legacyscheme.Scheme, legacyscheme.ParameterCodec, legacyscheme.Codecs)
-	// If you add a version here, be sure to add an entry in `k8s.io/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
+	// If you add a version here, be sure to add an entry in `github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
 	// TODO refactor the plumbing to provide the information in the APIGroupInfo
 
 	if storageMap, err := p.v1Storage(apiResourceConfigSource, restOptionsGetter); err != nil {

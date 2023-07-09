@@ -24,9 +24,9 @@ import (
 	"testing"
 
 	"github.com/fsnotify/fsnotify"
+	utilfs "github.com/sanposhiho/kubernetes/pkg/util/filesystem"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
 	"github.com/stretchr/testify/assert"
-	utilfs "k8s.io/kubernetes/pkg/util/filesystem"
-	"k8s.io/kubernetes/pkg/volume"
 	"k8s.io/utils/exec"
 )
 

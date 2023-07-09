@@ -21,13 +21,13 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/storage/install"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	storagev1beta1 "k8s.io/api/storage/v1beta1"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	_ "k8s.io/kubernetes/pkg/apis/storage/install"
-	"k8s.io/kubernetes/pkg/features"
 )
 
 func roundTrip(t *testing.T, obj runtime.Object) runtime.Object {

@@ -20,8 +20,8 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/bootstrap"
 	"k8s.io/controller-manager/controller"
-	"k8s.io/kubernetes/pkg/controller/bootstrap"
 )
 
 func startBootstrapSignerController(ctx context.Context, controllerContext ControllerContext) (controller.Interface, bool, error) {

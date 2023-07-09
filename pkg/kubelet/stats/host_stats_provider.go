@@ -22,12 +22,12 @@ import (
 	"path/filepath"
 
 	cadvisorapiv2 "github.com/google/cadvisor/info/v2"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/kuberuntime"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/kuberuntime"
-	"k8s.io/kubernetes/pkg/volume"
 )
 
 // PodEtcHostsPathFunc is a function to fetch a etc hosts path by pod uid and whether etc host path is supported by the runtime

@@ -15,10 +15,10 @@ limitations under the License.
 */
 
 // +k8s:deepcopy-gen=package
-// +k8s:conversion-gen=k8s.io/kubernetes/pkg/scheduler/apis/config
+// +k8s:conversion-gen=github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config
 // +k8s:conversion-gen-external-types=k8s.io/kube-scheduler/config/v1beta3
 // +k8s:defaulter-gen=TypeMeta
 // +k8s:defaulter-gen-input=k8s.io/kube-scheduler/config/v1beta3
 // +groupName=kubescheduler.config.k8s.io
 
-package v1beta3 // import "k8s.io/kubernetes/pkg/scheduler/apis/config/v1beta3"
+package v1beta3 // import "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/v1beta3"

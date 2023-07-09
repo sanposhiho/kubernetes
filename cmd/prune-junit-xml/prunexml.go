@@ -24,7 +24,7 @@ import (
 	"os"
 	"regexp"
 
-	"k8s.io/kubernetes/third_party/forked/gotestsum/junitxml"
+	"github.com/sanposhiho/kubernetes/third_party/forked/gotestsum/junitxml"
 )
 
 func main() {

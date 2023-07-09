@@ -22,13 +22,13 @@ import (
 
 	"k8s.io/utils/pointer"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	crdclientset "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/apiextensions-apiserver/test/integration/fixtures"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 // CleanCrdFn declares the clean up function needed to remove the CRD

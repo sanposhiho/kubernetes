@@ -19,16 +19,16 @@ package storage
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/apiserverinternal"
+	"github.com/sanposhiho/kubernetes/pkg/printers"
+	printersinternal "github.com/sanposhiho/kubernetes/pkg/printers/internalversion"
+	printerstorage "github.com/sanposhiho/kubernetes/pkg/printers/storage"
+	strategy "github.com/sanposhiho/kubernetes/pkg/registry/apiserverinternal/storageversion"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
 	genericregistry "k8s.io/apiserver/pkg/registry/generic/registry"
 	"k8s.io/apiserver/pkg/registry/rest"
-	"k8s.io/kubernetes/pkg/apis/apiserverinternal"
-	"k8s.io/kubernetes/pkg/printers"
-	printersinternal "k8s.io/kubernetes/pkg/printers/internalversion"
-	printerstorage "k8s.io/kubernetes/pkg/printers/storage"
-	strategy "k8s.io/kubernetes/pkg/registry/apiserverinternal/storageversion"
 	"sigs.k8s.io/structured-merge-diff/v4/fieldpath"
 )
 

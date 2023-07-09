@@ -23,6 +23,13 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2edebug "github.com/sanposhiho/kubernetes/test/e2e/framework/debug"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
+	e2erc "github.com/sanposhiho/kubernetes/test/e2e/framework/rc"
+	e2eresource "github.com/sanposhiho/kubernetes/test/e2e/framework/resource"
+	e2eservice "github.com/sanposhiho/kubernetes/test/e2e/framework/service"
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	autoscalingv2 "k8s.io/api/autoscaling/v2"
 	v1 "k8s.io/api/core/v1"
@@ -40,18 +47,11 @@ import (
 	"k8s.io/client-go/dynamic"
 	clientset "k8s.io/client-go/kubernetes"
 	scaleclient "k8s.io/client-go/scale"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2edebug "k8s.io/kubernetes/test/e2e/framework/debug"
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
-	e2erc "k8s.io/kubernetes/test/e2e/framework/rc"
-	e2eresource "k8s.io/kubernetes/test/e2e/framework/resource"
-	e2eservice "k8s.io/kubernetes/test/e2e/framework/service"
-	testutils "k8s.io/kubernetes/test/utils"
 	utilpointer "k8s.io/utils/pointer"
 
 	"github.com/onsi/ginkgo/v2"
 
-	imageutils "k8s.io/kubernetes/test/utils/image"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 )
 
 const (

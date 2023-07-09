@@ -23,9 +23,9 @@ import (
 	"runtime"
 	"time"
 
+	servermetrics "github.com/sanposhiho/kubernetes/pkg/kubelet/server/metrics"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	servermetrics "k8s.io/kubernetes/pkg/kubelet/server/metrics"
 )
 
 var _ MetricsProvider = &metricsBlock{}

@@ -22,6 +22,8 @@ import (
 	"testing"
 	"time"
 
+	apiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	"github.com/stretchr/testify/assert"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	"k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
@@ -33,8 +35,6 @@ import (
 	kubernetes "k8s.io/client-go/kubernetes"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	"k8s.io/kube-openapi/pkg/spec3"
-	apiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 const scaleSchemaName = "io.k8s.api.autoscaling.v1.Scale"

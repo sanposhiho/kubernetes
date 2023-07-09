@@ -29,6 +29,13 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
+	"github.com/sanposhiho/kubernetes/pkg/apis/scheduling"
+	pkgfeatures "github.com/sanposhiho/kubernetes/pkg/features"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/eviction"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/nodeshutdown/systemd"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/prober"
+	probetest "github.com/sanposhiho/kubernetes/pkg/kubelet/prober/testing"
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -38,13 +45,6 @@ import (
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	"k8s.io/klog/v2/ktesting"
 	_ "k8s.io/klog/v2/ktesting/init" // activate ktesting command line flags
-	"k8s.io/kubernetes/pkg/apis/scheduling"
-	pkgfeatures "k8s.io/kubernetes/pkg/features"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	"k8s.io/kubernetes/pkg/kubelet/eviction"
-	"k8s.io/kubernetes/pkg/kubelet/nodeshutdown/systemd"
-	"k8s.io/kubernetes/pkg/kubelet/prober"
-	probetest "k8s.io/kubernetes/pkg/kubelet/prober/testing"
 	"k8s.io/utils/clock"
 	testingclock "k8s.io/utils/clock/testing"
 )

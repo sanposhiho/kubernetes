@@ -24,14 +24,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
+	e2eproviders "github.com/sanposhiho/kubernetes/test/e2e/framework/providers"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
+	"github.com/sanposhiho/kubernetes/test/utils/junit"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/apimachinery/pkg/version"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
-	e2eproviders "k8s.io/kubernetes/test/e2e/framework/providers"
-	"k8s.io/kubernetes/test/e2e/upgrades"
-	"k8s.io/kubernetes/test/utils/junit"
 )
 
 // ControlPlaneUpgradeFunc returns a function that performs control plane upgrade.

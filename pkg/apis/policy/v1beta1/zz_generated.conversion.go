@@ -30,8 +30,8 @@ import (
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	intstr "k8s.io/apimachinery/pkg/util/intstr"
-	core "k8s.io/kubernetes/pkg/apis/core"
-	policy "k8s.io/kubernetes/pkg/apis/policy"
+	core "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	policy "github.com/sanposhiho/kubernetes/pkg/apis/policy"
 )
 
 func init() {

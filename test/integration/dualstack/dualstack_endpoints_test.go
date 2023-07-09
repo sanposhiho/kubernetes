@@ -22,6 +22,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
+	"github.com/sanposhiho/kubernetes/pkg/controller/endpoint"
+	"github.com/sanposhiho/kubernetes/pkg/controller/endpointslice"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/utils/ktesting"
 	v1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -29,11 +34,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/informers"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
-	"k8s.io/kubernetes/pkg/controller/endpoint"
-	"k8s.io/kubernetes/pkg/controller/endpointslice"
-	"k8s.io/kubernetes/test/integration/framework"
-	"k8s.io/kubernetes/test/utils/ktesting"
 )
 
 func TestDualStackEndpoints(t *testing.T) {

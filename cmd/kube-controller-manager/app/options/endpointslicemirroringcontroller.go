@@ -21,8 +21,8 @@ import (
 
 	"github.com/spf13/pflag"
 
-	"k8s.io/kubernetes/cmd/kube-controller-manager/names"
-	endpointslicemirroringconfig "k8s.io/kubernetes/pkg/controller/endpointslicemirroring/config"
+	"github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/names"
+	endpointslicemirroringconfig "github.com/sanposhiho/kubernetes/pkg/controller/endpointslicemirroring/config"
 )
 
 const (

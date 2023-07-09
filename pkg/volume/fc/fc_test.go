@@ -27,13 +27,13 @@ import (
 	"k8s.io/mount-utils"
 	testingexec "k8s.io/utils/exec/testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	volumetest "github.com/sanposhiho/kubernetes/pkg/volume/testing"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes/fake"
 	utiltesting "k8s.io/client-go/util/testing"
-	"k8s.io/kubernetes/pkg/volume"
-	volumetest "k8s.io/kubernetes/pkg/volume/testing"
 )
 
 func TestCanSupport(t *testing.T) {

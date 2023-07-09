@@ -23,12 +23,12 @@ import (
 
 	"github.com/spf13/pflag"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubeapiserver/authorizer"
+	authzmodes "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/authorizer/modes"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/wait"
 	genericoptions "k8s.io/apiserver/pkg/server/options"
 	versionedinformers "k8s.io/client-go/informers"
-	"k8s.io/kubernetes/pkg/kubeapiserver/authorizer"
-	authzmodes "k8s.io/kubernetes/pkg/kubeapiserver/authorizer/modes"
 )
 
 // BuiltInAuthorizationOptions contains all build-in authorization options for API Server

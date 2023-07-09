@@ -21,12 +21,12 @@ import (
 	"net"
 	"sync"
 
+	endpointsv1 "github.com/sanposhiho/kubernetes/pkg/api/v1/endpoints"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/util/retry"
 	"k8s.io/klog/v2"
-	endpointsv1 "k8s.io/kubernetes/pkg/api/v1/endpoints"
 )
 
 // masterCountEndpointReconciler reconciles endpoints based on a specified expected number of

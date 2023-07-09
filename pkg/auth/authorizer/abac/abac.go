@@ -26,14 +26,14 @@ import (
 
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/abac"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/authentication/user"
 	"k8s.io/apiserver/pkg/authorization/authorizer"
-	"k8s.io/kubernetes/pkg/apis/abac"
 
 	// Import latest API for init/side-effects
-	_ "k8s.io/kubernetes/pkg/apis/abac/latest"
-	"k8s.io/kubernetes/pkg/apis/abac/v0"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/abac/latest"
+	v0 "github.com/sanposhiho/kubernetes/pkg/apis/abac/v0"
 )
 
 type policyLoadError struct {

@@ -23,6 +23,11 @@ import (
 	"testing"
 	"time"
 
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/pkg/controller/endpoint"
+	"github.com/sanposhiho/kubernetes/pkg/controller/endpointslice"
+	"github.com/sanposhiho/kubernetes/pkg/controller/endpointslicemirroring"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	corev1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
@@ -30,11 +35,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/informers"
 	clientset "k8s.io/client-go/kubernetes"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/pkg/controller/endpoint"
-	"k8s.io/kubernetes/pkg/controller/endpointslice"
-	"k8s.io/kubernetes/pkg/controller/endpointslicemirroring"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 func TestEndpointSliceMirroring(t *testing.T) {

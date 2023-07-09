@@ -21,6 +21,8 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	deploymentutil "github.com/sanposhiho/kubernetes/pkg/controller/deployment/util"
 	apps "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
@@ -30,8 +32,6 @@ import (
 	testclient "k8s.io/client-go/testing"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/controller"
-	deploymentutil "k8s.io/kubernetes/pkg/controller/deployment/util"
 )
 
 func intOrStrP(val int) *intstr.IntOrString {

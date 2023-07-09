@@ -17,7 +17,7 @@ limitations under the License.
 package queue
 
 import (
-	"k8s.io/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
 )
 
 const (

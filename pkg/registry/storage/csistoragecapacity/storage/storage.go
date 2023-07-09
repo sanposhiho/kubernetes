@@ -17,12 +17,12 @@ limitations under the License.
 package storage
 
 import (
+	storageapi "github.com/sanposhiho/kubernetes/pkg/apis/storage"
+	"github.com/sanposhiho/kubernetes/pkg/registry/storage/csistoragecapacity"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
 	genericregistry "k8s.io/apiserver/pkg/registry/generic/registry"
 	"k8s.io/apiserver/pkg/registry/rest"
-	storageapi "k8s.io/kubernetes/pkg/apis/storage"
-	"k8s.io/kubernetes/pkg/registry/storage/csistoragecapacity"
 )
 
 // CSIStorageCapacityStorage includes storage for CSIStorageCapacity and all subresources

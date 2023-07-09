@@ -25,13 +25,13 @@ import (
 	"encoding/pem"
 	"testing"
 
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
 	certv1 "k8s.io/api/certificates/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	certclientset "k8s.io/client-go/kubernetes/typed/certificates/v1"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
 
-	"k8s.io/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 )
 
 // Verifies that the 'spec.signerName' field can be correctly used as a field selector on LIST requests

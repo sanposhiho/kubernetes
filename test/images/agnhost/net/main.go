@@ -31,8 +31,8 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"k8s.io/kubernetes/test/images/agnhost/net/common"
-	"k8s.io/kubernetes/test/images/agnhost/net/nat"
+	"github.com/sanposhiho/kubernetes/test/images/agnhost/net/common"
+	"github.com/sanposhiho/kubernetes/test/images/agnhost/net/nat"
 )
 
 type runnerMap map[string]common.Runner

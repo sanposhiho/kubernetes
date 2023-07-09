@@ -17,9 +17,9 @@ limitations under the License.
 package ipvs
 
 import (
+	utilipset "github.com/sanposhiho/kubernetes/pkg/proxy/ipvs/ipset"
 	"k8s.io/apimachinery/pkg/util/sets"
 	utilversion "k8s.io/apimachinery/pkg/util/version"
-	utilipset "k8s.io/kubernetes/pkg/proxy/ipvs/ipset"
 
 	"fmt"
 	"strings"

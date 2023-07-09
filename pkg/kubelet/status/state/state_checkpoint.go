@@ -21,10 +21,10 @@ import (
 	"path"
 	"sync"
 
-	"k8s.io/api/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager/errors"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager/errors"
 )
 
 var _ State = &stateCheckpoint{}

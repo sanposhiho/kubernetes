@@ -19,8 +19,8 @@ package state
 import (
 	"encoding/json"
 
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager/checksum"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager/checksum"
 )
 
 var _ checkpointmanager.Checkpoint = &DRAManagerCheckpoint{}

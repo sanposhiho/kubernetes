@@ -20,6 +20,10 @@ import (
 	"context"
 	"fmt"
 
+	endpointsv1 "github.com/sanposhiho/kubernetes/pkg/api/v1/endpoints"
+	"github.com/sanposhiho/kubernetes/pkg/controller/endpointslicemirroring/metrics"
+	endpointutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpoint"
+	endpointsliceutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpointslice"
 	corev1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
@@ -29,10 +33,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/klog/v2"
-	endpointsv1 "k8s.io/kubernetes/pkg/api/v1/endpoints"
-	"k8s.io/kubernetes/pkg/controller/endpointslicemirroring/metrics"
-	endpointutil "k8s.io/kubernetes/pkg/controller/util/endpoint"
-	endpointsliceutil "k8s.io/kubernetes/pkg/controller/util/endpointslice"
 )
 
 // reconciler is responsible for transforming current EndpointSlice state into

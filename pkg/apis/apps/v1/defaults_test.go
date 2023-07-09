@@ -20,6 +20,11 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/apps/install"
+	. "github.com/sanposhiho/kubernetes/pkg/apis/apps/v1"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
@@ -29,11 +34,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	_ "k8s.io/kubernetes/pkg/apis/apps/install"
-	. "k8s.io/kubernetes/pkg/apis/apps/v1"
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
-	"k8s.io/kubernetes/pkg/features"
 	utilpointer "k8s.io/utils/pointer"
 )
 

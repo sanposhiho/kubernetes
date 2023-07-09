@@ -24,6 +24,9 @@ import (
 	"fmt"
 	"time"
 
+	capihelper "github.com/sanposhiho/kubernetes/pkg/apis/certificates"
+	"github.com/sanposhiho/kubernetes/pkg/controller/certificates"
+	"github.com/sanposhiho/kubernetes/pkg/controller/certificates/authority"
 	capi "k8s.io/api/certificates/v1"
 	capiv1beta1 "k8s.io/api/certificates/v1beta1"
 	v1 "k8s.io/api/core/v1"
@@ -33,9 +36,6 @@ import (
 	certificatesinformers "k8s.io/client-go/informers/certificates/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/util/certificate/csr"
-	capihelper "k8s.io/kubernetes/pkg/apis/certificates"
-	"k8s.io/kubernetes/pkg/controller/certificates"
-	"k8s.io/kubernetes/pkg/controller/certificates/authority"
 )
 
 type CSRSigningController struct {

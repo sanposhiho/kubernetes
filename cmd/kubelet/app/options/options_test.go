@@ -24,8 +24,8 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/spf13/pflag"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
 	cliflag "k8s.io/component-base/cli/flag"
-	"k8s.io/kubernetes/pkg/kubelet/config"
 )
 
 func newKubeletServerOrDie() *KubeletServer {

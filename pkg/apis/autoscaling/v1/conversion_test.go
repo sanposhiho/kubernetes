@@ -19,12 +19,12 @@ package v1
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"github.com/stretchr/testify/assert"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/conversion"
-	"k8s.io/kubernetes/pkg/apis/autoscaling"
-	api "k8s.io/kubernetes/pkg/apis/core"
 	utilpointer "k8s.io/utils/pointer"
 )
 

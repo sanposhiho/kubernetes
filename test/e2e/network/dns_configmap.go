@@ -21,11 +21,11 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eservice "github.com/sanposhiho/kubernetes/test/e2e/framework/service"
+	"github.com/sanposhiho/kubernetes/test/e2e/network/common"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eservice "k8s.io/kubernetes/test/e2e/framework/service"
-	"k8s.io/kubernetes/test/e2e/network/common"
 
 	"github.com/onsi/ginkgo/v2"
 )

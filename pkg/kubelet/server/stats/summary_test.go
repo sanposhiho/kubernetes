@@ -28,11 +28,11 @@ import (
 	fuzz "github.com/google/gofuzz"
 	"github.com/stretchr/testify/assert"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm"
+	statstest "github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats/testing"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	"k8s.io/kubernetes/pkg/kubelet/cm"
-	statstest "k8s.io/kubernetes/pkg/kubelet/server/stats/testing"
 )
 
 var (

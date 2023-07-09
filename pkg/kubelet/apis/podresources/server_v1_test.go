@@ -24,14 +24,14 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
+	pkgfeatures "github.com/sanposhiho/kubernetes/pkg/features"
+	podresourcetest "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/podresources/testing"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	podresourcesapi "k8s.io/kubelet/pkg/apis/podresources/v1"
-	pkgfeatures "k8s.io/kubernetes/pkg/features"
-	podresourcetest "k8s.io/kubernetes/pkg/kubelet/apis/podresources/testing"
 )
 
 func TestListPodResourcesV1(t *testing.T) {

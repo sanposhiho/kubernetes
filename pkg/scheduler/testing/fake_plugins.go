@@ -22,10 +22,10 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	frameworkruntime "github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	frameworkruntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
 )
 
 // ErrReasonFake is a fake error message denotes the filter function errored.

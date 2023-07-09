@@ -22,9 +22,9 @@ import (
 
 	"os"
 
+	"github.com/sanposhiho/kubernetes/pkg/credentialprovider"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/credentialprovider"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
 )
 
 // readCredentialProviderConfigFile receives a path to a config file and decodes it

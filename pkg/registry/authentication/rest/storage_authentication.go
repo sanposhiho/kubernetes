@@ -17,6 +17,10 @@ limitations under the License.
 package rest
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/authentication"
+	"github.com/sanposhiho/kubernetes/pkg/registry/authentication/selfsubjectreview"
+	"github.com/sanposhiho/kubernetes/pkg/registry/authentication/tokenreview"
 	authenticationv1 "k8s.io/api/authentication/v1"
 	authenticationv1alpha1 "k8s.io/api/authentication/v1alpha1"
 	authenticationv1beta1 "k8s.io/api/authentication/v1beta1"
@@ -25,10 +29,6 @@ import (
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/authentication"
-	"k8s.io/kubernetes/pkg/registry/authentication/selfsubjectreview"
-	"k8s.io/kubernetes/pkg/registry/authentication/tokenreview"
 )
 
 type RESTStorageProvider struct {
@@ -43,7 +43,7 @@ func (p RESTStorageProvider) NewRESTStorage(apiResourceConfigSource serverstorag
 	// }
 
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(authentication.GroupName, legacyscheme.Scheme, legacyscheme.ParameterCodec, legacyscheme.Codecs)
-	// If you add a version here, be sure to add an entry in `k8s.io/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
+	// If you add a version here, be sure to add an entry in `github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
 	// TODO refactor the plumbing to provide the information in the APIGroupInfo
 
 	if storageMap := p.v1alpha1Storage(apiResourceConfigSource, restOptionsGetter); len(storageMap) > 0 {

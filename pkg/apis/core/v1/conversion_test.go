@@ -25,6 +25,11 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	apps "github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
+	corefuzzer "github.com/sanposhiho/kubernetes/pkg/apis/core/fuzzer"
+	corev1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/apitesting/fuzzer"
@@ -34,17 +39,12 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/diff"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	apps "k8s.io/kubernetes/pkg/apis/apps"
-	"k8s.io/kubernetes/pkg/apis/core"
-	corefuzzer "k8s.io/kubernetes/pkg/apis/core/fuzzer"
-	corev1 "k8s.io/kubernetes/pkg/apis/core/v1"
 	utilpointer "k8s.io/utils/pointer"
 
 	// ensure types are installed
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
 	// ensure types are installed corereplicationcontroller<->replicaset conversions
-	_ "k8s.io/kubernetes/pkg/apis/apps/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/apps/install"
 )
 
 func TestPodLogOptions(t *testing.T) {

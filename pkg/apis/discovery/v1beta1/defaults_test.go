@@ -20,11 +20,11 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/discovery/install"
 	v1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1beta1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	_ "k8s.io/kubernetes/pkg/apis/discovery/install"
 	utilpointer "k8s.io/utils/pointer"
 )
 

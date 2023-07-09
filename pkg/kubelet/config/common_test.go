@@ -22,15 +22,15 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
+	"github.com/sanposhiho/kubernetes/pkg/securitycontext"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	clientscheme "k8s.io/client-go/kubernetes/scheme"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/core/validation"
-	"k8s.io/kubernetes/pkg/securitycontext"
 )
 
 func noDefault(*core.Pod) error { return nil }

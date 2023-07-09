@@ -20,7 +20,7 @@ import (
 	"strings"
 	"testing"
 
-	api "k8s.io/kubernetes/pkg/apis/core"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	utilnet "k8s.io/utils/net"
 )
 

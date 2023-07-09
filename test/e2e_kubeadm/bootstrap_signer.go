@@ -19,7 +19,7 @@ package kubeadm
 import (
 	"context"
 
-	"k8s.io/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

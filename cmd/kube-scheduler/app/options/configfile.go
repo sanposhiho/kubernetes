@@ -22,12 +22,12 @@ import (
 	"io"
 	"os"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/scheme"
+	configv1 "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/v1"
+	configv1beta3 "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/v1beta3"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
-	configv1 "k8s.io/kubernetes/pkg/scheduler/apis/config/v1"
-	configv1beta3 "k8s.io/kubernetes/pkg/scheduler/apis/config/v1beta3"
 )
 
 func loadConfigFromFile(logger klog.Logger, file string) (*config.KubeSchedulerConfiguration, error) {

@@ -21,12 +21,12 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
+	e2emetrics "github.com/sanposhiho/kubernetes/test/e2e/framework/metrics"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2evolume "github.com/sanposhiho/kubernetes/test/e2e/framework/volume"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
-	e2emetrics "k8s.io/kubernetes/test/e2e/framework/metrics"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2evolume "k8s.io/kubernetes/test/e2e/framework/volume"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/prometheus/common/model"

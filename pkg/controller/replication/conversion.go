@@ -27,6 +27,10 @@ import (
 	"fmt"
 	"time"
 
+	appsinternal "github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	appsconversion "github.com/sanposhiho/kubernetes/pkg/apis/apps/v1"
+	apiv1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 	apps "k8s.io/api/apps/v1"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	v1 "k8s.io/api/core/v1"
@@ -45,10 +49,6 @@ import (
 	appslisters "k8s.io/client-go/listers/apps/v1"
 	v1listers "k8s.io/client-go/listers/core/v1"
 	"k8s.io/client-go/tools/cache"
-	appsinternal "k8s.io/kubernetes/pkg/apis/apps"
-	appsconversion "k8s.io/kubernetes/pkg/apis/apps/v1"
-	apiv1 "k8s.io/kubernetes/pkg/apis/core/v1"
-	"k8s.io/kubernetes/pkg/controller"
 )
 
 // informerAdapter implements ReplicaSetInformer by wrapping ReplicationControllerInformer

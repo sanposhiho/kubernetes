@@ -20,6 +20,9 @@ import (
 	"fmt"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	kubeletclient "github.com/sanposhiho/kubernetes/pkg/kubelet/client"
+	"github.com/sanposhiho/kubernetes/pkg/registry/registrytest"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
@@ -30,9 +33,6 @@ import (
 	genericregistrytest "k8s.io/apiserver/pkg/registry/generic/testing"
 	"k8s.io/apiserver/pkg/registry/rest"
 	etcd3testing "k8s.io/apiserver/pkg/storage/etcd3/testing"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	kubeletclient "k8s.io/kubernetes/pkg/kubelet/client"
-	"k8s.io/kubernetes/pkg/registry/registrytest"
 )
 
 func newStorage(t *testing.T) (*REST, *etcd3testing.EtcdTestServer) {

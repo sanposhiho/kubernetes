@@ -20,11 +20,11 @@ import (
 	"context"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/helper"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apiserver/pkg/admission"
 	admissiontesting "k8s.io/apiserver/pkg/admission/testing"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/core/helper"
 )
 
 func TestForgivenessAdmission(t *testing.T) {

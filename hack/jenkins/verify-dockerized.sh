@@ -42,6 +42,6 @@ export KUBE_JUNIT_REPORT_DIR="${ARTIFACTS}"
 
 export LOG_LEVEL=4
 
-cd "${GOPATH}/src/k8s.io/kubernetes"
+cd "${GOPATH}/src/github.com/sanposhiho/kubernetes"
 
 make verify

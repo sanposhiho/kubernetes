@@ -48,10 +48,10 @@ import (
 	"k8s.io/kube-openapi/pkg/validation/spec"
 	"k8s.io/utils/pointer"
 
-	apiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	corev1 "k8s.io/kubernetes/pkg/apis/core/v1"
-	"k8s.io/kubernetes/pkg/generated/openapi"
-	"k8s.io/kubernetes/test/integration/framework"
+	apiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	corev1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/generated/openapi"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 )
 
 func TestTypeResolver(t *testing.T) {

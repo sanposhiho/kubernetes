@@ -28,14 +28,14 @@ import (
 	"k8s.io/klog/v2"
 	utilsexec "k8s.io/utils/exec"
 
-	kubeadmapiv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/features"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/initsystem"
-	utilruntime "k8s.io/kubernetes/cmd/kubeadm/app/util/runtime"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/users"
+	kubeadmapiv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/features"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/initsystem"
+	utilruntime "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/runtime"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/users"
 )
 
 // NewCleanupNodePhase creates a kubeadm workflow phase that cleanup the node

@@ -25,6 +25,11 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/sanposhiho/kubernetes/pkg/apis/scheduling"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2ereplicaset "github.com/sanposhiho/kubernetes/test/e2e/framework/replicaset"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	schedulingv1 "k8s.io/api/scheduling/v1"
@@ -39,11 +44,6 @@ import (
 	"k8s.io/apimachinery/pkg/watch"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
-	"k8s.io/kubernetes/pkg/apis/scheduling"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2ereplicaset "k8s.io/kubernetes/test/e2e/framework/replicaset"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

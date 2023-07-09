@@ -22,15 +22,15 @@ import (
 	"time"
 
 	"github.com/onsi/ginkgo/v2"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2epv "github.com/sanposhiho/kubernetes/test/e2e/framework/pv"
+	"github.com/sanposhiho/kubernetes/test/e2e/storage/drivers"
+	"github.com/sanposhiho/kubernetes/test/e2e/storage/utils"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2epv "k8s.io/kubernetes/test/e2e/framework/pv"
-	"k8s.io/kubernetes/test/e2e/storage/drivers"
-	"k8s.io/kubernetes/test/e2e/storage/utils"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

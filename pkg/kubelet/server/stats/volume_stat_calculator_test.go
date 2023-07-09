@@ -26,6 +26,9 @@ import (
 	"github.com/stretchr/testify/assert"
 
 	csipbv1 "github.com/container-storage-interface/spec/lib/go/csi"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	statstest "github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats/testing"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
 	k8sv1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -33,9 +36,6 @@ import (
 	"k8s.io/client-go/tools/record"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	kubestats "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	"k8s.io/kubernetes/pkg/features"
-	statstest "k8s.io/kubernetes/pkg/kubelet/server/stats/testing"
-	"k8s.io/kubernetes/pkg/volume"
 )
 
 const (

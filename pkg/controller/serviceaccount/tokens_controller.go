@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/serviceaccount"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -38,7 +39,6 @@ import (
 	clientretry "k8s.io/client-go/util/retry"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/serviceaccount"
 )
 
 // RemoveTokenBackoff is the recommended (empirical) retry interval for removing

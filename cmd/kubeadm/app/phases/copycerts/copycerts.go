@@ -37,12 +37,12 @@ import (
 	bootstraputil "k8s.io/cluster-bootstrap/token/util"
 	"k8s.io/klog/v2"
 
-	bootstraptokenv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/bootstraptoken/v1"
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	nodebootstraptokenphase "k8s.io/kubernetes/cmd/kubeadm/app/phases/bootstraptoken/node"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/apiclient"
-	cryptoutil "k8s.io/kubernetes/cmd/kubeadm/app/util/crypto"
+	bootstraptokenv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/bootstraptoken/v1"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	nodebootstraptokenphase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/bootstraptoken/node"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/apiclient"
+	cryptoutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/crypto"
 )
 
 const (

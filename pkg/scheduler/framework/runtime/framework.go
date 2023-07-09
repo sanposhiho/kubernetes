@@ -23,6 +23,10 @@ import (
 	"sort"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/parallelize"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/metrics"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
@@ -33,10 +37,6 @@ import (
 	"k8s.io/client-go/tools/events"
 	"k8s.io/component-helpers/scheduling/corev1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/parallelize"
-	"k8s.io/kubernetes/pkg/scheduler/metrics"
 )
 
 const (

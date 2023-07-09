@@ -28,9 +28,9 @@ import (
 
 	testingexec "k8s.io/utils/exec/testing"
 
-	"k8s.io/kubernetes/pkg/kubelet/config"
-	"k8s.io/kubernetes/pkg/volume"
-	volumetest "k8s.io/kubernetes/pkg/volume/testing"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	volumetest "github.com/sanposhiho/kubernetes/pkg/volume/testing"
 )
 
 const (

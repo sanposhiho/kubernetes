@@ -20,12 +20,12 @@ import (
 	"context"
 	"sync"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	metainternalversion "k8s.io/apimachinery/pkg/apis/meta/internalversion"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/watch"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/apiserver/pkg/registry/rest"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 type ServiceRegistry struct {

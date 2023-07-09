@@ -22,13 +22,13 @@ import (
 	"os"
 	"time"
 
+	kubeapi "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	evictionapi "github.com/sanposhiho/kubernetes/pkg/kubelet/eviction/api"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/util/uuid"
-	kubeapi "k8s.io/kubernetes/pkg/apis/core"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	evictionapi "k8s.io/kubernetes/pkg/kubelet/eviction/api"
-	"k8s.io/kubernetes/test/e2e/framework"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

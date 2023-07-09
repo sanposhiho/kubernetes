@@ -26,9 +26,9 @@ import (
 
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/test/e2e_node/remote"
-	_ "k8s.io/kubernetes/test/e2e_node/remote/gce"
-	"k8s.io/kubernetes/test/e2e_node/system"
+	"github.com/sanposhiho/kubernetes/test/e2e_node/remote"
+	_ "github.com/sanposhiho/kubernetes/test/e2e_node/remote/gce"
+	"github.com/sanposhiho/kubernetes/test/e2e_node/system"
 )
 
 var testSuite = flag.String("test-suite", "default", "Test suite the runner initializes with. Currently support default|cadvisor|conformance")

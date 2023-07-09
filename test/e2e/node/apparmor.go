@@ -19,11 +19,11 @@ package node
 import (
 	"context"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2esecurity "k8s.io/kubernetes/test/e2e/framework/security"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2esecurity "github.com/sanposhiho/kubernetes/test/e2e/framework/security"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

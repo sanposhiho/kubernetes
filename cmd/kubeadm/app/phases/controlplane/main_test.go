@@ -19,7 +19,7 @@ package controlplane
 import (
 	"testing"
 
-	pkiutiltesting "k8s.io/kubernetes/cmd/kubeadm/app/util/pkiutil/testing"
+	pkiutiltesting "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/pkiutil/testing"
 )
 
 func TestMain(m *testing.M) {

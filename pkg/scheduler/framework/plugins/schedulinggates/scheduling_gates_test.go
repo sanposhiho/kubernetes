@@ -22,10 +22,10 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/feature"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/feature"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
 )
 
 func TestPreEnqueue(t *testing.T) {

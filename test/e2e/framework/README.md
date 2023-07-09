@@ -13,7 +13,7 @@ Downstream users have to be prepared to deal with API changes.
 
 # Code Organization
 
-The core framework is the `k8s.io/kubernetes/test/e2e/framework` package. It
+The core framework is the `github.com/sanposhiho/kubernetes/test/e2e/framework` package. It
 contains functionality that all E2E suites are expected to need:
 - connecting to the apiserver
 - managing per-test namespaces

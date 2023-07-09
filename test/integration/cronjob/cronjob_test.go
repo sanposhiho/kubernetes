@@ -22,6 +22,10 @@ import (
 	"testing"
 	"time"
 
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/pkg/controller/cronjob"
+	"github.com/sanposhiho/kubernetes/pkg/controller/job"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -31,10 +35,6 @@ import (
 	clientbatchv1 "k8s.io/client-go/kubernetes/typed/batch/v1"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/klog/v2/ktesting"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/pkg/controller/cronjob"
-	"k8s.io/kubernetes/pkg/controller/job"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 func setup(ctx context.Context, t *testing.T) (kubeapiservertesting.TearDownFunc, *cronjob.ControllerV2, *job.Controller, informers.SharedInformerFactory, clientset.Interface) {

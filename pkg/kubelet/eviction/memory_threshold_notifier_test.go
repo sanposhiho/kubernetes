@@ -24,9 +24,9 @@ import (
 	"time"
 
 	gomock "github.com/golang/mock/gomock"
+	evictionapi "github.com/sanposhiho/kubernetes/pkg/kubelet/eviction/api"
 	"k8s.io/apimachinery/pkg/api/resource"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	evictionapi "k8s.io/kubernetes/pkg/kubelet/eviction/api"
 )
 
 const testCgroupPath = "/sys/fs/cgroups/memory"

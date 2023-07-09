@@ -20,11 +20,11 @@ import (
 	"context"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/admission"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 // ensures the hard PodAntiAffinity is denied if it defines TopologyKey other than kubernetes.io/hostname.

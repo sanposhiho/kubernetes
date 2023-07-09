@@ -20,8 +20,8 @@ import (
 	"reflect"
 	"testing"
 
-	"k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/credentialprovider"
+	"github.com/sanposhiho/kubernetes/pkg/credentialprovider"
+	v1 "k8s.io/api/core/v1"
 )
 
 // fakeKeyring is a fake docker auth config keyring

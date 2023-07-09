@@ -33,7 +33,7 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
 
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
 )
 
 const (

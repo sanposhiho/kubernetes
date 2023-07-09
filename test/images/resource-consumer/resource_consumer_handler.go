@@ -24,7 +24,7 @@ import (
 	"sync"
 	"time"
 
-	"k8s.io/kubernetes/test/images/resource-consumer/common"
+	"github.com/sanposhiho/kubernetes/test/images/resource-consumer/common"
 )
 
 // ResourceConsumerHandler holds metrics for a resource consumer.

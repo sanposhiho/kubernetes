@@ -21,13 +21,13 @@ import (
 	"fmt"
 	"strings"
 
+	nodeapi "github.com/sanposhiho/kubernetes/pkg/api/node"
+	pvcutil "github.com/sanposhiho/kubernetes/pkg/api/persistentvolumeclaim"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/pods"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	nodeapi "k8s.io/kubernetes/pkg/api/node"
-	pvcutil "k8s.io/kubernetes/pkg/api/persistentvolumeclaim"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/core/pods"
 )
 
 func GetWarningsForPod(ctx context.Context, pod, oldPod *api.Pod) []string {

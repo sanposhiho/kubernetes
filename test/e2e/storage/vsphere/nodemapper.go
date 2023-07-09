@@ -23,13 +23,13 @@ import (
 	"sync"
 
 	"github.com/onsi/ginkgo/v2"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	"github.com/vmware/govmomi/object"
 	"github.com/vmware/govmomi/vapi/rest"
 	"github.com/vmware/govmomi/vapi/tags"
 	"github.com/vmware/govmomi/vim25/mo"
 	"github.com/vmware/govmomi/vim25/types"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
 
 	neturl "net/url"
 )

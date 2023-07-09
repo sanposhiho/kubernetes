@@ -17,10 +17,10 @@ limitations under the License.
 package admission
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/authentication"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/kubernetes/pkg/apis/authentication"
 )
 
 // +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object

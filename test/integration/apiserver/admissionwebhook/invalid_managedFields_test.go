@@ -30,6 +30,8 @@ import (
 	"testing"
 	"time"
 
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	v1 "k8s.io/api/admission/v1"
 	admissionv1 "k8s.io/api/admissionregistration/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -42,8 +44,6 @@ import (
 	"k8s.io/apiserver/pkg/endpoints/handlers/fieldmanager"
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 // TestMutatingWebhookResetsInvalidManagedFields ensures that the API server

@@ -26,9 +26,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"k8s.io/kubernetes/pkg/kubelet/container"
 
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 	critest "k8s.io/cri-api/pkg/apis/testing"

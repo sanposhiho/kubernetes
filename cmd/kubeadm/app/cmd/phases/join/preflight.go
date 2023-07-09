@@ -27,12 +27,12 @@ import (
 	"k8s.io/klog/v2"
 	utilsexec "k8s.io/utils/exec"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
-	cmdutil "k8s.io/kubernetes/cmd/kubeadm/app/cmd/util"
-	"k8s.io/kubernetes/cmd/kubeadm/app/phases/certs"
-	"k8s.io/kubernetes/cmd/kubeadm/app/preflight"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
+	cmdutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/util"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/certs"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/preflight"
 )
 
 var (

@@ -22,6 +22,9 @@ import (
 	"fmt"
 	"reflect"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2edeployment "github.com/sanposhiho/kubernetes/test/e2e/framework/deployment"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	appsv1 "k8s.io/api/apps/v1"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	apiextensionclientset "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
@@ -33,9 +36,6 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/dynamic"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2edeployment "k8s.io/kubernetes/test/e2e/framework/deployment"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

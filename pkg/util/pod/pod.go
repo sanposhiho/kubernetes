@@ -22,12 +22,12 @@ import (
 	"encoding/json"
 	"fmt"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
 	clientset "k8s.io/client-go/kubernetes"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
 )
 
 // PatchPodStatus patches pod status. It returns true and avoids an update if the patch contains no changes.

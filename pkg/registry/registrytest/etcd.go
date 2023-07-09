@@ -19,12 +19,12 @@ package registrytest
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubeapiserver"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/server/options"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
 	etcd3testing "k8s.io/apiserver/pkg/storage/etcd3/testing"
 	"k8s.io/apiserver/pkg/storage/storagebackend"
-	"k8s.io/kubernetes/pkg/kubeapiserver"
 )
 
 // NewEtcdStorage is for testing.  It configures the etcd storage for a bogus resource; the test must not care.

@@ -21,14 +21,14 @@ import (
 	"reflect"
 	"testing"
 
+	pkgfeatures "github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager/state"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager/topology"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
 	v1 "k8s.io/api/core/v1"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	pkgfeatures "k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/kubelet/cm/cpumanager/state"
-	"k8s.io/kubernetes/pkg/kubelet/cm/cpumanager/topology"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
 	"k8s.io/utils/cpuset"
 )
 

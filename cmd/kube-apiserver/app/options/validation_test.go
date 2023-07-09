@@ -20,10 +20,10 @@ import (
 	"net"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	utilnet "k8s.io/apimachinery/pkg/util/net"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	"k8s.io/kubernetes/pkg/features"
 	netutils "k8s.io/utils/net"
 )
 

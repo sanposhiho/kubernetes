@@ -35,10 +35,10 @@ FieldTags:
 # KEP-1753 adds tags to the relevant fields.
 Sources:
 # The following fields are tagged in #95994
-- PackageRE: "k8s.io/kubernetes/test/e2e/storage/vsphere"
+- PackageRE: "github.com/sanposhiho/kubernetes/test/e2e/storage/vsphere"
   TypeRE: "Config"
   FieldRE: "Password"
-- PackageRE: "k8s.io/kubernetes/test/e2e/storage/vsphere"
+- PackageRE: "github.com/sanposhiho/kubernetes/test/e2e/storage/vsphere"
   TypeRE: "ConfigFile"
   FieldRE: "Global"  # Global is of unnamed type, contains the field Password.
 
@@ -86,10 +86,10 @@ Sources:
   FieldRE: "BearerToken|Password"
 
 # The following fields are tagged in #96004
-- PackageRE: "k8s.io/kubernetes/pkg/kubelet/apis/config"
+- PackageRE: "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
   TypeRE: "KubeletConfiguration"
   FieldRE: "StaticPodURLHeader"
-- PackageRE: "k8s.io/kubernetes/pkg/kubelet/client"
+- PackageRE: "github.com/sanposhiho/kubernetes/pkg/kubelet/client"
   TypeRE: "KubeletClientConfig"
   FieldRE: "BearerToken"
 
@@ -102,27 +102,27 @@ Sources:
   FieldRE: " Token"
 
 # The following fields are tagged in #96007
-- PackageRE: "k8s.io/kubernetes/pkg/credentialprovider/azure"
+- PackageRE: "github.com/sanposhiho/kubernetes/pkg/credentialprovider/azure"
   TypeRE: "acrAuthResponse"
   FieldRE: "RefreshToken"
-- PackageRE: "k8s.io/kubernetes/pkg/credentialprovider"
+- PackageRE: "github.com/sanposhiho/kubernetes/pkg/credentialprovider"
   TypeRE: "DockerConfigEntry"
   FieldRE: "Password"
-- PackageRE: "k8s.io/kubernetes/pkg/credentialprovider"
+- PackageRE: "github.com/sanposhiho/kubernetes/pkg/credentialprovider"
   TypeRE: "DockerConfigJSON"
   FieldRE: "Auths|HTTPHeaders"
-- PackageRE: "k8s.io/kubernetes/pkg/credentialprovider"
+- PackageRE: "github.com/sanposhiho/kubernetes/pkg/credentialprovider"
   TypeRE: "dockerConfigEntryWithAuth"
   FieldRE: "Password|Auth"
-- PackageRE: "k8s.io/kubernetes/pkg/credentialprovider/gcp"
+- PackageRE: "github.com/sanposhiho/kubernetes/pkg/credentialprovider/gcp"
   TypeRE: "tokenBlob"
   FieldRE: "AccessToken"
-- PackageRE: "k8s.io/kubernetes/pkg/credentialprovider"
+- PackageRE: "github.com/sanposhiho/kubernetes/pkg/credentialprovider"
   TypeRE: "AuthConfig"
   FieldRE: "Password|Auth|IdentityToken|RegistryToken"
 
 # The following fields are tagged in #96008
-- PackageRE: "k8s.io/kubernetes/pkg/controller/certificates/authority"
+- PackageRE: "github.com/sanposhiho/kubernetes/pkg/controller/certificates/authority"
   TypeRE: "CertificateAuthority"
   FieldRE: "RawKey"
 
@@ -149,6 +149,6 @@ Sanitizers:
 # Exclude reporting within a given function by specifying it similar to Sinks, i.e.,
 # PackageRE | ReceiverRE | MethodRE regexp
 Exclude:
-- PackageRE: "k8s.io/kubernetes/cmd/kubelet/app"
+- PackageRE: "github.com/sanposhiho/kubernetes/cmd/kubelet/app"
   # Regexp matches anonymized inner function
   MethodRE: "NewKubeletCommand"

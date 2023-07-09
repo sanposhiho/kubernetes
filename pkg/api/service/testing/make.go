@@ -21,7 +21,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	utilpointer "k8s.io/utils/pointer"
 
-	api "k8s.io/kubernetes/pkg/apis/core"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 )
 
 // Tweak is a function that modifies a Service.

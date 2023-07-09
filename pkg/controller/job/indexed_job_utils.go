@@ -22,12 +22,12 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 	batch "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apiserver/pkg/storage/names"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller"
 )
 
 const (

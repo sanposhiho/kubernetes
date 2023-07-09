@@ -30,7 +30,7 @@ import (
 	"strings"
 	"time"
 
-	"k8s.io/kubernetes/test/e2e_node/remote"
+	"github.com/sanposhiho/kubernetes/test/e2e_node/remote"
 
 	"github.com/google/uuid"
 	"golang.org/x/oauth2/google"

@@ -19,9 +19,9 @@ package validatingwebhookconfiguration
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
-	"k8s.io/kubernetes/pkg/apis/admissionregistration"
 )
 
 func TestValidatingWebhookConfigurationStrategy(t *testing.T) {

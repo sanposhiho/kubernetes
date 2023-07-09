@@ -23,7 +23,7 @@ import (
 	"testing"
 	"time"
 
-	"k8s.io/kubernetes/pkg/kubelet/pluginmanager/cache"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/cache"
 )
 
 const (

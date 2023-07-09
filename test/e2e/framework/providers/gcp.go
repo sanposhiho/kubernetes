@@ -22,8 +22,8 @@ import (
 	"os"
 	"path"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
 )
 
 const etcdImage = "3.5.9-0"

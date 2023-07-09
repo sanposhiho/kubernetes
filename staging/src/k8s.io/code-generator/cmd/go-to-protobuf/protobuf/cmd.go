@@ -89,7 +89,7 @@ func (g *Generator) BindFlags(flag *flag.FlagSet) {
 	flag.StringVar(&g.APIMachineryPackages, "apimachinery-packages", g.APIMachineryPackages, "comma-separated list of directories to get apimachinery input types from which are needed by any API. Directories prefixed with '-' are not generated, directories prefixed with '+' only create types with explicit IDL instructions.")
 	flag.StringVarP(&g.OutputBase, "output-base", "o", g.OutputBase, "Output base; defaults to $GOPATH/src/")
 	flag.StringVar(&g.VendorOutputBase, "vendor-output-base", g.VendorOutputBase, "The vendor/ directory to look for packages in; defaults to $PWD/vendor/.")
-	flag.StringSliceVar(&g.ProtoImport, "proto-import", g.ProtoImport, "The search path for the core protobuf .protos, required; defaults $GOPATH/src/k8s.io/kubernetes/vendor/github.com/gogo/protobuf/protobuf.")
+	flag.StringSliceVar(&g.ProtoImport, "proto-import", g.ProtoImport, "The search path for the core protobuf .protos, required; defaults $GOPATH/src/github.com/sanposhiho/kubernetes/vendor/github.com/gogo/protobuf/protobuf.")
 	flag.StringVar(&g.Conditional, "conditional", g.Conditional, "An optional Golang build tag condition to add to the generated Go code")
 	flag.BoolVar(&g.Clean, "clean", g.Clean, "If true, remove all generated files for the specified Packages.")
 	flag.BoolVar(&g.OnlyIDL, "only-idl", g.OnlyIDL, "If true, only generate the IDL for each package.")

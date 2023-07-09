@@ -21,6 +21,8 @@ import (
 	"fmt"
 	"time"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -34,8 +36,6 @@ import (
 	bootstrapapi "k8s.io/cluster-bootstrap/token/api"
 	bootstrapsecretutil "k8s.io/cluster-bootstrap/util/secrets"
 	"k8s.io/klog/v2"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/controller"
 )
 
 // TokenCleanerOptions contains options for the TokenCleaner

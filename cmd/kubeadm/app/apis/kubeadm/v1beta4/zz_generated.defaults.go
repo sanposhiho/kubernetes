@@ -23,7 +23,7 @@ package v1beta4
 
 import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	v1 "k8s.io/kubernetes/pkg/apis/core/v1"
+	v1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
 )
 
 // RegisterDefaults adds defaulters functions to the given scheme.

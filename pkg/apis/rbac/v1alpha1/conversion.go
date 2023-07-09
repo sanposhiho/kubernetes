@@ -17,10 +17,10 @@ limitations under the License.
 package v1alpha1
 
 import (
+	api "github.com/sanposhiho/kubernetes/pkg/apis/rbac"
 	rbacv1alpha1 "k8s.io/api/rbac/v1alpha1"
 	"k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	api "k8s.io/kubernetes/pkg/apis/rbac"
 )
 
 // allAuthenticated matches k8s.io/apiserver/pkg/authentication/user.AllAuthenticated,

@@ -19,6 +19,10 @@ package storage
 import (
 	"testing"
 
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/extensions/install"
+	"github.com/sanposhiho/kubernetes/pkg/apis/networking"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/networking/install"
+	"github.com/sanposhiho/kubernetes/pkg/registry/registrytest"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/labels"
@@ -27,10 +31,6 @@ import (
 	"k8s.io/apiserver/pkg/registry/generic"
 	genericregistrytest "k8s.io/apiserver/pkg/registry/generic/testing"
 	etcd3testing "k8s.io/apiserver/pkg/storage/etcd3/testing"
-	_ "k8s.io/kubernetes/pkg/apis/extensions/install"
-	"k8s.io/kubernetes/pkg/apis/networking"
-	_ "k8s.io/kubernetes/pkg/apis/networking/install"
-	"k8s.io/kubernetes/pkg/registry/registrytest"
 )
 
 func newStorage(t *testing.T) (*REST, *StatusREST, *etcd3testing.EtcdTestServer) {

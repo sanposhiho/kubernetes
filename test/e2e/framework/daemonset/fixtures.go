@@ -20,13 +20,13 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/daemon"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/kubectl/pkg/util/podutils"
-	"k8s.io/kubernetes/pkg/controller/daemon"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 func NewDaemonSet(dsName, image string, labels map[string]string, volumes []v1.Volume, mounts []v1.VolumeMount, ports []v1.ContainerPort, args ...string) *appsv1.DaemonSet {

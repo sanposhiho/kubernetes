@@ -30,10 +30,10 @@ import (
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/cmd/kube-controller-manager/app"
-	kubecontrollerconfig "k8s.io/kubernetes/cmd/kube-controller-manager/app/config"
-	"k8s.io/kubernetes/cmd/kube-controller-manager/app/options"
-	"k8s.io/kubernetes/cmd/kube-controller-manager/names"
+	"github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/app"
+	kubecontrollerconfig "github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/app/config"
+	"github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/app/options"
+	"github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/names"
 )
 
 // TearDownFunc is to be called to tear down a test server.

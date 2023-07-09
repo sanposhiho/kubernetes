@@ -20,9 +20,9 @@ import (
 	"sync"
 	"time"
 
+	volumebindingmetrics "github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/volumebinding/metrics"
 	"k8s.io/component-base/metrics"
 	"k8s.io/component-base/metrics/legacyregistry"
-	volumebindingmetrics "k8s.io/kubernetes/pkg/scheduler/framework/plugins/volumebinding/metrics"
 )
 
 const (

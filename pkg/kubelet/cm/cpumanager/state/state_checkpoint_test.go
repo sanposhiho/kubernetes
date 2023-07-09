@@ -22,10 +22,10 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/containermap"
+	testutil "github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager/state/testing"
 	"github.com/stretchr/testify/require"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager"
-	"k8s.io/kubernetes/pkg/kubelet/cm/containermap"
-	testutil "k8s.io/kubernetes/pkg/kubelet/cm/cpumanager/state/testing"
 	"k8s.io/utils/cpuset"
 )
 

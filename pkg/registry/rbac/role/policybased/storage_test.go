@@ -20,6 +20,9 @@ import (
 	"context"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/rbac"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/rbac/install"
+	"github.com/sanposhiho/kubernetes/pkg/registry/rbac/validation"
 	rbacv1 "k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,9 +31,6 @@ import (
 	"k8s.io/apiserver/pkg/authorization/authorizer"
 	"k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/apiserver/pkg/registry/rest"
-	"k8s.io/kubernetes/pkg/apis/rbac"
-	_ "k8s.io/kubernetes/pkg/apis/rbac/install"
-	"k8s.io/kubernetes/pkg/registry/rbac/validation"
 )
 
 func TestEscalation(t *testing.T) {

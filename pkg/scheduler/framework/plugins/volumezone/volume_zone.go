@@ -21,6 +21,8 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/names"
 	v1 "k8s.io/api/core/v1"
 	storage "k8s.io/api/storage/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -31,8 +33,6 @@ import (
 	volumehelpers "k8s.io/cloud-provider/volume/helpers"
 	storagehelpers "k8s.io/component-helpers/storage/volume"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/names"
 )
 
 // VolumeZone is a plugin that checks volume zone.

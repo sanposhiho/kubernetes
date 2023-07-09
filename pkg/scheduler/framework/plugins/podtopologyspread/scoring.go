@@ -22,10 +22,10 @@ import (
 	"math"
 	"sync/atomic"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/component-helpers/scheduling/corev1/nodeaffinity"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
 const preScoreStateKey = "PreScore" + Name

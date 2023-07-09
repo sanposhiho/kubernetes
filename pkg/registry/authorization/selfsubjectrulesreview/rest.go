@@ -20,13 +20,13 @@ import (
 	"context"
 	"fmt"
 
+	authorizationapi "github.com/sanposhiho/kubernetes/pkg/apis/authorization"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/authorization/authorizer"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/apiserver/pkg/registry/rest"
-	authorizationapi "k8s.io/kubernetes/pkg/apis/authorization"
 )
 
 // REST implements a RESTStorage for selfsubjectrulesreview.

@@ -30,6 +30,11 @@ import (
 
 	"golang.org/x/sync/singleflight"
 
+	"github.com/sanposhiho/kubernetes/pkg/credentialprovider"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	kubeletconfigv1 "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/v1"
+	kubeletconfigv1alpha1 "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/v1alpha1"
+	kubeletconfigv1beta1 "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/v1beta1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
@@ -41,11 +46,6 @@ import (
 	credentialproviderv1 "k8s.io/kubelet/pkg/apis/credentialprovider/v1"
 	credentialproviderv1alpha1 "k8s.io/kubelet/pkg/apis/credentialprovider/v1alpha1"
 	credentialproviderv1beta1 "k8s.io/kubelet/pkg/apis/credentialprovider/v1beta1"
-	"k8s.io/kubernetes/pkg/credentialprovider"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	kubeletconfigv1 "k8s.io/kubernetes/pkg/kubelet/apis/config/v1"
-	kubeletconfigv1alpha1 "k8s.io/kubernetes/pkg/kubelet/apis/config/v1alpha1"
-	kubeletconfigv1beta1 "k8s.io/kubernetes/pkg/kubelet/apis/config/v1beta1"
 	"k8s.io/utils/clock"
 )
 

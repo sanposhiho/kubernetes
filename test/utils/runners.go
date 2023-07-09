@@ -25,6 +25,9 @@ import (
 	"sync"
 	"time"
 
+	batchinternal "github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	extensionsinternal "github.com/sanposhiho/kubernetes/pkg/apis/extensions"
 	apps "k8s.io/api/apps/v1"
 	batch "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
@@ -46,9 +49,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	scaleclient "k8s.io/client-go/scale"
 	"k8s.io/client-go/util/workqueue"
-	batchinternal "k8s.io/kubernetes/pkg/apis/batch"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	extensionsinternal "k8s.io/kubernetes/pkg/apis/extensions"
 	"k8s.io/utils/pointer"
 
 	"k8s.io/klog/v2"

@@ -60,15 +60,15 @@ import (
 	aggregatorapiserver "k8s.io/kube-aggregator/pkg/apiserver"
 	aggregatorscheme "k8s.io/kube-aggregator/pkg/apiserver/scheme"
 
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/capabilities"
-	"k8s.io/kubernetes/pkg/controlplane"
-	controlplaneapiserver "k8s.io/kubernetes/pkg/controlplane/apiserver"
-	"k8s.io/kubernetes/pkg/controlplane/reconcilers"
-	generatedopenapi "k8s.io/kubernetes/pkg/generated/openapi"
-	kubeapiserveradmission "k8s.io/kubernetes/pkg/kubeapiserver/admission"
-	"k8s.io/kubernetes/pkg/serviceaccount"
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/capabilities"
+	"github.com/sanposhiho/kubernetes/pkg/controlplane"
+	controlplaneapiserver "github.com/sanposhiho/kubernetes/pkg/controlplane/apiserver"
+	"github.com/sanposhiho/kubernetes/pkg/controlplane/reconcilers"
+	generatedopenapi "github.com/sanposhiho/kubernetes/pkg/generated/openapi"
+	kubeapiserveradmission "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/admission"
+	"github.com/sanposhiho/kubernetes/pkg/serviceaccount"
 )
 
 func init() {

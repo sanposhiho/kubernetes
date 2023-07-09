@@ -17,7 +17,7 @@ limitations under the License.
 package options
 
 import (
-	"k8s.io/kubernetes/pkg/kubelet/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
 )
 
 const (

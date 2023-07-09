@@ -17,9 +17,9 @@ limitations under the License.
 package dra
 
 import (
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 // Manager manages all the DRA resource plugins running on a node.

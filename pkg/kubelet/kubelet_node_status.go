@@ -25,6 +25,12 @@ import (
 	"strings"
 	"time"
 
+	v1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/events"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/nodestatus"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util"
+	taintutil "github.com/sanposhiho/kubernetes/pkg/util/taints"
+	volutil "github.com/sanposhiho/kubernetes/pkg/volume/util"
 	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -37,12 +43,6 @@ import (
 	nodeutil "k8s.io/component-helpers/node/util"
 	"k8s.io/klog/v2"
 	kubeletapis "k8s.io/kubelet/pkg/apis"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	"k8s.io/kubernetes/pkg/kubelet/events"
-	"k8s.io/kubernetes/pkg/kubelet/nodestatus"
-	"k8s.io/kubernetes/pkg/kubelet/util"
-	taintutil "k8s.io/kubernetes/pkg/util/taints"
-	volutil "k8s.io/kubernetes/pkg/volume/util"
 )
 
 // registerWithAPIServer registers the node with the cluster master. It is safe

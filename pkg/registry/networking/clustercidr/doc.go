@@ -14,4 +14,4 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package clustercidr // import "k8s.io/kubernetes/pkg/registry/networking/clustercidr"
+package clustercidr // import "github.com/sanposhiho/kubernetes/pkg/registry/networking/clustercidr"

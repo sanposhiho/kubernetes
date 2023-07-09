@@ -20,10 +20,10 @@ import (
 	"context"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apiserver/pkg/admission"
 	admissiontesting "k8s.io/apiserver/pkg/admission/testing"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 func TestAdmission(t *testing.T) {

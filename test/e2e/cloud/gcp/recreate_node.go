@@ -22,17 +22,17 @@ import (
 	"time"
 
 	"github.com/onsi/ginkgo/v2"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework/providers/gce"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/labels"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	"k8s.io/kubernetes/test/e2e/framework/providers/gce"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	testutils "k8s.io/kubernetes/test/utils"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

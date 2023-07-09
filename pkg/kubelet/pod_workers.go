@@ -23,6 +23,12 @@ import (
 	"sync"
 	"time"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/events"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/eviction"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util/queue"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/runtime"
@@ -30,12 +36,6 @@ import (
 	"k8s.io/client-go/tools/record"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 	"k8s.io/klog/v2"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/events"
-	"k8s.io/kubernetes/pkg/kubelet/eviction"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
-	"k8s.io/kubernetes/pkg/kubelet/util/queue"
 	"k8s.io/utils/clock"
 )
 

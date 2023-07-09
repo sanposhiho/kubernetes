@@ -19,9 +19,9 @@ package results
 import (
 	"sync"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 // Manager provides a probe results cache and channel of updates.

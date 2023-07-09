@@ -23,8 +23,8 @@ package operationexecutor
 import (
 	"time"
 
-	"k8s.io/kubernetes/pkg/kubelet/pluginmanager/cache"
-	"k8s.io/kubernetes/pkg/util/goroutinemap"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/cache"
+	"github.com/sanposhiho/kubernetes/pkg/util/goroutinemap"
 )
 
 // OperationExecutor defines a set of operations for registering and unregistering

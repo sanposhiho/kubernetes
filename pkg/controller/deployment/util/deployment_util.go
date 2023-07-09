@@ -25,6 +25,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	labelsutil "github.com/sanposhiho/kubernetes/pkg/util/labels"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
@@ -38,8 +40,6 @@ import (
 	appsclient "k8s.io/client-go/kubernetes/typed/apps/v1"
 	appslisters "k8s.io/client-go/listers/apps/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller"
-	labelsutil "k8s.io/kubernetes/pkg/util/labels"
 	"k8s.io/utils/integer"
 )
 

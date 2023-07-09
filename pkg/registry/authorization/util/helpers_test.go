@@ -20,10 +20,10 @@ import (
 	"reflect"
 	"testing"
 
+	authorizationapi "github.com/sanposhiho/kubernetes/pkg/apis/authorization"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apiserver/pkg/authentication/user"
 	"k8s.io/apiserver/pkg/authorization/authorizer"
-	authorizationapi "k8s.io/kubernetes/pkg/apis/authorization"
 )
 
 func TestResourceAttributesFrom(t *testing.T) {

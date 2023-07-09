@@ -25,21 +25,21 @@ import (
 	"strings"
 	"time"
 
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	"k8s.io/kubernetes/pkg/kubelet/cm/cpumanager"
-	"k8s.io/kubernetes/pkg/kubelet/types"
 	admissionapi "k8s.io/pod-security-admission/api"
 	"k8s.io/utils/cpuset"
 
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
 )
 
 // Helper for makeCPUManagerPod().

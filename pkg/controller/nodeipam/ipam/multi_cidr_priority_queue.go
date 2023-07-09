@@ -19,7 +19,7 @@ package ipam
 import (
 	"math"
 
-	cidrset "k8s.io/kubernetes/pkg/controller/nodeipam/ipam/multicidrset"
+	cidrset "github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam/multicidrset"
 )
 
 // A PriorityQueue implementation based on https://pkg.go.dev/container/heap#example-package-PriorityQueue

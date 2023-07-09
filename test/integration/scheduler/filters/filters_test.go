@@ -22,6 +22,11 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
+	testutils "github.com/sanposhiho/kubernetes/test/integration/util"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
+	"github.com/sanposhiho/kubernetes/test/utils/ktesting"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -31,11 +36,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	"k8s.io/component-helpers/storage/volume"
-	"k8s.io/kubernetes/pkg/features"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
-	testutils "k8s.io/kubernetes/test/integration/util"
-	imageutils "k8s.io/kubernetes/test/utils/image"
-	"k8s.io/kubernetes/test/utils/ktesting"
 	"k8s.io/utils/pointer"
 )
 

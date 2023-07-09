@@ -37,9 +37,9 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	volumehelpers "k8s.io/cloud-provider/volume/helpers"
 
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/util"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util"
 )
 
 // This is the primary entrypoint for volume plugins.

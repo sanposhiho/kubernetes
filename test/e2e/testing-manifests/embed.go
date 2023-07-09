@@ -19,7 +19,7 @@ package testing_manifests
 import (
 	"embed"
 
-	e2etestfiles "k8s.io/kubernetes/test/e2e/framework/testfiles"
+	e2etestfiles "github.com/sanposhiho/kubernetes/test/e2e/framework/testfiles"
 )
 
 //go:embed cluster-dns flexvolume guestbook kubectl sample-device-plugin scheduling/nvidia-driver-installer.yaml statefulset storage-csi

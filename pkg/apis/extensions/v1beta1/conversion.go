@@ -19,13 +19,13 @@ package v1beta1
 import (
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
+	"github.com/sanposhiho/kubernetes/pkg/apis/networking"
 	extensionsv1beta1 "k8s.io/api/extensions/v1beta1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	"k8s.io/kubernetes/pkg/apis/autoscaling"
-	"k8s.io/kubernetes/pkg/apis/networking"
 )
 
 func Convert_autoscaling_ScaleStatus_To_v1beta1_ScaleStatus(in *autoscaling.ScaleStatus, out *extensionsv1beta1.ScaleStatus, s conversion.Scope) error {

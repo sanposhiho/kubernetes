@@ -32,10 +32,10 @@ import (
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/klog/v2"
 
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	resourcehelper "k8s.io/kubernetes/pkg/api/v1/resource"
-	"k8s.io/kubernetes/pkg/features"
-	schedutil "k8s.io/kubernetes/pkg/scheduler/util"
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	resourcehelper "github.com/sanposhiho/kubernetes/pkg/api/v1/resource"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	schedutil "github.com/sanposhiho/kubernetes/pkg/scheduler/util"
 )
 
 var generation int64

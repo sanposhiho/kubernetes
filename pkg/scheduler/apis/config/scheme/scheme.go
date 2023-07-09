@@ -17,12 +17,12 @@ limitations under the License.
 package scheme
 
 import (
+	config "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	configv1 "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/v1"
+	configv1beta3 "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/v1beta3"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	config "k8s.io/kubernetes/pkg/scheduler/apis/config"
-	configv1 "k8s.io/kubernetes/pkg/scheduler/apis/config/v1"
-	configv1beta3 "k8s.io/kubernetes/pkg/scheduler/apis/config/v1beta3"
 )
 
 var (

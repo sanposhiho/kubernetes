@@ -27,21 +27,21 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/cluster/ports"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/uuid"
 	"k8s.io/cli-runtime/pkg/printers"
-	"k8s.io/kubernetes/pkg/cluster/ports"
-	"k8s.io/kubernetes/test/e2e/framework"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
-	testutils "k8s.io/kubernetes/test/utils"
 )
 
 var _ = SIGDescribe("[Feature:StandaloneMode] ", func() {

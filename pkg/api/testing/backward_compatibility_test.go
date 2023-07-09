@@ -19,14 +19,14 @@ package testing
 import (
 	"testing"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/pod"
+	"github.com/sanposhiho/kubernetes/pkg/api/testing/compat"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	podutil "k8s.io/kubernetes/pkg/api/pod"
-	"k8s.io/kubernetes/pkg/api/testing/compat"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
-	"k8s.io/kubernetes/pkg/apis/core/validation"
 )
 
 func TestCompatibility_v1_PodSecurityContext(t *testing.T) {

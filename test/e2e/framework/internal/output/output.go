@@ -30,8 +30,8 @@ import (
 	"github.com/onsi/gomega"
 	"github.com/stretchr/testify/require"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	"k8s.io/kubernetes/test/e2e/framework/internal/junit"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework/internal/junit"
 )
 
 // TestGinkgoOutput runs the current suite and verifies that the generated
@@ -155,9 +155,9 @@ var klogPrefix = regexp.MustCompile(`(?m)^[IEF][[:digit:]]{4} [[:digit:]]{2}:[[:
 
 // testFailureOutput matches TestFailureOutput() and its source followed by additional stack entries:
 //
-// k8s.io/kubernetes/test/e2e/framework/pod/pod_test.TestFailureOutput(0xc000558800)
+// github.com/sanposhiho/kubernetes/test/e2e/framework/pod/pod_test.TestFailureOutput(0xc000558800)
 //
-//	/nvme/gopath/src/k8s.io/kubernetes/test/e2e/framework/pod/wait_test.go:73 +0x1c9
+//	/nvme/gopath/src/github.com/sanposhiho/kubernetes/test/e2e/framework/pod/wait_test.go:73 +0x1c9
 //
 // testing.tRunner(0xc000558800, 0x1af2848)
 //
@@ -166,7 +166,7 @@ var klogPrefix = regexp.MustCompile(`(?m)^[IEF][[:digit:]]{4} [[:digit:]]{2}:[[:
 // created by testing.(*T).Run
 //
 //	/nvme/gopath/go/src/testing/testing.go:916 +0x35a
-var testFailureOutput = regexp.MustCompile(`(?m)^k8s.io/kubernetes/test/e2e/framework/internal/output\.TestGinkgoOutput\(.*\n\t.*(\n.*\n\t.*)*`)
+var testFailureOutput = regexp.MustCompile(`(?m)^github.com/sanposhiho/kubernetes/test/e2e/framework/internal/output\.TestGinkgoOutput\(.*\n\t.*(\n.*\n\t.*)*`)
 
 // normalizeLocation removes path prefix and function parameters and certain stack entries
 // that we don't care about.

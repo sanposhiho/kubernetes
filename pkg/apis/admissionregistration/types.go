@@ -967,7 +967,7 @@ type RuleWithOperations struct {
 // OperationType specifies what type of operation the admission hook cares about.
 type OperationType string
 
-// The constants should be kept in sync with those defined in k8s.io/kubernetes/pkg/admission/interface.go.
+// The constants should be kept in sync with those defined in github.com/sanposhiho/kubernetes/pkg/admission/interface.go.
 const (
 	OperationAll OperationType = "*"
 	Create       OperationType = "CREATE"

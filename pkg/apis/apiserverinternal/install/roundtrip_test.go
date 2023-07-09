@@ -19,8 +19,8 @@ package install
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/apiserverinternal/fuzzer"
 	"k8s.io/apimachinery/pkg/api/apitesting/roundtrip"
-	"k8s.io/kubernetes/pkg/apis/apiserverinternal/fuzzer"
 )
 
 func TestRoundTrip(t *testing.T) {

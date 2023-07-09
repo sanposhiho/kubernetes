@@ -32,6 +32,11 @@ import (
 	"testing"
 	"time"
 
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	apisv1beta1 "github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration/v1beta1"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/test/integration/etcd"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	clientv3 "go.etcd.io/etcd/client/v3"
 	admissionreviewv1 "k8s.io/api/admission/v1"
 	"k8s.io/api/admission/v1beta1"
@@ -58,11 +63,6 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/util/retry"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	apisv1beta1 "k8s.io/kubernetes/pkg/apis/admissionregistration/v1beta1"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/test/integration/etcd"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 const (

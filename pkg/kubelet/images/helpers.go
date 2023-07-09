@@ -20,10 +20,10 @@ import (
 	"context"
 	"fmt"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/util/flowcontrol"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 // throttleImagePulling wraps kubecontainer.ImageService to throttle image

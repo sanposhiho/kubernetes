@@ -20,6 +20,7 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	authorizationv1 "k8s.io/api/authorization/v1"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -27,7 +28,6 @@ import (
 	"k8s.io/apiserver/pkg/authentication/serviceaccount"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
-	"k8s.io/kubernetes/test/e2e/framework"
 
 	"github.com/onsi/ginkgo/v2"
 )

@@ -17,11 +17,11 @@ limitations under the License.
 package conntrack
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/proxy"
+	proxyutil "github.com/sanposhiho/kubernetes/pkg/proxy/util"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/proxy"
-	proxyutil "k8s.io/kubernetes/pkg/proxy/util"
 	utilexec "k8s.io/utils/exec"
 )
 

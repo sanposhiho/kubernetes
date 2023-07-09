@@ -35,7 +35,7 @@ UPDATE_API_KNOWN_VIOLATIONS="${UPDATE_API_KNOWN_VIOLATIONS:-}"
 API_KNOWN_VIOLATIONS_DIR="${API_KNOWN_VIOLATIONS_DIR:-"${KUBE_ROOT}/api/api-rules"}"
 
 OUT_DIR="_output"
-PRJ_SRC_PATH="k8s.io/kubernetes"
+PRJ_SRC_PATH="github.com/sanposhiho/kubernetes"
 BOILERPLATE_FILENAME="hack/boilerplate/boilerplate.generatego.txt"
 APPLYCONFIG_PKG="k8s.io/client-go/applyconfigurations"
 
@@ -108,7 +108,7 @@ function codegen::protobuf() {
             -- \
             cmd pkg staging \
             | xargs -0 -n1 dirname \
-            | sed 's|^|k8s.io/kubernetes/|;s|k8s.io/kubernetes/staging/src/||' \
+            | sed 's|^|github.com/sanposhiho/kubernetes/|;s|github.com/sanposhiho/kubernetes/staging/src/||' \
             | sort -u)
 
     kube::log::status "Generating protobufs for ${#apis[@]} targets"
@@ -450,8 +450,8 @@ function codegen::conversions() {
     done
 
     local extra_peer_pkgs=(
-        k8s.io/kubernetes/pkg/apis/core
-        k8s.io/kubernetes/pkg/apis/core/v1
+        github.com/sanposhiho/kubernetes/pkg/apis/core
+        github.com/sanposhiho/kubernetes/pkg/apis/core/v1
         k8s.io/api/core/v1
     )
 
@@ -586,7 +586,7 @@ function codegen::openapi() {
 
 function codegen::applyconfigs() {
     GO111MODULE=on GOPROXY=off go install \
-        k8s.io/kubernetes/pkg/generated/openapi/cmd/models-schema \
+        github.com/sanposhiho/kubernetes/pkg/generated/openapi/cmd/models-schema \
         k8s.io/code-generator/cmd/applyconfiguration-gen
 
     local modelsschema

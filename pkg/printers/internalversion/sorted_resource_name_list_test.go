@@ -17,10 +17,11 @@ limitations under the License.
 package internalversion
 
 import (
-	api "k8s.io/kubernetes/pkg/apis/core"
 	"reflect"
 	"sort"
 	"testing"
+
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 )
 
 func TestSortableResourceNamesSorting(t *testing.T) {

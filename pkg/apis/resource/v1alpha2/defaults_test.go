@@ -24,8 +24,8 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 
 	// ensure types are installed
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	_ "k8s.io/kubernetes/pkg/apis/resource/install"
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/resource/install"
 )
 
 func TestSetDefaultAllocationMode(t *testing.T) {

@@ -21,12 +21,12 @@ import (
 	"strings"
 	"testing"
 
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 
 	cadvisorapi "github.com/google/cadvisor/info/v1"
 
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
-	"k8s.io/kubernetes/pkg/kubelet/lifecycle"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/lifecycle"
 )
 
 func NewTestBitMask(sockets ...int) bitmask.BitMask {

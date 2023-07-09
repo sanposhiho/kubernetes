@@ -29,9 +29,9 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	batch "k8s.io/kubernetes/pkg/apis/batch"
-	batchv1 "k8s.io/kubernetes/pkg/apis/batch/v1"
-	core "k8s.io/kubernetes/pkg/apis/core"
+	batch "github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	batchv1 "github.com/sanposhiho/kubernetes/pkg/apis/batch/v1"
+	core "github.com/sanposhiho/kubernetes/pkg/apis/core"
 )
 
 func init() {

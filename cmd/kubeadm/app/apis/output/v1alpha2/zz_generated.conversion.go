@@ -26,7 +26,7 @@ import (
 
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	output "k8s.io/kubernetes/cmd/kubeadm/app/apis/output"
+	output "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/output"
 )
 
 func init() {

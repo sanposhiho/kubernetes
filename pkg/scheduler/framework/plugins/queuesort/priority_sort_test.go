@@ -20,9 +20,9 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
 )
 
 func TestLess(t *testing.T) {

@@ -171,7 +171,7 @@ if [[ ${WHAT} == "" || ${WHAT} =~ .*kubeadm.* ]] ; then
   export KUBEADM_PATH="${KUBEADM_PATH:=$(kube::realpath "${KUBE_ROOT}")/_output/local/go/bin/kubeadm}"
   # invoke the tests
   make -C "${KUBE_ROOT}" test \
-    WHAT=k8s.io/kubernetes/cmd/kubeadm/test/cmd \
+    WHAT=github.com/sanposhiho/kubernetes/cmd/kubeadm/test/cmd \
     KUBE_TIMEOUT=--timeout=240s \
     KUBE_RACE=""
 

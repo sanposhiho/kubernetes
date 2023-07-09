@@ -23,12 +23,12 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/cache"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/operationexecutor"
+	"github.com/sanposhiho/kubernetes/pkg/util/goroutinemap"
+	"github.com/sanposhiho/kubernetes/pkg/util/goroutinemap/exponentialbackoff"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/kubelet/pluginmanager/cache"
-	"k8s.io/kubernetes/pkg/kubelet/pluginmanager/operationexecutor"
-	"k8s.io/kubernetes/pkg/util/goroutinemap"
-	"k8s.io/kubernetes/pkg/util/goroutinemap/exponentialbackoff"
 )
 
 // Reconciler runs a periodic loop to reconcile the desired state of the world

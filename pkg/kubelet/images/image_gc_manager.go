@@ -29,18 +29,18 @@ import (
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/events"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util/sliceutils"
 	"k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/tools/record"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	"k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/events"
-	"k8s.io/kubernetes/pkg/kubelet/util/sliceutils"
 )
 
 // instrumentationScope is OpenTelemetry instrumentation scope name
-const instrumentationScope = "k8s.io/kubernetes/pkg/kubelet/images"
+const instrumentationScope = "github.com/sanposhiho/kubernetes/pkg/kubelet/images"
 
 // StatsProvider is an interface for fetching stats used during image garbage
 // collection.

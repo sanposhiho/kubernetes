@@ -31,6 +31,26 @@ import (
 	crierror "k8s.io/cri-api/pkg/errors"
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/pkg/credentialprovider"
+	"github.com/sanposhiho/kubernetes/pkg/credentialprovider/plugin"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/events"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/images"
+	runtimeutil "github.com/sanposhiho/kubernetes/pkg/kubelet/kuberuntime/util"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/lifecycle"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/logs"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
+	proberesults "github.com/sanposhiho/kubernetes/pkg/kubelet/prober/results"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/runtimeclass"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/sysctl"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util/cache"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util/format"
+	sc "github.com/sanposhiho/kubernetes/pkg/securitycontext"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -44,26 +64,6 @@ import (
 	"k8s.io/component-base/logs/logreduction"
 	internalapi "k8s.io/cri-api/pkg/apis"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/pkg/credentialprovider"
-	"k8s.io/kubernetes/pkg/credentialprovider/plugin"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/kubelet/cm"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/events"
-	"k8s.io/kubernetes/pkg/kubelet/images"
-	runtimeutil "k8s.io/kubernetes/pkg/kubelet/kuberuntime/util"
-	"k8s.io/kubernetes/pkg/kubelet/lifecycle"
-	"k8s.io/kubernetes/pkg/kubelet/logs"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
-	proberesults "k8s.io/kubernetes/pkg/kubelet/prober/results"
-	"k8s.io/kubernetes/pkg/kubelet/runtimeclass"
-	"k8s.io/kubernetes/pkg/kubelet/sysctl"
-	"k8s.io/kubernetes/pkg/kubelet/types"
-	"k8s.io/kubernetes/pkg/kubelet/util/cache"
-	"k8s.io/kubernetes/pkg/kubelet/util/format"
-	sc "k8s.io/kubernetes/pkg/securitycontext"
 )
 
 const (
@@ -79,7 +79,7 @@ const (
 	// How frequently to report identical errors
 	identicalErrorDelay = 1 * time.Minute
 	// OpenTelemetry instrumentation scope name
-	instrumentationScope = "k8s.io/kubernetes/pkg/kubelet/kuberuntime"
+	instrumentationScope = "github.com/sanposhiho/kubernetes/pkg/kubelet/kuberuntime"
 )
 
 var (

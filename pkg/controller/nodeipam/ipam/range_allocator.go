@@ -26,6 +26,8 @@ import (
 	"k8s.io/klog/v2"
 	netutils "k8s.io/utils/net"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam/cidrset"
+	controllerutil "github.com/sanposhiho/kubernetes/pkg/controller/util/node"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/types"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -38,8 +40,6 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/record"
 	nodeutil "k8s.io/component-helpers/node/util"
-	"k8s.io/kubernetes/pkg/controller/nodeipam/ipam/cidrset"
-	controllerutil "k8s.io/kubernetes/pkg/controller/util/node"
 )
 
 type rangeAllocator struct {

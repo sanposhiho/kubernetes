@@ -22,9 +22,9 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/devicemanager/checkpoint"
 	"k8s.io/apimachinery/pkg/util/sets"
 	pluginapi "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
-	"k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/checkpoint"
 )
 
 func TestGetContainerDevices(t *testing.T) {

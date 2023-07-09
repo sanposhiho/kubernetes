@@ -19,8 +19,8 @@ package main
 import (
 	"os"
 
+	"github.com/sanposhiho/kubernetes/cmd/kubemark/app"
 	"k8s.io/component-base/cli"
-	"k8s.io/kubernetes/cmd/kubemark/app"
 )
 
 func main() {

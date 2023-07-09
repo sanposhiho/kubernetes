@@ -37,6 +37,6 @@ hack/run-in-gopath.sh \
     go run test/typecheck/main.go "$@" "--serial=$TYPECHECK_SERIAL" || ret=$?
 if [[ $ret -ne 0 ]]; then
   echo "!!! Type Check has failed. This may cause cross platform build failures." >&2
-  echo "!!! Please see https://git.k8s.io/kubernetes/test/typecheck for more information." >&2
+  echo "!!! Please see https://git.github.com/sanposhiho/kubernetes/test/typecheck for more information." >&2
   exit 1
 fi

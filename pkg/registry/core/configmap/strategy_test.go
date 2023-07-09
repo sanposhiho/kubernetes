@@ -19,9 +19,9 @@ package configmap
 import (
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 func TestConfigMapStrategy(t *testing.T) {

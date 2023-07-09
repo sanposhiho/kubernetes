@@ -26,12 +26,12 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/volume"
 	api "k8s.io/api/core/v1"
 	storage "k8s.io/api/storage/v1"
 	meta "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/volume"
 	utilstrings "k8s.io/utils/strings"
 )
 

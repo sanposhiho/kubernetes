@@ -19,9 +19,9 @@ package metrics
 import (
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/cache"
 	"k8s.io/component-base/metrics"
 	"k8s.io/component-base/metrics/legacyregistry"
-	"k8s.io/kubernetes/pkg/kubelet/pluginmanager/cache"
 )
 
 const (

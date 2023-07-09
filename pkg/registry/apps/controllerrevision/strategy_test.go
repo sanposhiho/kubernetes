@@ -19,11 +19,11 @@ package controllerrevision
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
-	"k8s.io/kubernetes/pkg/apis/apps"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 func TestStrategy_NamespaceScoped(t *testing.T) {

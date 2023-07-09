@@ -21,9 +21,9 @@ import (
 	"path/filepath"
 	"testing"
 
+	. "github.com/sanposhiho/kubernetes/pkg/volume"
+	volumetest "github.com/sanposhiho/kubernetes/pkg/volume/testing"
 	utiltesting "k8s.io/client-go/util/testing"
-	. "k8s.io/kubernetes/pkg/volume"
-	volumetest "k8s.io/kubernetes/pkg/volume/testing"
 )
 
 // TestMetricsDuGetCapacity tests that MetricsDu can read disk usage

@@ -20,8 +20,8 @@ import (
 	"reflect"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 func TestVisitContainersWithPath(t *testing.T) {

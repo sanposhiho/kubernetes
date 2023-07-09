@@ -20,9 +20,9 @@ import (
 	"testing"
 	"time"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 func buildPodsByCreationTime() PodsByCreationTime {

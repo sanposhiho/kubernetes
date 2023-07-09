@@ -25,8 +25,8 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	bootstraputil "k8s.io/cluster-bootstrap/token/util"
 
-	bootstraptokenv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/bootstraptoken/v1"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/apiclient"
+	bootstraptokenv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/bootstraptoken/v1"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/apiclient"
 )
 
 // CreateNewTokens tries to create a token and fails if one with the same ID already exists

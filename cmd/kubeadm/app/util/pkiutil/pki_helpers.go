@@ -43,9 +43,9 @@ import (
 	"k8s.io/klog/v2"
 	netutils "k8s.io/utils/net"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	kubeadmutil "k8s.io/kubernetes/cmd/kubeadm/app/util"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	kubeadmutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util"
 )
 
 const (

@@ -22,15 +22,15 @@ import (
 
 	fuzz "github.com/google/gofuzz"
 
+	"github.com/sanposhiho/kubernetes/pkg/cluster/ports"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	kubeletconfigv1beta1 "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/v1beta1"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/eviction"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/qos"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	runtimeserializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/kubelet/config/v1beta1"
-	"k8s.io/kubernetes/pkg/cluster/ports"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	kubeletconfigv1beta1 "k8s.io/kubernetes/pkg/kubelet/apis/config/v1beta1"
-	"k8s.io/kubernetes/pkg/kubelet/eviction"
-	"k8s.io/kubernetes/pkg/kubelet/qos"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 	utilpointer "k8s.io/utils/pointer"
 )
 

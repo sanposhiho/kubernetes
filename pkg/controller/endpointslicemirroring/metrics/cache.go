@@ -20,8 +20,8 @@ import (
 	"math"
 	"sync"
 
+	endpointutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpoint"
 	"k8s.io/apimachinery/pkg/types"
-	endpointutil "k8s.io/kubernetes/pkg/controller/util/endpoint"
 )
 
 // NewCache returns a new Cache with the specified endpointsPerSlice.

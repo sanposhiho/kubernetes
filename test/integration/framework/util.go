@@ -24,12 +24,12 @@ import (
 	"testing"
 	"time"
 
+	nodectlr "github.com/sanposhiho/kubernetes/pkg/controller/nodelifecycle"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
-	nodectlr "k8s.io/kubernetes/pkg/controller/nodelifecycle"
 )
 
 const (

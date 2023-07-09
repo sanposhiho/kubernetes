@@ -35,10 +35,10 @@ import (
 	"k8s.io/utils/integer"
 	netutil "k8s.io/utils/net"
 
-	_ "k8s.io/kubernetes/pkg/features"
-	kubeauthenticator "k8s.io/kubernetes/pkg/kubeapiserver/authenticator"
-	kubeoptions "k8s.io/kubernetes/pkg/kubeapiserver/options"
-	"k8s.io/kubernetes/pkg/serviceaccount"
+	_ "github.com/sanposhiho/kubernetes/pkg/features"
+	kubeauthenticator "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/authenticator"
+	kubeoptions "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/options"
+	"github.com/sanposhiho/kubernetes/pkg/serviceaccount"
 )
 
 type Options struct {

@@ -21,10 +21,10 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager/checksum"
+	utilstore "github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager/testing"
+	v1 "github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager/testing/example_checkpoint_formats/v1"
 	"github.com/stretchr/testify/assert"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager/checksum"
-	utilstore "k8s.io/kubernetes/pkg/kubelet/checkpointmanager/testing"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager/testing/example_checkpoint_formats/v1"
 )
 
 var testStore *utilstore.MemStore

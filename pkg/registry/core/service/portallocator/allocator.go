@@ -20,12 +20,12 @@ import (
 	"errors"
 	"fmt"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/registry/core/service/allocator"
 	"k8s.io/apimachinery/pkg/util/net"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/klog/v2"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/registry/core/service/allocator"
 )
 
 // Interface manages the allocation of ports out of a range. Interface

@@ -21,7 +21,7 @@ import (
 	"strconv"
 	"time"
 
-	"k8s.io/kubernetes/pkg/probe"
+	"github.com/sanposhiho/kubernetes/pkg/probe"
 
 	"k8s.io/klog/v2"
 )

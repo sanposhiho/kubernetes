@@ -21,12 +21,12 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	internal "github.com/sanposhiho/kubernetes/pkg/apis/resource"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	internal "k8s.io/kubernetes/pkg/apis/resource"
 )
 
 func TestResourceVersioner(t *testing.T) {

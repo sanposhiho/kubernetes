@@ -28,8 +28,8 @@ import (
 	"strconv"
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/fsquota/common"
 	"golang.org/x/sys/unix"
-	"k8s.io/kubernetes/pkg/volume/util/fsquota/common"
 )
 
 var projectsFile = "/etc/projects"

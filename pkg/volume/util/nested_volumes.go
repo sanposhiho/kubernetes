@@ -23,8 +23,8 @@ import (
 	"sort"
 	"strings"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
 	v1 "k8s.io/api/core/v1"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
 )
 
 // getNestedMountpoints returns a list of mountpoint directories that should be created

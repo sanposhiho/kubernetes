@@ -22,6 +22,10 @@ import (
 	"sort"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/endpointslice/metrics"
+	"github.com/sanposhiho/kubernetes/pkg/controller/endpointslice/topologycache"
+	endpointutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpoint"
+	endpointsliceutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpointslice"
 	corev1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -34,10 +38,6 @@ import (
 	corelisters "k8s.io/client-go/listers/core/v1"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller/endpointslice/metrics"
-	"k8s.io/kubernetes/pkg/controller/endpointslice/topologycache"
-	endpointutil "k8s.io/kubernetes/pkg/controller/util/endpoint"
-	endpointsliceutil "k8s.io/kubernetes/pkg/controller/util/endpointslice"
 )
 
 // reconciler is responsible for transforming current EndpointSlice state into

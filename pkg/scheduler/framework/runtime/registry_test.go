@@ -22,8 +22,8 @@ import (
 
 	"github.com/google/uuid"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
 func TestDecodeInto(t *testing.T) {

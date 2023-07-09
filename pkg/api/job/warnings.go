@@ -20,10 +20,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/pod"
+	"github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/api/pod"
-	"k8s.io/kubernetes/pkg/apis/batch"
-	"k8s.io/kubernetes/pkg/apis/core"
 	"k8s.io/utils/pointer"
 )
 

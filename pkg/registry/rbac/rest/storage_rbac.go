@@ -23,6 +23,22 @@ import (
 
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/rbac"
+	"github.com/sanposhiho/kubernetes/pkg/registry/rbac/clusterrole"
+	clusterrolepolicybased "github.com/sanposhiho/kubernetes/pkg/registry/rbac/clusterrole/policybased"
+	clusterrolestore "github.com/sanposhiho/kubernetes/pkg/registry/rbac/clusterrole/storage"
+	"github.com/sanposhiho/kubernetes/pkg/registry/rbac/clusterrolebinding"
+	clusterrolebindingpolicybased "github.com/sanposhiho/kubernetes/pkg/registry/rbac/clusterrolebinding/policybased"
+	clusterrolebindingstore "github.com/sanposhiho/kubernetes/pkg/registry/rbac/clusterrolebinding/storage"
+	"github.com/sanposhiho/kubernetes/pkg/registry/rbac/role"
+	rolepolicybased "github.com/sanposhiho/kubernetes/pkg/registry/rbac/role/policybased"
+	rolestore "github.com/sanposhiho/kubernetes/pkg/registry/rbac/role/storage"
+	"github.com/sanposhiho/kubernetes/pkg/registry/rbac/rolebinding"
+	rolebindingpolicybased "github.com/sanposhiho/kubernetes/pkg/registry/rbac/rolebinding/policybased"
+	rolebindingstore "github.com/sanposhiho/kubernetes/pkg/registry/rbac/rolebinding/storage"
+	rbacregistryvalidation "github.com/sanposhiho/kubernetes/pkg/registry/rbac/validation"
+	"github.com/sanposhiho/kubernetes/plugin/pkg/auth/authorizer/rbac/bootstrappolicy"
 	rbacapiv1 "k8s.io/api/rbac/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -38,22 +54,6 @@ import (
 	rbacv1client "k8s.io/client-go/kubernetes/typed/rbac/v1"
 	"k8s.io/client-go/util/retry"
 	"k8s.io/component-helpers/auth/rbac/reconciliation"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/rbac"
-	"k8s.io/kubernetes/pkg/registry/rbac/clusterrole"
-	clusterrolepolicybased "k8s.io/kubernetes/pkg/registry/rbac/clusterrole/policybased"
-	clusterrolestore "k8s.io/kubernetes/pkg/registry/rbac/clusterrole/storage"
-	"k8s.io/kubernetes/pkg/registry/rbac/clusterrolebinding"
-	clusterrolebindingpolicybased "k8s.io/kubernetes/pkg/registry/rbac/clusterrolebinding/policybased"
-	clusterrolebindingstore "k8s.io/kubernetes/pkg/registry/rbac/clusterrolebinding/storage"
-	"k8s.io/kubernetes/pkg/registry/rbac/role"
-	rolepolicybased "k8s.io/kubernetes/pkg/registry/rbac/role/policybased"
-	rolestore "k8s.io/kubernetes/pkg/registry/rbac/role/storage"
-	"k8s.io/kubernetes/pkg/registry/rbac/rolebinding"
-	rolebindingpolicybased "k8s.io/kubernetes/pkg/registry/rbac/rolebinding/policybased"
-	rolebindingstore "k8s.io/kubernetes/pkg/registry/rbac/rolebinding/storage"
-	rbacregistryvalidation "k8s.io/kubernetes/pkg/registry/rbac/validation"
-	"k8s.io/kubernetes/plugin/pkg/auth/authorizer/rbac/bootstrappolicy"
 )
 
 const PostStartHookName = "rbac/bootstrap-roles"
@@ -66,7 +66,7 @@ var _ genericapiserver.PostStartHookProvider = RESTStorageProvider{}
 
 func (p RESTStorageProvider) NewRESTStorage(apiResourceConfigSource serverstorage.APIResourceConfigSource, restOptionsGetter generic.RESTOptionsGetter) (genericapiserver.APIGroupInfo, error) {
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(rbac.GroupName, legacyscheme.Scheme, legacyscheme.ParameterCodec, legacyscheme.Codecs)
-	// If you add a version here, be sure to add an entry in `k8s.io/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
+	// If you add a version here, be sure to add an entry in `github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
 	// TODO refactor the plumbing to provide the information in the APIGroupInfo
 
 	if storageMap, err := p.storage(rbacapiv1.SchemeGroupVersion, apiResourceConfigSource, restOptionsGetter); err != nil {

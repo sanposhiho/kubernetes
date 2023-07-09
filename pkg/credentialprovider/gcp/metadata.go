@@ -26,10 +26,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/credentialprovider"
 	utilnet "k8s.io/apimachinery/pkg/util/net"
 	"k8s.io/cloud-provider/credentialconfig"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/credentialprovider"
 	"k8s.io/legacy-cloud-providers/gce/gcpcredential"
 )
 

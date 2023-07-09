@@ -19,7 +19,7 @@ package validation
 import (
 	"k8s.io/apimachinery/pkg/util/validation/field"
 
-	eventratelimitapi "k8s.io/kubernetes/plugin/pkg/admission/eventratelimit/apis/eventratelimit"
+	eventratelimitapi "github.com/sanposhiho/kubernetes/plugin/pkg/admission/eventratelimit/apis/eventratelimit"
 )
 
 var limitTypes = map[eventratelimitapi.LimitType]bool{

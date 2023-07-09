@@ -17,9 +17,9 @@ limitations under the License.
 package memorymanager
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/memorymanager/state"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/kubelet/cm/memorymanager/state"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
 )
 
 // Type defines the policy type

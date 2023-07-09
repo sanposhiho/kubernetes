@@ -1455,7 +1455,7 @@ is now under 'kubescheduler.config.k8s.io/v1alpha1'.  ([#66916](https://github.c
 - Extender preemption should respect IsInterested() ([#66291](https://github.com/kubernetes/kubernetes/pull/66291), [@resouer](https://github.com/resouer))
 - This PR will leverage subtests on the existing table tests for the scheduler units. ([#63665](https://github.com/kubernetes/kubernetes/pull/63665), [@xchapter7x](https://github.com/xchapter7x))
 - This PR will leverage subtests on the existing table tests for the scheduler units. ([#63666](https://github.com/kubernetes/kubernetes/pull/63666), [@xchapter7x](https://github.com/xchapter7x))
-- Re-adds `pkg/generated/bindata.go` to the repository to allow some parts of k8s.io/kubernetes to be go-vendorable. ([#65985](https://github.com/kubernetes/kubernetes/pull/65985), [@ixdy](https://github.com/ixdy))
+- Re-adds `pkg/generated/bindata.go` to the repository to allow some parts of github.com/sanposhiho/kubernetes to be go-vendorable. ([#65985](https://github.com/kubernetes/kubernetes/pull/65985), [@ixdy](https://github.com/ixdy))
 - If `TaintNodesByCondition` enabled, taint node with `TaintNodeUnschedulable` when initializing node to avoid race condition.
 ([#63955](https://github.com/kubernetes/kubernetes/pull/63955), [@k82cn](https://github.com/k82cn))
 - Remove rescheduler since scheduling DS pods by default scheduler is moving to beta. ([#67687](https://github.com/kubernetes/kubernetes/pull/67687), [@Lion-Wei](https://github.com/Lion-Wei))
@@ -2237,7 +2237,7 @@ filename | sha256 hash
 * "kubectl delete" no longer waits for dependent objects to be deleted when removing parent resources ([#65908](https://github.com/kubernetes/kubernetes/pull/65908), [@juanvallejo](https://github.com/juanvallejo))
 * Introduce a new flag `--keepalive` for kubectl proxy to allow setting keep-alive period for long-running request. ([#63793](https://github.com/kubernetes/kubernetes/pull/63793), [@hzxuzhonghu](https://github.com/hzxuzhonghu))
 * If Openstack LoadBalancer is not defined in cloud config, the loadbalancer is not initialized any more in openstack. All setups must have some setting under that section ([#65781](https://github.com/kubernetes/kubernetes/pull/65781), [@zetaab](https://github.com/zetaab))
-* Re-adds `pkg/generated/bindata.go` to the repository to allow some parts of k8s.io/kubernetes to be go-vendorable. ([#65985](https://github.com/kubernetes/kubernetes/pull/65985), [@ixdy](https://github.com/ixdy))
+* Re-adds `pkg/generated/bindata.go` to the repository to allow some parts of github.com/sanposhiho/kubernetes to be go-vendorable. ([#65985](https://github.com/kubernetes/kubernetes/pull/65985), [@ixdy](https://github.com/ixdy))
 * Fix a bug that preempting a pod may block forever. ([#65987](https://github.com/kubernetes/kubernetes/pull/65987), [@Random-Liu](https://github.com/Random-Liu))
 * Fix flexvolume in containarized kubelets ([#65549](https://github.com/kubernetes/kubernetes/pull/65549), [@gnufied](https://github.com/gnufied))
 * Add volume mode filed to constructed volume spec for CSI plugin ([#65456](https://github.com/kubernetes/kubernetes/pull/65456), [@wenlxie](https://github.com/wenlxie))

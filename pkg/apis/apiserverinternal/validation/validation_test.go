@@ -20,8 +20,8 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/apiserverinternal"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/apiserverinternal"
 )
 
 func TestValidateServerStorageVersion(t *testing.T) {

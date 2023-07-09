@@ -20,9 +20,9 @@ import (
 	"context"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
 	"k8s.io/apimachinery/pkg/util/wait"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
 )
 
 // WaitForSSHTunnels waits for establishing SSH tunnel to busybox pod.

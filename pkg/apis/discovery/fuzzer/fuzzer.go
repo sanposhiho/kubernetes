@@ -19,9 +19,9 @@ package fuzzer
 import (
 	fuzz "github.com/google/gofuzz"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/discovery"
 	runtimeserializer "k8s.io/apimachinery/pkg/runtime/serializer"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/discovery"
 )
 
 // Funcs returns the fuzzer functions for the discovery api group.

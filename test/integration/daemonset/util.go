@@ -21,8 +21,8 @@ import (
 	"fmt"
 	"sync"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"k8s.io/apiserver/pkg/admission"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 var _ admission.ValidationInterface = &fakePodFailAdmission{}

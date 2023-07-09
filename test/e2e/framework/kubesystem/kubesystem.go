@@ -23,8 +23,8 @@ import (
 	"strconv"
 	"time"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2essh "k8s.io/kubernetes/test/e2e/framework/ssh"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2essh "github.com/sanposhiho/kubernetes/test/e2e/framework/ssh"
 )
 
 // RestartControllerManager restarts the kube-controller-manager.

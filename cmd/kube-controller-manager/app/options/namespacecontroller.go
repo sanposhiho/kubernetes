@@ -19,7 +19,7 @@ package options
 import (
 	"github.com/spf13/pflag"
 
-	namespaceconfig "k8s.io/kubernetes/pkg/controller/namespace/config"
+	namespaceconfig "github.com/sanposhiho/kubernetes/pkg/controller/namespace/config"
 )
 
 // NamespaceControllerOptions holds the NamespaceController options.

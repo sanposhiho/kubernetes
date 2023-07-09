@@ -19,18 +19,18 @@ package statefulset
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	pvcutil "github.com/sanposhiho/kubernetes/pkg/api/persistentvolumeclaim"
+	"github.com/sanposhiho/kubernetes/pkg/api/pod"
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps/validation"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apiserver/pkg/registry/rest"
 	"k8s.io/apiserver/pkg/storage/names"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	pvcutil "k8s.io/kubernetes/pkg/api/persistentvolumeclaim"
-	"k8s.io/kubernetes/pkg/api/pod"
-	"k8s.io/kubernetes/pkg/apis/apps"
-	"k8s.io/kubernetes/pkg/apis/apps/validation"
-	"k8s.io/kubernetes/pkg/features"
 	"sigs.k8s.io/structured-merge-diff/v4/fieldpath"
 )
 

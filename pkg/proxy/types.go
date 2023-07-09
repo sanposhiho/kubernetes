@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"net"
 
+	"github.com/sanposhiho/kubernetes/pkg/proxy/config"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/kubernetes/pkg/proxy/config"
 )
 
 // Provider is the interface provided by proxier implementations.

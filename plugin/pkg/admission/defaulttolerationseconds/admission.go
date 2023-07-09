@@ -22,10 +22,10 @@ import (
 	"fmt"
 	"io"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apiserver/pkg/admission"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 // PluginName indicates name of admission plugin.

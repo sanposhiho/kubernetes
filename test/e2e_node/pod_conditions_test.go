@@ -27,18 +27,18 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	admissionapi "k8s.io/pod-security-admission/api"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/events"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eevents "github.com/sanposhiho/kubernetes/test/e2e/framework/events"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/util/uuid"
-	"k8s.io/kubernetes/pkg/kubelet/events"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eevents "k8s.io/kubernetes/test/e2e/framework/events"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	testutils "k8s.io/kubernetes/test/utils"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 
-	"k8s.io/kubernetes/pkg/features"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
 
 	"github.com/onsi/ginkgo/v2"
 )

@@ -29,7 +29,7 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/component-base/version"
 
-	kubeadmutil "k8s.io/kubernetes/cmd/kubeadm/app/util"
+	kubeadmutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util"
 )
 
 // VersionGetter defines an interface for fetching different versions.

@@ -35,9 +35,9 @@ package common
 
 import (
 	// ensure these packages are scanned by ginkgo for e2e tests
-	_ "k8s.io/kubernetes/test/e2e/common/network"
-	_ "k8s.io/kubernetes/test/e2e/common/node"
-	_ "k8s.io/kubernetes/test/e2e/common/storage"
+	_ "github.com/sanposhiho/kubernetes/test/e2e/common/network"
+	_ "github.com/sanposhiho/kubernetes/test/e2e/common/node"
+	_ "github.com/sanposhiho/kubernetes/test/e2e/common/storage"
 )
 ```
 - test ownership must be declared via a top-level SIGDescribe call defined in the sig-owned package, e.g.
@@ -59,7 +59,7 @@ package bootstrap
 
 import (
 	"github.com/onsi/ginkgo"
-	"k8s.io/kubernetes/test/e2e/lifecycle"
+	"github.com/sanposhiho/kubernetes/test/e2e/lifecycle"
 )
 var _ = lifecycle.SIGDescribe("[Feature:BootstrapTokens]", func() {
   /* ... */

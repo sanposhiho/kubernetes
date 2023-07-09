@@ -27,7 +27,7 @@ import (
 	v1alpha1 "k8s.io/api/certificates/v1alpha1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	certificates "k8s.io/kubernetes/pkg/apis/certificates"
+	certificates "github.com/sanposhiho/kubernetes/pkg/apis/certificates"
 )
 
 func init() {

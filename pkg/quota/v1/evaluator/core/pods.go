@@ -33,12 +33,12 @@ import (
 	"k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/utils/clock"
 
-	resourcehelper "k8s.io/kubernetes/pkg/api/v1/resource"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	k8s_api_v1 "k8s.io/kubernetes/pkg/apis/core/v1"
-	"k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	"k8s.io/kubernetes/pkg/apis/core/v1/helper/qos"
-	"k8s.io/kubernetes/pkg/features"
+	resourcehelper "github.com/sanposhiho/kubernetes/pkg/api/v1/resource"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	k8s_api_v1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper/qos"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 )
 
 // the name used for object count quota

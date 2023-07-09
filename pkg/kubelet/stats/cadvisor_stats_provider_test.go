@@ -25,18 +25,18 @@ import (
 	cadvisorapiv2 "github.com/google/cadvisor/info/v2"
 	"github.com/stretchr/testify/assert"
 
+	cadvisortest "github.com/sanposhiho/kubernetes/pkg/kubelet/cadvisor/testing"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	containertest "github.com/sanposhiho/kubernetes/pkg/kubelet/container/testing"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/kuberuntime"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/leaky"
+	serverstats "github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats"
+	statustest "github.com/sanposhiho/kubernetes/pkg/kubelet/status/testing"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	cadvisortest "k8s.io/kubernetes/pkg/kubelet/cadvisor/testing"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	containertest "k8s.io/kubernetes/pkg/kubelet/container/testing"
-	"k8s.io/kubernetes/pkg/kubelet/kuberuntime"
-	"k8s.io/kubernetes/pkg/kubelet/leaky"
-	serverstats "k8s.io/kubernetes/pkg/kubelet/server/stats"
-	statustest "k8s.io/kubernetes/pkg/kubelet/status/testing"
-	"k8s.io/kubernetes/pkg/volume"
 )
 
 func TestFilterTerminatedContainerInfoAndAssembleByPodCgroupKey(t *testing.T) {

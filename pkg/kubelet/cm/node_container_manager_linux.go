@@ -25,15 +25,15 @@ import (
 	"strings"
 	"time"
 
+	kubefeatures "github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/events"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/stats/pidlimit"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/types"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/klog/v2"
-	kubefeatures "k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/kubelet/events"
-	"k8s.io/kubernetes/pkg/kubelet/stats/pidlimit"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 )
 
 const (

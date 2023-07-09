@@ -20,13 +20,13 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
 	apiv1 "k8s.io/api/core/v1"
 	v1 "k8s.io/api/scheduling/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
 
 	// ensure types are installed
-	_ "k8s.io/kubernetes/pkg/apis/scheduling/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/scheduling/install"
 )
 
 func roundTrip(t *testing.T, obj runtime.Object) runtime.Object {

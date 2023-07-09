@@ -32,8 +32,8 @@ import (
 	"k8s.io/client-go/tools/record"
 	registerapi "k8s.io/kubelet/pkg/apis/pluginregistration/v1"
 
-	"k8s.io/kubernetes/pkg/kubelet/config"
-	"k8s.io/kubernetes/pkg/kubelet/pluginmanager/pluginwatcher"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/pluginwatcher"
 )
 
 var (

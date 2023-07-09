@@ -23,10 +23,16 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	"k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	"k8s.io/kubernetes/pkg/features"
 
+	authenticationapi "github.com/sanposhiho/kubernetes/pkg/apis/authentication"
+	"github.com/sanposhiho/kubernetes/pkg/apis/coordination"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/policy"
+	storage "github.com/sanposhiho/kubernetes/pkg/apis/storage"
+	"github.com/sanposhiho/kubernetes/pkg/auth/nodeidentifier"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -40,12 +46,6 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/component-base/featuregate"
 	kubeletapis "k8s.io/kubelet/pkg/apis"
-	authenticationapi "k8s.io/kubernetes/pkg/apis/authentication"
-	"k8s.io/kubernetes/pkg/apis/coordination"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/policy"
-	storage "k8s.io/kubernetes/pkg/apis/storage"
-	"k8s.io/kubernetes/pkg/auth/nodeidentifier"
 	"k8s.io/utils/pointer"
 )
 

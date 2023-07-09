@@ -19,9 +19,9 @@ package resourceclaim
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
-	"k8s.io/kubernetes/pkg/apis/resource"
 )
 
 var resourceClaim = &resource.ResourceClaim{

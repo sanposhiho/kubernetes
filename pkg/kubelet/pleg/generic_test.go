@@ -30,11 +30,11 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/stretchr/testify/assert"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	containertest "github.com/sanposhiho/kubernetes/pkg/kubelet/container/testing"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/component-base/metrics/testutil"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	containertest "k8s.io/kubernetes/pkg/kubelet/container/testing"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
 	"k8s.io/utils/clock"
 	testingclock "k8s.io/utils/clock/testing"
 )

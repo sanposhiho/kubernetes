@@ -34,11 +34,11 @@ import (
 	"k8s.io/apimachinery/pkg/util/version"
 	"k8s.io/apimachinery/pkg/util/wait"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
-	e2estatefulset "k8s.io/kubernetes/test/e2e/framework/statefulset"
-	e2etestfiles "k8s.io/kubernetes/test/e2e/framework/testfiles"
-	"k8s.io/kubernetes/test/e2e/upgrades"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
+	e2estatefulset "github.com/sanposhiho/kubernetes/test/e2e/framework/statefulset"
+	e2etestfiles "github.com/sanposhiho/kubernetes/test/e2e/framework/testfiles"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 )
 
 const cassandraManifestPath = "test/e2e/testing-manifests/statefulset/cassandra"

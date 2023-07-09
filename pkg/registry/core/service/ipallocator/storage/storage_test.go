@@ -22,16 +22,16 @@ import (
 	"strings"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
+	"github.com/sanposhiho/kubernetes/pkg/registry/core/service/allocator"
+	allocatorstore "github.com/sanposhiho/kubernetes/pkg/registry/core/service/allocator/storage"
+	"github.com/sanposhiho/kubernetes/pkg/registry/core/service/ipallocator"
+	"github.com/sanposhiho/kubernetes/pkg/registry/registrytest"
 	"k8s.io/apiserver/pkg/registry/generic"
 	"k8s.io/apiserver/pkg/storage"
 	etcd3testing "k8s.io/apiserver/pkg/storage/etcd3/testing"
 	"k8s.io/apiserver/pkg/storage/storagebackend/factory"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
-	"k8s.io/kubernetes/pkg/registry/core/service/allocator"
-	allocatorstore "k8s.io/kubernetes/pkg/registry/core/service/allocator/storage"
-	"k8s.io/kubernetes/pkg/registry/core/service/ipallocator"
-	"k8s.io/kubernetes/pkg/registry/registrytest"
 	netutils "k8s.io/utils/net"
 )
 

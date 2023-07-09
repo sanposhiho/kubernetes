@@ -19,9 +19,9 @@ package scheme
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/proxy/apis/config/fuzzer"
 	"k8s.io/apimachinery/pkg/api/apitesting/roundtrip"
 	componentconfigtesting "k8s.io/component-base/config/testing"
-	"k8s.io/kubernetes/pkg/proxy/apis/config/fuzzer"
 )
 
 func TestRoundTripFuzzing(t *testing.T) {

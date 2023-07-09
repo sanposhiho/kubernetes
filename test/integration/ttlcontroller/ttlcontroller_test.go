@@ -24,7 +24,10 @@ import (
 	"testing"
 	"time"
 
-	"k8s.io/api/core/v1"
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/pkg/controller/ttl"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/wait"
@@ -33,9 +36,6 @@ import (
 	listers "k8s.io/client-go/listers/core/v1"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/klog/v2/ktesting"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/pkg/controller/ttl"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 func createClientAndInformers(t *testing.T, server *kubeapiservertesting.TestServer) (*clientset.Clientset, informers.SharedInformerFactory) {

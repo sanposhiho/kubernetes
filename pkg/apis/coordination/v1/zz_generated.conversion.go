@@ -28,7 +28,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	coordination "k8s.io/kubernetes/pkg/apis/coordination"
+	coordination "github.com/sanposhiho/kubernetes/pkg/apis/coordination"
 )
 
 func init() {

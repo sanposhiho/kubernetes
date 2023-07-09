@@ -17,10 +17,10 @@ limitations under the License.
 package v1beta1
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/discovery"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/api/discovery/v1beta1"
 	"k8s.io/apimachinery/pkg/conversion"
-	"k8s.io/kubernetes/pkg/apis/discovery"
 )
 
 func Convert_v1beta1_Endpoint_To_discovery_Endpoint(in *v1beta1.Endpoint, out *discovery.Endpoint, s conversion.Scope) error {

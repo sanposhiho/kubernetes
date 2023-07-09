@@ -19,10 +19,10 @@ package phases
 import (
 	"github.com/pkg/errors"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
-	cmdutil "k8s.io/kubernetes/cmd/kubeadm/app/cmd/util"
-	markcontrolplanephase "k8s.io/kubernetes/cmd/kubeadm/app/phases/markcontrolplane"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
+	cmdutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/util"
+	markcontrolplanephase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/markcontrolplane"
 )
 
 var (

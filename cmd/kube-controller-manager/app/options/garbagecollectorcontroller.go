@@ -19,7 +19,7 @@ package options
 import (
 	"github.com/spf13/pflag"
 
-	garbagecollectorconfig "k8s.io/kubernetes/pkg/controller/garbagecollector/config"
+	garbagecollectorconfig "github.com/sanposhiho/kubernetes/pkg/controller/garbagecollector/config"
 )
 
 // GarbageCollectorControllerOptions holds the GarbageCollectorController options.

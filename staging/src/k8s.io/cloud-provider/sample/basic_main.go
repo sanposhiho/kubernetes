@@ -16,7 +16,7 @@ limitations under the License.
 
 // This file should be written by each cloud provider.
 // For an minimal working example, please refer to k8s.io/cloud-provider/sample/basic_main.go
-// For more details, please refer to k8s.io/kubernetes/cmd/cloud-controller-manager/main.go
+// For more details, please refer to github.com/sanposhiho/kubernetes/cmd/cloud-controller-manager/main.go
 
 package main
 

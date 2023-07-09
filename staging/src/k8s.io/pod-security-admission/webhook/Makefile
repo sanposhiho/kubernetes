@@ -31,7 +31,7 @@ ARCH ?= amd64
 # Builds the PodSecurity webhook binary.
 build:
 	@echo Building PodSecurity webhook...
-	@LDFLAGS=`cd -P . && /usr/bin/env bash -c '. $(KUBE_ROOT)/hack/lib/version.sh && KUBE_ROOT=$(KUBE_ROOT) KUBE_GO_PACKAGE=k8s.io/kubernetes kube::version::ldflags'`; \
+	@LDFLAGS=`cd -P . && /usr/bin/env bash -c '. $(KUBE_ROOT)/hack/lib/version.sh && KUBE_ROOT=$(KUBE_ROOT) KUBE_GO_PACKAGE=github.com/sanposhiho/kubernetes kube::version::ldflags'`; \
 	GOOS=$(OS) GOARCH=$(ARCH) CGO_ENABLED=0 go build -o $(EXECUTABLE) -trimpath -ldflags "$$LDFLAGS" $(ENTRYPOINT)
 	@echo Done!
 

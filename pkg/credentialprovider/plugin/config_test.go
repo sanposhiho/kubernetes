@@ -24,8 +24,8 @@ import (
 
 	utiltesting "k8s.io/client-go/util/testing"
 
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
 )
 
 func Test_readCredentialProviderConfigFile(t *testing.T) {

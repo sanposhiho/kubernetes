@@ -22,8 +22,8 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/util/iptables"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/kubernetes/pkg/util/iptables"
 )
 
 // FakeIPTables is no-op implementation of iptables Interface.

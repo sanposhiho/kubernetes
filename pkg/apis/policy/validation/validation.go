@@ -22,6 +22,10 @@ import (
 	"regexp"
 	"strings"
 
+	appsvalidation "github.com/sanposhiho/kubernetes/pkg/apis/apps/validation"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
+	apivalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
+	"github.com/sanposhiho/kubernetes/pkg/apis/policy"
 	v1 "k8s.io/api/core/v1"
 	policyapiv1beta1 "k8s.io/api/policy/v1beta1"
 	apimachineryvalidation "k8s.io/apimachinery/pkg/api/validation"
@@ -29,10 +33,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	appsvalidation "k8s.io/kubernetes/pkg/apis/apps/validation"
-	"k8s.io/kubernetes/pkg/apis/core"
-	apivalidation "k8s.io/kubernetes/pkg/apis/core/validation"
-	"k8s.io/kubernetes/pkg/apis/policy"
 )
 
 const (

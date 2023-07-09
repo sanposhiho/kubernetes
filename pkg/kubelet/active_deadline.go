@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"time"
 
-	"k8s.io/api/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/lifecycle"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/status"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/tools/record"
-	"k8s.io/kubernetes/pkg/kubelet/lifecycle"
-	"k8s.io/kubernetes/pkg/kubelet/status"
 	"k8s.io/utils/clock"
 )
 

@@ -16,4 +16,4 @@ limitations under the License.
 
 // Package cephfs contains the internal representation of Ceph file system
 // (CephFS) volumes.
-package cephfs // import "k8s.io/kubernetes/pkg/volume/cephfs"
+package cephfs // import "github.com/sanposhiho/kubernetes/pkg/volume/cephfs"

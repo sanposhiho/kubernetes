@@ -23,6 +23,11 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2erc "github.com/sanposhiho/kubernetes/test/e2e/framework/rc"
+	"github.com/sanposhiho/kubernetes/test/e2e/network/common"
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -31,11 +36,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/flowcontrol"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2erc "k8s.io/kubernetes/test/e2e/framework/rc"
-	"k8s.io/kubernetes/test/e2e/network/common"
-	testutils "k8s.io/kubernetes/test/utils"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

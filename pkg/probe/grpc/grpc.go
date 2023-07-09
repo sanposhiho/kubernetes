@@ -22,6 +22,7 @@ import (
 	"net"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/probe"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/credentials/insecure"
@@ -30,7 +31,6 @@ import (
 	"google.golang.org/grpc/status"
 	"k8s.io/component-base/version"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/probe"
 )
 
 // Prober is an interface that defines the Probe function for doing GRPC readiness/liveness/startup checks.

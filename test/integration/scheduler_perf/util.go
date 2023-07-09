@@ -29,6 +29,14 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	kubeschedulerscheme "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/scheme"
+	frameworkruntime "github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/integration/util"
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
 	v1 "k8s.io/api/core/v1"
 	resourcev1alpha2 "k8s.io/api/resource/v1alpha2"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -45,14 +53,6 @@ import (
 	"k8s.io/component-base/metrics/testutil"
 	"k8s.io/klog/v2"
 	kubeschedulerconfigv1 "k8s.io/kube-scheduler/config/v1"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	kubeschedulerscheme "k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
-	frameworkruntime "k8s.io/kubernetes/pkg/scheduler/framework/runtime"
-	"k8s.io/kubernetes/test/integration/framework"
-	"k8s.io/kubernetes/test/integration/util"
-	testutils "k8s.io/kubernetes/test/utils"
 )
 
 const (

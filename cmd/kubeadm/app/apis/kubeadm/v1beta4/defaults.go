@@ -24,8 +24,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 
-	bootstraptokenv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/bootstraptoken/v1"
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
+	bootstraptokenv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/bootstraptoken/v1"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
 )
 
 const (

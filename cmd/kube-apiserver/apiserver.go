@@ -22,11 +22,11 @@ import (
 	"os"
 	_ "time/tzdata" // for timeZone support in CronJob
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app"
 	"k8s.io/component-base/cli"
 	_ "k8s.io/component-base/logs/json/register"          // for JSON log format registration
 	_ "k8s.io/component-base/metrics/prometheus/clientgo" // load all the prometheus client-go plugins
 	_ "k8s.io/component-base/metrics/prometheus/version"  // for version metric registration
-	"k8s.io/kubernetes/cmd/kube-apiserver/app"
 )
 
 func main() {

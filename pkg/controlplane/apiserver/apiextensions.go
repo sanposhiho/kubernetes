@@ -17,7 +17,7 @@ limitations under the License.
 package apiserver
 
 import (
-	"k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
+	v1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	"k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1beta1"
 	apiextensionsapiserver "k8s.io/apiextensions-apiserver/pkg/apiserver"
 	apiextensionsoptions "k8s.io/apiextensions-apiserver/pkg/cmd/server/options"
@@ -30,7 +30,7 @@ import (
 	"k8s.io/apiserver/pkg/util/webhook"
 	"k8s.io/client-go/informers"
 
-	controlplaneapiserver "k8s.io/kubernetes/pkg/controlplane/apiserver/options"
+	controlplaneapiserver "github.com/sanposhiho/kubernetes/pkg/controlplane/apiserver/options"
 )
 
 func CreateAPIExtensionsConfig(

@@ -22,10 +22,10 @@ import (
 
 	"k8s.io/klog/v2"
 
-	"k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	internalcache "k8s.io/kubernetes/pkg/scheduler/internal/cache"
-	"k8s.io/kubernetes/pkg/scheduler/internal/queue"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	internalcache "github.com/sanposhiho/kubernetes/pkg/scheduler/internal/cache"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/internal/queue"
+	v1 "k8s.io/api/core/v1"
 )
 
 // CacheDumper writes some information from the scheduler cache and the scheduling queue to the

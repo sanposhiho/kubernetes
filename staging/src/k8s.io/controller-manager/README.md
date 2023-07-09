@@ -22,12 +22,12 @@ understanding of the right way to build a controller manager. There are legacy
 aspects of these controller managers which should be cleaned before adding them
 here.
 `controller-manager` is synced from https://github.com/kubernetes/kubernetes/blob/master/staging/src/k8s.io/controller-manager.
-Code changes are made in that location, merged into `k8s.io/kubernetes` and later synced here.
+Code changes are made in that location, merged into `github.com/sanposhiho/kubernetes` and later synced here.
 
 
 ## Things you should *NOT* do
 
- 1. Directly modify any files under `pkg` in this repo.  Those are driven from `k8s.io/kubernetes/staging/src/k8s.io/controller-manager`.
+ 1. Directly modify any files under `pkg` in this repo.  Those are driven from `github.com/sanposhiho/kubernetes/staging/src/k8s.io/controller-manager`.
  2. Expect compatibility.  This repo is currently changing rapidly in direct support of
     Kubernetes and the controller-manager processes and the cloud provider
     extraction effort.

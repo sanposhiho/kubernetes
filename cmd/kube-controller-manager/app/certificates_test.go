@@ -20,8 +20,8 @@ import (
 	"testing"
 	"time"
 
+	csrsigningconfig "github.com/sanposhiho/kubernetes/pkg/controller/certificates/signer/config"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	csrsigningconfig "k8s.io/kubernetes/pkg/controller/certificates/signer/config"
 )
 
 func TestCertSpecified(t *testing.T) {

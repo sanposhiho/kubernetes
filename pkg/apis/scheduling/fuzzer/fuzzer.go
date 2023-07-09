@@ -17,10 +17,10 @@ limitations under the License.
 package fuzzer
 
 import (
-	"github.com/google/gofuzz"
+	fuzz "github.com/google/gofuzz"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/scheduling"
 	runtimeserializer "k8s.io/apimachinery/pkg/runtime/serializer"
-	"k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/scheduling"
 )
 
 // Funcs returns the fuzzer functions for the scheduling api group.

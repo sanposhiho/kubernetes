@@ -19,7 +19,7 @@ package options
 import (
 	"github.com/spf13/pflag"
 
-	persistentvolumeconfig "k8s.io/kubernetes/pkg/controller/volume/persistentvolume/config"
+	persistentvolumeconfig "github.com/sanposhiho/kubernetes/pkg/controller/volume/persistentvolume/config"
 )
 
 // PersistentVolumeBinderControllerOptions holds the PersistentVolumeBinderController options.

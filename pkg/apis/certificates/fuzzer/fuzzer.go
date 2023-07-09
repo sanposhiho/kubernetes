@@ -21,10 +21,10 @@ import (
 
 	fuzz "github.com/google/gofuzz"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/certificates"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	runtimeserializer "k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/client-go/util/certificate/csr"
-	"k8s.io/kubernetes/pkg/apis/certificates"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 // Funcs returns the fuzzer functions for the certificates api group.

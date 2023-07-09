@@ -19,14 +19,14 @@ package storage
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2eoutput "github.com/sanposhiho/kubernetes/test/e2e/framework/pod/output"
+	e2epv "github.com/sanposhiho/kubernetes/test/e2e/framework/pv"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 	v1 "k8s.io/api/core/v1"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2eoutput "k8s.io/kubernetes/test/e2e/framework/pod/output"
-	e2epv "k8s.io/kubernetes/test/e2e/framework/pv"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	"k8s.io/kubernetes/test/e2e/upgrades"
 
 	"github.com/onsi/ginkgo/v2"
 )

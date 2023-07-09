@@ -19,7 +19,7 @@ package options
 import (
 	"github.com/spf13/pflag"
 
-	resourcequotaconfig "k8s.io/kubernetes/pkg/controller/resourcequota/config"
+	resourcequotaconfig "github.com/sanposhiho/kubernetes/pkg/controller/resourcequota/config"
 )
 
 // ResourceQuotaControllerOptions holds the ResourceQuotaController options.

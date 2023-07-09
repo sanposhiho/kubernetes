@@ -27,11 +27,11 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	"sigs.k8s.io/yaml"
 
-	kubeadmapiv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/pkiutil"
-	testutil "k8s.io/kubernetes/cmd/kubeadm/test"
-	kubeconfigtestutil "k8s.io/kubernetes/cmd/kubeadm/test/kubeconfig"
+	kubeadmapiv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/pkiutil"
+	testutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/test"
+	kubeconfigtestutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/test/kubeconfig"
 )
 
 func generateTestKubeadmConfig(dir, id, certDir, clusterName string) (string, error) {

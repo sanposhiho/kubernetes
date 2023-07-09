@@ -31,13 +31,13 @@ import (
 	core "k8s.io/client-go/testing"
 	"k8s.io/client-go/tools/clientcmd"
 
-	bootstraptokenv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/bootstraptoken/v1"
-	kubeadmapiv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
-	outputapischeme "k8s.io/kubernetes/cmd/kubeadm/app/apis/output/scheme"
-	outputapiv1alpha2 "k8s.io/kubernetes/cmd/kubeadm/app/apis/output/v1alpha2"
-	cmdutil "k8s.io/kubernetes/cmd/kubeadm/app/cmd/util"
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/output"
+	bootstraptokenv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/bootstraptoken/v1"
+	kubeadmapiv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
+	outputapischeme "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/output/scheme"
+	outputapiv1alpha2 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/output/v1alpha2"
+	cmdutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/util"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/output"
 )
 
 const (

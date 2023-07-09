@@ -24,7 +24,7 @@ import (
 	genericoptions "k8s.io/apiserver/pkg/server/options"
 	basemetrics "k8s.io/component-base/metrics"
 
-	kubeoptions "k8s.io/kubernetes/pkg/kubeapiserver/options"
+	kubeoptions "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/options"
 )
 
 func TestValidateAPIPriorityAndFairness(t *testing.T) {

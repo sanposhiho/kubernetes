@@ -9,7 +9,7 @@ The only allowed kubernetes dependencies are `k8s.io/apimachinery`, `k8s.io/api`
 
 ## Purpose
 
-One of the goals is to provide a better location for helpers currently located under `k8s.io/kubernetes/pkg/apis`.
+One of the goals is to provide a better location for helpers currently located under `github.com/sanposhiho/kubernetes/pkg/apis`.
 
 Recent effort of moving [scheduling
  framework](https://kubernetes.io/docs/concepts/scheduling-eviction/scheduling-framework/) under
@@ -26,5 +26,5 @@ There are NO compatibility guarantees for this repository. It is in direct suppo
 ## Where does it come from?
 
 This repo is synced from https://github.com/kubernetes/kubernetes/tree/master/staging/src/k8s.io/component-helpers.
-Code changes are made in that location, merged into `k8s.io/kubernetes` and later synced here by a bot.
+Code changes are made in that location, merged into `github.com/sanposhiho/kubernetes` and later synced here by a bot.
 

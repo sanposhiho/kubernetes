@@ -32,9 +32,9 @@ import (
 	libcontainercgroups "github.com/opencontainers/runc/libcontainer/cgroups"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 
-	"k8s.io/kubernetes/pkg/api/v1/resource"
-	v1qos "k8s.io/kubernetes/pkg/apis/core/v1/helper/qos"
-	kubefeatures "k8s.io/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/api/v1/resource"
+	v1qos "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper/qos"
+	kubefeatures "github.com/sanposhiho/kubernetes/pkg/features"
 )
 
 const (

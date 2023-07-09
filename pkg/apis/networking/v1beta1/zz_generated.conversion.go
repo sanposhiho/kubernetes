@@ -28,8 +28,8 @@ import (
 	v1beta1 "k8s.io/api/networking/v1beta1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	core "k8s.io/kubernetes/pkg/apis/core"
-	networking "k8s.io/kubernetes/pkg/apis/networking"
+	core "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	networking "github.com/sanposhiho/kubernetes/pkg/apis/networking"
 )
 
 func init() {

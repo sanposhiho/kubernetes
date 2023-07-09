@@ -17,9 +17,10 @@ limitations under the License.
 package sysctl
 
 import (
-	"k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/kubelet/lifecycle"
 	"testing"
+
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/lifecycle"
+	v1 "k8s.io/api/core/v1"
 )
 
 func TestNewAllowlist(t *testing.T) {

@@ -17,10 +17,10 @@ limitations under the License.
 package v2beta2
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
 	autoscalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/kubernetes/pkg/apis/autoscaling"
 	"k8s.io/utils/pointer"
 )
 

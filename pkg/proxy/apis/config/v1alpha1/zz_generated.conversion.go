@@ -29,7 +29,7 @@ import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	configv1alpha1 "k8s.io/component-base/config/v1alpha1"
 	v1alpha1 "k8s.io/kube-proxy/config/v1alpha1"
-	config "k8s.io/kubernetes/pkg/proxy/apis/config"
+	config "github.com/sanposhiho/kubernetes/pkg/proxy/apis/config"
 )
 
 func init() {

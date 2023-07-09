@@ -19,15 +19,15 @@ package validation
 import (
 	"fmt"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	apivalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
+	"github.com/sanposhiho/kubernetes/pkg/apis/discovery"
 	corev1 "k8s.io/api/core/v1"
 	apimachineryvalidation "k8s.io/apimachinery/pkg/api/validation"
 	metavalidation "k8s.io/apimachinery/pkg/apis/meta/v1/validation"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	apivalidation "k8s.io/kubernetes/pkg/apis/core/validation"
-	"k8s.io/kubernetes/pkg/apis/discovery"
 )
 
 var (

@@ -21,6 +21,8 @@ import (
 	"fmt"
 	"time"
 
+	apipod "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 	apps "k8s.io/api/apps/v1beta1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/api/extensions/v1beta1"
@@ -51,8 +53,6 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	pdbhelper "k8s.io/component-helpers/apps/poddisruptionbudget"
 	"k8s.io/klog/v2"
-	apipod "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/pkg/controller"
 	"k8s.io/utils/clock"
 )
 

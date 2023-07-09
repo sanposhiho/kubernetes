@@ -18,11 +18,12 @@ package deployment
 
 import (
 	"context"
+
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/controller/deployment/util"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/kubernetes/pkg/controller"
-	"k8s.io/kubernetes/pkg/controller/deployment/util"
 )
 
 // rolloutRecreate implements the logic for recreating a replica set.

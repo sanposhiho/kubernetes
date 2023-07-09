@@ -17,12 +17,12 @@ limitations under the License.
 package qos
 
 import (
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	v1qos "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper/qos"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	v1 "k8s.io/api/core/v1"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	v1qos "k8s.io/kubernetes/pkg/apis/core/v1/helper/qos"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/kubelet/types"
 )
 
 const (

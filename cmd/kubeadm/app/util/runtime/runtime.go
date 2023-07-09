@@ -26,7 +26,7 @@ import (
 	"k8s.io/klog/v2"
 	utilsexec "k8s.io/utils/exec"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
 )
 
 // defaultKnownCRISockets holds the set of known CRI endpoints

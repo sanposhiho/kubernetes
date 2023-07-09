@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strconv"
 
+	"github.com/sanposhiho/kubernetes/pkg/volume"
 	"k8s.io/apimachinery/pkg/api/resource"
-	"k8s.io/kubernetes/pkg/volume"
 )
 
 func (plugin *flexVolumePlugin) ExpandVolumeDevice(spec *volume.Spec, newSize resource.Quantity, oldSize resource.Quantity) (resource.Quantity, error) {

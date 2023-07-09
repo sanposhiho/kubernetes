@@ -26,13 +26,13 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/onsi/ginkgo/v2"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/tools/cache"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 var _ = SIGDescribe("API Streaming (aka. WatchList) [Serial] [Feature:WatchList]", func() {

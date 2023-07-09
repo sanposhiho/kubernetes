@@ -24,12 +24,12 @@ import (
 
 	clientset "k8s.io/client-go/kubernetes"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
-	cmdutil "k8s.io/kubernetes/cmd/kubeadm/app/cmd/util"
-	dnsaddon "k8s.io/kubernetes/cmd/kubeadm/app/phases/addons/dns"
-	proxyaddon "k8s.io/kubernetes/cmd/kubeadm/app/phases/addons/proxy"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
+	cmdutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/util"
+	dnsaddon "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/addons/dns"
+	proxyaddon "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/addons/proxy"
 )
 
 var (

@@ -28,7 +28,7 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	apidiscovery "k8s.io/kubernetes/pkg/apis/apidiscovery"
+	apidiscovery "github.com/sanposhiho/kubernetes/pkg/apis/apidiscovery"
 )
 
 func init() {

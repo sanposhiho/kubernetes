@@ -23,10 +23,10 @@ import (
 
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
-	cmdutil "k8s.io/kubernetes/cmd/kubeadm/app/cmd/util"
-	kubeletphase "k8s.io/kubernetes/cmd/kubeadm/app/phases/kubelet"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
+	cmdutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/util"
+	kubeletphase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/kubelet"
 )
 
 var (

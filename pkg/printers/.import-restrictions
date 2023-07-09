@@ -1,5 +1,5 @@
 rules:
-  #  Discourage import of k8s.io/kubernetes/pkg/{api|apis}
+  #  Discourage import of github.com/sanposhiho/kubernetes/pkg/{api|apis}
   - selectorRegexp: "k8s[.]io/kubernetes/pkg/(api$|apis/)"
     forbiddenPrefixes:
       - ""

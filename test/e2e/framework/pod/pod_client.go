@@ -38,23 +38,23 @@ import (
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
 
-	"k8s.io/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 )
 
 const (
 	// DefaultPodDeletionTimeout is the default timeout for deleting pod
 	DefaultPodDeletionTimeout = 3 * time.Minute
 
-	// the status of container event, copied from k8s.io/kubernetes/pkg/kubelet/events
+	// the status of container event, copied from github.com/sanposhiho/kubernetes/pkg/kubelet/events
 	killingContainer = "Killing"
 
-	// the status of container event, copied from k8s.io/kubernetes/pkg/kubelet/events
+	// the status of container event, copied from github.com/sanposhiho/kubernetes/pkg/kubelet/events
 	failedToCreateContainer = "Failed"
 
-	// the status of container event, copied from k8s.io/kubernetes/pkg/kubelet/events
+	// the status of container event, copied from github.com/sanposhiho/kubernetes/pkg/kubelet/events
 	startedContainer = "Started"
 
-	// it is copied from k8s.io/kubernetes/pkg/kubelet/sysctl
+	// it is copied from github.com/sanposhiho/kubernetes/pkg/kubelet/sysctl
 	forbiddenReason = "SysctlForbidden"
 )
 

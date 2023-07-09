@@ -21,10 +21,10 @@ import (
 	"fmt"
 	"io"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apiserver/pkg/admission"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/apis/core"
 )
 
 const (

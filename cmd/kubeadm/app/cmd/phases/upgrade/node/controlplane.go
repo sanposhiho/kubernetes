@@ -22,11 +22,11 @@ import (
 
 	"github.com/pkg/errors"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
-	"k8s.io/kubernetes/cmd/kubeadm/app/features"
-	"k8s.io/kubernetes/cmd/kubeadm/app/phases/upgrade"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/apiclient"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/features"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/upgrade"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/apiclient"
 )
 
 // NewControlPlane creates a kubeadm workflow phase that implements handling of control-plane upgrade.

@@ -21,14 +21,14 @@ import (
 	"errors"
 	"testing"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/client-go/kubernetes/fake"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 	"k8s.io/utils/pointer"
 )
 

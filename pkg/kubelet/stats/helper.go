@@ -22,12 +22,12 @@ import (
 
 	cadvisorapiv1 "github.com/google/cadvisor/info/v1"
 	cadvisorapiv2 "github.com/google/cadvisor/info/v2"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cadvisor"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/klog/v2"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	"k8s.io/kubernetes/pkg/kubelet/cadvisor"
-	"k8s.io/kubernetes/pkg/kubelet/server/stats"
 )
 
 // defaultNetworkInterfaceName is used for collectng network stats.

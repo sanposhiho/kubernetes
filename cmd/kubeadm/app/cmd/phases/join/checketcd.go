@@ -21,8 +21,8 @@ import (
 
 	"github.com/pkg/errors"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
-	etcdphase "k8s.io/kubernetes/cmd/kubeadm/app/phases/etcd"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
+	etcdphase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/etcd"
 )
 
 // NewCheckEtcdPhase is a hidden phase that runs after the control-plane-prepare and

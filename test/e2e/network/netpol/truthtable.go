@@ -19,7 +19,7 @@ package netpol
 import (
 	"strings"
 
-	"k8s.io/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 )
 
 // TruthTable takes in n items and maintains an n x n table of booleans for each ordered pair

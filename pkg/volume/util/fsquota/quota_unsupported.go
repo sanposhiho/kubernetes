@@ -22,7 +22,7 @@ package fsquota
 import (
 	"errors"
 
-	"k8s.io/kubernetes/pkg/volume/util/fsquota/common"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/fsquota/common"
 	"k8s.io/mount-utils"
 
 	"k8s.io/apimachinery/pkg/api/resource"

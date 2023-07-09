@@ -20,12 +20,12 @@ import (
 	"errors"
 	"testing"
 
+	pvtesting "github.com/sanposhiho/kubernetes/pkg/controller/volume/persistentvolume/testing"
 	v1 "k8s.io/api/core/v1"
 	storage "k8s.io/api/storage/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/component-helpers/storage/volume"
 	"k8s.io/klog/v2/ktesting"
-	pvtesting "k8s.io/kubernetes/pkg/controller/volume/persistentvolume/testing"
 )
 
 // Test single call to syncVolume, expecting recycling to happen.

@@ -24,6 +24,10 @@ import (
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2edeployment "github.com/sanposhiho/kubernetes/test/e2e/framework/deployment"
+	"github.com/sanposhiho/kubernetes/test/utils/crd"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -34,10 +38,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/dynamic"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2edeployment "k8s.io/kubernetes/test/e2e/framework/deployment"
-	"k8s.io/kubernetes/test/utils/crd"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	admissionapi "k8s.io/pod-security-admission/api"
 	"k8s.io/utils/pointer"
 

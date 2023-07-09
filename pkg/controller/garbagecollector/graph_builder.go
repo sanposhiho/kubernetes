@@ -41,7 +41,7 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/controller-manager/pkg/informerfactory"
 
-	"k8s.io/kubernetes/pkg/controller/garbagecollector/metaonly"
+	"github.com/sanposhiho/kubernetes/pkg/controller/garbagecollector/metaonly"
 )
 
 type eventType int

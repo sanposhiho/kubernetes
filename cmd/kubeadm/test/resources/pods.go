@@ -24,7 +24,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
 
-	staticpodutil "k8s.io/kubernetes/cmd/kubeadm/app/util/staticpod"
+	staticpodutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/staticpod"
 )
 
 // FakeStaticPod represents a fake static pod

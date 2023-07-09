@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/apiserverinternal"
+	apivalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
 	apimachineryvalidation "k8s.io/apimachinery/pkg/api/validation"
 	utilvalidation "k8s.io/apimachinery/pkg/util/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/apiserverinternal"
-	apivalidation "k8s.io/kubernetes/pkg/apis/core/validation"
 )
 
 // ValidateStorageVersion validate the storage version object.

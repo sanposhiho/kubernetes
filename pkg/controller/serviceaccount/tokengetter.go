@@ -18,11 +18,12 @@ package serviceaccount
 
 import (
 	"context"
-	"k8s.io/api/core/v1"
+
+	"github.com/sanposhiho/kubernetes/pkg/serviceaccount"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	v1listers "k8s.io/client-go/listers/core/v1"
-	"k8s.io/kubernetes/pkg/serviceaccount"
 )
 
 // clientGetter implements ServiceAccountTokenGetter using a clientset.Interface

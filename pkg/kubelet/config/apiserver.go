@@ -19,6 +19,7 @@ package config
 import (
 	"time"
 
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
@@ -27,7 +28,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog/v2"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 )
 
 // WaitForAPIServerSyncPeriod is the period between checks for the node list/watch initial sync

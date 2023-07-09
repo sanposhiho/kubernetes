@@ -21,9 +21,9 @@ import (
 	"sort"
 	"time"
 
+	apipod "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/tools/cache"
-	apipod "k8s.io/kubernetes/pkg/api/v1/pod"
 	"k8s.io/utils/clock"
 	"k8s.io/utils/pointer"
 )

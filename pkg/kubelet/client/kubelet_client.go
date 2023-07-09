@@ -23,12 +23,12 @@ import (
 	"strconv"
 	"time"
 
+	nodeutil "github.com/sanposhiho/kubernetes/pkg/util/node"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apiserver/pkg/server/egressselector"
 	"k8s.io/client-go/transport"
-	nodeutil "k8s.io/kubernetes/pkg/util/node"
 )
 
 // KubeletClientConfig defines config parameters for the kubelet client

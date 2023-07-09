@@ -23,9 +23,9 @@ import (
 	"hash"
 	"sort"
 
-	"k8s.io/api/core/v1"
+	hashutil "github.com/sanposhiho/kubernetes/pkg/util/hash"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
-	hashutil "k8s.io/kubernetes/pkg/util/hash"
 )
 
 // RepackSubsets takes a slice of EndpointSubset objects, expands it to the full

@@ -22,13 +22,13 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	pluginapi "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
 )
 
 type mockAffinityStore struct {

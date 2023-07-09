@@ -17,10 +17,10 @@ limitations under the License.
 package framework
 
 import (
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2evolume "github.com/sanposhiho/kubernetes/test/e2e/framework/volume"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2evolume "k8s.io/kubernetes/test/e2e/framework/volume"
 )
 
 // PerTestConfig represents parameters that control test execution.

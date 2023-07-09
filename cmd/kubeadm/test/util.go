@@ -21,11 +21,11 @@ import (
 	"path/filepath"
 	"testing"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	certtestutil "k8s.io/kubernetes/cmd/kubeadm/app/util/certs"
-	configutil "k8s.io/kubernetes/cmd/kubeadm/app/util/config"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/pkiutil"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	certtestutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/certs"
+	configutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/config"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/pkiutil"
 )
 
 // SetupTempDir is a utility function for kubeadm testing, that creates a temporary directory

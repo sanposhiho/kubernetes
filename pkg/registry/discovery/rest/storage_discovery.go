@@ -17,14 +17,14 @@ limitations under the License.
 package rest
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/discovery"
+	endpointslicestorage "github.com/sanposhiho/kubernetes/pkg/registry/discovery/endpointslice/storage"
 	discoveryv1 "k8s.io/api/discovery/v1"
 	"k8s.io/apiserver/pkg/registry/generic"
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/discovery"
-	endpointslicestorage "k8s.io/kubernetes/pkg/registry/discovery/endpointslice/storage"
 )
 
 // StorageProvider is a REST storage provider for discovery.k8s.io.
@@ -33,7 +33,7 @@ type StorageProvider struct{}
 // NewRESTStorage returns a new storage provider.
 func (p StorageProvider) NewRESTStorage(apiResourceConfigSource serverstorage.APIResourceConfigSource, restOptionsGetter generic.RESTOptionsGetter) (genericapiserver.APIGroupInfo, error) {
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(discovery.GroupName, legacyscheme.Scheme, legacyscheme.ParameterCodec, legacyscheme.Codecs)
-	// If you add a version here, be sure to add an entry in `k8s.io/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
+	// If you add a version here, be sure to add an entry in `github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
 	// TODO refactor the plumbing to provide the information in the APIGroupInfo
 
 	if storageMap, err := p.v1Storage(apiResourceConfigSource, restOptionsGetter); err != nil {

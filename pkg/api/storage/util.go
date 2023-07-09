@@ -19,9 +19,9 @@ package storage
 import (
 	"fmt"
 
+	nodeapi "github.com/sanposhiho/kubernetes/pkg/api/node"
+	"github.com/sanposhiho/kubernetes/pkg/apis/storage"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	nodeapi "k8s.io/kubernetes/pkg/api/node"
-	"k8s.io/kubernetes/pkg/apis/storage"
 )
 
 func GetWarningsForStorageClass(sc *storage.StorageClass) []string {

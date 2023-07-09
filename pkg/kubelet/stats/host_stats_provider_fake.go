@@ -21,12 +21,12 @@ import (
 	"path/filepath"
 
 	cadvisorapiv2 "github.com/google/cadvisor/info/v2"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	kubecontainertest "github.com/sanposhiho/kubernetes/pkg/kubelet/container/testing"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/kuberuntime"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
 	"k8s.io/apimachinery/pkg/types"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	kubecontainertest "k8s.io/kubernetes/pkg/kubelet/container/testing"
-	"k8s.io/kubernetes/pkg/kubelet/kuberuntime"
-	"k8s.io/kubernetes/pkg/volume"
 )
 
 type fakeHostStatsProvider struct {

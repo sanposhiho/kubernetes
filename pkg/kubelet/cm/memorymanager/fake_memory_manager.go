@@ -17,14 +17,14 @@ limitations under the License.
 package memorymanager
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/containermap"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/memorymanager/state"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/status"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/kubelet/cm/containermap"
-	"k8s.io/kubernetes/pkg/kubelet/cm/memorymanager/state"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
-	"k8s.io/kubernetes/pkg/kubelet/config"
-	"k8s.io/kubernetes/pkg/kubelet/status"
 )
 
 type fakeManager struct {

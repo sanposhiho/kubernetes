@@ -17,11 +17,11 @@ limitations under the License.
 package scheme
 
 import (
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	kubeletconfigv1 "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/v1"
+	kubeletconfigv1beta1 "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/v1beta1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	kubeletconfigv1 "k8s.io/kubernetes/pkg/kubelet/apis/config/v1"
-	kubeletconfigv1beta1 "k8s.io/kubernetes/pkg/kubelet/apis/config/v1beta1"
 )
 
 // Utility functions for the Kubelet's kubeletconfig API group

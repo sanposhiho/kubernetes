@@ -26,12 +26,12 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/google/go-cmp/cmp/cmpopts"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	corevalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/batch"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	corevalidation "k8s.io/kubernetes/pkg/apis/core/validation"
 	"k8s.io/utils/pointer"
 )
 

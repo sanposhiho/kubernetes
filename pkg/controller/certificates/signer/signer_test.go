@@ -30,14 +30,14 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
+	capihelper "github.com/sanposhiho/kubernetes/pkg/apis/certificates/v1"
+	"github.com/sanposhiho/kubernetes/pkg/controller/certificates"
 	capi "k8s.io/api/certificates/v1"
 	"k8s.io/apimachinery/pkg/util/diff"
 	"k8s.io/client-go/kubernetes/fake"
 	testclient "k8s.io/client-go/testing"
 	"k8s.io/client-go/util/cert"
 	"k8s.io/client-go/util/certificate/csr"
-	capihelper "k8s.io/kubernetes/pkg/apis/certificates/v1"
-	"k8s.io/kubernetes/pkg/controller/certificates"
 	testingclock "k8s.io/utils/clock/testing"
 )
 

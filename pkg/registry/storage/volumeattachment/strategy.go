@@ -19,13 +19,13 @@ package volumeattachment
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/storage"
+	"github.com/sanposhiho/kubernetes/pkg/apis/storage/validation"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apiserver/pkg/storage/names"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/storage"
-	"k8s.io/kubernetes/pkg/apis/storage/validation"
 	"sigs.k8s.io/structured-merge-diff/v4/fieldpath"
 )
 

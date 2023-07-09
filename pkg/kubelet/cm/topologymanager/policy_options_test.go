@@ -21,11 +21,11 @@ import (
 	"strings"
 	"testing"
 
+	pkgfeatures "github.com/sanposhiho/kubernetes/pkg/features"
 	"k8s.io/apimachinery/pkg/util/sets"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/component-base/featuregate"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	pkgfeatures "k8s.io/kubernetes/pkg/features"
 )
 
 var fancyBetaOption = "fancy-new-option"

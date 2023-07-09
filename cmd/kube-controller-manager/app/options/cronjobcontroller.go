@@ -21,7 +21,7 @@ import (
 
 	"github.com/spf13/pflag"
 
-	cronjobconfig "k8s.io/kubernetes/pkg/controller/cronjob/config"
+	cronjobconfig "github.com/sanposhiho/kubernetes/pkg/controller/cronjob/config"
 )
 
 // CronJobControllerOptions holds the CronJobController options.

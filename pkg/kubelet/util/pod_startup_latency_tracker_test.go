@@ -26,8 +26,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
 	"k8s.io/component-base/metrics/testutil"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
 	testingclock "k8s.io/utils/clock/testing"
 )
 

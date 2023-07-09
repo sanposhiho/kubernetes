@@ -15,4 +15,4 @@ limitations under the License.
 */
 
 // Package util holds utility functions.
-package util // import "k8s.io/kubernetes/pkg/kubelet/util"
+package util // import "github.com/sanposhiho/kubernetes/pkg/kubelet/util"

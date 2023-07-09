@@ -17,8 +17,8 @@ limitations under the License.
 package e2enode
 
 import (
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
 )
 
 const (

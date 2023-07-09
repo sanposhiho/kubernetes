@@ -19,11 +19,11 @@ package cronjob
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/apiserver/pkg/registry/rest"
-	"k8s.io/kubernetes/pkg/apis/batch"
-	api "k8s.io/kubernetes/pkg/apis/core"
 	"k8s.io/utils/pointer"
 )
 

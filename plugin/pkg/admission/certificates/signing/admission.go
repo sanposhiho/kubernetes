@@ -24,12 +24,12 @@ import (
 
 	"k8s.io/klog/v2"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/certificates"
+	"github.com/sanposhiho/kubernetes/plugin/pkg/admission/certificates"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apiserver/pkg/admission"
 	genericadmissioninit "k8s.io/apiserver/pkg/admission/initializer"
 	"k8s.io/apiserver/pkg/authorization/authorizer"
-	api "k8s.io/kubernetes/pkg/apis/certificates"
-	"k8s.io/kubernetes/plugin/pkg/admission/certificates"
 )
 
 // PluginName is a string with the name of the plugin

@@ -26,6 +26,7 @@ import (
 	"net/netip"
 	"time"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	networkingv1alpha1 "k8s.io/api/networking/v1alpha1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -35,7 +36,6 @@ import (
 	networkingv1alpha1listers "k8s.io/client-go/listers/networking/v1alpha1"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog/v2"
-	api "k8s.io/kubernetes/pkg/apis/core"
 	netutils "k8s.io/utils/net"
 	utiltrace "k8s.io/utils/trace"
 )

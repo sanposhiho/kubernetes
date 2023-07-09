@@ -22,8 +22,8 @@ import (
 	"net"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	"k8s.io/kubernetes/pkg/features"
 	netutils "k8s.io/utils/net"
 )
 

@@ -30,6 +30,10 @@ import (
 
 	clientv3 "go.etcd.io/etcd/client/v3"
 
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/test/integration"
+	"github.com/sanposhiho/kubernetes/test/integration/etcd"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -45,10 +49,6 @@ import (
 	"k8s.io/client-go/rest"
 	"k8s.io/component-base/metrics/legacyregistry"
 	"k8s.io/klog/v2"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration"
-	"k8s.io/kubernetes/test/integration/etcd"
-	"k8s.io/kubernetes/test/integration/framework"
 	"k8s.io/utils/pointer"
 	"sigs.k8s.io/yaml"
 )

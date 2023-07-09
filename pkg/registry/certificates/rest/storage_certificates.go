@@ -17,6 +17,11 @@ limitations under the License.
 package rest
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/certificates"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	certificatestore "github.com/sanposhiho/kubernetes/pkg/registry/certificates/certificates/storage"
+	clustertrustbundlestore "github.com/sanposhiho/kubernetes/pkg/registry/certificates/clustertrustbundle/storage"
 	certificatesapiv1 "k8s.io/api/certificates/v1"
 	certificatesapiv1alpha1 "k8s.io/api/certificates/v1alpha1"
 	"k8s.io/apiserver/pkg/registry/generic"
@@ -25,18 +30,13 @@ import (
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/certificates"
-	"k8s.io/kubernetes/pkg/features"
-	certificatestore "k8s.io/kubernetes/pkg/registry/certificates/certificates/storage"
-	clustertrustbundlestore "k8s.io/kubernetes/pkg/registry/certificates/clustertrustbundle/storage"
 )
 
 type RESTStorageProvider struct{}
 
 func (p RESTStorageProvider) NewRESTStorage(apiResourceConfigSource serverstorage.APIResourceConfigSource, restOptionsGetter generic.RESTOptionsGetter) (genericapiserver.APIGroupInfo, error) {
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(certificates.GroupName, legacyscheme.Scheme, legacyscheme.ParameterCodec, legacyscheme.Codecs)
-	// If you add a version here, be sure to add an entry in `k8s.io/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
+	// If you add a version here, be sure to add an entry in `github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
 	// TODO refactor the plumbing to provide the information in the APIGroupInfo
 
 	if storageMap, err := p.v1Storage(apiResourceConfigSource, restOptionsGetter); err != nil {

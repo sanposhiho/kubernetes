@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/dra/state"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/kubernetes/pkg/kubelet/cm/dra/state"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 // ClaimInfo holds information required

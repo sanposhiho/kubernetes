@@ -23,18 +23,18 @@ import (
 	"strings"
 	"time"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	v1resource "github.com/sanposhiho/kubernetes/pkg/api/v1/resource"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	evictionapi "github.com/sanposhiho/kubernetes/pkg/kubelet/eviction/api"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	volumeutils "github.com/sanposhiho/kubernetes/pkg/volume/util"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	corev1helpers "k8s.io/component-helpers/scheduling/corev1"
 	"k8s.io/klog/v2"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	v1resource "k8s.io/kubernetes/pkg/api/v1/resource"
-	"k8s.io/kubernetes/pkg/features"
-	evictionapi "k8s.io/kubernetes/pkg/kubelet/eviction/api"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
-	volumeutils "k8s.io/kubernetes/pkg/volume/util"
 )
 
 const (

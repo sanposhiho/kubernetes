@@ -35,7 +35,7 @@ var collectCases = []struct {
 var num = 3
 func Helper(x int) { return x / 0 }
 func TestStuff(t *Testing.T) {
-}`, []Test{{"test/list/main_test.go:5:1", "k8s.io/kubernetes/test/list", "TestStuff"}},
+}`, []Test{{"test/list/main_test.go:5:1", "github.com/sanposhiho/kubernetes/test/list", "TestStuff"}},
 	},
 	// Describe + It
 	{"e2e/foo.go", `

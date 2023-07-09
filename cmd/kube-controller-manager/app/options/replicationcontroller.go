@@ -19,7 +19,7 @@ package options
 import (
 	"github.com/spf13/pflag"
 
-	replicationconfig "k8s.io/kubernetes/pkg/controller/replication/config"
+	replicationconfig "github.com/sanposhiho/kubernetes/pkg/controller/replication/config"
 )
 
 // ReplicationControllerOptions holds the ReplicationController options.

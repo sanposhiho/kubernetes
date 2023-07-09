@@ -27,9 +27,9 @@ import (
 	"sync"
 	"time"
 
-	"k8s.io/kubernetes/test/e2e/chaosmonkey"
-	"k8s.io/kubernetes/test/e2e/framework"
-	"k8s.io/kubernetes/test/utils/junit"
+	"github.com/sanposhiho/kubernetes/test/e2e/chaosmonkey"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/utils/junit"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

@@ -24,11 +24,11 @@ package main
 import (
 	"os"
 
+	"github.com/sanposhiho/kubernetes/cmd/kubelet/app"
 	"k8s.io/component-base/cli"
 	_ "k8s.io/component-base/logs/json/register"          // for JSON log format registration
 	_ "k8s.io/component-base/metrics/prometheus/clientgo" // for client metric registration
 	_ "k8s.io/component-base/metrics/prometheus/version"  // for version metric registration
-	"k8s.io/kubernetes/cmd/kubelet/app"
 )
 
 func main() {

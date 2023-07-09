@@ -34,10 +34,10 @@ import (
 	"k8s.io/klog/v2"
 	"k8s.io/utils/pointer"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/images"
-	"k8s.io/kubernetes/cmd/kubeadm/app/preflight"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/images"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/preflight"
 )
 
 // healthCheck is a helper struct for easily performing healthchecks against the cluster and printing the output

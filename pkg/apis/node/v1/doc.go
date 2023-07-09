@@ -14,9 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// +k8s:conversion-gen=k8s.io/kubernetes/pkg/apis/node
+// +k8s:conversion-gen=github.com/sanposhiho/kubernetes/pkg/apis/node
 // +k8s:conversion-gen-external-types=k8s.io/api/node/v1
 
 // +groupName=node.k8s.io
 
-package v1 // import "k8s.io/kubernetes/pkg/apis/node/v1"
+package v1 // import "github.com/sanposhiho/kubernetes/pkg/apis/node/v1"

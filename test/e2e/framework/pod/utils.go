@@ -22,8 +22,8 @@ import (
 
 	"github.com/onsi/gomega"
 
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	psaapi "k8s.io/pod-security-admission/api"
 	psapolicy "k8s.io/pod-security-admission/policy"
 	"k8s.io/utils/pointer"

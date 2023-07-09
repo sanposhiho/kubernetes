@@ -20,7 +20,7 @@ limitations under the License.
 package nodeshutdown
 
 import (
-	"k8s.io/kubernetes/pkg/kubelet/lifecycle"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/lifecycle"
 )
 
 // NewManager returns a fake node shutdown manager for non linux platforms.

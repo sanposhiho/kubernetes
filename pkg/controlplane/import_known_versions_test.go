@@ -20,12 +20,12 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
 	v1 "k8s.io/api/core/v1"
 	apinamingtest "k8s.io/apimachinery/pkg/api/apitesting/naming"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
 )
 
 func TestGroupVersions(t *testing.T) {

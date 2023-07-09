@@ -20,8 +20,8 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol"
 	"k8s.io/api/flowcontrol/v1beta1"
-	"k8s.io/kubernetes/pkg/apis/flowcontrol"
 )
 
 func TestConvert_v1beta1_LimitedPriorityLevelConfiguration_To_flowcontrol_LimitedPriorityLevelConfiguration(t *testing.T) {

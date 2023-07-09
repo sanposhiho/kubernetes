@@ -23,18 +23,18 @@ import (
 
 	cadvisorapi "github.com/google/cadvisor/info/v1"
 
+	corev1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/containermap"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/memorymanager/state"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/status"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/util/sets"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 	"k8s.io/klog/v2"
-	corev1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	"k8s.io/kubernetes/pkg/kubelet/cm/containermap"
-	"k8s.io/kubernetes/pkg/kubelet/cm/memorymanager/state"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
-	"k8s.io/kubernetes/pkg/kubelet/config"
-	"k8s.io/kubernetes/pkg/kubelet/status"
 )
 
 // memoryManagerStateFileName is the file name where memory manager stores its state

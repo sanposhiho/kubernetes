@@ -28,12 +28,12 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/pkg/api/v1/resource"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	v1qos "k8s.io/kubernetes/pkg/apis/core/v1/helper/qos"
-	kubefeatures "k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/kubelet/cm/util"
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/pkg/api/v1/resource"
+	v1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	v1qos "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper/qos"
+	kubefeatures "github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/util"
 )
 
 const (

@@ -27,13 +27,13 @@ import (
 
 	"k8s.io/mount-utils"
 
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	volumetest "github.com/sanposhiho/kubernetes/pkg/volume/testing"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	utiltesting "k8s.io/client-go/util/testing"
 	cloudprovider "k8s.io/cloud-provider"
 	"k8s.io/cloud-provider/fake"
-	"k8s.io/kubernetes/pkg/volume"
-	volumetest "k8s.io/kubernetes/pkg/volume/testing"
 	"k8s.io/legacy-cloud-providers/vsphere"
 )
 

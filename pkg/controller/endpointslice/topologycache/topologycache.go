@@ -21,12 +21,12 @@ import (
 	"math"
 	"sync"
 
+	endpointsliceutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpointslice"
 	v1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/klog/v2"
-	endpointsliceutil "k8s.io/kubernetes/pkg/controller/util/endpointslice"
 )
 
 const (

@@ -26,11 +26,11 @@ import (
 	"github.com/onsi/gomega"
 	clientset "k8s.io/client-go/kubernetes"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2emetrics "k8s.io/kubernetes/test/e2e/framework/metrics"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	instrumentation "k8s.io/kubernetes/test/e2e/instrumentation/common"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2emetrics "github.com/sanposhiho/kubernetes/test/e2e/framework/metrics"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	instrumentation "github.com/sanposhiho/kubernetes/test/e2e/instrumentation/common"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

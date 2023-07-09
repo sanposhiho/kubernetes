@@ -32,13 +32,13 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	clientcmdapi "k8s.io/client-go/tools/clientcmd/api"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	kubeadmutil "k8s.io/kubernetes/cmd/kubeadm/app/util"
-	certstestutil "k8s.io/kubernetes/cmd/kubeadm/app/util/certs"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/pkiutil"
-	testutil "k8s.io/kubernetes/cmd/kubeadm/test"
-	kubeconfigtestutil "k8s.io/kubernetes/cmd/kubeadm/test/kubeconfig"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	kubeadmutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util"
+	certstestutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/certs"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/pkiutil"
+	testutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/test"
+	kubeconfigtestutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/test/kubeconfig"
 )
 
 func TestGetKubeConfigSpecsFailsIfCADoesntExists(t *testing.T) {

@@ -24,6 +24,8 @@ import (
 	"strings"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/apis/certificates"
+	apivalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
 	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	apimachineryvalidation "k8s.io/apimachinery/pkg/api/validation"
@@ -31,8 +33,6 @@ import (
 	utilvalidation "k8s.io/apimachinery/pkg/util/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	utilcert "k8s.io/client-go/util/cert"
-	"k8s.io/kubernetes/pkg/apis/certificates"
-	apivalidation "k8s.io/kubernetes/pkg/apis/core/validation"
 )
 
 var (

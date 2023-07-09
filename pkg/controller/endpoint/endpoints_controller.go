@@ -22,6 +22,13 @@ import (
 	"math"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/v1/endpoints"
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	endpointutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpoint"
+	utillabels "github.com/sanposhiho/kubernetes/pkg/util/labels"
 	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -39,13 +46,6 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/api/v1/endpoints"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	"k8s.io/kubernetes/pkg/controller"
-	endpointutil "k8s.io/kubernetes/pkg/controller/util/endpoint"
-	utillabels "k8s.io/kubernetes/pkg/util/labels"
 	utilnet "k8s.io/utils/net"
 )
 

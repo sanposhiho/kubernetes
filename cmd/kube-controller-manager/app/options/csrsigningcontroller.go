@@ -21,7 +21,7 @@ import (
 
 	"github.com/spf13/pflag"
 
-	csrsigningconfig "k8s.io/kubernetes/pkg/controller/certificates/signer/config"
+	csrsigningconfig "github.com/sanposhiho/kubernetes/pkg/controller/certificates/signer/config"
 )
 
 // CSRSigningControllerOptions holds the CSRSigningController options.

@@ -19,10 +19,10 @@ limitations under the License.
 package install
 
 import (
+	internalapi "github.com/sanposhiho/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction"
+	versionedapi "github.com/sanposhiho/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction/v1alpha1"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	internalapi "k8s.io/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction"
-	versionedapi "k8s.io/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction/v1alpha1"
 )
 
 // Install registers the API group and adds types to a scheme

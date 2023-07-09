@@ -19,11 +19,11 @@ package metrics
 import (
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/volumemanager/cache"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	volumeutil "github.com/sanposhiho/kubernetes/pkg/volume/util"
 	"k8s.io/component-base/metrics"
 	"k8s.io/component-base/metrics/legacyregistry"
-	"k8s.io/kubernetes/pkg/kubelet/volumemanager/cache"
-	"k8s.io/kubernetes/pkg/volume"
-	volumeutil "k8s.io/kubernetes/pkg/volume/util"
 )
 
 const (

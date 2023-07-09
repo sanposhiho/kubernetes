@@ -21,6 +21,10 @@ import (
 	"fmt"
 	"time"
 
+	authenticationapi "github.com/sanposhiho/kubernetes/pkg/apis/authentication"
+	authenticationvalidation "github.com/sanposhiho/kubernetes/pkg/apis/authentication/validation"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	token "github.com/sanposhiho/kubernetes/pkg/serviceaccount"
 	authenticationapiv1 "k8s.io/api/authentication/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -33,10 +37,6 @@ import (
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/apiserver/pkg/registry/rest"
 	"k8s.io/apiserver/pkg/warning"
-	authenticationapi "k8s.io/kubernetes/pkg/apis/authentication"
-	authenticationvalidation "k8s.io/kubernetes/pkg/apis/authentication/validation"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	token "k8s.io/kubernetes/pkg/serviceaccount"
 )
 
 func (r *TokenREST) New() runtime.Object {

@@ -19,13 +19,13 @@ package bootstrap
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/helper"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/dump"
 	core "k8s.io/client-go/testing"
 	bootstrapapi "k8s.io/cluster-bootstrap/token/api"
-	"k8s.io/kubernetes/pkg/apis/core/helper"
 )
 
 func newTokenSecret(tokenID, tokenSecret string) *v1.Secret {

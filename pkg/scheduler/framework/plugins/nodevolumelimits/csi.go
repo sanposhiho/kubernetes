@@ -20,6 +20,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/feature"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/names"
+	volumeutil "github.com/sanposhiho/kubernetes/pkg/volume/util"
 	v1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -30,10 +34,6 @@ import (
 	storagehelpers "k8s.io/component-helpers/storage/volume"
 	csitrans "k8s.io/csi-translation-lib"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/feature"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/names"
-	volumeutil "k8s.io/kubernetes/pkg/volume/util"
 )
 
 // InTreeToCSITranslator contains methods required to check migratable status

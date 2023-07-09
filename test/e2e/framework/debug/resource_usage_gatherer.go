@@ -38,8 +38,8 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	kubeletstatsv1alpha1 "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2essh "k8s.io/kubernetes/test/e2e/framework/ssh"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2essh "github.com/sanposhiho/kubernetes/test/e2e/framework/ssh"
 )
 
 // ResourceConstraint is a struct to hold constraints.

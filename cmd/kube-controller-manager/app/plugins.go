@@ -28,20 +28,20 @@ import (
 	// Cloud providers
 	cloudprovider "k8s.io/cloud-provider"
 	// ensure the cloud providers are installed
-	_ "k8s.io/kubernetes/pkg/cloudprovider/providers"
+	_ "github.com/sanposhiho/kubernetes/pkg/cloudprovider/providers"
 	// Volume plugins
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/csi"
-	"k8s.io/kubernetes/pkg/volume/fc"
-	"k8s.io/kubernetes/pkg/volume/flexvolume"
-	"k8s.io/kubernetes/pkg/volume/hostpath"
-	"k8s.io/kubernetes/pkg/volume/iscsi"
-	"k8s.io/kubernetes/pkg/volume/local"
-	"k8s.io/kubernetes/pkg/volume/nfs"
-	volumeutil "k8s.io/kubernetes/pkg/volume/util"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/csi"
+	"github.com/sanposhiho/kubernetes/pkg/volume/fc"
+	"github.com/sanposhiho/kubernetes/pkg/volume/flexvolume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/hostpath"
+	"github.com/sanposhiho/kubernetes/pkg/volume/iscsi"
+	"github.com/sanposhiho/kubernetes/pkg/volume/local"
+	"github.com/sanposhiho/kubernetes/pkg/volume/nfs"
+	volumeutil "github.com/sanposhiho/kubernetes/pkg/volume/util"
 
+	persistentvolumeconfig "github.com/sanposhiho/kubernetes/pkg/controller/volume/persistentvolume/config"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	persistentvolumeconfig "k8s.io/kubernetes/pkg/controller/volume/persistentvolume/config"
 	"k8s.io/utils/exec"
 )
 

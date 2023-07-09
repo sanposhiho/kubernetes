@@ -32,14 +32,14 @@ import (
 	"github.com/opencontainers/runc/libcontainer/cgroups/manager"
 	cgroupsystemd "github.com/opencontainers/runc/libcontainer/cgroups/systemd"
 	libcontainerconfigs "github.com/opencontainers/runc/libcontainer/configs"
+	v1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
 
+	cmutil "github.com/sanposhiho/kubernetes/pkg/kubelet/cm/util"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/apimachinery/pkg/util/sets"
-	cmutil "k8s.io/kubernetes/pkg/kubelet/cm/util"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
 )
 
 const (

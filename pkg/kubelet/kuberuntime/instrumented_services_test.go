@@ -25,9 +25,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
 	compbasemetrics "k8s.io/component-base/metrics"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
 )
 
 func TestRecordOperation(t *testing.T) {

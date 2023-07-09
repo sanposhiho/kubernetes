@@ -27,17 +27,17 @@ import (
 	"math/big"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/events"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
-	"k8s.io/kubernetes/pkg/kubelet/events"
 	admissionapi "k8s.io/pod-security-admission/api"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eevents "k8s.io/kubernetes/test/e2e/framework/events"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2eoutput "k8s.io/kubernetes/test/e2e/framework/pod/output"
-	imageutils "k8s.io/kubernetes/test/utils/image"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eevents "github.com/sanposhiho/kubernetes/test/e2e/framework/events"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2eoutput "github.com/sanposhiho/kubernetes/test/e2e/framework/pod/output"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 
 	"github.com/onsi/ginkgo/v2"
 )

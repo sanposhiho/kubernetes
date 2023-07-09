@@ -21,18 +21,18 @@ import (
 	"encoding/json"
 	"time"
 
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	kubeletconfigscheme "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/scheme"
 	kubeletconfigv1beta1 "k8s.io/kubelet/config/v1beta1"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	kubeletconfigscheme "k8s.io/kubernetes/pkg/kubelet/apis/config/scheme"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/uuid"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

@@ -17,8 +17,8 @@ limitations under the License.
 package defaults
 
 import (
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/names"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/names"
 )
 
 // PluginsV1beta3 is the set of default v1beta3 plugins (before MultiPoint expansion)

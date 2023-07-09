@@ -33,15 +33,15 @@ import (
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
 	"k8s.io/utils/clock"
 
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	resourcehelper "k8s.io/kubernetes/pkg/api/v1/resource"
-	v1qos "k8s.io/kubernetes/pkg/apis/core/v1/helper/qos"
-	"k8s.io/kubernetes/pkg/features"
-	evictionapi "k8s.io/kubernetes/pkg/kubelet/eviction/api"
-	"k8s.io/kubernetes/pkg/kubelet/lifecycle"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
-	"k8s.io/kubernetes/pkg/kubelet/server/stats"
-	kubelettypes "k8s.io/kubernetes/pkg/kubelet/types"
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	resourcehelper "github.com/sanposhiho/kubernetes/pkg/api/v1/resource"
+	v1qos "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper/qos"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	evictionapi "github.com/sanposhiho/kubernetes/pkg/kubelet/eviction/api"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/lifecycle"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats"
+	kubelettypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 )
 
 const (

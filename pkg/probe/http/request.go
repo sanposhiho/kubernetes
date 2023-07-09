@@ -24,9 +24,9 @@ import (
 	"strconv"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/probe"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/component-base/version"
-	"k8s.io/kubernetes/pkg/probe"
 )
 
 // NewProbeRequest returns an http.Request suitable for use as a request for a

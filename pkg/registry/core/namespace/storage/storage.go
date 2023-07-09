@@ -20,6 +20,11 @@ import (
 	"context"
 	"fmt"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/printers"
+	printersinternal "github.com/sanposhiho/kubernetes/pkg/printers/internalversion"
+	printerstorage "github.com/sanposhiho/kubernetes/pkg/printers/storage"
+	"github.com/sanposhiho/kubernetes/pkg/registry/core/namespace"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metainternalversion "k8s.io/apimachinery/pkg/apis/meta/internalversion"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -32,11 +37,6 @@ import (
 	"k8s.io/apiserver/pkg/storage"
 	storageerr "k8s.io/apiserver/pkg/storage/errors"
 	"k8s.io/apiserver/pkg/util/dryrun"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/printers"
-	printersinternal "k8s.io/kubernetes/pkg/printers/internalversion"
-	printerstorage "k8s.io/kubernetes/pkg/printers/storage"
-	"k8s.io/kubernetes/pkg/registry/core/namespace"
 	"sigs.k8s.io/structured-merge-diff/v4/fieldpath"
 )
 

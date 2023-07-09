@@ -29,8 +29,8 @@ import (
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	types "k8s.io/apimachinery/pkg/types"
-	core "k8s.io/kubernetes/pkg/apis/core"
-	resource "k8s.io/kubernetes/pkg/apis/resource"
+	core "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	resource "github.com/sanposhiho/kubernetes/pkg/apis/resource"
 )
 
 func init() {

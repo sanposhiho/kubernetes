@@ -19,7 +19,7 @@ limitations under the License.
 
 // This file should be written by each cloud provider.
 // For a minimal working example, please refer to k8s.io/cloud-provider/sample/basic_main.go
-// For more details, please refer to k8s.io/kubernetes/cmd/cloud-controller-manager/main.go
+// For more details, please refer to github.com/sanposhiho/kubernetes/cmd/cloud-controller-manager/main.go
 // The current file demonstrate how other cloud provider should leverage CCM and it uses fake parameters. Please modify for your own use.
 
 package main
@@ -27,6 +27,7 @@ package main
 import (
 	"os"
 
+	kcmnames "github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/names"
 	"k8s.io/apimachinery/pkg/util/wait"
 	cloudprovider "k8s.io/cloud-provider"
 	"k8s.io/cloud-provider/app"
@@ -38,7 +39,6 @@ import (
 	_ "k8s.io/component-base/metrics/prometheus/clientgo" // load all the prometheus client-go plugins
 	_ "k8s.io/component-base/metrics/prometheus/version"  // for version metric registration
 	"k8s.io/klog/v2"
-	kcmnames "k8s.io/kubernetes/cmd/kube-controller-manager/names"
 	// For existing cloud providers, the option to import legacy providers is still available.
 	// e.g. _"k8s.io/legacy-cloud-providers/<provider>"
 )

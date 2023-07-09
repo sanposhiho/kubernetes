@@ -18,7 +18,7 @@ package common
 
 import (
 	// ensure these packages are scanned by ginkgo for e2e tests
-	_ "k8s.io/kubernetes/test/e2e/common/network"
-	_ "k8s.io/kubernetes/test/e2e/common/node"
-	_ "k8s.io/kubernetes/test/e2e/common/storage"
+	_ "github.com/sanposhiho/kubernetes/test/e2e/common/network"
+	_ "github.com/sanposhiho/kubernetes/test/e2e/common/node"
+	_ "github.com/sanposhiho/kubernetes/test/e2e/common/storage"
 )

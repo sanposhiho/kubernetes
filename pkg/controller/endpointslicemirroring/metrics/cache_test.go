@@ -19,9 +19,9 @@ package metrics
 import (
 	"testing"
 
+	endpointutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpoint"
 	discovery "k8s.io/api/discovery/v1"
 	"k8s.io/apimachinery/pkg/types"
-	endpointutil "k8s.io/kubernetes/pkg/controller/util/endpoint"
 )
 
 func TestNumEndpointsAndSlices(t *testing.T) {

@@ -19,14 +19,14 @@ package namespace
 import (
 	"testing"
 
+	apitesting "github.com/sanposhiho/kubernetes/pkg/api/testing"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
-	apitesting "k8s.io/kubernetes/pkg/api/testing"
-	api "k8s.io/kubernetes/pkg/apis/core"
 
 	// ensure types are installed
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
 )
 
 func TestNamespaceStrategy(t *testing.T) {

@@ -24,8 +24,8 @@ import (
 
 	"sync"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	"k8s.io/kubernetes/test/e2e/perftype"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/perftype"
 )
 
 var now = time.Now

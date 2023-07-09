@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"strconv"
 
+	kubefeatures "github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager/topology"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
 	"k8s.io/apimachinery/pkg/util/sets"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	kubefeatures "k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/kubelet/cm/cpumanager/topology"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
 )
 
 // Names of the options, as part of the user interface.

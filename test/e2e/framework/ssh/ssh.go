@@ -30,12 +30,12 @@ import (
 
 	"golang.org/x/crypto/ssh"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 const (

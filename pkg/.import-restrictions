@@ -5,7 +5,7 @@ rules:
     forbiddenPrefixes:
       # prevent pkg/ from depending on cmd/
       #   note: pkg/kubemark overrides this
-      - k8s.io/kubernetes/cmd
+      - github.com/sanposhiho/kubernetes/cmd
       # use sigs.k8s.io/yaml instead
       - github.com/ghodss/yaml
       # prevent kubernetes from opening sctp sockets (ref: https://github.com/kubernetes/kubernetes/pull/87926#discussion_r376642015)

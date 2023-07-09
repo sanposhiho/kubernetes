@@ -20,11 +20,11 @@ import (
 	"reflect"
 	"testing"
 
+	kapi "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	kapihelper "github.com/sanposhiho/kubernetes/pkg/apis/core/helper"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
-	kapi "k8s.io/kubernetes/pkg/apis/core"
-	kapihelper "k8s.io/kubernetes/pkg/apis/core/helper"
 
 	fuzz "github.com/google/gofuzz"
 )

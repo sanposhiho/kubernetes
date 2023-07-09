@@ -21,7 +21,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 )
 
 // This file implements the functions that are needed for backward

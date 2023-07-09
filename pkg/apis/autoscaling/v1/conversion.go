@@ -21,10 +21,10 @@ import (
 
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/conversion"
-	"k8s.io/kubernetes/pkg/apis/autoscaling"
-	"k8s.io/kubernetes/pkg/apis/core"
 )
 
 func Convert_autoscaling_MetricTarget_To_v1_CrossVersionObjectReference(in *autoscaling.MetricTarget, out *autoscalingv1.CrossVersionObjectReference, s conversion.Scope) error {

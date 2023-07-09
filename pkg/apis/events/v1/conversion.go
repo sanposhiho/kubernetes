@@ -19,11 +19,11 @@ package v1
 import (
 	"fmt"
 
+	k8s_api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	k8s_api_v1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
 	v1 "k8s.io/api/events/v1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/apimachinery/pkg/runtime"
-	k8s_api "k8s.io/kubernetes/pkg/apis/core"
-	k8s_api_v1 "k8s.io/kubernetes/pkg/apis/core/v1"
 )
 
 func Convert_v1_Event_To_core_Event(in *v1.Event, out *k8s_api.Event, s conversion.Scope) error {

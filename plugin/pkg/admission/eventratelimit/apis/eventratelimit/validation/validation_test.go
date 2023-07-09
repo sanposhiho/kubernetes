@@ -19,7 +19,7 @@ package validation
 import (
 	"testing"
 
-	eventratelimitapi "k8s.io/kubernetes/plugin/pkg/admission/eventratelimit/apis/eventratelimit"
+	eventratelimitapi "github.com/sanposhiho/kubernetes/plugin/pkg/admission/eventratelimit/apis/eventratelimit"
 )
 
 func TestValidateConfiguration(t *testing.T) {

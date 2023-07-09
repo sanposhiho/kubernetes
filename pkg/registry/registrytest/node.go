@@ -20,11 +20,11 @@ import (
 	"context"
 	"sync"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metainternalversion "k8s.io/apimachinery/pkg/apis/meta/internalversion"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/watch"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 // NodeRegistry implements node.Registry interface.

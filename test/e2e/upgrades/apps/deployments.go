@@ -21,18 +21,18 @@ import (
 	"fmt"
 	"time"
 
+	deploymentutil "github.com/sanposhiho/kubernetes/pkg/controller/deployment/util"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2edeployment "github.com/sanposhiho/kubernetes/test/e2e/framework/deployment"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 	appsv1 "k8s.io/api/apps/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
-	deploymentutil "k8s.io/kubernetes/pkg/controller/deployment/util"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2edeployment "k8s.io/kubernetes/test/e2e/framework/deployment"
-	"k8s.io/kubernetes/test/e2e/upgrades"
 
 	"github.com/onsi/ginkgo/v2"
-	imageutils "k8s.io/kubernetes/test/utils/image"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 )
 
 const (

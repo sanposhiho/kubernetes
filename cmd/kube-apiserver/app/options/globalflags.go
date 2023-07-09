@@ -22,8 +22,8 @@ import (
 	"k8s.io/component-base/cli/globalflag"
 
 	// ensure libs have a chance to globally register their flags
+	_ "github.com/sanposhiho/kubernetes/pkg/cloudprovider/providers"
 	_ "k8s.io/apiserver/pkg/admission"
-	_ "k8s.io/kubernetes/pkg/cloudprovider/providers"
 )
 
 // AddCustomGlobalFlags explicitly registers flags that internal packages register
@@ -32,7 +32,7 @@ import (
 func AddCustomGlobalFlags(fs *pflag.FlagSet) {
 	// Lookup flags in global flag set and re-register the values with our flagset.
 
-	// Adds flags from k8s.io/kubernetes/pkg/cloudprovider/providers.
+	// Adds flags from github.com/sanposhiho/kubernetes/pkg/cloudprovider/providers.
 	registerLegacyGlobalFlags(fs)
 
 	// Adds flags from k8s.io/apiserver/pkg/admission.

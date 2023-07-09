@@ -23,8 +23,8 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/apis/output"
-	"k8s.io/kubernetes/cmd/kubeadm/app/apis/output/v1alpha2"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/output"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/output/v1alpha2"
 )
 
 // Scheme is the runtime.Scheme to which all kubeadm api types are registered.

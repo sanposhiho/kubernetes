@@ -19,9 +19,9 @@ package testing
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
 )
 
 // TestSelectableFieldLabelConversionsOfKind verifies that given resource have field

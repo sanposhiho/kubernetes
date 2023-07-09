@@ -28,8 +28,8 @@ import (
 
 	"golang.org/x/sys/unix"
 
-	servermetrics "k8s.io/kubernetes/pkg/kubelet/server/metrics"
-	"k8s.io/kubernetes/pkg/volume/util/fsquota"
+	servermetrics "github.com/sanposhiho/kubernetes/pkg/kubelet/server/metrics"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/fsquota"
 )
 
 type UsageInfo struct {

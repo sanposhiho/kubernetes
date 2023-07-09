@@ -19,10 +19,10 @@ package main
 import (
 	"os"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-proxy/app"
 	"k8s.io/component-base/cli"
 	_ "k8s.io/component-base/metrics/prometheus/clientgo" // for client metric registration
 	_ "k8s.io/component-base/metrics/prometheus/version"  // for version metric registration
-	"k8s.io/kubernetes/cmd/kube-proxy/app"
 )
 
 func main() {

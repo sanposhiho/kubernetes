@@ -17,9 +17,9 @@ limitations under the License.
 package validation
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/coordination"
 	"k8s.io/apimachinery/pkg/api/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/coordination"
 )
 
 // ValidateLease validates a Lease.

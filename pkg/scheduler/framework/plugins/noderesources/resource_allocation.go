@@ -24,11 +24,11 @@ import (
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/klog/v2"
 
-	resourcehelper "k8s.io/kubernetes/pkg/api/v1/resource"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	schedutil "k8s.io/kubernetes/pkg/scheduler/util"
+	resourcehelper "github.com/sanposhiho/kubernetes/pkg/api/v1/resource"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	schedutil "github.com/sanposhiho/kubernetes/pkg/scheduler/util"
 )
 
 // scorer is decorator for resourceAllocationScorer

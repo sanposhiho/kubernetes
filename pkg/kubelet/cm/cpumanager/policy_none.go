@@ -19,10 +19,10 @@ package cpumanager
 import (
 	"fmt"
 
-	"k8s.io/api/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager/state"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/kubelet/cm/cpumanager/state"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
 	"k8s.io/utils/cpuset"
 )
 

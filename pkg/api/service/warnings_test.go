@@ -21,9 +21,9 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 func TestGetWarningsForService(t *testing.T) {

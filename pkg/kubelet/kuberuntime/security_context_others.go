@@ -22,9 +22,9 @@ package kuberuntime
 import (
 	"fmt"
 
-	"k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/kubelet/util/format"
-	"k8s.io/kubernetes/pkg/securitycontext"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util/format"
+	"github.com/sanposhiho/kubernetes/pkg/securitycontext"
+	v1 "k8s.io/api/core/v1"
 )
 
 // verifyRunAsNonRoot verifies RunAsNonRoot.

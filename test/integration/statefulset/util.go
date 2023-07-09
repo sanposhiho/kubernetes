@@ -23,6 +23,8 @@ import (
 	"testing"
 	"time"
 
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -36,12 +38,10 @@ import (
 	typedv1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/util/retry"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	api "k8s.io/kubernetes/pkg/apis/core"
 
-	//svc "k8s.io/kubernetes/pkg/api/v1/service"
-	"k8s.io/kubernetes/pkg/controller/statefulset"
-	"k8s.io/kubernetes/test/integration/framework"
+	//svc "github.com/sanposhiho/kubernetes/pkg/api/v1/service"
+	"github.com/sanposhiho/kubernetes/pkg/controller/statefulset"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 )
 
 const (

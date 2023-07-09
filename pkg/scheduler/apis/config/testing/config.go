@@ -19,11 +19,11 @@ package testing
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/scheme"
 	"k8s.io/component-base/config/v1alpha1"
 	v1 "k8s.io/kube-scheduler/config/v1"
 	"k8s.io/kube-scheduler/config/v1beta3"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
 )
 
 // V1beta3ToInternalWithDefaults creates a v1beta3 default configuration.

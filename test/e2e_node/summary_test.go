@@ -23,14 +23,14 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2evolume "github.com/sanposhiho/kubernetes/test/e2e/framework/volume"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	kubeletstatsv1alpha1 "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2evolume "k8s.io/kubernetes/test/e2e/framework/volume"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	systemdutil "github.com/coreos/go-systemd/v22/util"

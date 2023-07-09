@@ -19,8 +19,8 @@ package v2beta2
 import (
 	autoscalingv2beta2 "k8s.io/api/autoscaling/v2beta2"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
 	"k8s.io/apimachinery/pkg/conversion"
-	"k8s.io/kubernetes/pkg/apis/autoscaling"
 )
 
 func Convert_autoscaling_HorizontalPodAutoscaler_To_v2beta2_HorizontalPodAutoscaler(in *autoscaling.HorizontalPodAutoscaler, out *autoscalingv2beta2.HorizontalPodAutoscaler, s conversion.Scope) error {

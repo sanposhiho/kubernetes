@@ -21,6 +21,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/volume/protectionutil"
+	"github.com/sanposhiho/kubernetes/pkg/util/slice"
+	volumeutil "github.com/sanposhiho/kubernetes/pkg/volume/util"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -32,9 +35,6 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller/volume/protectionutil"
-	"k8s.io/kubernetes/pkg/util/slice"
-	volumeutil "k8s.io/kubernetes/pkg/volume/util"
 )
 
 // Controller is controller that removes PVProtectionFinalizer

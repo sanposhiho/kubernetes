@@ -25,12 +25,12 @@ import (
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
 
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	volumetest "github.com/sanposhiho/kubernetes/pkg/volume/testing"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/hostutil"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/subpath"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	volumetest "k8s.io/kubernetes/pkg/volume/testing"
-	"k8s.io/kubernetes/pkg/volume/util/hostutil"
-	"k8s.io/kubernetes/pkg/volume/util/subpath"
 )
 
 func TestMakeMounts(t *testing.T) {

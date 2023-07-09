@@ -19,9 +19,9 @@ package protectionutil
 import (
 	"testing"
 
-	"k8s.io/api/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/pkg/volume/util"
 )
 
 const (

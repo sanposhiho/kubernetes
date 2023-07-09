@@ -31,7 +31,7 @@ import (
 )
 
 var (
-	exclude  = flag.String("exclude", "", "skip packages regex pattern (e.g. '^k8s.io/kubernetes/')")
+	exclude  = flag.String("exclude", "", "skip packages regex pattern (e.g. '^github.com/sanposhiho/kubernetes/')")
 	restrict = flag.String("restrict", "", "restricted dependencies regex pattern (e.g. '^k8s.io/(apimachinery|client-go)/')")
 )
 

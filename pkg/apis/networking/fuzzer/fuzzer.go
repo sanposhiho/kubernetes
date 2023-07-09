@@ -20,8 +20,8 @@ import (
 	"net/netip"
 
 	fuzz "github.com/google/gofuzz"
+	"github.com/sanposhiho/kubernetes/pkg/apis/networking"
 	runtimeserializer "k8s.io/apimachinery/pkg/runtime/serializer"
-	"k8s.io/kubernetes/pkg/apis/networking"
 	utilpointer "k8s.io/utils/pointer"
 )
 

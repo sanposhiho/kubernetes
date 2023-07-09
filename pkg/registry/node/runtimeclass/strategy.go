@@ -19,14 +19,14 @@ package runtimeclass
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	nodeapi "github.com/sanposhiho/kubernetes/pkg/api/node"
+	"github.com/sanposhiho/kubernetes/pkg/apis/node"
+	"github.com/sanposhiho/kubernetes/pkg/apis/node/validation"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apiserver/pkg/registry/rest"
 	"k8s.io/apiserver/pkg/storage/names"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	nodeapi "k8s.io/kubernetes/pkg/api/node"
-	"k8s.io/kubernetes/pkg/apis/node"
-	"k8s.io/kubernetes/pkg/apis/node/validation"
 )
 
 // strategy implements verification logic for RuntimeClass.

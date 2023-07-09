@@ -19,8 +19,8 @@ package openshift
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/controlplane"
 	genericapiserver "k8s.io/apiserver/pkg/server"
-	"k8s.io/kubernetes/pkg/controlplane"
 )
 
 // This test references methods that OpenShift uses to customize the apiserver on startup, that

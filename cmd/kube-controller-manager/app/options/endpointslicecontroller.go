@@ -21,7 +21,7 @@ import (
 
 	"github.com/spf13/pflag"
 
-	endpointsliceconfig "k8s.io/kubernetes/pkg/controller/endpointslice/config"
+	endpointsliceconfig "github.com/sanposhiho/kubernetes/pkg/controller/endpointslice/config"
 )
 
 const (

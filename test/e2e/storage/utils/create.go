@@ -25,6 +25,9 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2etestfiles "github.com/sanposhiho/kubernetes/test/e2e/framework/testfiles"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -36,9 +39,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/tools/cache"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2etestfiles "k8s.io/kubernetes/test/e2e/framework/testfiles"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 )
 
 // LoadFromManifests loads .yaml or .json manifest files and returns

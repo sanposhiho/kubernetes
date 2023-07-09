@@ -36,11 +36,11 @@ import (
 	clientsetfake "k8s.io/client-go/kubernetes/fake"
 	clienttesting "k8s.io/client-go/testing"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmapiv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
-	"k8s.io/kubernetes/cmd/kubeadm/app/componentconfigs"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	testresources "k8s.io/kubernetes/cmd/kubeadm/test/resources"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmapiv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/componentconfigs"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	testresources "github.com/sanposhiho/kubernetes/cmd/kubeadm/test/resources"
 )
 
 var k8sVersionString = kubeadmconstants.MinimumControlPlaneVersion.String()

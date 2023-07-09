@@ -19,7 +19,7 @@ package metrics
 import (
 	"fmt"
 
-	e2eperftype "k8s.io/kubernetes/test/e2e/perftype"
+	e2eperftype "github.com/sanposhiho/kubernetes/test/e2e/perftype"
 )
 
 // APICall is a struct for managing API call.

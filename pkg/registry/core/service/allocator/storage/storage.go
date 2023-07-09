@@ -22,6 +22,10 @@ import (
 	"fmt"
 	"sync"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
+	"github.com/sanposhiho/kubernetes/pkg/registry/core/rangeallocation"
+	"github.com/sanposhiho/kubernetes/pkg/registry/core/service/allocator"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
@@ -29,10 +33,6 @@ import (
 	"k8s.io/apiserver/pkg/storage"
 	storeerr "k8s.io/apiserver/pkg/storage/errors"
 	"k8s.io/apiserver/pkg/storage/storagebackend"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
-	"k8s.io/kubernetes/pkg/registry/core/rangeallocation"
-	"k8s.io/kubernetes/pkg/registry/core/service/allocator"
 )
 
 var (

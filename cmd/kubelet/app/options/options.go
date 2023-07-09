@@ -25,6 +25,12 @@ import (
 
 	"github.com/spf13/pflag"
 
+	"github.com/sanposhiho/kubernetes/pkg/cluster/ports"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	kubeletscheme "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/scheme"
+	kubeletconfigvalidation "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/validation"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
+	utilflag "github.com/sanposhiho/kubernetes/pkg/util/flag"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation"
@@ -33,12 +39,6 @@ import (
 	logsapi "k8s.io/component-base/logs/api/v1"
 	"k8s.io/kubelet/config/v1beta1"
 	kubeletapis "k8s.io/kubelet/pkg/apis"
-	"k8s.io/kubernetes/pkg/cluster/ports"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	kubeletscheme "k8s.io/kubernetes/pkg/kubelet/apis/config/scheme"
-	kubeletconfigvalidation "k8s.io/kubernetes/pkg/kubelet/apis/config/validation"
-	"k8s.io/kubernetes/pkg/kubelet/config"
-	utilflag "k8s.io/kubernetes/pkg/util/flag"
 )
 
 const defaultRootDir = "/var/lib/kubelet"

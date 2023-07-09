@@ -29,6 +29,9 @@ import (
 	"github.com/onsi/gomega/gcustom"
 	"github.com/onsi/gomega/types"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
+	"github.com/sanposhiho/kubernetes/test/utils/format"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -37,9 +40,6 @@ import (
 	apitypes "k8s.io/apimachinery/pkg/types"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/kubectl/pkg/util/podutils"
-	"k8s.io/kubernetes/test/e2e/framework"
-	testutils "k8s.io/kubernetes/test/utils"
-	"k8s.io/kubernetes/test/utils/format"
 )
 
 const (

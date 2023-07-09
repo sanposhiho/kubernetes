@@ -21,9 +21,9 @@ import (
 	"net"
 	"testing"
 
-	"k8s.io/api/core/v1"
+	fake "github.com/sanposhiho/kubernetes/pkg/proxy/util/testing"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
-	fake "k8s.io/kubernetes/pkg/proxy/util/testing"
 	netutils "k8s.io/utils/net"
 )
 

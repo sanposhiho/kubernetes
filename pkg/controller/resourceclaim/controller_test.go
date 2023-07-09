@@ -24,6 +24,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	ephemeralvolumemetrics "github.com/sanposhiho/kubernetes/pkg/controller/resourceclaim/metrics"
 	v1 "k8s.io/api/core/v1"
 	resourcev1alpha2 "k8s.io/api/resource/v1alpha2"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -36,8 +38,6 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/component-base/metrics/testutil"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller"
-	ephemeralvolumemetrics "k8s.io/kubernetes/pkg/controller/resourceclaim/metrics"
 )
 
 var (

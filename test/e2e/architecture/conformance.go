@@ -22,8 +22,8 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

@@ -20,14 +20,14 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/networking/install"
+	. "github.com/sanposhiho/kubernetes/pkg/apis/networking/v1"
 	networkingv1 "k8s.io/api/networking/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
-	_ "k8s.io/kubernetes/pkg/apis/networking/install"
-	. "k8s.io/kubernetes/pkg/apis/networking/v1"
 	utilpointer "k8s.io/utils/pointer"
 )
 

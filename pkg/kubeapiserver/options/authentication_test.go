@@ -25,13 +25,13 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/spf13/pflag"
 
+	kubeauthenticator "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/authenticator"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/apiserver/pkg/authentication/authenticator"
 	"k8s.io/apiserver/pkg/authentication/authenticatorfactory"
 	"k8s.io/apiserver/pkg/authentication/request/headerrequest"
 	apiserveroptions "k8s.io/apiserver/pkg/server/options"
-	kubeauthenticator "k8s.io/kubernetes/pkg/kubeapiserver/authenticator"
 )
 
 func TestAuthenticationValidate(t *testing.T) {

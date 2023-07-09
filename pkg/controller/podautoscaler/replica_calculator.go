@@ -22,14 +22,14 @@ import (
 	"math"
 	"time"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	metricsclient "github.com/sanposhiho/kubernetes/pkg/controller/podautoscaler/metrics"
 	autoscaling "k8s.io/api/autoscaling/v2"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/util/sets"
 	corelisters "k8s.io/client-go/listers/core/v1"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	metricsclient "k8s.io/kubernetes/pkg/controller/podautoscaler/metrics"
 )
 
 const (

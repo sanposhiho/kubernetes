@@ -1144,8 +1144,8 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"k8s.io/kubelet/config/v1beta1.MemorySwapConfiguration":                                           schema_k8sio_kubelet_config_v1beta1_MemorySwapConfiguration(ref),
 		"k8s.io/kubelet/config/v1beta1.SerializedNodeConfigSource":                                        schema_k8sio_kubelet_config_v1beta1_SerializedNodeConfigSource(ref),
 		"k8s.io/kubelet/config/v1beta1.ShutdownGracePeriodByPodPriority":                                  schema_k8sio_kubelet_config_v1beta1_ShutdownGracePeriodByPodPriority(ref),
-		"k8s.io/kubernetes/pkg/apis/abac/v1beta1.Policy":                                                  schema_pkg_apis_abac_v1beta1_Policy(ref),
-		"k8s.io/kubernetes/pkg/apis/abac/v1beta1.PolicySpec":                                              schema_pkg_apis_abac_v1beta1_PolicySpec(ref),
+		"github.com/sanposhiho/kubernetes/pkg/apis/abac/v1beta1.Policy":                                                  schema_pkg_apis_abac_v1beta1_Policy(ref),
+		"github.com/sanposhiho/kubernetes/pkg/apis/abac/v1beta1.PolicySpec":                                              schema_pkg_apis_abac_v1beta1_PolicySpec(ref),
 		"k8s.io/metrics/pkg/apis/custom_metrics/v1beta1.MetricListOptions":                                schema_pkg_apis_custom_metrics_v1beta1_MetricListOptions(ref),
 		"k8s.io/metrics/pkg/apis/custom_metrics/v1beta1.MetricValue":                                      schema_pkg_apis_custom_metrics_v1beta1_MetricValue(ref),
 		"k8s.io/metrics/pkg/apis/custom_metrics/v1beta1.MetricValueList":                                  schema_pkg_apis_custom_metrics_v1beta1_MetricValueList(ref),
@@ -57557,7 +57557,7 @@ func schema_k8sio_kubelet_config_v1beta1_KubeletConfiguration(ref common.Referen
 					},
 					"featureGates": {
 						SchemaProps: spec.SchemaProps{
-							Description: "featureGates is a map of feature names to bools that enable or disable experimental features. This field modifies piecemeal the built-in default values from \"k8s.io/kubernetes/pkg/features/kube_features.go\". Default: nil",
+							Description: "featureGates is a map of feature names to bools that enable or disable experimental features. This field modifies piecemeal the built-in default values from \"github.com/sanposhiho/kubernetes/pkg/features/kube_features.go\". Default: nil",
 							Type:        []string{"object"},
 							AdditionalProperties: &spec.SchemaOrBool{
 								Allows: true,
@@ -58083,7 +58083,7 @@ func schema_pkg_apis_abac_v1beta1_Policy(ref common.ReferenceCallback) common.Op
 						SchemaProps: spec.SchemaProps{
 							Description: "Spec describes the policy rule",
 							Default:     map[string]interface{}{},
-							Ref:         ref("k8s.io/kubernetes/pkg/apis/abac/v1beta1.PolicySpec"),
+							Ref:         ref("github.com/sanposhiho/kubernetes/pkg/apis/abac/v1beta1.PolicySpec"),
 						},
 					},
 				},
@@ -58091,7 +58091,7 @@ func schema_pkg_apis_abac_v1beta1_Policy(ref common.ReferenceCallback) common.Op
 			},
 		},
 		Dependencies: []string{
-			"k8s.io/kubernetes/pkg/apis/abac/v1beta1.PolicySpec"},
+			"github.com/sanposhiho/kubernetes/pkg/apis/abac/v1beta1.PolicySpec"},
 	}
 }
 

@@ -17,26 +17,26 @@ limitations under the License.
 package rest
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/networking"
+	clustercidrstore "github.com/sanposhiho/kubernetes/pkg/registry/networking/clustercidr/storage"
+	ingressstore "github.com/sanposhiho/kubernetes/pkg/registry/networking/ingress/storage"
+	ingressclassstore "github.com/sanposhiho/kubernetes/pkg/registry/networking/ingressclass/storage"
+	ipaddressstore "github.com/sanposhiho/kubernetes/pkg/registry/networking/ipaddress/storage"
+	networkpolicystore "github.com/sanposhiho/kubernetes/pkg/registry/networking/networkpolicy/storage"
 	networkingapiv1 "k8s.io/api/networking/v1"
 	networkingapiv1alpha1 "k8s.io/api/networking/v1alpha1"
 	"k8s.io/apiserver/pkg/registry/generic"
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/networking"
-	clustercidrstore "k8s.io/kubernetes/pkg/registry/networking/clustercidr/storage"
-	ingressstore "k8s.io/kubernetes/pkg/registry/networking/ingress/storage"
-	ingressclassstore "k8s.io/kubernetes/pkg/registry/networking/ingressclass/storage"
-	ipaddressstore "k8s.io/kubernetes/pkg/registry/networking/ipaddress/storage"
-	networkpolicystore "k8s.io/kubernetes/pkg/registry/networking/networkpolicy/storage"
 )
 
 type RESTStorageProvider struct{}
 
 func (p RESTStorageProvider) NewRESTStorage(apiResourceConfigSource serverstorage.APIResourceConfigSource, restOptionsGetter generic.RESTOptionsGetter) (genericapiserver.APIGroupInfo, error) {
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(networking.GroupName, legacyscheme.Scheme, legacyscheme.ParameterCodec, legacyscheme.Codecs)
-	// If you add a version here, be sure to add an entry in `k8s.io/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
+	// If you add a version here, be sure to add an entry in `github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
 	// TODO refactor the plumbing to provide the information in the APIGroupInfo
 
 	if storageMap, err := p.v1alpha1Storage(apiResourceConfigSource, restOptionsGetter); err != nil {

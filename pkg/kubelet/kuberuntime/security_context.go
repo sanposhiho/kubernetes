@@ -17,11 +17,11 @@ limitations under the License.
 package kuberuntime
 
 import (
+	runtimeutil "github.com/sanposhiho/kubernetes/pkg/kubelet/kuberuntime/util"
+	"github.com/sanposhiho/kubernetes/pkg/security/apparmor"
+	"github.com/sanposhiho/kubernetes/pkg/securitycontext"
 	v1 "k8s.io/api/core/v1"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	runtimeutil "k8s.io/kubernetes/pkg/kubelet/kuberuntime/util"
-	"k8s.io/kubernetes/pkg/security/apparmor"
-	"k8s.io/kubernetes/pkg/securitycontext"
 )
 
 // determineEffectiveSecurityContext gets container's security context from v1.Pod and v1.Container.

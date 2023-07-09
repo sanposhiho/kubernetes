@@ -36,7 +36,7 @@ cd "${KUBE_ROOT}"
 # Check for any module that is not main or staging and depends on main or staging
 bad_deps=$(go mod graph | grep -vE "^k8s.io\/(kubernetes|${staging_repos_pattern})" | grep -E "\sk8s.io\/(kubernetes|${staging_repos_pattern})" || true)
 if [[ -n "${bad_deps}" ]]; then
-  echo "Found disallowed dependencies that transitively depend on k8s.io/kubernetes or staging modules:"
+  echo "Found disallowed dependencies that transitively depend on github.com/sanposhiho/kubernetes or staging modules:"
   echo "${bad_deps}"
   exit 1
 fi

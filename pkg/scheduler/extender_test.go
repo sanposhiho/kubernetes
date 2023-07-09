@@ -22,6 +22,15 @@ import (
 	"testing"
 	"time"
 
+	schedulerapi "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/fake"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/defaultbinder"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/queuesort"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
+	internalcache "github.com/sanposhiho/kubernetes/pkg/scheduler/internal/cache"
+	internalqueue "github.com/sanposhiho/kubernetes/pkg/scheduler/internal/queue"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -29,15 +38,6 @@ import (
 	clientsetfake "k8s.io/client-go/kubernetes/fake"
 	"k8s.io/klog/v2/ktesting"
 	extenderv1 "k8s.io/kube-scheduler/extender/v1"
-	schedulerapi "k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/fake"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/defaultbinder"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/queuesort"
-	"k8s.io/kubernetes/pkg/scheduler/framework/runtime"
-	internalcache "k8s.io/kubernetes/pkg/scheduler/internal/cache"
-	internalqueue "k8s.io/kubernetes/pkg/scheduler/internal/queue"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
 )
 
 func TestSchedulerWithExtenders(t *testing.T) {

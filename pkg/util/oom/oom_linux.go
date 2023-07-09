@@ -27,7 +27,7 @@ import (
 	"strconv"
 	"time"
 
-	cmutil "k8s.io/kubernetes/pkg/kubelet/cm/util"
+	cmutil "github.com/sanposhiho/kubernetes/pkg/kubelet/cm/util"
 
 	"k8s.io/klog/v2"
 )

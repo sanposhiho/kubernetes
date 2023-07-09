@@ -20,13 +20,13 @@ import (
 	"context"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/helper"
+	"github.com/sanposhiho/kubernetes/pkg/controlplane"
+	"github.com/sanposhiho/kubernetes/plugin/pkg/admission/defaulttolerationseconds"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/utils/ktesting"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/pkg/apis/core/helper"
-	"k8s.io/kubernetes/pkg/controlplane"
-	"k8s.io/kubernetes/plugin/pkg/admission/defaulttolerationseconds"
-	"k8s.io/kubernetes/test/integration/framework"
-	"k8s.io/kubernetes/test/utils/ktesting"
 )
 
 func TestAdmission(t *testing.T) {

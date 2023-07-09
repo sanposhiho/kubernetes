@@ -24,6 +24,10 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util"
+	"github.com/sanposhiho/kubernetes/pkg/probe/exec"
 	"go.opentelemetry.io/contrib/instrumentation/google.golang.org/grpc/otelgrpc"
 	"go.opentelemetry.io/otel/trace"
 	"google.golang.org/grpc"
@@ -37,10 +41,6 @@ import (
 	internalapi "k8s.io/cri-api/pkg/apis"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
-	"k8s.io/kubernetes/pkg/kubelet/util"
-	"k8s.io/kubernetes/pkg/probe/exec"
 
 	utilexec "k8s.io/utils/exec"
 )

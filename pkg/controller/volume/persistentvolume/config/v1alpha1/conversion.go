@@ -17,9 +17,9 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/controller/volume/persistentvolume/config"
 	"k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/kube-controller-manager/config/v1alpha1"
-	"k8s.io/kubernetes/pkg/controller/volume/persistentvolume/config"
 )
 
 // Important! The public back-and-forth conversion functions for the types in this package

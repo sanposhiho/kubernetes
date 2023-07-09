@@ -25,12 +25,12 @@ import (
 
 	"k8s.io/klog/v2"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	appsclient "k8s.io/client-go/kubernetes/typed/apps/v1"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
 )
 
 // updateReplicaSetStatus attempts to update the Status.Replicas of the given ReplicaSet, with a single GET/PUT retry.

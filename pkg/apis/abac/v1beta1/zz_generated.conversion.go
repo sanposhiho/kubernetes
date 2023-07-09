@@ -24,7 +24,7 @@ package v1beta1
 import (
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	abac "k8s.io/kubernetes/pkg/apis/abac"
+	abac "github.com/sanposhiho/kubernetes/pkg/apis/abac"
 )
 
 func init() {

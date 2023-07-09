@@ -26,13 +26,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/proxy"
+	"github.com/sanposhiho/kubernetes/pkg/proxy/healthcheck"
 	v1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	"k8s.io/kubernetes/pkg/proxy"
-	"k8s.io/kubernetes/pkg/proxy/healthcheck"
 	netutils "k8s.io/utils/net"
 	"k8s.io/utils/pointer"
 )

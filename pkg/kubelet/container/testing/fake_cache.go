@@ -20,8 +20,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 type fakeCache struct {

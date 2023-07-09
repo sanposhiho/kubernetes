@@ -22,17 +22,17 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/sysctl"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/uuid"
-	"k8s.io/kubernetes/pkg/kubelet/sysctl"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2eoutput "k8s.io/kubernetes/test/e2e/framework/pod/output"
-	"k8s.io/kubernetes/test/e2e/upgrades"
-	imageutils "k8s.io/kubernetes/test/utils/image"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2eoutput "github.com/sanposhiho/kubernetes/test/e2e/framework/pod/output"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 )
 
 // SysctlUpgradeTest tests that a pod with sysctls runs before and after an upgrade. During

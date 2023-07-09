@@ -87,9 +87,9 @@ type MetricListOptions struct {
 	MetricLabelSelector string
 }
 
-// NOTE: ObjectReference is copied from k8s.io/kubernetes/pkg/api/types.go. We
-// cannot depend on k8s.io/kubernetes/pkg/api because that creates cyclic
-// dependency between k8s.io/metrics and k8s.io/kubernetes. We cannot depend on
+// NOTE: ObjectReference is copied from github.com/sanposhiho/kubernetes/pkg/api/types.go. We
+// cannot depend on github.com/sanposhiho/kubernetes/pkg/api because that creates cyclic
+// dependency between k8s.io/metrics and github.com/sanposhiho/kubernetes. We cannot depend on
 // k8s.io/client-go/pkg/api because the package is going to be deprecated soon.
 // There is no need to keep it an exact copy. Each repo can define its own
 // internal objects.

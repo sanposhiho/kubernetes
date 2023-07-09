@@ -16,18 +16,18 @@ limitations under the License.
 
 // Package clustertrustbundle provides Registry interface and its RESTStorage
 // implementation for storing ClusterTrustBundle objects.
-package clustertrustbundle // import "k8s.io/kubernetes/pkg/registry/certificates/clustertrustbundle"
+package clustertrustbundle // import "github.com/sanposhiho/kubernetes/pkg/registry/certificates/clustertrustbundle"
 
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/certificates"
+	certvalidation "github.com/sanposhiho/kubernetes/pkg/apis/certificates/validation"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apiserver/pkg/registry/rest"
 	"k8s.io/apiserver/pkg/storage/names"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/certificates"
-	certvalidation "k8s.io/kubernetes/pkg/apis/certificates/validation"
 )
 
 // strategy implements behavior for ClusterTrustBundles.

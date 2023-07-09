@@ -24,6 +24,9 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/controller/history"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -41,9 +44,6 @@ import (
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	"k8s.io/klog/v2"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/controller"
-	"k8s.io/kubernetes/pkg/controller/history"
-	"k8s.io/kubernetes/pkg/features"
 )
 
 var parentKind = apps.SchemeGroupVersion.WithKind("StatefulSet")

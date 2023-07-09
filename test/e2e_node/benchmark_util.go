@@ -28,13 +28,13 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2emetrics "github.com/sanposhiho/kubernetes/test/e2e/framework/metrics"
+	e2eperf "github.com/sanposhiho/kubernetes/test/e2e/framework/perf"
+	"github.com/sanposhiho/kubernetes/test/e2e/perftype"
+	nodeperftype "github.com/sanposhiho/kubernetes/test/e2e_node/perftype"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2emetrics "k8s.io/kubernetes/test/e2e/framework/metrics"
-	e2eperf "k8s.io/kubernetes/test/e2e/framework/perf"
-	"k8s.io/kubernetes/test/e2e/perftype"
-	nodeperftype "k8s.io/kubernetes/test/e2e_node/perftype"
 )
 
 const (

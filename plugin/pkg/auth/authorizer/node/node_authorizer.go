@@ -22,19 +22,19 @@ import (
 
 	"k8s.io/klog/v2"
 
+	coordapi "github.com/sanposhiho/kubernetes/pkg/apis/coordination"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	storageapi "github.com/sanposhiho/kubernetes/pkg/apis/storage"
+	"github.com/sanposhiho/kubernetes/pkg/auth/nodeidentifier"
+	"github.com/sanposhiho/kubernetes/plugin/pkg/auth/authorizer/rbac"
+	"github.com/sanposhiho/kubernetes/third_party/forked/gonum/graph"
+	"github.com/sanposhiho/kubernetes/third_party/forked/gonum/graph/traverse"
 	rbacv1 "k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/authentication/user"
 	"k8s.io/apiserver/pkg/authorization/authorizer"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/component-base/featuregate"
-	coordapi "k8s.io/kubernetes/pkg/apis/coordination"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	storageapi "k8s.io/kubernetes/pkg/apis/storage"
-	"k8s.io/kubernetes/pkg/auth/nodeidentifier"
-	"k8s.io/kubernetes/plugin/pkg/auth/authorizer/rbac"
-	"k8s.io/kubernetes/third_party/forked/gonum/graph"
-	"k8s.io/kubernetes/third_party/forked/gonum/graph/traverse"
 )
 
 // NodeAuthorizer authorizes requests from kubelets, with the following logic:

@@ -19,9 +19,9 @@ package container
 import (
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
 	v1 "k8s.io/api/core/v1"
 	ref "k8s.io/client-go/tools/reference"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
 )
 
 // ImplicitContainerPrefix is a container name prefix that will indicate that container was started implicitly (like the pod infra container).

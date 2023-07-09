@@ -21,20 +21,20 @@ import (
 	"fmt"
 
 	cadvisorapiv1 "github.com/google/cadvisor/info/v1"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cadvisor"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/stats/pidlimit"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/status"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	internalapi "k8s.io/cri-api/pkg/apis"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	"k8s.io/kubernetes/pkg/kubelet/cadvisor"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/server/stats"
-	"k8s.io/kubernetes/pkg/kubelet/stats/pidlimit"
-	"k8s.io/kubernetes/pkg/kubelet/status"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 )
 
 // PodManager is the subset of methods the manager needs to observe the actual state of the kubelet.
-// See pkg/k8s.io/kubernetes/pkg/kubelet/pod.Manager for method godoc.
+// See pkg/github.com/sanposhiho/kubernetes/pkg/kubelet/pod.Manager for method godoc.
 type PodManager interface {
 	TranslatePodUID(uid types.UID) kubetypes.ResolvedPodUID
 }

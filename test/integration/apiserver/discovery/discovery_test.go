@@ -26,6 +26,7 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
 	"github.com/stretchr/testify/require"
 	apidiscoveryv2beta1 "k8s.io/api/apidiscovery/v2beta1"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
@@ -47,9 +48,8 @@ import (
 	apiregistrationv1 "k8s.io/kube-aggregator/pkg/apis/apiregistration/v1"
 	aggregator "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset"
 	aggregatorclientsetscheme "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset/scheme"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
 
-	"k8s.io/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 )
 
 type kubeClientSet = kubernetes.Interface

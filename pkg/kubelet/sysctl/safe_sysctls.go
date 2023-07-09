@@ -20,9 +20,9 @@ import (
 	"fmt"
 	goruntime "runtime"
 
+	"github.com/sanposhiho/kubernetes/pkg/proxy/ipvs"
 	"k8s.io/apimachinery/pkg/util/version"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/proxy/ipvs"
 )
 
 // refer to https://github.com/torvalds/linux/commit/122ff243f5f104194750ecbc76d5946dd1eec934.

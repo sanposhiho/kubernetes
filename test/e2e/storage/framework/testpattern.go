@@ -17,9 +17,9 @@ limitations under the License.
 package framework
 
 import (
+	e2evolume "github.com/sanposhiho/kubernetes/test/e2e/framework/volume"
 	v1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"
-	e2evolume "k8s.io/kubernetes/test/e2e/framework/volume"
 )
 
 const (

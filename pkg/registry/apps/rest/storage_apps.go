@@ -17,18 +17,18 @@ limitations under the License.
 package rest
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	controllerrevisionsstore "github.com/sanposhiho/kubernetes/pkg/registry/apps/controllerrevision/storage"
+	daemonsetstore "github.com/sanposhiho/kubernetes/pkg/registry/apps/daemonset/storage"
+	deploymentstore "github.com/sanposhiho/kubernetes/pkg/registry/apps/deployment/storage"
+	replicasetstore "github.com/sanposhiho/kubernetes/pkg/registry/apps/replicaset/storage"
+	statefulsetstore "github.com/sanposhiho/kubernetes/pkg/registry/apps/statefulset/storage"
 	appsapiv1 "k8s.io/api/apps/v1"
 	"k8s.io/apiserver/pkg/registry/generic"
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/apps"
-	controllerrevisionsstore "k8s.io/kubernetes/pkg/registry/apps/controllerrevision/storage"
-	daemonsetstore "k8s.io/kubernetes/pkg/registry/apps/daemonset/storage"
-	deploymentstore "k8s.io/kubernetes/pkg/registry/apps/deployment/storage"
-	replicasetstore "k8s.io/kubernetes/pkg/registry/apps/replicaset/storage"
-	statefulsetstore "k8s.io/kubernetes/pkg/registry/apps/statefulset/storage"
 )
 
 // StorageProvider is a struct for apps REST storage.
@@ -37,7 +37,7 @@ type StorageProvider struct{}
 // NewRESTStorage returns APIGroupInfo object.
 func (p StorageProvider) NewRESTStorage(apiResourceConfigSource serverstorage.APIResourceConfigSource, restOptionsGetter generic.RESTOptionsGetter) (genericapiserver.APIGroupInfo, error) {
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(apps.GroupName, legacyscheme.Scheme, legacyscheme.ParameterCodec, legacyscheme.Codecs)
-	// If you add a version here, be sure to add an entry in `k8s.io/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
+	// If you add a version here, be sure to add an entry in `github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
 	// TODO refactor the plumbing to provide the information in the APIGroupInfo
 
 	if storageMap, err := p.v1Storage(apiResourceConfigSource, restOptionsGetter); err != nil {

@@ -22,6 +22,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -31,7 +32,6 @@ import (
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/apiserver/pkg/storage"
 	"k8s.io/client-go/dynamic"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
 )
 
 // TestCrossGroupStorage tests to make sure that all objects stored in an expected location in etcd can be converted/read.

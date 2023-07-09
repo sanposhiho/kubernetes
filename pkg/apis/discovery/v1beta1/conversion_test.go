@@ -19,11 +19,11 @@ package v1beta1
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/discovery"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/api/discovery/v1beta1"
-	"k8s.io/kubernetes/pkg/apis/discovery"
 	utilpointer "k8s.io/utils/pointer"
 )
 

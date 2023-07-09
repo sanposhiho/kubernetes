@@ -33,7 +33,7 @@ import (
 	remotecommand "k8s.io/client-go/tools/remotecommand"
 	flowcontrol "k8s.io/client-go/util/flowcontrol"
 	v10 "k8s.io/cri-api/pkg/apis/runtime/v1"
-	container "k8s.io/kubernetes/pkg/kubelet/container"
+	container "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 )
 
 // MockVersion is a mock of Version interface.

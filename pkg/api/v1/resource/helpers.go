@@ -25,7 +25,7 @@ import (
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
 )
 
 // PodResourcesOptions controls the behavior of PodRequests and PodLimits.

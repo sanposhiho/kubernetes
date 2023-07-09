@@ -17,24 +17,24 @@ limitations under the License.
 package rest
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/resource"
+	podschedulingcontextsstore "github.com/sanposhiho/kubernetes/pkg/registry/resource/podschedulingcontext/storage"
+	resourceclaimstore "github.com/sanposhiho/kubernetes/pkg/registry/resource/resourceclaim/storage"
+	resourceclaimtemplatestore "github.com/sanposhiho/kubernetes/pkg/registry/resource/resourceclaimtemplate/storage"
+	resourceclassstore "github.com/sanposhiho/kubernetes/pkg/registry/resource/resourceclass/storage"
 	resourcev1alpha2 "k8s.io/api/resource/v1alpha2"
 	"k8s.io/apiserver/pkg/registry/generic"
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/resource"
-	podschedulingcontextsstore "k8s.io/kubernetes/pkg/registry/resource/podschedulingcontext/storage"
-	resourceclaimstore "k8s.io/kubernetes/pkg/registry/resource/resourceclaim/storage"
-	resourceclaimtemplatestore "k8s.io/kubernetes/pkg/registry/resource/resourceclaimtemplate/storage"
-	resourceclassstore "k8s.io/kubernetes/pkg/registry/resource/resourceclass/storage"
 )
 
 type RESTStorageProvider struct{}
 
 func (p RESTStorageProvider) NewRESTStorage(apiResourceConfigSource serverstorage.APIResourceConfigSource, restOptionsGetter generic.RESTOptionsGetter) (genericapiserver.APIGroupInfo, error) {
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(resource.GroupName, legacyscheme.Scheme, legacyscheme.ParameterCodec, legacyscheme.Codecs)
-	// If you add a version here, be sure to add an entry in `k8s.io/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
+	// If you add a version here, be sure to add an entry in `github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
 	// TODO refactor the plumbing to provide the information in the APIGroupInfo
 
 	if storageMap, err := p.v1alpha2Storage(apiResourceConfigSource, restOptionsGetter); err != nil {

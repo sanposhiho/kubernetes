@@ -25,11 +25,11 @@ import (
 
 	cadvisorapi "github.com/google/cadvisor/info/v1"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/memorymanager/state"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
-	"k8s.io/kubernetes/pkg/kubelet/cm/memorymanager/state"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
 )
 
 const (

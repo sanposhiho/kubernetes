@@ -24,6 +24,10 @@ import (
 	"strings"
 	"testing"
 
+	podapi "github.com/sanposhiho/kubernetes/pkg/api/pod"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/policy"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	policyv1 "k8s.io/api/policy/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	apimeta "k8s.io/apimachinery/pkg/api/meta"
@@ -37,10 +41,6 @@ import (
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/client-go/kubernetes/fake"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	podapi "k8s.io/kubernetes/pkg/api/pod"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/policy"
-	"k8s.io/kubernetes/pkg/features"
 )
 
 func TestEviction(t *testing.T) {

@@ -19,10 +19,10 @@ package volumemanager
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/types"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/kubelet/config"
-	"k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/volume/util/types"
 )
 
 // FakeVolumeManager is a test implementation that just tracks calls

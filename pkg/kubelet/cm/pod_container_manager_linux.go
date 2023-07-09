@@ -24,13 +24,13 @@ import (
 	"strings"
 
 	libcontainercgroups "github.com/opencontainers/runc/libcontainer/cgroups"
+	v1qos "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper/qos"
+	kubefeatures "github.com/sanposhiho/kubernetes/pkg/features"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/klog/v2"
-	v1qos "k8s.io/kubernetes/pkg/apis/core/v1/helper/qos"
-	kubefeatures "k8s.io/kubernetes/pkg/features"
 )
 
 const (

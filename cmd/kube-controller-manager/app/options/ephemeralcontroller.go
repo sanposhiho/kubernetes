@@ -21,7 +21,7 @@ import (
 
 	"github.com/spf13/pflag"
 
-	ephemeralvolumeconfig "k8s.io/kubernetes/pkg/controller/volume/ephemeral/config"
+	ephemeralvolumeconfig "github.com/sanposhiho/kubernetes/pkg/controller/volume/ephemeral/config"
 )
 
 // EphemeralVolumeControllerOptions holds the EphemeralVolumeController options.

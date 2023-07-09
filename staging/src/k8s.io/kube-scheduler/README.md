@@ -13,5 +13,5 @@ HEAD of this repo will match HEAD of k8s.io/apiserver, k8s.io/apimachinery, and 
 ## Where does it come from?
 
 This repo is synced from https://github.com/kubernetes/kubernetes/tree/master/staging/src/k8s.io/kube-scheduler.
-Code changes are made in that location, merged into `k8s.io/kubernetes` and later synced here by a bot.
+Code changes are made in that location, merged into `github.com/sanposhiho/kubernetes` and later synced here by a bot.
 

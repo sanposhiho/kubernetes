@@ -30,8 +30,8 @@ import (
 	bootstrapapi "k8s.io/cluster-bootstrap/token/api"
 	tokenjws "k8s.io/cluster-bootstrap/token/jws"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/apiclient"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/apiclient"
 )
 
 func TestRetrieveValidatedConfigInfo(t *testing.T) {

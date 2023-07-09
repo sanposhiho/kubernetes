@@ -20,9 +20,9 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/util/filesystem"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
-	"k8s.io/kubernetes/pkg/util/filesystem"
 )
 
 func TestFileStore(t *testing.T) {

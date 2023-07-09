@@ -30,11 +30,11 @@ import (
 	"k8s.io/apimachinery/pkg/util/intstr"
 	clientset "k8s.io/client-go/kubernetes"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2edeployment "k8s.io/kubernetes/test/e2e/framework/deployment"
-	e2eingress "k8s.io/kubernetes/test/e2e/framework/ingress"
-	"k8s.io/kubernetes/test/e2e/framework/providers/gce"
-	imageutils "k8s.io/kubernetes/test/utils/image"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2edeployment "github.com/sanposhiho/kubernetes/test/e2e/framework/deployment"
+	e2eingress "github.com/sanposhiho/kubernetes/test/e2e/framework/ingress"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework/providers/gce"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 )
 
 const (

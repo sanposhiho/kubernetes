@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -28,7 +29,6 @@ import (
 	"k8s.io/client-go/kubernetes/fake"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/controller"
 )
 
 func TestScaleDownOldReplicaSets(t *testing.T) {

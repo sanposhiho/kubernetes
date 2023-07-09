@@ -17,11 +17,11 @@ limitations under the License.
 package job
 
 import (
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	batchv1 "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/rand"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 // NewTestJob returns a Job which does one of several testing behaviors. notTerminate starts a Job that will run

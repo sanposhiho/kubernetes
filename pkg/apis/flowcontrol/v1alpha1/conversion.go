@@ -17,9 +17,9 @@ limitations under the License.
 package v1alpha1
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol"
 	"k8s.io/api/flowcontrol/v1alpha1"
 	"k8s.io/apimachinery/pkg/conversion"
-	"k8s.io/kubernetes/pkg/apis/flowcontrol"
 )
 
 // LimitedPriorityLevelConfiguration.AssuredConcurrencyShares has been

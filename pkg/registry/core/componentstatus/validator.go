@@ -23,11 +23,11 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/probe"
+	httpprober "github.com/sanposhiho/kubernetes/pkg/probe/http"
 	utilnet "k8s.io/apimachinery/pkg/util/net"
 	"k8s.io/apiserver/pkg/storage/storagebackend"
 	"k8s.io/apiserver/pkg/storage/storagebackend/factory"
-	"k8s.io/kubernetes/pkg/probe"
-	httpprober "k8s.io/kubernetes/pkg/probe/http"
 )
 
 const (

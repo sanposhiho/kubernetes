@@ -17,13 +17,13 @@ limitations under the License.
 package install
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/authentication"
+	"github.com/sanposhiho/kubernetes/pkg/apis/authorization"
+	"github.com/sanposhiho/kubernetes/pkg/quota/v1/evaluator/core"
 	eventv1 "k8s.io/api/events/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	quota "k8s.io/apiserver/pkg/quota/v1"
 	"k8s.io/apiserver/pkg/quota/v1/generic"
-	"k8s.io/kubernetes/pkg/apis/authentication"
-	"k8s.io/kubernetes/pkg/apis/authorization"
-	"k8s.io/kubernetes/pkg/quota/v1/evaluator/core"
 )
 
 // NewQuotaConfigurationForAdmission returns a quota configuration for admission control.

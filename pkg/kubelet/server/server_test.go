@@ -34,6 +34,7 @@ import (
 
 	cadvisorapi "github.com/google/cadvisor/info/v1"
 	cadvisorapiv2 "github.com/google/cadvisor/info/v2"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	oteltrace "go.opentelemetry.io/otel/trace"
@@ -49,21 +50,20 @@ import (
 	"k8s.io/client-go/tools/remotecommand"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	api "k8s.io/kubernetes/pkg/apis/core"
 	"k8s.io/utils/pointer"
 
 	// Do some initialization to decode the query parameters correctly.
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	kubeletconfiginternal "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	"k8s.io/kubelet/pkg/cri/streaming"
 	"k8s.io/kubelet/pkg/cri/streaming/portforward"
 	remotecommandserver "k8s.io/kubelet/pkg/cri/streaming/remotecommand"
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
-	"k8s.io/kubernetes/pkg/features"
-	kubeletconfiginternal "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	"k8s.io/kubernetes/pkg/kubelet/cm"
-	"k8s.io/kubernetes/pkg/kubelet/server/stats"
-	"k8s.io/kubernetes/pkg/volume"
 )
 
 const (

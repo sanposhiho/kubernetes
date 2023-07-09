@@ -1,4 +1,4 @@
-module k8s.io/kubernetes/hack/tools
+module github.com/sanposhiho/kubernetes/hack/tools
 
 go 1.19
 

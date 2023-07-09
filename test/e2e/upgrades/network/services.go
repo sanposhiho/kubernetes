@@ -19,11 +19,11 @@ package network
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eservice "github.com/sanposhiho/kubernetes/test/e2e/framework/service"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eservice "k8s.io/kubernetes/test/e2e/framework/service"
-	"k8s.io/kubernetes/test/e2e/upgrades"
 
 	"github.com/onsi/ginkgo/v2"
 )

@@ -31,12 +31,12 @@ import (
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/ginkgo/v2/reporters"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework/internal/output"
+	testapiserver "github.com/sanposhiho/kubernetes/test/utils/apiserver"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/klog/v2"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/test/e2e/framework"
-	"k8s.io/kubernetes/test/e2e/framework/internal/output"
-	testapiserver "k8s.io/kubernetes/test/utils/apiserver"
 )
 
 // The line number of the following code is checked in TestFailureOutput below.

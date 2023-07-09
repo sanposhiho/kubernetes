@@ -40,12 +40,12 @@ import (
 	"k8s.io/component-base/version"
 	openapicommon "k8s.io/kube-openapi/pkg/common"
 
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/controlplane"
-	controlplaneapiserver "k8s.io/kubernetes/pkg/controlplane/apiserver/options"
-	"k8s.io/kubernetes/pkg/kubeapiserver"
-	"k8s.io/kubernetes/pkg/kubeapiserver/authorizer/modes"
-	rbacrest "k8s.io/kubernetes/pkg/registry/rbac/rest"
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/controlplane"
+	controlplaneapiserver "github.com/sanposhiho/kubernetes/pkg/controlplane/apiserver/options"
+	"github.com/sanposhiho/kubernetes/pkg/kubeapiserver"
+	"github.com/sanposhiho/kubernetes/pkg/kubeapiserver/authorizer/modes"
+	rbacrest "github.com/sanposhiho/kubernetes/pkg/registry/rbac/rest"
 )
 
 // BuildGenericConfig takes the master server options and produces the genericapiserver.Config associated with it

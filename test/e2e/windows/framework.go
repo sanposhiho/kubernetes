@@ -17,7 +17,7 @@ limitations under the License.
 package windows
 
 import (
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
 
 	"github.com/onsi/ginkgo/v2"
 )

@@ -23,15 +23,15 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	plugintesting "github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/testing"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/internal/cache"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	plugintesting "k8s.io/kubernetes/pkg/scheduler/framework/plugins/testing"
-	"k8s.io/kubernetes/pkg/scheduler/internal/cache"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
 )
 
 var (

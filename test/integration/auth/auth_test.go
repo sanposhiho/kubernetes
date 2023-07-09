@@ -45,6 +45,16 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/extensions"
+	"github.com/sanposhiho/kubernetes/pkg/controlplane"
+	"github.com/sanposhiho/kubernetes/test/integration"
+	"github.com/sanposhiho/kubernetes/test/integration/authutil"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/utils/ktesting"
 	authenticationv1beta1 "k8s.io/api/authentication/v1beta1"
 	certificatesv1 "k8s.io/api/certificates/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
@@ -65,16 +75,6 @@ import (
 	"k8s.io/client-go/rest"
 	v1 "k8s.io/client-go/tools/clientcmd/api/v1"
 	resttransport "k8s.io/client-go/transport"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/pkg/apis/autoscaling"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/extensions"
-	"k8s.io/kubernetes/pkg/controlplane"
-	"k8s.io/kubernetes/test/integration"
-	"k8s.io/kubernetes/test/integration/authutil"
-	"k8s.io/kubernetes/test/integration/framework"
-	"k8s.io/kubernetes/test/utils/ktesting"
 )
 
 const (

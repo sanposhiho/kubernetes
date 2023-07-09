@@ -17,7 +17,7 @@ limitations under the License.
 package helper
 
 import (
-	"k8s.io/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
 )
 
 // DefaultNormalizeScore generates a Normalize Score function that can normalize the

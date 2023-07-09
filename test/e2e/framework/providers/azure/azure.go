@@ -23,9 +23,9 @@ import (
 
 	"github.com/Azure/azure-sdk-for-go/services/compute/mgmt/2019-12-01/compute"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/uuid"
-	"k8s.io/kubernetes/test/e2e/framework"
 	"k8s.io/legacy-cloud-providers/azure"
 	"k8s.io/legacy-cloud-providers/azure/clients/fileclient"
 )

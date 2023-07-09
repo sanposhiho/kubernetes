@@ -25,9 +25,9 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/pkg/util/goroutinemap/exponentialbackoff"
 	k8sRuntime "k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/util/goroutinemap/exponentialbackoff"
 )
 
 // GoRoutineMap defines a type that can run named goroutines and track their

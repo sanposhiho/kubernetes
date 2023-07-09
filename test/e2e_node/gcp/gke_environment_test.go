@@ -26,8 +26,8 @@ import (
 	"strings"
 
 	"github.com/onsi/ginkgo/v2"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
 )
 
 // checkProcess checks whether there's a process whose command line contains

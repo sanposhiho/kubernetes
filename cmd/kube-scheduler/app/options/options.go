@@ -23,6 +23,10 @@ import (
 	"os"
 	"time"
 
+	schedulerappconfig "github.com/sanposhiho/kubernetes/cmd/kube-scheduler/app/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler"
+	kubeschedulerconfig "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/validation"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/uuid"
@@ -44,10 +48,6 @@ import (
 	logsapi "k8s.io/component-base/logs/api/v1"
 	"k8s.io/component-base/metrics"
 	"k8s.io/klog/v2"
-	schedulerappconfig "k8s.io/kubernetes/cmd/kube-scheduler/app/config"
-	"k8s.io/kubernetes/pkg/scheduler"
-	kubeschedulerconfig "k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config/validation"
 	netutils "k8s.io/utils/net"
 )
 

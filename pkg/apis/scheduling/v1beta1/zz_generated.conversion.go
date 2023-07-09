@@ -28,8 +28,8 @@ import (
 	v1beta1 "k8s.io/api/scheduling/v1beta1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	core "k8s.io/kubernetes/pkg/apis/core"
-	scheduling "k8s.io/kubernetes/pkg/apis/scheduling"
+	core "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	scheduling "github.com/sanposhiho/kubernetes/pkg/apis/scheduling"
 )
 
 func init() {

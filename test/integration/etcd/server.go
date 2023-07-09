@@ -30,6 +30,10 @@ import (
 
 	clientv3 "go.etcd.io/etcd/client/v3"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app"
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
+	"github.com/sanposhiho/kubernetes/test/integration"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	apiextensionsclientset "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -45,14 +49,10 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/restmapper"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
-	"k8s.io/kubernetes/test/integration"
-	"k8s.io/kubernetes/test/integration/framework"
 	netutils "k8s.io/utils/net"
 
 	// install all APIs
-	_ "k8s.io/kubernetes/pkg/controlplane"
+	_ "github.com/sanposhiho/kubernetes/pkg/controlplane"
 )
 
 // This key is for testing purposes only and is not considered secure.

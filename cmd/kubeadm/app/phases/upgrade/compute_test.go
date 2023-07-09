@@ -29,8 +29,8 @@ import (
 	versionutil "k8s.io/apimachinery/pkg/util/version"
 	clientsetfake "k8s.io/client-go/kubernetes/fake"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/output"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/output"
 )
 
 type fakeVersionGetter struct {

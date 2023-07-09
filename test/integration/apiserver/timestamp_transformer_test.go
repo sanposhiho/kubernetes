@@ -22,6 +22,7 @@ import (
 	"math/rand"
 	"testing"
 
+	k8stest "github.com/sanposhiho/kubernetes/pkg/api/testing"
 	"github.com/stretchr/testify/require"
 	v1 "k8s.io/api/core/v1"
 	k8sfuzz "k8s.io/apimachinery/pkg/api/apitesting/fuzzer"
@@ -31,7 +32,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/apimachinery/pkg/util/managedfields"
 	"k8s.io/apiserver/pkg/endpoints/handlers/fieldmanager"
-	k8stest "k8s.io/kubernetes/pkg/api/testing"
 )
 
 func convertToUnstructured(b *testing.B, obj runtime.Object) runtime.Object {

@@ -19,10 +19,10 @@ package job
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/test/utils/ktesting"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/pkg/apis/batch"
-	"k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/test/utils/ktesting"
 	"k8s.io/utils/pointer"
 )
 

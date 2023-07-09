@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	coordinationv1 "k8s.io/api/coordination/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -29,7 +30,6 @@ import (
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/strategicpatch"
-	"k8s.io/kubernetes/test/e2e/framework"
 	admissionapi "k8s.io/pod-security-admission/api"
 	"k8s.io/utils/pointer"
 

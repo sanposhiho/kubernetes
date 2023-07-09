@@ -23,14 +23,14 @@ import (
 
 	"k8s.io/klog/v2"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	storageutil "github.com/sanposhiho/kubernetes/pkg/apis/storage/util"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 	storagev1 "k8s.io/api/storage/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apiserver/pkg/admission"
 	admissiontesting "k8s.io/apiserver/pkg/admission/testing"
 	"k8s.io/client-go/informers"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	storageutil "k8s.io/kubernetes/pkg/apis/storage/util"
-	"k8s.io/kubernetes/pkg/controller"
 )
 
 func TestAdmission(t *testing.T) {

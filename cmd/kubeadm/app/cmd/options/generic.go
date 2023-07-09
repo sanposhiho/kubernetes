@@ -23,8 +23,8 @@ import (
 
 	cliflag "k8s.io/component-base/cli/flag"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/features"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/features"
 )
 
 // AddKubeConfigFlag adds the --kubeconfig flag to the given flagset

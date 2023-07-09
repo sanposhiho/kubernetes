@@ -31,8 +31,8 @@ import (
 	"github.com/google/go-cmp/cmp"
 	jose "gopkg.in/square/go-jose.v2"
 
-	"k8s.io/kubernetes/pkg/routes"
-	"k8s.io/kubernetes/pkg/serviceaccount"
+	"github.com/sanposhiho/kubernetes/pkg/routes"
+	"github.com/sanposhiho/kubernetes/pkg/serviceaccount"
 )
 
 const (

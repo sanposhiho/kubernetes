@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"sync"
 
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager/errors"
-	utilstore "k8s.io/kubernetes/pkg/kubelet/util/store"
-	utilfs "k8s.io/kubernetes/pkg/util/filesystem"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager/errors"
+	utilstore "github.com/sanposhiho/kubernetes/pkg/kubelet/util/store"
+	utilfs "github.com/sanposhiho/kubernetes/pkg/util/filesystem"
 )
 
 // Checkpoint provides the process checkpoint data

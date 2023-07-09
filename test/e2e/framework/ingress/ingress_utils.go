@@ -41,6 +41,13 @@ import (
 	"k8s.io/klog/v2"
 	netutils "k8s.io/utils/net"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2edeployment "github.com/sanposhiho/kubernetes/test/e2e/framework/deployment"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
+	e2eservice "github.com/sanposhiho/kubernetes/test/e2e/framework/service"
+	e2etestfiles "github.com/sanposhiho/kubernetes/test/e2e/framework/testfiles"
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	networkingv1 "k8s.io/api/networking/v1"
@@ -57,13 +64,6 @@ import (
 	utilyaml "k8s.io/apimachinery/pkg/util/yaml"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/scheme"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2edeployment "k8s.io/kubernetes/test/e2e/framework/deployment"
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
-	e2eservice "k8s.io/kubernetes/test/e2e/framework/service"
-	e2etestfiles "k8s.io/kubernetes/test/e2e/framework/testfiles"
-	testutils "k8s.io/kubernetes/test/utils"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 
 	"github.com/onsi/ginkgo/v2"
 )

@@ -34,12 +34,12 @@ import (
 	"k8s.io/client-go/util/keyutil"
 	"k8s.io/klog/v2"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	certsphase "k8s.io/kubernetes/cmd/kubeadm/app/phases/certs"
-	kubeadmutil "k8s.io/kubernetes/cmd/kubeadm/app/util"
-	kubeconfigutil "k8s.io/kubernetes/cmd/kubeadm/app/util/kubeconfig"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/pkiutil"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	certsphase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/certs"
+	kubeadmutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util"
+	kubeconfigutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/kubeconfig"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/pkiutil"
 )
 
 const (

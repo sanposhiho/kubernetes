@@ -29,8 +29,8 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	autoscaling "k8s.io/kubernetes/pkg/apis/autoscaling"
-	core "k8s.io/kubernetes/pkg/apis/core"
+	autoscaling "github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
+	core "github.com/sanposhiho/kubernetes/pkg/apis/core"
 )
 
 func init() {

@@ -33,11 +33,11 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	admissionapi "k8s.io/pod-security-admission/api"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
 	utilversion "k8s.io/apimachinery/pkg/util/version"
 	"k8s.io/cli-runtime/pkg/printers"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
 )
 
 var serverPrintVersion = utilversion.MustParseSemantic("v1.10.0")

@@ -19,12 +19,12 @@ package apps
 import (
 	"context"
 
-	"k8s.io/kubernetes/test/e2e/cloud/gcp/common"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epv "k8s.io/kubernetes/test/e2e/framework/pv"
-	"k8s.io/kubernetes/test/e2e/upgrades"
-	"k8s.io/kubernetes/test/e2e/upgrades/apps"
-	"k8s.io/kubernetes/test/utils/junit"
+	"github.com/sanposhiho/kubernetes/test/e2e/cloud/gcp/common"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epv "github.com/sanposhiho/kubernetes/test/e2e/framework/pv"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades/apps"
+	"github.com/sanposhiho/kubernetes/test/utils/junit"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

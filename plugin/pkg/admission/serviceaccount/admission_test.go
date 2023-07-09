@@ -23,6 +23,10 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	v1defaults "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	kubelet "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	"github.com/stretchr/testify/assert"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -31,10 +35,6 @@ import (
 	admissiontesting "k8s.io/apiserver/pkg/admission/testing"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes/fake"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	v1defaults "k8s.io/kubernetes/pkg/apis/core/v1"
-	"k8s.io/kubernetes/pkg/controller"
-	kubelet "k8s.io/kubernetes/pkg/kubelet/types"
 	utilpointer "k8s.io/utils/pointer"
 )
 

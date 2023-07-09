@@ -20,7 +20,7 @@ import (
 	"context"
 	"testing"
 
-	"k8s.io/kubernetes/pkg/apis/certificates"
+	"github.com/sanposhiho/kubernetes/pkg/apis/certificates"
 )
 
 func TestWarningsOnCreate(t *testing.T) {

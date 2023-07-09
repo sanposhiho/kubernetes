@@ -22,6 +22,9 @@ import (
 	"strings"
 	"testing"
 
+	deploymentutil "github.com/sanposhiho/kubernetes/pkg/controller/deployment/util"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	testutil "github.com/sanposhiho/kubernetes/test/utils"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -30,9 +33,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/util/retry"
 	"k8s.io/klog/v2/ktesting"
-	deploymentutil "k8s.io/kubernetes/pkg/controller/deployment/util"
-	"k8s.io/kubernetes/test/integration/framework"
-	testutil "k8s.io/kubernetes/test/utils"
 	"k8s.io/utils/pointer"
 )
 

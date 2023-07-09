@@ -17,9 +17,9 @@ limitations under the License.
 package types
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	v1 "k8s.io/api/core/v1"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	"k8s.io/kubernetes/pkg/features"
 )
 
 // PodConditionsByKubelet is the list of pod conditions owned by kubelet

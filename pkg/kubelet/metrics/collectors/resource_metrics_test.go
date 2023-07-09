@@ -24,10 +24,10 @@ import (
 	"time"
 
 	"github.com/golang/mock/gomock"
+	summaryprovidertest "github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats/testing"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/component-base/metrics/testutil"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	summaryprovidertest "k8s.io/kubernetes/pkg/kubelet/server/stats/testing"
 )
 
 func TestCollectResourceMetrics(t *testing.T) {

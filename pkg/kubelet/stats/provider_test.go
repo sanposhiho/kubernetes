@@ -29,16 +29,16 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	cadvisortest "github.com/sanposhiho/kubernetes/pkg/kubelet/cadvisor/testing"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	kubecontainertest "github.com/sanposhiho/kubernetes/pkg/kubelet/container/testing"
+	kubepodtest "github.com/sanposhiho/kubernetes/pkg/kubelet/pod/testing"
+	serverstats "github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	cadvisortest "k8s.io/kubernetes/pkg/kubelet/cadvisor/testing"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	kubecontainertest "k8s.io/kubernetes/pkg/kubelet/container/testing"
-	kubepodtest "k8s.io/kubernetes/pkg/kubelet/pod/testing"
-	serverstats "k8s.io/kubernetes/pkg/kubelet/server/stats"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
-	"k8s.io/kubernetes/pkg/volume"
 )
 
 const (

@@ -20,8 +20,8 @@ import (
 	"context"
 	"math"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/metrics"
 	"k8s.io/client-go/util/workqueue"
-	"k8s.io/kubernetes/pkg/scheduler/metrics"
 )
 
 // DefaultParallelism is the default parallelism used in scheduler.

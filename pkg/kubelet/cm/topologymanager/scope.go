@@ -19,11 +19,11 @@ package topologymanager
 import (
 	"sync"
 
-	"k8s.io/api/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/admission"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/containermap"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/lifecycle"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/kubelet/cm/admission"
-	"k8s.io/kubernetes/pkg/kubelet/cm/containermap"
-	"k8s.io/kubernetes/pkg/kubelet/lifecycle"
 )
 
 const (

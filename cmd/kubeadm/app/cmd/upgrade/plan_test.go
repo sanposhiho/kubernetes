@@ -21,8 +21,8 @@ import (
 	"reflect"
 	"testing"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/phases/upgrade"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/output"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/upgrade"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/output"
 )
 
 func TestSortedSliceFromStringIntMap(t *testing.T) {

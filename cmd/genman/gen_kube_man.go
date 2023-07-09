@@ -24,17 +24,17 @@ import (
 	"strings"
 
 	mangen "github.com/cpuguy83/go-md2man/v2/md2man"
+	"github.com/sanposhiho/kubernetes/cmd/genutils"
+	apiservapp "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app"
+	cmapp "github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/app"
+	proxyapp "github.com/sanposhiho/kubernetes/cmd/kube-proxy/app"
+	schapp "github.com/sanposhiho/kubernetes/cmd/kube-scheduler/app"
+	kubeadmapp "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd"
+	kubeletapp "github.com/sanposhiho/kubernetes/cmd/kubelet/app"
 	"github.com/spf13/cobra"
 	"github.com/spf13/pflag"
 	"k8s.io/cli-runtime/pkg/genericiooptions"
 	kubectlcmd "k8s.io/kubectl/pkg/cmd"
-	"k8s.io/kubernetes/cmd/genutils"
-	apiservapp "k8s.io/kubernetes/cmd/kube-apiserver/app"
-	cmapp "k8s.io/kubernetes/cmd/kube-controller-manager/app"
-	proxyapp "k8s.io/kubernetes/cmd/kube-proxy/app"
-	schapp "k8s.io/kubernetes/cmd/kube-scheduler/app"
-	kubeadmapp "k8s.io/kubernetes/cmd/kubeadm/app/cmd"
-	kubeletapp "k8s.io/kubernetes/cmd/kubelet/app"
 )
 
 func main() {

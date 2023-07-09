@@ -22,6 +22,8 @@ import (
 	"strings"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	kubeadmission "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/admission"
 	appsv1 "k8s.io/api/apps/v1"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -35,8 +37,6 @@ import (
 	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/restmapper"
 	coretesting "k8s.io/client-go/testing"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	kubeadmission "k8s.io/kubernetes/pkg/kubeapiserver/admission"
 )
 
 type fakeAuthorizer struct{}

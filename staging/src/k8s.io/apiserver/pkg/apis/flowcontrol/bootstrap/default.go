@@ -30,7 +30,7 @@ import (
 // registered defaulting procedures make no changes to these
 // particular objects (this is verified in the unit tests of the
 // internalbootstrap package; it can not be verified in this package
-// because that would require importing k8s.io/kubernetes).
+// because that would require importing github.com/sanposhiho/kubernetes).
 var (
 	MandatoryPriorityLevelConfigurations = []*flowcontrol.PriorityLevelConfiguration{
 		MandatoryPriorityLevelConfigurationCatchAll,

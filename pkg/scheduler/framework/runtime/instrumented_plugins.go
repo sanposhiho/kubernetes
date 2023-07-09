@@ -19,9 +19,9 @@ package runtime
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
 	v1 "k8s.io/api/core/v1"
 	compbasemetrics "k8s.io/component-base/metrics"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
 type instrumentedFilterPlugin struct {

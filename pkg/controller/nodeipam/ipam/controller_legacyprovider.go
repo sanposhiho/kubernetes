@@ -29,15 +29,15 @@ import (
 	"k8s.io/klog/v2"
 	netutils "k8s.io/utils/net"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam/cidrset"
+	nodesync "github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam/sync"
+	controllerutil "github.com/sanposhiho/kubernetes/pkg/controller/util/node"
 	v1 "k8s.io/api/core/v1"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	informers "k8s.io/client-go/informers/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
 	cloudprovider "k8s.io/cloud-provider"
-	"k8s.io/kubernetes/pkg/controller/nodeipam/ipam/cidrset"
-	nodesync "k8s.io/kubernetes/pkg/controller/nodeipam/ipam/sync"
-	controllerutil "k8s.io/kubernetes/pkg/controller/util/node"
 	"k8s.io/legacy-cloud-providers/gce"
 )
 

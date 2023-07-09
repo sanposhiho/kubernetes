@@ -25,6 +25,10 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	containertest "github.com/sanposhiho/kubernetes/pkg/kubelet/container/testing"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util/queue"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	v1 "k8s.io/api/core/v1"
@@ -32,10 +36,6 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/client-go/tools/record"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	containertest "k8s.io/kubernetes/pkg/kubelet/container/testing"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
-	"k8s.io/kubernetes/pkg/kubelet/util/queue"
 	"k8s.io/utils/clock"
 	clocktesting "k8s.io/utils/clock/testing"
 )

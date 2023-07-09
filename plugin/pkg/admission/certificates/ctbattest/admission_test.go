@@ -22,6 +22,8 @@ import (
 	"fmt"
 	"testing"
 
+	certificatesapi "github.com/sanposhiho/kubernetes/pkg/apis/certificates"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/admission"
@@ -29,8 +31,6 @@ import (
 	"k8s.io/apiserver/pkg/authorization/authorizer"
 	"k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	certificatesapi "k8s.io/kubernetes/pkg/apis/certificates"
-	"k8s.io/kubernetes/pkg/features"
 )
 
 func TestPluginValidate(t *testing.T) {

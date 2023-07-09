@@ -24,10 +24,14 @@ import (
 	"sync"
 
 	// install conversions for types we need to convert
-	_ "k8s.io/kubernetes/pkg/apis/apps/install"
-	_ "k8s.io/kubernetes/pkg/apis/batch/install"
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/apps/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/batch/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	"github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
 	admissionv1 "k8s.io/api/admission/v1"
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
@@ -44,10 +48,6 @@ import (
 	corev1listers "k8s.io/client-go/listers/core/v1"
 	"k8s.io/component-base/featuregate"
 	"k8s.io/component-base/metrics/legacyregistry"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/apps"
-	"k8s.io/kubernetes/pkg/apis/batch"
-	"k8s.io/kubernetes/pkg/apis/core"
 	podsecurityadmission "k8s.io/pod-security-admission/admission"
 	podsecurityconfigloader "k8s.io/pod-security-admission/admission/api/load"
 	podsecurityadmissionapi "k8s.io/pod-security-admission/api"

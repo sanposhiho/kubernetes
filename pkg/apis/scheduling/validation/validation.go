@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"strings"
 
+	apivalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
+	"github.com/sanposhiho/kubernetes/pkg/apis/scheduling"
+	schedulingapiv1 "github.com/sanposhiho/kubernetes/pkg/apis/scheduling/v1"
 	apimachineryvalidation "k8s.io/apimachinery/pkg/api/validation"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	apivalidation "k8s.io/kubernetes/pkg/apis/core/validation"
-	"k8s.io/kubernetes/pkg/apis/scheduling"
-	schedulingapiv1 "k8s.io/kubernetes/pkg/apis/scheduling/v1"
 )
 
 // ValidatePriorityClass tests whether required fields in the PriorityClass are

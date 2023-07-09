@@ -20,10 +20,10 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 )
 
 // Model defines the namespaces, deployments, services, pods, containers and associated

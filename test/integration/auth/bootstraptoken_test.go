@@ -25,6 +25,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
+	"github.com/sanposhiho/kubernetes/pkg/controlplane"
+	"github.com/sanposhiho/kubernetes/plugin/pkg/auth/authenticator/token/bootstrap"
+	"github.com/sanposhiho/kubernetes/test/integration"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/utils/ktesting"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -32,12 +38,6 @@ import (
 	"k8s.io/apiserver/pkg/authentication/request/bearertoken"
 	"k8s.io/client-go/rest"
 	bootstrapapi "k8s.io/cluster-bootstrap/token/api"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
-	"k8s.io/kubernetes/pkg/controlplane"
-	"k8s.io/kubernetes/plugin/pkg/auth/authenticator/token/bootstrap"
-	"k8s.io/kubernetes/test/integration"
-	"k8s.io/kubernetes/test/integration/framework"
-	"k8s.io/kubernetes/test/utils/ktesting"
 )
 
 type bootstrapSecrets []*corev1.Secret

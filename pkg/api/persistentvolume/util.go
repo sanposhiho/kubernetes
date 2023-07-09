@@ -19,12 +19,12 @@ package persistentvolume
 import (
 	"fmt"
 
+	nodeapi "github.com/sanposhiho/kubernetes/pkg/api/node"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	nodeapi "k8s.io/kubernetes/pkg/api/node"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/features"
 )
 
 const (

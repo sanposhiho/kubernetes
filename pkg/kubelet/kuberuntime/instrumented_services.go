@@ -20,9 +20,9 @@ import (
 	"context"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
 	internalapi "k8s.io/cri-api/pkg/apis"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
 )
 
 // instrumentedRuntimeService wraps the RuntimeService and records the operations

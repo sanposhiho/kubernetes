@@ -29,7 +29,7 @@ import (
 	"k8s.io/client-go/kubernetes/fake"
 	core "k8s.io/client-go/testing"
 
-	configutil "k8s.io/kubernetes/cmd/kubeadm/app/util/config"
+	configutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/config"
 )
 
 func TestCreateConfigMap(t *testing.T) {

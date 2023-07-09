@@ -38,7 +38,7 @@ func main() {
 	arguments := args.Default()
 
 	// Override defaults.
-	arguments.InputDirs = []string{"k8s.io/kubernetes/pkg/util/sets/types"}
+	arguments.InputDirs = []string{"github.com/sanposhiho/kubernetes/pkg/util/sets/types"}
 	arguments.OutputPackagePath = "k8s.io/apimachinery/pkg/util/sets"
 
 	if err := arguments.Execute(

@@ -17,9 +17,9 @@ limitations under the License.
 package batch
 
 import (
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 const (

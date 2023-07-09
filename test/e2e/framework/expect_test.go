@@ -56,7 +56,7 @@ not to equal
 	if !errors.As(err, &failure) {
 		t.Errorf("expected error that can be copied to FailureError, got %T: %+v", err, err)
 	} else {
-		assert.Regexp(t, `^k8s.io/kubernetes/test/e2e/framework.TestNewGomega\(0x[0-9A-Fa-f]*\)
+		assert.Regexp(t, `^github.com/sanposhiho/kubernetes/test/e2e/framework.TestNewGomega\(0x[0-9A-Fa-f]*\)
 	.*/test/e2e/framework/expect_test.go:46`, failure.Backtrace())
 	}
 }

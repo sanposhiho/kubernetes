@@ -26,6 +26,12 @@ import (
 	"github.com/onsi/gomega"
 	"github.com/onsi/gomega/format"
 
+	batchinternal "github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	"github.com/sanposhiho/kubernetes/pkg/controller/job"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ejob "github.com/sanposhiho/kubernetes/test/e2e/framework/job"
+	e2eresource "github.com/sanposhiho/kubernetes/test/e2e/framework/resource"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	batchv1 "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -38,12 +44,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/util/retry"
-	batchinternal "k8s.io/kubernetes/pkg/apis/batch"
-	"k8s.io/kubernetes/pkg/controller/job"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ejob "k8s.io/kubernetes/test/e2e/framework/job"
-	e2eresource "k8s.io/kubernetes/test/e2e/framework/resource"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

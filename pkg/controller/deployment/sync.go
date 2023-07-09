@@ -23,14 +23,14 @@ import (
 	"sort"
 	"strconv"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	deploymentutil "github.com/sanposhiho/kubernetes/pkg/controller/deployment/util"
+	labelsutil "github.com/sanposhiho/kubernetes/pkg/util/labels"
 	apps "k8s.io/api/apps/v1"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller"
-	deploymentutil "k8s.io/kubernetes/pkg/controller/deployment/util"
-	labelsutil "k8s.io/kubernetes/pkg/util/labels"
 )
 
 // syncStatusOnly only updates Deployments Status and doesn't take any mutating actions.

@@ -31,11 +31,11 @@ import (
 	kubeletconfig "k8s.io/kubelet/config/v1beta1"
 	"sigs.k8s.io/yaml"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	"k8s.io/kubernetes/cmd/kubeadm/app/componentconfigs"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/apiclient"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/patches"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/componentconfigs"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/apiclient"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/patches"
 )
 
 // WriteConfigToDisk writes the kubelet config object down to a file

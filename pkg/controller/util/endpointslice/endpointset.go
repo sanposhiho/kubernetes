@@ -19,8 +19,8 @@ package endpointslice
 import (
 	"sort"
 
+	endpointutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpoint"
 	discovery "k8s.io/api/discovery/v1"
-	endpointutil "k8s.io/kubernetes/pkg/controller/util/endpoint"
 )
 
 // endpointHash is used to uniquely identify endpoints. Only including addresses

@@ -20,12 +20,12 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/helper"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/selection"
 	"k8s.io/apimachinery/pkg/util/validation"
-	"k8s.io/kubernetes/pkg/apis/core/helper"
 )
 
 // IsExtendedResourceName returns true if:

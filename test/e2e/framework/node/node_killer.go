@@ -27,8 +27,8 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2essh "k8s.io/kubernetes/test/e2e/framework/ssh"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2essh "github.com/sanposhiho/kubernetes/test/e2e/framework/ssh"
 )
 
 // NodeKiller is a utility to simulate node failures.

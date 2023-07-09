@@ -28,7 +28,7 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	rbac "k8s.io/kubernetes/pkg/apis/rbac"
+	rbac "github.com/sanposhiho/kubernetes/pkg/apis/rbac"
 )
 
 func init() {

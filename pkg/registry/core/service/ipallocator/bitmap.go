@@ -21,8 +21,8 @@ import (
 	"math/big"
 	"net"
 
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/registry/core/service/allocator"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/registry/core/service/allocator"
 	netutils "k8s.io/utils/net"
 )
 

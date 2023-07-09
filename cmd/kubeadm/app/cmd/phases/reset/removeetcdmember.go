@@ -25,14 +25,14 @@ import (
 
 	"k8s.io/klog/v2"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	"k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/scheme"
-	"k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	etcdphase "k8s.io/kubernetes/cmd/kubeadm/app/phases/etcd"
-	utilstaticpod "k8s.io/kubernetes/cmd/kubeadm/app/util/staticpod"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/scheme"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	etcdphase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/etcd"
+	utilstaticpod "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/staticpod"
 )
 
 // NewRemoveETCDMemberPhase creates a kubeadm workflow phase for remove-etcd-member

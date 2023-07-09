@@ -21,6 +21,9 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	jobutil "github.com/sanposhiho/kubernetes/pkg/controller/job"
+	"github.com/sanposhiho/kubernetes/pkg/controller/ttlafterfinished/metrics"
 	batch "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -36,9 +39,6 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
 	"k8s.io/kubectl/pkg/scheme"
-	"k8s.io/kubernetes/pkg/controller"
-	jobutil "k8s.io/kubernetes/pkg/controller/job"
-	"k8s.io/kubernetes/pkg/controller/ttlafterfinished/metrics"
 	"k8s.io/utils/clock"
 )
 

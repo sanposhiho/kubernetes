@@ -21,8 +21,8 @@ import (
 	"path/filepath"
 	"strings"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 // ValidatePersistentVolume validates PV object for plugin specific validation

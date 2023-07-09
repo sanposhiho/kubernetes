@@ -24,6 +24,10 @@ import (
 	"strings"
 	"testing"
 
+	deploymentstorage "github.com/sanposhiho/kubernetes/pkg/registry/apps/deployment/storage"
+	replicasetstorage "github.com/sanposhiho/kubernetes/pkg/registry/apps/replicaset/storage"
+	statefulsetstorage "github.com/sanposhiho/kubernetes/pkg/registry/apps/statefulset/storage"
+	replicationcontrollerstorage "github.com/sanposhiho/kubernetes/pkg/registry/core/replicationcontroller/storage"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
@@ -32,10 +36,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/managedfields"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/scheme"
-	deploymentstorage "k8s.io/kubernetes/pkg/registry/apps/deployment/storage"
-	replicasetstorage "k8s.io/kubernetes/pkg/registry/apps/replicaset/storage"
-	statefulsetstorage "k8s.io/kubernetes/pkg/registry/apps/statefulset/storage"
-	replicationcontrollerstorage "k8s.io/kubernetes/pkg/registry/core/replicationcontroller/storage"
 )
 
 type scaleTest struct {

@@ -19,7 +19,7 @@ package util
 import (
 	"sort"
 
-	"k8s.io/kubernetes/pkg/apis/flowcontrol"
+	"github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol"
 )
 
 var _ sort.Interface = FlowSchemaSequence{}

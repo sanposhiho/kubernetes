@@ -34,14 +34,14 @@ import (
 	"testing"
 	"time"
 
+	capihelper "github.com/sanposhiho/kubernetes/pkg/apis/certificates/v1"
+	"github.com/sanposhiho/kubernetes/pkg/controller/certificates/authority"
 	certapi "k8s.io/api/certificates/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	restclient "k8s.io/client-go/rest"
 	certutil "k8s.io/client-go/util/cert"
-	capihelper "k8s.io/kubernetes/pkg/apis/certificates/v1"
-	"k8s.io/kubernetes/pkg/controller/certificates/authority"
 )
 
 // Test_buildClientCertificateManager validates that we can build a local client cert

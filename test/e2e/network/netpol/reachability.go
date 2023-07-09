@@ -20,8 +20,8 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 // TestCase describes the data for a netpol test

@@ -26,6 +26,9 @@ import (
 	"sync"
 	"time"
 
+	cidrset "github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam/multicidrset"
+	controllerutil "github.com/sanposhiho/kubernetes/pkg/controller/util/node"
+	"github.com/sanposhiho/kubernetes/pkg/util/slice"
 	v1 "k8s.io/api/core/v1"
 	networkingv1alpha1 "k8s.io/api/networking/v1alpha1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -48,9 +51,6 @@ import (
 	"k8s.io/client-go/util/workqueue"
 	nodeutil "k8s.io/component-helpers/node/util"
 	"k8s.io/klog/v2"
-	cidrset "k8s.io/kubernetes/pkg/controller/nodeipam/ipam/multicidrset"
-	controllerutil "k8s.io/kubernetes/pkg/controller/util/node"
-	"k8s.io/kubernetes/pkg/util/slice"
 	netutil "k8s.io/utils/net"
 )
 

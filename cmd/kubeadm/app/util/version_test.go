@@ -25,7 +25,7 @@ import (
 
 	"github.com/pkg/errors"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
 )
 
 func TestEmptyVersion(t *testing.T) {

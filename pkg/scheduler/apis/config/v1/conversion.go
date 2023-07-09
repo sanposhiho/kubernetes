@@ -20,11 +20,11 @@ import (
 	"fmt"
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
 	"k8s.io/apimachinery/pkg/conversion"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	v1 "k8s.io/kube-scheduler/config/v1"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
 )
 
 var (

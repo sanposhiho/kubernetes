@@ -23,6 +23,8 @@ import (
 	"strings"
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	proxyutil "github.com/sanposhiho/kubernetes/pkg/proxy/util"
 	v1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	"k8s.io/apimachinery/pkg/types"
@@ -30,8 +32,6 @@ import (
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/client-go/tools/events"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/features"
-	proxyutil "k8s.io/kubernetes/pkg/proxy/util"
 	utilnet "k8s.io/utils/net"
 )
 

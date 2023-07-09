@@ -23,8 +23,8 @@ import (
 	"k8s.io/klog/v2"
 	"k8s.io/mount-utils"
 
+	"github.com/sanposhiho/kubernetes/pkg/volume"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/kubernetes/pkg/volume"
 )
 
 type flexVolumeDetacher struct {

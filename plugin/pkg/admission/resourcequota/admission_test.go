@@ -23,6 +23,10 @@ import (
 	"strings"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	kubeapiserveradmission "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/admission"
+	"github.com/sanposhiho/kubernetes/pkg/quota/v1/install"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -38,10 +42,6 @@ import (
 	testcore "k8s.io/client-go/testing"
 	"k8s.io/client-go/tools/cache"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/features"
-	kubeapiserveradmission "k8s.io/kubernetes/pkg/kubeapiserver/admission"
-	"k8s.io/kubernetes/pkg/quota/v1/install"
 )
 
 func getResourceList(cpu, memory string) api.ResourceList {

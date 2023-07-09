@@ -20,11 +20,11 @@ import (
 	"testing"
 	"time"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	"github.com/stretchr/testify/assert"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 func TestCacheOperations(t *testing.T) {

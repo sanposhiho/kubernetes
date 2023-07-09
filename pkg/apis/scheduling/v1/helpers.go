@@ -18,9 +18,11 @@ package v1
 
 import (
 	"fmt"
+
+	"github.com/sanposhiho/kubernetes/pkg/apis/scheduling"
 	"k8s.io/api/scheduling/v1"
+	v1 "k8s.io/api/scheduling/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/pkg/apis/scheduling"
 )
 
 // SystemPriorityClasses define system priority classes that are auto-created at cluster bootstrapping.

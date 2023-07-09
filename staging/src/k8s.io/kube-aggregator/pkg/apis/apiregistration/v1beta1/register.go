@@ -36,7 +36,7 @@ func Resource(resource string) schema.GroupResource {
 var (
 	// SchemeBuilder is the scheme builder with scheme init functions to run for this API package
 	// TODO: move SchemeBuilder with zz_generated.deepcopy.go to k8s.io/api.
-	// localSchemeBuilder and AddToScheme will stay in k8s.io/kubernetes.
+	// localSchemeBuilder and AddToScheme will stay in github.com/sanposhiho/kubernetes.
 	SchemeBuilder      runtime.SchemeBuilder
 	localSchemeBuilder = &SchemeBuilder
 	// AddToScheme is a common registration function for mapping packaged scoped group & version keys to a scheme

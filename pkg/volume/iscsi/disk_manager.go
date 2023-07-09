@@ -23,8 +23,8 @@ import (
 	"k8s.io/klog/v2"
 	"k8s.io/mount-utils"
 
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/util"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util"
 )
 
 // Abstract interface to disk operations.

@@ -32,6 +32,13 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	kubemetrics "github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ekubelet "github.com/sanposhiho/kubernetes/test/e2e/framework/kubelet"
+	e2emetrics "github.com/sanposhiho/kubernetes/test/e2e/framework/metrics"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
@@ -39,13 +46,6 @@ import (
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/tools/cache"
 	kubeletstatsv1alpha1 "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	kubemetrics "k8s.io/kubernetes/pkg/kubelet/metrics"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ekubelet "k8s.io/kubernetes/test/e2e/framework/kubelet"
-	e2emetrics "k8s.io/kubernetes/test/e2e/framework/metrics"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

@@ -19,11 +19,11 @@ package validation
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/scheduling"
+	schedulingapiv1 "github.com/sanposhiho/kubernetes/pkg/apis/scheduling/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/scheduling"
-	schedulingapiv1 "k8s.io/kubernetes/pkg/apis/scheduling/v1"
 )
 
 func TestValidatePriorityClass(t *testing.T) {

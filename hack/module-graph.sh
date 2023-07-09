@@ -31,7 +31,7 @@ error_exit()
 
 staging_dependencies()
 {
-	relevant_modules="(k8s.io/kubernetes|$(find staging/src/k8s.io -maxdepth 1 -mindepth 1 | sed -E 's|staging/src/k8s.io|k8s.io|g' | tr '\n' '|' | sed 's#|$##' ))"
+	relevant_modules="(github.com/sanposhiho/kubernetes|$(find staging/src/k8s.io -maxdepth 1 -mindepth 1 | sed -E 's|staging/src/k8s.io|k8s.io|g' | tr '\n' '|' | sed 's#|$##' ))"
 	# Generating lines of the form " k8s_io_kubernetes -> k8s_io_api"
 	# Use only the directories in staging
 	# Trimming away version info

@@ -20,13 +20,13 @@ import (
 	"context"
 	"time"
 
+	namespacecontroller "github.com/sanposhiho/kubernetes/pkg/controller/namespace"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/informers"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/metadata"
 	restclient "k8s.io/client-go/rest"
-	namespacecontroller "k8s.io/kubernetes/pkg/controller/namespace"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 const (

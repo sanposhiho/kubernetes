@@ -20,10 +20,10 @@ import (
 	"encoding/json"
 	goruntime "runtime"
 
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	volumetesting "github.com/sanposhiho/kubernetes/pkg/volume/testing"
+	"github.com/sanposhiho/kubernetes/test/utils/harness"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/volume"
-	volumetesting "k8s.io/kubernetes/pkg/volume/testing"
-	"k8s.io/kubernetes/test/utils/harness"
 	"k8s.io/utils/exec"
 	exectesting "k8s.io/utils/exec/testing"
 )

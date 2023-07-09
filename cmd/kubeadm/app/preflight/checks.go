@@ -46,11 +46,11 @@ import (
 	utilsexec "k8s.io/utils/exec"
 	netutils "k8s.io/utils/net"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/images"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/initsystem"
-	utilruntime "k8s.io/kubernetes/cmd/kubeadm/app/util/runtime"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/images"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/initsystem"
+	utilruntime "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/runtime"
 )
 
 const (

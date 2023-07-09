@@ -27,7 +27,7 @@ import (
 	v1 "k8s.io/api/authorization/v1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	authorization "k8s.io/kubernetes/pkg/apis/authorization"
+	authorization "github.com/sanposhiho/kubernetes/pkg/apis/authorization"
 )
 
 func init() {

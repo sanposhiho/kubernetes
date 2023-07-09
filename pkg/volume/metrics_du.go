@@ -17,9 +17,9 @@ limitations under the License.
 package volume
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/fs"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/pkg/volume/util/fs"
 )
 
 var _ MetricsProvider = &metricsDu{}

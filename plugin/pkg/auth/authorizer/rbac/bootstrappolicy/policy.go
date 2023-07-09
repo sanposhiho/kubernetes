@@ -17,6 +17,8 @@ limitations under the License.
 package bootstrappolicy
 
 import (
+	rbacv1helpers "github.com/sanposhiho/kubernetes/pkg/apis/rbac/v1"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	capi "k8s.io/api/certificates/v1beta1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	"k8s.io/apimachinery/pkg/api/meta"
@@ -25,8 +27,6 @@ import (
 	"k8s.io/apiserver/pkg/authentication/serviceaccount"
 	"k8s.io/apiserver/pkg/authentication/user"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	rbacv1helpers "k8s.io/kubernetes/pkg/apis/rbac/v1"
-	"k8s.io/kubernetes/pkg/features"
 )
 
 // Write and other vars are slices of the allowed verbs.

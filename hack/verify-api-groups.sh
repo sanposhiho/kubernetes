@@ -52,7 +52,7 @@ for register_file in "${register_files[@]}"; do
 	# if does have one, then it's versioned (e.g. foobar/v1).
 	if [[ "${group_dirname#*'/'}" == "${group_dirname}" ]]; then
 		group_dirnames+=("${group_dirname}")
-		expected_install_packages+=("k8s.io/kubernetes/${package}")
+		expected_install_packages+=("github.com/sanposhiho/kubernetes/${package}")
 	else
 		version=$(echo "${group_dirname}" | cut -d/ -f2 -)
 		external_group_versions+=("${group_name}/${version}")
@@ -90,10 +90,10 @@ done
 # groups_without_codegen is the list of group we EXPECT to not have the client generated for
 # them.  This happens for types that aren't served from the API server
 packages_without_install=(
-	"k8s.io/kubernetes/pkg/apis/abac"
-	"k8s.io/kubernetes/pkg/apis/admission"
-	"k8s.io/kubernetes/pkg/apis/apidiscovery"
-	"k8s.io/kubernetes/pkg/apis/componentconfig" # TODO: Remove this package completely and from this list
+	"github.com/sanposhiho/kubernetes/pkg/apis/abac"
+	"github.com/sanposhiho/kubernetes/pkg/apis/admission"
+	"github.com/sanposhiho/kubernetes/pkg/apis/apidiscovery"
+	"github.com/sanposhiho/kubernetes/pkg/apis/componentconfig" # TODO: Remove this package completely and from this list
 )
 known_version_files=(
 	"pkg/controlplane/import_known_versions.go"

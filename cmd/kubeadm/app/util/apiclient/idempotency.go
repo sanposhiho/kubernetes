@@ -33,7 +33,7 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	clientsetretry "k8s.io/client-go/util/retry"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
 )
 
 // ConfigMapMutator is a function that mutates the given ConfigMap and optionally returns an error

@@ -19,10 +19,10 @@ package fuzzer
 import (
 	"fmt"
 
-	"github.com/google/gofuzz"
+	fuzz "github.com/google/gofuzz"
 
+	kubectrlmgrconfig "github.com/sanposhiho/kubernetes/pkg/controller/apis/config"
 	runtimeserializer "k8s.io/apimachinery/pkg/runtime/serializer"
-	kubectrlmgrconfig "k8s.io/kubernetes/pkg/controller/apis/config"
 )
 
 // Funcs returns the fuzzer functions for the kube-controller manager apis.

@@ -18,10 +18,11 @@ package options
 
 import (
 	"fmt"
-	"github.com/spf13/pflag"
 	"time"
 
-	attachdetachconfig "k8s.io/kubernetes/pkg/controller/volume/attachdetach/config"
+	"github.com/spf13/pflag"
+
+	attachdetachconfig "github.com/sanposhiho/kubernetes/pkg/controller/volume/attachdetach/config"
 )
 
 // AttachDetachControllerOptions holds the AttachDetachController options.

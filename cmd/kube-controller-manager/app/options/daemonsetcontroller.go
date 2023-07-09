@@ -19,7 +19,7 @@ package options
 import (
 	"github.com/spf13/pflag"
 
-	daemonconfig "k8s.io/kubernetes/pkg/controller/daemon/config"
+	daemonconfig "github.com/sanposhiho/kubernetes/pkg/controller/daemon/config"
 )
 
 // DaemonSetControllerOptions holds the DaemonSetController options.

@@ -19,13 +19,13 @@ package kubeadm
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	appsv1 "k8s.io/api/apps/v1"
 	authv1 "k8s.io/api/authorization/v1"
 	corev1 "k8s.io/api/core/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
 
 	"github.com/onsi/gomega"
 	"github.com/onsi/gomega/gstruct"

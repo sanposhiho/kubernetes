@@ -22,6 +22,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/authentication"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -29,7 +30,6 @@ import (
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/apiserver/pkg/registry/rest"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/apis/authentication"
 )
 
 var badAuthenticatorAuds = apierrors.NewInternalError(errors.New("error validating audiences"))

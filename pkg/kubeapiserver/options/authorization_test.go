@@ -26,9 +26,9 @@ import (
 	"github.com/google/go-cmp/cmp"
 	"github.com/spf13/pflag"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubeapiserver/authorizer/modes"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/wait"
-	"k8s.io/kubernetes/pkg/kubeapiserver/authorizer/modes"
 )
 
 func TestAuthzValidate(t *testing.T) {

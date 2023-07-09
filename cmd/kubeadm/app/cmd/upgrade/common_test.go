@@ -24,12 +24,12 @@ import (
 	"strings"
 	"testing"
 
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmapiv1 "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/preflight"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/output"
+	testutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/test"
 	clientset "k8s.io/client-go/kubernetes"
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmapiv1 "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm/v1beta3"
-	"k8s.io/kubernetes/cmd/kubeadm/app/preflight"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/output"
-	testutil "k8s.io/kubernetes/cmd/kubeadm/test"
 )
 
 const testConfigToken = `apiVersion: v1

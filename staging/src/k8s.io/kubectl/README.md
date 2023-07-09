@@ -5,8 +5,8 @@
 [![Build Status](https://travis-ci.org/kubernetes/kubectl.svg?branch=master)](https://travis-ci.org/kubernetes/kubectl) [![GoDoc](https://godoc.org/k8s.io/kubectl?status.svg)](https://godoc.org/k8s.io/kubectl)
 
 The `k8s.io/kubectl` repo is used to track issues for the kubectl cli distributed
-with `k8s.io/kubernetes`. It also contains packages intended for use by client
-programs. E.g. these packages are vendored into `k8s.io/kubernetes` for use in
+with `github.com/sanposhiho/kubernetes`. It also contains packages intended for use by client
+programs. E.g. these packages are vendored into `github.com/sanposhiho/kubernetes` for use in
 the [kubectl](https://github.com/kubernetes/kubernetes/tree/master/cmd/kubectl)
 cli client. That client will eventually move here too.
 
@@ -17,7 +17,7 @@ cli client. That client will eventually move here too.
 - Go tools compliant (`go get`, `go test`, etc.). It needs to be vendorable
   somewhere else.
 
-- No dependence on `k8s.io/kubernetes`. Dependence on other repositories is fine.
+- No dependence on `github.com/sanposhiho/kubernetes`. Dependence on other repositories is fine.
 
 - Code must be usefully [commented](https://go.dev/doc/effective_go#commentary).
   Not only for developers on the project, but also for external users of these packages.

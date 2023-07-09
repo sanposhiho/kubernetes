@@ -19,9 +19,9 @@ package container
 import (
 	"testing"
 
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
 )
 
 func TestFieldPath(t *testing.T) {

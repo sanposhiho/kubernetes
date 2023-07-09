@@ -22,11 +22,11 @@ import (
 	"reflect"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/deployment/util"
 	apps "k8s.io/api/apps/v1"
-	"k8s.io/api/core/v1"
+	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller/deployment/util"
 )
 
 // syncRolloutStatus updates the status of a deployment during a rollout. There are

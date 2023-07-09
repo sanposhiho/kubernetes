@@ -19,9 +19,9 @@ package storageversion
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/apiserverinternal"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
-	"k8s.io/kubernetes/pkg/apis/apiserverinternal"
 )
 
 func TestStorageVersionStrategy(t *testing.T) {

@@ -14,7 +14,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-// +k8s:conversion-gen=k8s.io/kubernetes/pkg/apis/apiserverinternal
+// +k8s:conversion-gen=github.com/sanposhiho/kubernetes/pkg/apis/apiserverinternal
 // +k8s:conversion-gen-external-types=k8s.io/api/apiserverinternal/v1alpha1
 // +k8s:defaulter-gen=TypeMeta
 // +k8s:defaulter-gen-input=k8s.io/api/apiserverinternal/v1alpha1
@@ -23,4 +23,4 @@ limitations under the License.
 
 // Package v1alpha1 contains the v1alpha1 version of the API used by the
 // apiservers themselves.
-package v1alpha1 // import "k8s.io/kubernetes/pkg/apis/apiserverinternal/v1alpha1"
+package v1alpha1 // import "github.com/sanposhiho/kubernetes/pkg/apis/apiserverinternal/v1alpha1"

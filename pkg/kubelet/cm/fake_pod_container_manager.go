@@ -20,9 +20,9 @@ import (
 	"reflect"
 	"sync"
 
-	"k8s.io/api/core/v1"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 type FakePodContainerManager struct {

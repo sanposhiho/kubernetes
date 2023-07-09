@@ -24,10 +24,10 @@
       "SelectorRegexp": "k8s[.]io",
       "AllowedPrefixes": [
         "k8s.io/gengo/examples",
-        "k8s.io/kubernetes/third_party"
+        "github.com/sanposhiho/kubernetes/third_party"
       ],
       "ForbiddenPrefixes": [
-        "k8s.io/kubernetes/pkg/third_party/deprecated"
+        "github.com/sanposhiho/kubernetes/pkg/third_party/deprecated"
       ]
     },
     {
@@ -60,9 +60,9 @@ rules:
   - selectorRegexp: k8s[.]io
     allowedPrefixes:
       - k8s.io/gengo/examples
-      - k8s.io/kubernetes/third_party
+      - github.com/sanposhiho/kubernetes/third_party
     forbiddenPrefixes:
-      - k8s.io/kubernetes/pkg/third_party/deprecated
+      - github.com/sanposhiho/kubernetes/pkg/third_party/deprecated
   - selectorRegexp: ^unsafe$
     forbiddenPrefixes:
       - ""
@@ -70,14 +70,14 @@ inverseRules:
   - selectorRegexp: k8s[.]io
     allowedPrefixes:
       - k8s.io/same-repo
-      - k8s.io/kubernetes/pkg/legacy
+      - github.com/sanposhiho/kubernetes/pkg/legacy
     forbiddenPrefixes:
-      - k8s.io/kubernetes/pkg/legacy/subpkg
+      - github.com/sanposhiho/kubernetes/pkg/legacy/subpkg
   - selectorRegexp: k8s[.]io
     transitive: true
     forbiddenPrefixes:
-      - k8s.io/kubernetes/cmd/kubelet
-      - k8s.io/kubernetes/cmd/kubectl
+      - github.com/sanposhiho/kubernetes/cmd/kubelet
+      - github.com/sanposhiho/kubernetes/cmd/kubectl
 ```
 
 ## How do I run import-boss within the k/k repo?
@@ -89,7 +89,7 @@ inverseRules:
 
 - To include other directories, pass in a directory or directories using the `input-dirs` flag:
   ```sh
-  hack/verify-import-boss.sh --input-dirs="k8s.io/kubernetes/test/e2e/framework/..."
+  hack/verify-import-boss.sh --input-dirs="github.com/sanposhiho/kubernetes/test/e2e/framework/..."
   ```
 
 ## Reference

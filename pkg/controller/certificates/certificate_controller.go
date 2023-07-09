@@ -25,6 +25,7 @@ import (
 
 	"golang.org/x/time/rate"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 	certificates "k8s.io/api/certificates/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -35,7 +36,6 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller"
 )
 
 type CertificateController struct {

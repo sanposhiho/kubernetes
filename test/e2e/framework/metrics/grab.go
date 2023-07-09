@@ -21,7 +21,7 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
-	"k8s.io/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 )
 
 func GrabBeforeEach(ctx context.Context, f *framework.Framework) (result *Collection) {

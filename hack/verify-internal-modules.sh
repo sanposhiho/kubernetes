@@ -29,7 +29,7 @@ _tmpdir="$(kube::realpath "$(mktemp -d -t verify-internal-modules.XXXXXX)")"
 kube::util::trap_add "rm -rf ${_tmpdir:?}" EXIT
 
 _tmp_gopath="${_tmpdir}/go"
-_tmp_kuberoot="${_tmp_gopath}/src/k8s.io/kubernetes"
+_tmp_kuberoot="${_tmp_gopath}/src/github.com/sanposhiho/kubernetes"
 git worktree add -f "${_tmp_kuberoot}" HEAD
 kube::util::trap_add "git worktree remove -f ${_tmp_kuberoot}" EXIT
 

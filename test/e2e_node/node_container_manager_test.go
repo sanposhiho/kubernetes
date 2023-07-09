@@ -28,17 +28,17 @@ import (
 	"strings"
 	"time"
 
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/stats/pidlimit"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	"k8s.io/kubernetes/pkg/kubelet/cm"
-	"k8s.io/kubernetes/pkg/kubelet/stats/pidlimit"
 	admissionapi "k8s.io/pod-security-admission/api"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eskipper "k8s.io/kubernetes/test/e2e/framework/skipper"
-	e2enodekubelet "k8s.io/kubernetes/test/e2e_node/kubeletconfig"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eskipper "github.com/sanposhiho/kubernetes/test/e2e/framework/skipper"
+	e2enodekubelet "github.com/sanposhiho/kubernetes/test/e2e_node/kubeletconfig"
 
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"

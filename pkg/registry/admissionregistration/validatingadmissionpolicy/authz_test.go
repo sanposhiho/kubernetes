@@ -20,11 +20,11 @@ import (
 	"context"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/registry/admissionregistration/resolver"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/authentication/user"
 	"k8s.io/apiserver/pkg/authorization/authorizer"
 	"k8s.io/apiserver/pkg/endpoints/request"
-	"k8s.io/kubernetes/pkg/registry/admissionregistration/resolver"
 )
 
 func TestAuthorization(t *testing.T) {

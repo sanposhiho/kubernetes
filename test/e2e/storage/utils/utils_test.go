@@ -19,7 +19,7 @@ package utils
 import (
 	"testing"
 
-	e2evolume "k8s.io/kubernetes/test/e2e/framework/volume"
+	e2evolume "github.com/sanposhiho/kubernetes/test/e2e/framework/volume"
 )
 
 // getSizeRangesIntersection takes two instances of storage size ranges and determines the

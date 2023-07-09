@@ -21,6 +21,9 @@ import (
 	"strings"
 	"testing"
 
+	endpointsv1 "github.com/sanposhiho/kubernetes/pkg/api/v1/endpoints"
+	"github.com/sanposhiho/kubernetes/pkg/controller/endpointslicemirroring/metrics"
+	endpointsliceutil "github.com/sanposhiho/kubernetes/pkg/controller/util/endpointslice"
 	corev1 "k8s.io/api/core/v1"
 	discovery "k8s.io/api/discovery/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,9 +31,6 @@ import (
 	"k8s.io/client-go/kubernetes/scheme"
 	"k8s.io/client-go/tools/record"
 	"k8s.io/component-base/metrics/testutil"
-	endpointsv1 "k8s.io/kubernetes/pkg/api/v1/endpoints"
-	"k8s.io/kubernetes/pkg/controller/endpointslicemirroring/metrics"
-	endpointsliceutil "k8s.io/kubernetes/pkg/controller/util/endpointslice"
 	"k8s.io/utils/pointer"
 )
 

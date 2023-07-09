@@ -26,6 +26,9 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
+	schedutil "github.com/sanposhiho/kubernetes/pkg/scheduler/util"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -33,9 +36,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/klog/v2"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
-	schedutil "k8s.io/kubernetes/pkg/scheduler/util"
 )
 
 func deepEqualWithoutGeneration(actual *nodeInfoListItem, expected *framework.NodeInfo) error {

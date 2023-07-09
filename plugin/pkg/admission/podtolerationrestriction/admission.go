@@ -24,6 +24,11 @@ import (
 
 	"k8s.io/klog/v2"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	qoshelper "github.com/sanposhiho/kubernetes/pkg/apis/core/helper/qos"
+	k8s_api_v1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/util/tolerations"
+	pluginapi "github.com/sanposhiho/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -32,11 +37,6 @@ import (
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	corev1listers "k8s.io/client-go/listers/core/v1"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	qoshelper "k8s.io/kubernetes/pkg/apis/core/helper/qos"
-	k8s_api_v1 "k8s.io/kubernetes/pkg/apis/core/v1"
-	"k8s.io/kubernetes/pkg/util/tolerations"
-	pluginapi "k8s.io/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction"
 )
 
 // PluginName is a string with the name of the plugin

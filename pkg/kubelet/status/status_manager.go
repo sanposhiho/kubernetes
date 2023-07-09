@@ -28,6 +28,13 @@ import (
 	"github.com/google/go-cmp/cmp"
 	clientset "k8s.io/client-go/kubernetes"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/status/state"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	statusutil "github.com/sanposhiho/kubernetes/pkg/util/pod"
 	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -36,13 +43,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/klog/v2"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/pkg/features"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
-	"k8s.io/kubernetes/pkg/kubelet/status/state"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
-	statusutil "k8s.io/kubernetes/pkg/util/pod"
 )
 
 // podStatusManagerStateFile is the file name where status manager stores its state
@@ -87,7 +87,7 @@ type manager struct {
 }
 
 // PodManager is the subset of methods the manager needs to observe the actual state of the kubelet.
-// See pkg/k8s.io/kubernetes/pkg/kubelet/pod.Manager for method godoc.
+// See pkg/github.com/sanposhiho/kubernetes/pkg/kubelet/pod.Manager for method godoc.
 type PodManager interface {
 	GetPodByUID(types.UID) (*v1.Pod, bool)
 	GetMirrorPodByPod(*v1.Pod) (*v1.Pod, bool)

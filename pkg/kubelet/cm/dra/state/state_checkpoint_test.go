@@ -23,9 +23,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager"
+	testutil "github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager/state/testing"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager"
-	testutil "k8s.io/kubernetes/pkg/kubelet/cm/cpumanager/state/testing"
 )
 
 const testingCheckpoint = "dramanager_checkpoint_test"

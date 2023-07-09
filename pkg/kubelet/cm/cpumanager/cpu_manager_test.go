@@ -33,10 +33,10 @@ import (
 	"k8s.io/apimachinery/pkg/types"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 
-	"k8s.io/kubernetes/pkg/kubelet/cm/containermap"
-	"k8s.io/kubernetes/pkg/kubelet/cm/cpumanager/state"
-	"k8s.io/kubernetes/pkg/kubelet/cm/cpumanager/topology"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/containermap"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager/state"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager/topology"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
 	"k8s.io/utils/cpuset"
 )
 

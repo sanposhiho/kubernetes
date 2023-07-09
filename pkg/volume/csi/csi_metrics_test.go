@@ -21,9 +21,9 @@ import (
 	"testing"
 
 	csipbv1 "github.com/container-storage-interface/spec/lib/go/csi"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/csi/fake"
 	"k8s.io/apimachinery/pkg/api/resource"
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/csi/fake"
 )
 
 func TestGetMetrics(t *testing.T) {

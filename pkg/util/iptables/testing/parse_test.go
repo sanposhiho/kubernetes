@@ -24,7 +24,7 @@ import (
 
 	"github.com/lithammer/dedent"
 
-	"k8s.io/kubernetes/pkg/util/iptables"
+	"github.com/sanposhiho/kubernetes/pkg/util/iptables"
 	utilpointer "k8s.io/utils/pointer"
 )
 

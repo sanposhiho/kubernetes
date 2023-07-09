@@ -24,13 +24,13 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/daemon"
+	"github.com/sanposhiho/kubernetes/pkg/controller/deployment"
+	"github.com/sanposhiho/kubernetes/pkg/controller/replicaset"
+	"github.com/sanposhiho/kubernetes/pkg/controller/statefulset"
 	"k8s.io/client-go/util/flowcontrol"
 	"k8s.io/controller-manager/controller"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller/daemon"
-	"k8s.io/kubernetes/pkg/controller/deployment"
-	"k8s.io/kubernetes/pkg/controller/replicaset"
-	"k8s.io/kubernetes/pkg/controller/statefulset"
 )
 
 func startDaemonSetController(ctx context.Context, controllerContext ControllerContext) (controller.Interface, bool, error) {

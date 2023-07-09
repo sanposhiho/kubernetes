@@ -27,7 +27,7 @@ import (
 	v1alpha1 "k8s.io/api/apiserverinternal/v1alpha1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	apiserverinternal "k8s.io/kubernetes/pkg/apis/apiserverinternal"
+	apiserverinternal "github.com/sanposhiho/kubernetes/pkg/apis/apiserverinternal"
 )
 
 func init() {

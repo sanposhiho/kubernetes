@@ -20,12 +20,12 @@ import (
 	"sync"
 	"time"
 
+	pvutil "github.com/sanposhiho/kubernetes/pkg/api/v1/persistentvolume"
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/third_party/forked/gonum/graph"
+	"github.com/sanposhiho/kubernetes/third_party/forked/gonum/graph/simple"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/component-helpers/storage/ephemeral"
-	pvutil "k8s.io/kubernetes/pkg/api/v1/persistentvolume"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/third_party/forked/gonum/graph"
-	"k8s.io/kubernetes/third_party/forked/gonum/graph/simple"
 )
 
 // namedVertex implements graph.Node and remembers the type, namespace, and name of its related API object

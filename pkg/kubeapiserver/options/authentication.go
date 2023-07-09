@@ -25,6 +25,10 @@ import (
 
 	"github.com/spf13/pflag"
 
+	serviceaccountcontroller "github.com/sanposhiho/kubernetes/pkg/controller/serviceaccount"
+	kubeauthenticator "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/authenticator"
+	authzmodes "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/authorizer/modes"
+	"github.com/sanposhiho/kubernetes/plugin/pkg/auth/authenticator/token/bootstrap"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/wait"
@@ -37,10 +41,6 @@ import (
 	cliflag "k8s.io/component-base/cli/flag"
 	"k8s.io/klog/v2"
 	openapicommon "k8s.io/kube-openapi/pkg/common"
-	serviceaccountcontroller "k8s.io/kubernetes/pkg/controller/serviceaccount"
-	kubeauthenticator "k8s.io/kubernetes/pkg/kubeapiserver/authenticator"
-	authzmodes "k8s.io/kubernetes/pkg/kubeapiserver/authorizer/modes"
-	"k8s.io/kubernetes/plugin/pkg/auth/authenticator/token/bootstrap"
 )
 
 // BuiltInAuthenticationOptions contains all build-in authentication options for API Server

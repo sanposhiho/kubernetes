@@ -20,8 +20,8 @@ import (
 	"reflect"
 	"testing"
 
-	utiliptables "k8s.io/kubernetes/pkg/util/iptables"
-	iptablestest "k8s.io/kubernetes/pkg/util/iptables/testing"
+	utiliptables "github.com/sanposhiho/kubernetes/pkg/util/iptables"
+	iptablestest "github.com/sanposhiho/kubernetes/pkg/util/iptables/testing"
 )
 
 func TestNoOpLocalDetector(t *testing.T) {

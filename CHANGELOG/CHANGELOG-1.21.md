@@ -2062,7 +2062,7 @@ The feature gate currently falls back to the default behavior in most cases. Ena
 
 ### Other (Cleanup or Flake)
 
-- APIs for kubelet annotations and labels from `k8s.io/kubernetes/pkg/kubelet/apis` are now moved under `k8s.io/kubelet/pkg/apis/` ([#98931](https://github.com/kubernetes/kubernetes/pull/98931), [@michaelbeaumont](https://github.com/michaelbeaumont))
+- APIs for kubelet annotations and labels from `github.com/sanposhiho/kubernetes/pkg/kubelet/apis` are now moved under `k8s.io/kubelet/pkg/apis/` ([#98931](https://github.com/kubernetes/kubernetes/pull/98931), [@michaelbeaumont](https://github.com/michaelbeaumont))
 - Apiserver_request_duration_seconds is promoted to stable status. ([#99925](https://github.com/kubernetes/kubernetes/pull/99925), [@logicalhan](https://github.com/logicalhan)) [SIG API Machinery, Instrumentation and Testing]
 - Bump github.com/Azure/go-autorest/autorest to v0.11.12 ([#97033](https://github.com/kubernetes/kubernetes/pull/97033), [@patrickshan](https://github.com/patrickshan)) [SIG API Machinery, CLI, Cloud Provider and Cluster Lifecycle]
 - Clients required to use go1.15.8+ or go1.16+ if kube-apiserver has the goaway feature enabled to avoid unexpected data race condition. ([#98809](https://github.com/kubernetes/kubernetes/pull/98809), [@answer1991](https://github.com/answer1991))
@@ -2714,7 +2714,7 @@ filename | sha512 hash
 
 ### Other (Cleanup or Flake)
 
-- APIs for kubelet annotations and labels from k8s.io/kubernetes/pkg/kubelet/apis are now available under k8s.io/kubelet/pkg/apis/ ([#98931](https://github.com/kubernetes/kubernetes/pull/98931), [@michaelbeaumont](https://github.com/michaelbeaumont)) [SIG Apps, Auth and Node]
+- APIs for kubelet annotations and labels from github.com/sanposhiho/kubernetes/pkg/kubelet/apis are now available under k8s.io/kubelet/pkg/apis/ ([#98931](https://github.com/kubernetes/kubernetes/pull/98931), [@michaelbeaumont](https://github.com/michaelbeaumont)) [SIG Apps, Auth and Node]
 - Migrate `pkg/kubelet/(pod, pleg)` to structured logging ([#98990](https://github.com/kubernetes/kubernetes/pull/98990), [@gjkim42](https://github.com/gjkim42)) [SIG Instrumentation and Node]
 - Migrate pkg/kubelet/nodestatus to structured logging ([#99001](https://github.com/kubernetes/kubernetes/pull/99001), [@QiWang19](https://github.com/QiWang19)) [SIG Node]
 - Migrate pkg/kubelet/server logs to structured logging ([#98643](https://github.com/kubernetes/kubernetes/pull/98643), [@chenyw1990](https://github.com/chenyw1990)) [SIG Node]

@@ -4,4 +4,4 @@ rules:
   # tests is fine.
   - selectorRegexp: k8s[.]io/kubernetes/test/e2e
     allowedPrefixes:
-      - k8s.io/kubernetes/test/e2e/dra/test-driver
+      - github.com/sanposhiho/kubernetes/test/e2e/dra/test-driver

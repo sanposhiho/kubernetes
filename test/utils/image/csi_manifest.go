@@ -23,8 +23,8 @@ import (
 	"regexp"
 	"strings"
 
+	e2etestingmanifests "github.com/sanposhiho/kubernetes/test/e2e/testing-manifests"
 	"k8s.io/apimachinery/pkg/util/yaml"
-	e2etestingmanifests "k8s.io/kubernetes/test/e2e/testing-manifests"
 )
 
 // All of the image tags are of the format registry.k8s.io/sig-storage/hostpathplugin:v1.7.3.

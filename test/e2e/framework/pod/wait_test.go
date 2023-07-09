@@ -27,14 +27,14 @@ import (
 	"github.com/onsi/ginkgo/v2/reporters"
 	"github.com/onsi/gomega"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework/internal/output"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	_ "github.com/sanposhiho/kubernetes/test/utils/format" // activate YAML object dumps
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/fake"
-	"k8s.io/kubernetes/test/e2e/framework"
-	"k8s.io/kubernetes/test/e2e/framework/internal/output"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	_ "k8s.io/kubernetes/test/utils/format" // activate YAML object dumps
 )
 
 // The line number of the following code is checked in TestFailureOutput below.
@@ -174,9 +174,9 @@ In [It] at: wait_test.go:58 <time>
 					},
 					SystemErr: `> Enter [It] not found, retry - wait_test.go:57 <time>
 INFO: Failed inside E2E framework:
-    k8s.io/kubernetes/test/e2e/framework/pod.WaitTimeoutForPodRunningInNamespace()
+    github.com/sanposhiho/kubernetes/test/e2e/framework/pod.WaitTimeoutForPodRunningInNamespace()
     	wait.go
-    k8s.io/kubernetes/test/e2e/framework/pod_test.glob..func1.2()
+    github.com/sanposhiho/kubernetes/test/e2e/framework/pod_test.glob..func1.2()
     	wait_test.go:58
 [FAILED] Timed out after <after>.
 The function passed to Eventually returned the following error:
@@ -341,9 +341,9 @@ In [It] at: wait_test.go:71 <time>
 					SystemErr: `> Enter [It] not running - wait_test.go:69 <time>
 STEP: waiting for pod pending-pod to run - wait_test.go:70 <time>
 INFO: Failed inside E2E framework:
-    k8s.io/kubernetes/test/e2e/framework/pod.WaitTimeoutForPodRunningInNamespace()
+    github.com/sanposhiho/kubernetes/test/e2e/framework/pod.WaitTimeoutForPodRunningInNamespace()
     	wait.go
-    k8s.io/kubernetes/test/e2e/framework/pod_test.glob..func1.5()
+    github.com/sanposhiho/kubernetes/test/e2e/framework/pod_test.glob..func1.5()
     	wait_test.go:71
 [FAILED] Timed out after <after>.
 Expected Pod to be in <v1.PodPhase>: "Running"
@@ -373,9 +373,9 @@ In [It] at: wait_test.go:75 <time>
 					},
 					SystemErr: `> Enter [It] failed - wait_test.go:74 <time>
 INFO: Failed inside E2E framework:
-    k8s.io/kubernetes/test/e2e/framework/pod.WaitTimeoutForPodRunningInNamespace()
+    github.com/sanposhiho/kubernetes/test/e2e/framework/pod.WaitTimeoutForPodRunningInNamespace()
     	wait.go
-    k8s.io/kubernetes/test/e2e/framework/pod_test.glob..func1.6()
+    github.com/sanposhiho/kubernetes/test/e2e/framework/pod_test.glob..func1.6()
     	wait_test.go:75
 [FAILED] Told to stop trying after <after>.
 Expected pod to reach phase "Running", got final phase "Failed" instead.

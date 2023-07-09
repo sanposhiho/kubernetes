@@ -19,9 +19,9 @@ package validation
 import (
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
+	internalapi "github.com/sanposhiho/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/core/validation"
-	internalapi "k8s.io/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction"
 )
 
 // ValidateConfiguration validates the configuration.

@@ -21,10 +21,10 @@ import (
 	"testing"
 	"time"
 
+	kubeproxyconfig "github.com/sanposhiho/kubernetes/pkg/proxy/apis/config"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	componentbaseconfig "k8s.io/component-base/config"
-	kubeproxyconfig "k8s.io/kubernetes/pkg/proxy/apis/config"
 
 	"k8s.io/utils/pointer"
 )

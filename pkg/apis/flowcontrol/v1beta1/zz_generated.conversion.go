@@ -27,7 +27,7 @@ import (
 	v1beta1 "k8s.io/api/flowcontrol/v1beta1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	flowcontrol "k8s.io/kubernetes/pkg/apis/flowcontrol"
+	flowcontrol "github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol"
 )
 
 func init() {

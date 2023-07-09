@@ -25,6 +25,12 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	autoscalingapiv2 "github.com/sanposhiho/kubernetes/pkg/apis/autoscaling/v2"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/controller/podautoscaler/metrics"
+	"github.com/sanposhiho/kubernetes/pkg/controller/podautoscaler/monitor"
+	"github.com/sanposhiho/kubernetes/pkg/controller/util/selectors"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	autoscalingv2 "k8s.io/api/autoscaling/v2"
 	v1 "k8s.io/api/core/v1"
@@ -40,12 +46,6 @@ import (
 	"k8s.io/client-go/kubernetes/fake"
 	scalefake "k8s.io/client-go/scale/fake"
 	core "k8s.io/client-go/testing"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	autoscalingapiv2 "k8s.io/kubernetes/pkg/apis/autoscaling/v2"
-	"k8s.io/kubernetes/pkg/controller"
-	"k8s.io/kubernetes/pkg/controller/podautoscaler/metrics"
-	"k8s.io/kubernetes/pkg/controller/podautoscaler/monitor"
-	"k8s.io/kubernetes/pkg/controller/util/selectors"
 	cmapi "k8s.io/metrics/pkg/apis/custom_metrics/v1beta2"
 	emapi "k8s.io/metrics/pkg/apis/external_metrics/v1beta1"
 	metricsapi "k8s.io/metrics/pkg/apis/metrics/v1beta1"
@@ -56,8 +56,8 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
-	_ "k8s.io/kubernetes/pkg/apis/apps/install"
-	_ "k8s.io/kubernetes/pkg/apis/autoscaling/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/apps/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/autoscaling/install"
 )
 
 // From now on, the HPA controller does have history in it (scaleUpEvents, scaleDownEvents)

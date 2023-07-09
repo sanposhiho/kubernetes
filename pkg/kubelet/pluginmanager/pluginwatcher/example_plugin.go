@@ -28,10 +28,10 @@ import (
 	"google.golang.org/grpc"
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/cache"
+	v1beta1 "github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/pluginwatcher/example_plugin_apis/v1beta1"
+	v1beta2 "github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/pluginwatcher/example_plugin_apis/v1beta2"
 	registerapi "k8s.io/kubelet/pkg/apis/pluginregistration/v1"
-	"k8s.io/kubernetes/pkg/kubelet/pluginmanager/cache"
-	v1beta1 "k8s.io/kubernetes/pkg/kubelet/pluginmanager/pluginwatcher/example_plugin_apis/v1beta1"
-	v1beta2 "k8s.io/kubernetes/pkg/kubelet/pluginmanager/pluginwatcher/example_plugin_apis/v1beta2"
 )
 
 // examplePlugin is a sample plugin to work with plugin watcher

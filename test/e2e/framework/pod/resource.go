@@ -33,9 +33,9 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	testutils "k8s.io/kubernetes/test/utils"
-	imageutils "k8s.io/kubernetes/test/utils/image"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 )
 
 // LabelLogOnPodFailure can be used to mark which Pods will have their logs logged in the case of

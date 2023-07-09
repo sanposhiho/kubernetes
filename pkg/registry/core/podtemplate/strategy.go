@@ -19,14 +19,14 @@ package podtemplate
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/api/pod"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	corevalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apiserver/pkg/storage/names"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/api/pod"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	corevalidation "k8s.io/kubernetes/pkg/apis/core/validation"
 )
 
 // podTemplateStrategy implements behavior for PodTemplates

@@ -26,30 +26,30 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	"k8s.io/apimachinery/pkg/util/sets"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/component-base/metrics/testutil"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 const (
 	proxyTimeout = 2 * time.Minute
 	// dockerOperationsLatencyKey is the key for the operation latency metrics.
-	// Taken from k8s.io/kubernetes/pkg/kubelet/dockershim/metrics
+	// Taken from github.com/sanposhiho/kubernetes/pkg/kubelet/dockershim/metrics
 	dockerOperationsLatencyKey = "docker_operations_duration_seconds"
-	// Taken from k8s.io/kubernetes/pkg/kubelet/metrics
+	// Taken from github.com/sanposhiho/kubernetes/pkg/kubelet/metrics
 	kubeletSubsystem = "kubelet"
-	// Taken from k8s.io/kubernetes/pkg/kubelet/metrics
+	// Taken from github.com/sanposhiho/kubernetes/pkg/kubelet/metrics
 	podWorkerDurationKey = "pod_worker_duration_seconds"
-	// Taken from k8s.io/kubernetes/pkg/kubelet/metrics
+	// Taken from github.com/sanposhiho/kubernetes/pkg/kubelet/metrics
 	podStartDurationKey = "pod_start_duration_seconds"
-	// Taken from k8s.io/kubernetes/pkg/kubelet/metrics
+	// Taken from github.com/sanposhiho/kubernetes/pkg/kubelet/metrics
 	podStartSLIDurationKey = "pod_start_sli_duration_seconds"
-	// Taken from k8s.io/kubernetes/pkg/kubelet/metrics
+	// Taken from github.com/sanposhiho/kubernetes/pkg/kubelet/metrics
 	cgroupManagerOperationsKey = "cgroup_manager_duration_seconds"
-	// Taken from k8s.io/kubernetes/pkg/kubelet/metrics
+	// Taken from github.com/sanposhiho/kubernetes/pkg/kubelet/metrics
 	podWorkerStartDurationKey = "pod_worker_start_duration_seconds"
-	// Taken from k8s.io/kubernetes/pkg/kubelet/metrics
+	// Taken from github.com/sanposhiho/kubernetes/pkg/kubelet/metrics
 	plegRelistDurationKey = "pleg_relist_duration_seconds"
 )
 

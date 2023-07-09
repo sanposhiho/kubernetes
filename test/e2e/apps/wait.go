@@ -23,9 +23,9 @@ import (
 	v1 "k8s.io/api/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
 
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2estatefulset "k8s.io/kubernetes/test/e2e/framework/statefulset"
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2estatefulset "github.com/sanposhiho/kubernetes/test/e2e/framework/statefulset"
 )
 
 // waitForPartitionedRollingUpdate waits for all Pods in set to exist and have the correct revision. set must have

@@ -19,8 +19,8 @@ package flexvolume
 import (
 	"testing"
 
-	"k8s.io/kubernetes/test/utils/harness"
-	"k8s.io/utils/exec/testing"
+	"github.com/sanposhiho/kubernetes/test/utils/harness"
+	testingexec "k8s.io/utils/exec/testing"
 )
 
 func TestInit(tt *testing.T) {

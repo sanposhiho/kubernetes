@@ -26,8 +26,8 @@ import (
 	gomock "github.com/golang/mock/gomock"
 	v1 "k8s.io/api/core/v1"
 	types "k8s.io/apimachinery/pkg/types"
-	container "k8s.io/kubernetes/pkg/kubelet/container"
-	types0 "k8s.io/kubernetes/pkg/kubelet/types"
+	container "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	types0 "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 )
 
 // MockPodManager is a mock of PodManager interface.

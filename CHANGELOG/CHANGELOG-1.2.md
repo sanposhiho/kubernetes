@@ -433,8 +433,8 @@ if supported by the kernel. You should either adjust your CPU limit, or set CPU
 request only, if you want to avoid hardcapping. If the kernel does not support
 CPU Quota, NodeStatus will contain a warning indicating that CPU Limits cannot
 be enforced.
-  * The following applies only if you use the Go language client (<code>/pkg/client/unversioned</code>) to create Job by defining Go variables of type "<code>k8s.io/kubernetes/pkg/apis/extensions".Job</code>).  We think <strong>this is not common</strong>, so if you are not sure what this means, you probably aren't doing this.  If
-you do this, then, at the time you re-vendor the "<code>k8s.io/kubernetes/"</code> code, you will need to set <code>job.Spec.ManualSelector = true</code>, or else set <code>job.Spec.Selector = nil.  </code>Otherwise, the jobs you create may be rejected.  See [Specifying your own pod selector](http://kubernetes.io/docs/user-guide/jobs/#specifying-your-own-pod-selector).
+  * The following applies only if you use the Go language client (<code>/pkg/client/unversioned</code>) to create Job by defining Go variables of type "<code>github.com/sanposhiho/kubernetes/pkg/apis/extensions".Job</code>).  We think <strong>this is not common</strong>, so if you are not sure what this means, you probably aren't doing this.  If
+you do this, then, at the time you re-vendor the "<code>github.com/sanposhiho/kubernetes/"</code> code, you will need to set <code>job.Spec.ManualSelector = true</code>, or else set <code>job.Spec.Selector = nil.  </code>Otherwise, the jobs you create may be rejected.  See [Specifying your own pod selector](http://kubernetes.io/docs/user-guide/jobs/#specifying-your-own-pod-selector).
   * Deployment was Alpha in 1.1 (though it had apiVersion extensions/v1beta1) and
 was disabled by default. Due to some non-backward-compatible API changes, any
 Deployment objects you created in 1.1 won’t work with in the 1.2 release.

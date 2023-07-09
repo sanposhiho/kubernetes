@@ -25,6 +25,10 @@ import (
 
 	"k8s.io/klog/v2"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/controller/daemon/util"
+	labelsutil "github.com/sanposhiho/kubernetes/pkg/util/labels"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -33,10 +37,6 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/json"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/pkg/controller"
-	"k8s.io/kubernetes/pkg/controller/daemon/util"
-	labelsutil "k8s.io/kubernetes/pkg/util/labels"
 )
 
 // rollingUpdate identifies the set of old pods to delete, or additional pods to create on nodes,

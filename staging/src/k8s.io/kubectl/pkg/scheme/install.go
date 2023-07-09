@@ -54,7 +54,7 @@ import (
 )
 
 // Register all groups in the kubectl's registry, but no componentconfig group since it's not in k8s.io/api
-// The code in this file mostly duplicate the install under k8s.io/kubernetes/pkg/api and k8s.io/kubernetes/pkg/apis,
+// The code in this file mostly duplicate the install under github.com/sanposhiho/kubernetes/pkg/api and github.com/sanposhiho/kubernetes/pkg/apis,
 // but does NOT register the internal types.
 func init() {
 	// Register external types for Scheme

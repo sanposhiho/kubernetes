@@ -22,6 +22,13 @@ import (
 	"strings"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/registry/core/service/allocator"
+	allocatorstore "github.com/sanposhiho/kubernetes/pkg/registry/core/service/allocator/storage"
+	"github.com/sanposhiho/kubernetes/pkg/registry/core/service/portallocator"
+	"github.com/sanposhiho/kubernetes/pkg/registry/registrytest"
 	utilnet "k8s.io/apimachinery/pkg/util/net"
 	"k8s.io/apiserver/pkg/registry/generic"
 	"k8s.io/apiserver/pkg/storage"
@@ -29,13 +36,6 @@ import (
 	"k8s.io/apiserver/pkg/storage/storagebackend/factory"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/registry/core/service/allocator"
-	allocatorstore "k8s.io/kubernetes/pkg/registry/core/service/allocator/storage"
-	"k8s.io/kubernetes/pkg/registry/core/service/portallocator"
-	"k8s.io/kubernetes/pkg/registry/registrytest"
 )
 
 const (

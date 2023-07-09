@@ -38,7 +38,7 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/workqueue"
 
-	"k8s.io/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 )
 
 // ClusterRoleAggregationController is a controller to combine cluster roles

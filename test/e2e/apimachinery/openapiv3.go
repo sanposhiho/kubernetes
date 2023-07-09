@@ -25,6 +25,7 @@ import (
 
 	"github.com/google/go-cmp/cmp"
 	"github.com/onsi/ginkgo/v2"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	apiextensionclientset "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
 	"k8s.io/apiextensions-apiserver/test/integration/fixtures"
@@ -34,11 +35,10 @@ import (
 	"k8s.io/client-go/openapi3"
 	aggregatorclient "k8s.io/kube-aggregator/pkg/client/clientset_generated/clientset"
 	"k8s.io/kube-openapi/pkg/spec3"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	admissionapi "k8s.io/pod-security-admission/api"
 	samplev1beta1 "k8s.io/sample-apiserver/pkg/apis/wardle/v1beta1"
 
-	"k8s.io/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 
 	// ensure libs have a chance to initialize
 	_ "github.com/stretchr/testify/assert"

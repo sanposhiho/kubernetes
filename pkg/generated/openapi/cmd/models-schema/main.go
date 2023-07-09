@@ -22,9 +22,9 @@ import (
 	"os"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/generated/openapi"
 	"k8s.io/kube-openapi/pkg/common"
 	"k8s.io/kube-openapi/pkg/validation/spec"
-	"k8s.io/kubernetes/pkg/generated/openapi"
 )
 
 // Outputs openAPI schema JSON containing the schema definitions in zz_generated.openapi.go.

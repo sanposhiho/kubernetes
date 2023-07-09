@@ -25,12 +25,12 @@ import (
 
 	"github.com/spf13/pflag"
 
+	corev1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	utiltaints "github.com/sanposhiho/kubernetes/pkg/util/taints"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	utilnet "k8s.io/apimachinery/pkg/util/net"
-	corev1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	utiltaints "k8s.io/kubernetes/pkg/util/taints"
 	netutils "k8s.io/utils/net"
 )
 

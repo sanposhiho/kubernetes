@@ -18,9 +18,9 @@ package fuzzer
 
 import (
 	fuzz "github.com/google/gofuzz"
+	"github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	runtimeserializer "k8s.io/apimachinery/pkg/runtime/serializer"
-	"k8s.io/kubernetes/pkg/apis/batch"
-	api "k8s.io/kubernetes/pkg/apis/core"
 	"k8s.io/utils/pointer"
 )
 

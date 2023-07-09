@@ -20,12 +20,12 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration"
+	rbacregistry "github.com/sanposhiho/kubernetes/pkg/registry/rbac"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/authorization/authorizer"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
-	"k8s.io/kubernetes/pkg/apis/admissionregistration"
-	rbacregistry "k8s.io/kubernetes/pkg/registry/rbac"
 )
 
 func (v *validatingAdmissionPolicyStrategy) authorizeCreate(ctx context.Context, obj runtime.Object) error {

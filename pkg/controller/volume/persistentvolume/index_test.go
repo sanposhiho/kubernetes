@@ -20,13 +20,13 @@ import (
 	"sort"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/volume/util"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes/scheme"
 	ref "k8s.io/client-go/tools/reference"
 	"k8s.io/component-helpers/storage/volume"
-	"k8s.io/kubernetes/pkg/volume/util"
 )
 
 func makePVC(size string, modfn func(*v1.PersistentVolumeClaim)) *v1.PersistentVolumeClaim {

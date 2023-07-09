@@ -22,9 +22,9 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apiserver/pkg/storage"
-	"k8s.io/kubernetes/pkg/kubelet/util"
 
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"

@@ -82,12 +82,12 @@ type Config struct {
 	StreamCreationTimeout time.Duration
 
 	// The streaming protocols the server supports (understands and permits).  See
-	// k8s.io/kubernetes/pkg/kubelet/server/remotecommand/constants.go for available protocols.
+	// github.com/sanposhiho/kubernetes/pkg/kubelet/server/remotecommand/constants.go for available protocols.
 	// Only used for SPDY streaming.
 	SupportedRemoteCommandProtocols []string
 
 	// The streaming protocols the server supports (understands and permits).  See
-	// k8s.io/kubernetes/pkg/kubelet/server/portforward/constants.go for available protocols.
+	// github.com/sanposhiho/kubernetes/pkg/kubelet/server/portforward/constants.go for available protocols.
 	// Only used for SPDY streaming.
 	SupportedPortForwardProtocols []string
 

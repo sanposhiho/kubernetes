@@ -24,11 +24,11 @@ import (
 	"testing"
 	"time"
 
-	"k8s.io/api/core/v1"
+	proxyutil "github.com/sanposhiho/kubernetes/pkg/proxy/util"
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/dump"
 	"k8s.io/apimachinery/pkg/util/sets"
-	proxyutil "k8s.io/kubernetes/pkg/proxy/util"
 	testingclock "k8s.io/utils/clock/testing"
 )
 

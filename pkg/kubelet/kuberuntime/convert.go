@@ -19,8 +19,8 @@ package kuberuntime
 import (
 	"sort"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 // This file contains help function to kuberuntime types to CRI runtime API types, or vice versa.

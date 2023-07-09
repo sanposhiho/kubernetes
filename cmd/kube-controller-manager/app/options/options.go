@@ -21,6 +21,13 @@ import (
 	"fmt"
 	"net"
 
+	kubecontrollerconfig "github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/app/config"
+	"github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/names"
+	"github.com/sanposhiho/kubernetes/pkg/cluster/ports"
+	kubectrlmgrconfig "github.com/sanposhiho/kubernetes/pkg/controller/apis/config"
+	kubectrlmgrconfigscheme "github.com/sanposhiho/kubernetes/pkg/controller/apis/config/scheme"
+	"github.com/sanposhiho/kubernetes/pkg/controller/garbagecollector"
+	garbagecollectorconfig "github.com/sanposhiho/kubernetes/pkg/controller/garbagecollector/config"
 	v1 "k8s.io/api/core/v1"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	apiserveroptions "k8s.io/apiserver/pkg/server/options"
@@ -38,17 +45,10 @@ import (
 	"k8s.io/component-base/metrics"
 	cmoptions "k8s.io/controller-manager/options"
 	kubectrlmgrconfigv1alpha1 "k8s.io/kube-controller-manager/config/v1alpha1"
-	kubecontrollerconfig "k8s.io/kubernetes/cmd/kube-controller-manager/app/config"
-	"k8s.io/kubernetes/cmd/kube-controller-manager/names"
-	"k8s.io/kubernetes/pkg/cluster/ports"
-	kubectrlmgrconfig "k8s.io/kubernetes/pkg/controller/apis/config"
-	kubectrlmgrconfigscheme "k8s.io/kubernetes/pkg/controller/apis/config/scheme"
-	"k8s.io/kubernetes/pkg/controller/garbagecollector"
-	garbagecollectorconfig "k8s.io/kubernetes/pkg/controller/garbagecollector/config"
 	netutils "k8s.io/utils/net"
 
 	// add the kubernetes feature gates
-	_ "k8s.io/kubernetes/pkg/features"
+	_ "github.com/sanposhiho/kubernetes/pkg/features"
 )
 
 const (

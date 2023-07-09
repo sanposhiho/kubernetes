@@ -45,7 +45,7 @@ export KUBE_KEEP_VERBOSE_TEST_OUTPUT=y
 export KUBE_INTEGRATION_TEST_MAX_CONCURRENCY=4
 export LOG_LEVEL=4
 
-cd "${GOPATH}/src/k8s.io/kubernetes"
+cd "${GOPATH}/src/github.com/sanposhiho/kubernetes"
 
 ./hack/install-etcd.sh
 

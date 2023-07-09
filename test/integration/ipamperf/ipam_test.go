@@ -29,14 +29,14 @@ import (
 	"k8s.io/klog/v2/ktesting"
 	netutils "k8s.io/utils/net"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodeipam"
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/integration/util"
 	"k8s.io/client-go/informers"
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
-	"k8s.io/kubernetes/pkg/controller/nodeipam"
-	"k8s.io/kubernetes/pkg/controller/nodeipam/ipam"
-	"k8s.io/kubernetes/test/integration/framework"
-	"k8s.io/kubernetes/test/integration/util"
 )
 
 func setupAllocator(ctx context.Context, kubeConfig *restclient.Config, config *Config, clusterCIDR, serviceCIDR *net.IPNet, subnetMaskSize int) (*clientset.Clientset, util.ShutdownFunc, error) {

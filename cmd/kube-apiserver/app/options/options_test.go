@@ -27,6 +27,11 @@ import (
 	"github.com/spf13/pflag"
 	oteltrace "go.opentelemetry.io/otel/trace"
 
+	kapi "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	controlplaneapiserver "github.com/sanposhiho/kubernetes/pkg/controlplane/apiserver/options"
+	"github.com/sanposhiho/kubernetes/pkg/controlplane/reconcilers"
+	kubeoptions "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/options"
+	kubeletclient "github.com/sanposhiho/kubernetes/pkg/kubelet/client"
 	"k8s.io/apiserver/pkg/admission"
 	apiserveroptions "k8s.io/apiserver/pkg/server/options"
 	"k8s.io/apiserver/pkg/storage/etcd3"
@@ -36,11 +41,6 @@ import (
 	cliflag "k8s.io/component-base/cli/flag"
 	"k8s.io/component-base/logs"
 	"k8s.io/component-base/metrics"
-	kapi "k8s.io/kubernetes/pkg/apis/core"
-	controlplaneapiserver "k8s.io/kubernetes/pkg/controlplane/apiserver/options"
-	"k8s.io/kubernetes/pkg/controlplane/reconcilers"
-	kubeoptions "k8s.io/kubernetes/pkg/kubeapiserver/options"
-	kubeletclient "k8s.io/kubernetes/pkg/kubelet/client"
 	netutils "k8s.io/utils/net"
 )
 

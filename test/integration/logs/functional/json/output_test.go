@@ -54,13 +54,13 @@ func TestJSONOutput(t *testing.T) {
 
 	// If Go modules are turned off (for example, as in "make test-integration"),
 	// references to klog like k8s.io/klog/v2.ObjectRef.MarshalLog become
-	// k8s.io/kubernetes/vendor/k8s.io/klog/v2.ObjectRef.MarshalLog.
+	// github.com/sanposhiho/kubernetes/vendor/k8s.io/klog/v2.ObjectRef.MarshalLog.
 	injectVendor := func(mapping map[string]string) map[string]string {
 		if os.Getenv("GO111MODULE") != "off" {
 			return mapping
 		}
 		for key, value := range mapping {
-			mapping[key] = strings.ReplaceAll(value, "k8s.io/klog/v2", "k8s.io/kubernetes/vendor/k8s.io/klog/v2")
+			mapping[key] = strings.ReplaceAll(value, "k8s.io/klog/v2", "github.com/sanposhiho/kubernetes/vendor/k8s.io/klog/v2")
 		}
 		return mapping
 	}

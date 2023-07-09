@@ -19,12 +19,12 @@ package cpumanager
 import (
 	"testing"
 
+	pkgfeatures "github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager/topology"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	"k8s.io/component-base/featuregate"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
-	pkgfeatures "k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/kubelet/cm/cpumanager/topology"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
 )
 
 type optionAvailTest struct {

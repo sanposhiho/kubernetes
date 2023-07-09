@@ -21,14 +21,14 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ejob "github.com/sanposhiho/kubernetes/test/e2e/framework/job"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 	batchv1 "k8s.io/api/batch/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ejob "k8s.io/kubernetes/test/e2e/framework/job"
-	"k8s.io/kubernetes/test/e2e/upgrades"
 
 	"github.com/onsi/ginkgo/v2"
 )

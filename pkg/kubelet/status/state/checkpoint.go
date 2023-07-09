@@ -19,9 +19,9 @@ package state
 import (
 	"encoding/json"
 
-	"k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager/checksum"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager/checksum"
+	v1 "k8s.io/api/core/v1"
 )
 
 var _ checkpointmanager.Checkpoint = &PodResourceAllocationCheckpoint{}

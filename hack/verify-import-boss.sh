@@ -31,11 +31,11 @@ kube::golang::setup_env
 GO111MODULE=on GOPROXY=off go install k8s.io/code-generator/cmd/import-boss
 
 packages=(
-  "k8s.io/kubernetes/pkg/..."
-  "k8s.io/kubernetes/cmd/..."
-  "k8s.io/kubernetes/plugin/..."
-  "k8s.io/kubernetes/test/e2e/framework/..."
-  "k8s.io/kubernetes/test/integration/..."
+  "github.com/sanposhiho/kubernetes/pkg/..."
+  "github.com/sanposhiho/kubernetes/cmd/..."
+  "github.com/sanposhiho/kubernetes/plugin/..."
+  "github.com/sanposhiho/kubernetes/test/e2e/framework/..."
+  "github.com/sanposhiho/kubernetes/test/integration/..."
 )
 for d in staging/src/k8s.io/*/; do
   if [ -d "$d" ]; then

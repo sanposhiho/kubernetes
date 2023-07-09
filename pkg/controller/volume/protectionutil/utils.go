@@ -17,8 +17,8 @@ limitations under the License.
 package protectionutil
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/util/slice"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/pkg/util/slice"
 )
 
 // IsDeletionCandidate checks if object is candidate to be deleted

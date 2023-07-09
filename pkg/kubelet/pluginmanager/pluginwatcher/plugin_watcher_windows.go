@@ -21,7 +21,7 @@ package pluginwatcher
 
 import (
 	"github.com/fsnotify/fsnotify"
-	"k8s.io/kubernetes/pkg/kubelet/util"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util"
 	"os"
 )
 

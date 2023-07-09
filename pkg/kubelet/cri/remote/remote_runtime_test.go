@@ -26,15 +26,15 @@ import (
 	"go.opentelemetry.io/otel/sdk/trace/tracetest"
 	oteltrace "go.opentelemetry.io/otel/trace"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	fakeremote "github.com/sanposhiho/kubernetes/pkg/kubelet/cri/remote/fake"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
 	internalapi "k8s.io/cri-api/pkg/apis"
 	apitest "k8s.io/cri-api/pkg/apis/testing"
-	"k8s.io/kubernetes/pkg/features"
-	fakeremote "k8s.io/kubernetes/pkg/kubelet/cri/remote/fake"
-	"k8s.io/kubernetes/pkg/kubelet/util"
 )
 
 const (

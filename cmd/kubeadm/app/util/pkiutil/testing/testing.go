@@ -29,7 +29,7 @@ import (
 	"sync"
 	"testing"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/pkiutil"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/pkiutil"
 )
 
 // RunWithPrivateKeyFixtureDirectory overrides NewPrivateKey to return private key fixtures

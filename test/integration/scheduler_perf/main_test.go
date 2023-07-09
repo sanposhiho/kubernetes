@@ -23,12 +23,12 @@ import (
 	"strings"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/test/utils/ktesting"
 	"k8s.io/apimachinery/pkg/util/runtime"
 	"k8s.io/component-base/featuregate"
 	"k8s.io/component-base/logs"
 	logsapi "k8s.io/component-base/logs/api/v1"
 	_ "k8s.io/component-base/logs/json/register"
-	"k8s.io/kubernetes/test/utils/ktesting"
 )
 
 func TestMain(m *testing.M) {

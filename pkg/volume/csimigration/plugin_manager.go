@@ -20,11 +20,11 @@ import (
 	"errors"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/component-base/featuregate"
 	csilibplugins "k8s.io/csi-translation-lib/plugins"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/volume"
 )
 
 // PluginNameMapper contains utility methods to retrieve names of plugins

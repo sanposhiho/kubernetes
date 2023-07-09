@@ -24,15 +24,15 @@ import (
 
 	utiltesting "k8s.io/client-go/util/testing"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
+	kubeoptions "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/options"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
+	"github.com/sanposhiho/kubernetes/test/utils/ktesting"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apiserver/pkg/authentication/authenticator"
 	clientset "k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/controller-manager/pkg/clientbuilder"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
-	kubeoptions "k8s.io/kubernetes/pkg/kubeapiserver/options"
-	"k8s.io/kubernetes/test/integration/framework"
-	"k8s.io/kubernetes/test/utils/ktesting"
 )
 
 func TestDynamicClientBuilder(t *testing.T) {

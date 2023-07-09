@@ -24,6 +24,9 @@ import (
 	"io"
 	"sync"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	k8s_api_v1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
+	kubeapiserveradmission "github.com/sanposhiho/kubernetes/pkg/kubeapiserver/admission"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apiserver/pkg/admission"
@@ -32,9 +35,6 @@ import (
 	volumehelpers "k8s.io/cloud-provider/volume/helpers"
 	persistentvolume "k8s.io/component-helpers/storage/volume"
 	"k8s.io/klog/v2"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	k8s_api_v1 "k8s.io/kubernetes/pkg/apis/core/v1"
-	kubeapiserveradmission "k8s.io/kubernetes/pkg/kubeapiserver/admission"
 )
 
 const (

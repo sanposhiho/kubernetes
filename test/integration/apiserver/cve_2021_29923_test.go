@@ -21,13 +21,13 @@ import (
 	"encoding/json"
 	"testing"
 
+	kubeapiservertesting "github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/testing"
+	"github.com/sanposhiho/kubernetes/test/integration/framework"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/client-go/dynamic"
 	clientset "k8s.io/client-go/kubernetes"
-	kubeapiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
-	"k8s.io/kubernetes/test/integration/framework"
 )
 
 func gvr(g, v, r string) schema.GroupVersionResource {
@@ -56,14 +56,14 @@ func TestCanaryCVE_2021_29923(t *testing.T) {
 	}
 
 	objects := map[schema.GroupVersionResource]string{
-		// k8s.io/kubernetes/pkg/api/v1
+		// github.com/sanposhiho/kubernetes/pkg/api/v1
 		gvr("", "v1", "nodes"):     `{"kind": "Node", "apiVersion": "v1", "metadata": {"name": "node1"}, "spec": {"unschedulable": true}, "status": {"addresses":[{"address":"172.18.0.012","type":"InternalIP"}]}}`,
 		gvr("", "v1", "pods"):      `{"kind": "Pod", "apiVersion": "v1", "metadata": {"name": "pod1", "namespace": "test-cve-2021-29923"}, "spec": {"containers": [{"image": "` + "image" + `", "name": "container7", "resources": {"limits": {"cpu": "1M"}, "requests": {"cpu": "1M"}}}]}, "status": {"podIP":"10.244.0.05","podIPs":[{"ip":"10.244.0.05"}]}}`,
 		gvr("", "v1", "services"):  `{"kind": "Service", "apiVersion": "v1", "metadata": {"name": "service1", "namespace": "test-cve-2021-29923"}, "spec": {"clusterIP": "10.0.0.011", "externalIP": "192.168.0.012", "externalName": "service1name", "ports": [{"port": 10000, "targetPort": 11000}], "selector": {"test": "data"}}}`,
 		gvr("", "v1", "endpoints"): `{"kind": "Endpoints", "apiVersion": "v1", "metadata": {"name": "ep1name", "namespace": "test-cve-2021-29923"}, "subsets": [{"addresses": [{"hostname": "bar-001", "ip": "192.168.3.011"}], "ports": [{"port": 8000}]}]}`,
-		// k8s.io/kubernetes/pkg/apis/discovery/v1
+		// github.com/sanposhiho/kubernetes/pkg/apis/discovery/v1
 		gvr("discovery.k8s.io", "v1", "endpointslices"): `{"kind": "EndpointSlice", "apiVersion": "discovery.k8s.io/v1", "metadata": {"name": "slicev1", "namespace": "test-cve-2021-29923"}, "addressType": "IPv4", "protocol": "TCP", "ports": [], "endpoints": [{"addresses": ["10.244.0.011"], "conditions": {"ready": true, "serving": true, "terminating": false}, "nodeName": "control-plane"}]}`,
-		// k8s.io/kubernetes/pkg/apis/networking/v1
+		// github.com/sanposhiho/kubernetes/pkg/apis/networking/v1
 		gvr("networking.k8s.io", "v1", "ingresses"):       `{"kind": "Ingress", "apiVersion": "networking.k8s.io/v1", "metadata": {"name": "ingress3", "namespace": "test-cve-2021-29923"}, "spec": {"defaultBackend": {"service":{"name":"service", "port":{"number": 5000}}}}, "status":{"loadBalancer":{"ingress": [{"ip":"10.0.0.013"}]}}}`,
 		gvr("networking.k8s.io", "v1", "networkpolicies"): `{"kind": "NetworkPolicy", "apiVersion": "networking.k8s.io/v1", "metadata": {"name": "np2", "namespace": "test-cve-2021-29923"}, "spec": {"egress":[{"ports":[{"port":5978,"protocol":"TCP"}],"to":[{"ipBlock":{"cidr":"10.0.012.0/24"}}]}],"ingress":[{"from":[{"ipBlock":{"cidr":"172.017.0.0/16","except":["172.17.001.0/24"]}},{"podSelector":{"matchLabels":{"role":"frontend"}}}],"ports":[{"port":6379,"protocol":"TCP"}]}],"podSelector":{"matchLabels":{"role":"db"}},"policyTypes":["Ingress","Egress"]}}`,
 	}

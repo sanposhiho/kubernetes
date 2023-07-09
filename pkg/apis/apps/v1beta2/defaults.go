@@ -17,11 +17,11 @@ limitations under the License.
 package v1beta2
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	appsv1beta2 "k8s.io/api/apps/v1beta2"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	"k8s.io/kubernetes/pkg/features"
 	"k8s.io/utils/pointer"
 )
 

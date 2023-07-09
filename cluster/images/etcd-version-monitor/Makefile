@@ -31,11 +31,11 @@ build:
 
 	# Compile etcd-version-monitor.
 	docker run --rm -it \
-	    -v $(shell pwd)/../../../:/go/src/k8s.io/kubernetes \
+	    -v $(shell pwd)/../../../:/go/src/github.com/sanposhiho/kubernetes \
 	    -v $(TEMP_DIR):/build \
 	    -e GOARCH=$(ARCH) \
 	    golang:$(GOLANG_VERSION) \
-	    /bin/bash -c "CGO_ENABLED=0 go build -o /build/etcd-version-monitor k8s.io/kubernetes/cluster/images/etcd-version-monitor"
+	    /bin/bash -c "CGO_ENABLED=0 go build -o /build/etcd-version-monitor github.com/sanposhiho/kubernetes/cluster/images/etcd-version-monitor"
 
 	docker build -t $(IMAGE) $(TEMP_DIR)
 

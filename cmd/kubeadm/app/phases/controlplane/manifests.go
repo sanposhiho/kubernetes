@@ -30,14 +30,14 @@ import (
 	"k8s.io/klog/v2"
 	utilsnet "k8s.io/utils/net"
 
-	kubeadmapi "k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/features"
-	"k8s.io/kubernetes/cmd/kubeadm/app/images"
-	certphase "k8s.io/kubernetes/cmd/kubeadm/app/phases/certs"
-	kubeadmutil "k8s.io/kubernetes/cmd/kubeadm/app/util"
-	staticpodutil "k8s.io/kubernetes/cmd/kubeadm/app/util/staticpod"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/users"
+	kubeadmapi "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/features"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/images"
+	certphase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/certs"
+	kubeadmutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util"
+	staticpodutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/staticpod"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/users"
 )
 
 // CreateInitStaticPodManifestFiles will write all static pod manifest files needed to bring up the control plane.

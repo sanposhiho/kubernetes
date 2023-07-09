@@ -23,9 +23,9 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/cronjob"
+	"github.com/sanposhiho/kubernetes/pkg/controller/job"
 	"k8s.io/controller-manager/controller"
-	"k8s.io/kubernetes/pkg/controller/cronjob"
-	"k8s.io/kubernetes/pkg/controller/job"
 )
 
 func startJobController(ctx context.Context, controllerContext ControllerContext) (controller.Interface, bool, error) {

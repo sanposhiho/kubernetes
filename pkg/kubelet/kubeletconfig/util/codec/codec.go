@@ -22,15 +22,15 @@ import (
 	"k8s.io/klog/v2"
 
 	// ensure the core apis are installed
-	_ "k8s.io/kubernetes/pkg/apis/core/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/core/install"
 
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/scheme"
+	kubeletconfigv1beta1 "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/v1beta1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/runtime/serializer"
 	"k8s.io/component-base/codec"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	"k8s.io/kubernetes/pkg/kubelet/apis/config/scheme"
-	kubeletconfigv1beta1 "k8s.io/kubernetes/pkg/kubelet/apis/config/v1beta1"
 )
 
 // EncodeKubeletConfig encodes an internal KubeletConfiguration to an external YAML representation.

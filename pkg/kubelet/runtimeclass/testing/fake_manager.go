@@ -17,11 +17,11 @@ limitations under the License.
 package testing
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/runtimeclass"
 	nodev1 "k8s.io/api/node/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
-	"k8s.io/kubernetes/pkg/kubelet/runtimeclass"
 )
 
 const (

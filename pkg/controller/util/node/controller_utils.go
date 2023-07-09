@@ -28,13 +28,13 @@ import (
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/tools/record"
 
+	utilpod "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util/format"
+	nodepkg "github.com/sanposhiho/kubernetes/pkg/util/node"
 	v1 "k8s.io/api/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	appsv1listers "k8s.io/client-go/listers/apps/v1"
-	utilpod "k8s.io/kubernetes/pkg/api/v1/pod"
-	"k8s.io/kubernetes/pkg/controller"
-	"k8s.io/kubernetes/pkg/kubelet/util/format"
-	nodepkg "k8s.io/kubernetes/pkg/util/node"
 
 	"k8s.io/klog/v2"
 )

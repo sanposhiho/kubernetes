@@ -22,15 +22,15 @@ import (
 	"net/http"
 	"net/url"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/capabilities"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/client"
+	"github.com/sanposhiho/kubernetes/pkg/registry/core/pod"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/net"
 	"k8s.io/apimachinery/pkg/util/proxy"
 	genericregistry "k8s.io/apiserver/pkg/registry/generic/registry"
 	"k8s.io/apiserver/pkg/registry/rest"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/capabilities"
-	"k8s.io/kubernetes/pkg/kubelet/client"
-	"k8s.io/kubernetes/pkg/registry/core/pod"
 )
 
 // ProxyREST implements the proxy subresource for a Pod

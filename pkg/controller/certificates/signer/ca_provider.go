@@ -22,10 +22,10 @@ import (
 	"fmt"
 	"sync/atomic"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/certificates/authority"
 	"k8s.io/apiserver/pkg/server/dynamiccertificates"
 	"k8s.io/client-go/util/cert"
 	"k8s.io/client-go/util/keyutil"
-	"k8s.io/kubernetes/pkg/controller/certificates/authority"
 )
 
 func newCAProvider(caFile, caKeyFile string) (*caProvider, error) {

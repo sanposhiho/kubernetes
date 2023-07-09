@@ -22,7 +22,7 @@ import (
 
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/test/e2e_node/builder"
+	"github.com/sanposhiho/kubernetes/test/e2e_node/builder"
 )
 
 // utils.go contains functions used across test suites.

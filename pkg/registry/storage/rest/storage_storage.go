@@ -17,6 +17,13 @@ limitations under the License.
 package rest
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	storageapi "github.com/sanposhiho/kubernetes/pkg/apis/storage"
+	csidriverstore "github.com/sanposhiho/kubernetes/pkg/registry/storage/csidriver/storage"
+	csinodestore "github.com/sanposhiho/kubernetes/pkg/registry/storage/csinode/storage"
+	csistoragecapacitystore "github.com/sanposhiho/kubernetes/pkg/registry/storage/csistoragecapacity/storage"
+	storageclassstore "github.com/sanposhiho/kubernetes/pkg/registry/storage/storageclass/storage"
+	volumeattachmentstore "github.com/sanposhiho/kubernetes/pkg/registry/storage/volumeattachment/storage"
 	storageapiv1 "k8s.io/api/storage/v1"
 	storageapiv1alpha1 "k8s.io/api/storage/v1alpha1"
 	storageapiv1beta1 "k8s.io/api/storage/v1beta1"
@@ -24,13 +31,6 @@ import (
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	storageapi "k8s.io/kubernetes/pkg/apis/storage"
-	csidriverstore "k8s.io/kubernetes/pkg/registry/storage/csidriver/storage"
-	csinodestore "k8s.io/kubernetes/pkg/registry/storage/csinode/storage"
-	csistoragecapacitystore "k8s.io/kubernetes/pkg/registry/storage/csistoragecapacity/storage"
-	storageclassstore "k8s.io/kubernetes/pkg/registry/storage/storageclass/storage"
-	volumeattachmentstore "k8s.io/kubernetes/pkg/registry/storage/volumeattachment/storage"
 )
 
 type RESTStorageProvider struct {
@@ -38,7 +38,7 @@ type RESTStorageProvider struct {
 
 func (p RESTStorageProvider) NewRESTStorage(apiResourceConfigSource serverstorage.APIResourceConfigSource, restOptionsGetter generic.RESTOptionsGetter) (genericapiserver.APIGroupInfo, error) {
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(storageapi.GroupName, legacyscheme.Scheme, legacyscheme.ParameterCodec, legacyscheme.Codecs)
-	// If you add a version here, be sure to add an entry in `k8s.io/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
+	// If you add a version here, be sure to add an entry in `github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
 	// TODO refactor the plumbing to provide the information in the APIGroupInfo
 
 	if storageMap, err := p.v1alpha1Storage(apiResourceConfigSource, restOptionsGetter); err != nil {

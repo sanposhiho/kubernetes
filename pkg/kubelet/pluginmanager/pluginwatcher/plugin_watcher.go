@@ -24,9 +24,9 @@ import (
 	"github.com/fsnotify/fsnotify"
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/pkg/kubelet/pluginmanager/cache"
-	"k8s.io/kubernetes/pkg/kubelet/util"
-	utilfs "k8s.io/kubernetes/pkg/util/filesystem"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/pluginmanager/cache"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util"
+	utilfs "github.com/sanposhiho/kubernetes/pkg/util/filesystem"
 )
 
 // Watcher is the plugin watcher

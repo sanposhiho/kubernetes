@@ -30,9 +30,9 @@ import (
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
-	core "k8s.io/kubernetes/pkg/apis/core"
-	corev1 "k8s.io/kubernetes/pkg/apis/core/v1"
-	storage "k8s.io/kubernetes/pkg/apis/storage"
+	core "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	corev1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
+	storage "github.com/sanposhiho/kubernetes/pkg/apis/storage"
 )
 
 func init() {

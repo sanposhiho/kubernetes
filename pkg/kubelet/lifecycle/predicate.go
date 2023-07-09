@@ -20,14 +20,14 @@ import (
 	"fmt"
 	"runtime"
 
+	v1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler"
+	schedulerframework "github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/tainttoleration"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/component-helpers/scheduling/corev1"
 	"k8s.io/klog/v2"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	"k8s.io/kubernetes/pkg/kubelet/types"
-	"k8s.io/kubernetes/pkg/scheduler"
-	schedulerframework "k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/tainttoleration"
 )
 
 type getNodeAnyWayFuncType func() (*v1.Node, error)

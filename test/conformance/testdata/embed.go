@@ -19,7 +19,7 @@ package testdata
 import (
 	"embed"
 
-	"k8s.io/kubernetes/test/e2e/framework/testfiles"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework/testfiles"
 )
 
 //go:embed conformance.yaml ineligible_endpoints.yaml

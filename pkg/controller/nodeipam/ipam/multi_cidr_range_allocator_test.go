@@ -23,6 +23,10 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	cidrset "github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam/multicidrset"
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam/test"
+	"github.com/sanposhiho/kubernetes/pkg/controller/testutil"
 	"github.com/stretchr/testify/assert"
 	v1 "k8s.io/api/core/v1"
 	networkingv1alpha1 "k8s.io/api/networking/v1alpha1"
@@ -35,10 +39,6 @@ import (
 	k8stesting "k8s.io/client-go/testing"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/controller"
-	cidrset "k8s.io/kubernetes/pkg/controller/nodeipam/ipam/multicidrset"
-	"k8s.io/kubernetes/pkg/controller/nodeipam/ipam/test"
-	"k8s.io/kubernetes/pkg/controller/testutil"
 	utilnet "k8s.io/utils/net"
 )
 

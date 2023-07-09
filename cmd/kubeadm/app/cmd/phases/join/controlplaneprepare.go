@@ -26,15 +26,15 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
-	cmdutil "k8s.io/kubernetes/cmd/kubeadm/app/cmd/util"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	certsphase "k8s.io/kubernetes/cmd/kubeadm/app/phases/certs"
-	"k8s.io/kubernetes/cmd/kubeadm/app/phases/controlplane"
-	"k8s.io/kubernetes/cmd/kubeadm/app/phases/copycerts"
-	kubeconfigphase "k8s.io/kubernetes/cmd/kubeadm/app/phases/kubeconfig"
-	kubeconfigutil "k8s.io/kubernetes/cmd/kubeadm/app/util/kubeconfig"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
+	cmdutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/util"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	certsphase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/certs"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/controlplane"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/copycerts"
+	kubeconfigphase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/kubeconfig"
+	kubeconfigutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/kubeconfig"
 )
 
 var controlPlanePrepareExample = cmdutil.Examples(`

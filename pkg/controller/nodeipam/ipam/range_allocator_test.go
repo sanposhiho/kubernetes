@@ -22,13 +22,13 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodeipam/ipam/test"
+	"github.com/sanposhiho/kubernetes/pkg/controller/testutil"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/kubernetes/fake"
 	"k8s.io/klog/v2/ktesting"
-	"k8s.io/kubernetes/pkg/controller/nodeipam/ipam/test"
-	"k8s.io/kubernetes/pkg/controller/testutil"
 	netutils "k8s.io/utils/net"
 )
 

@@ -34,7 +34,7 @@ import (
 	"google.golang.org/grpc/grpclog"
 	"k8s.io/klog/v2"
 
-	"k8s.io/kubernetes/pkg/util/env"
+	"github.com/sanposhiho/kubernetes/pkg/util/env"
 )
 
 const installEtcd = `
@@ -201,7 +201,7 @@ func EtcdMain(tests func() int) {
 		// this leak for all tests.
 		//
 		// Both names occurred in practice.
-		goleak.IgnoreTopFunction("k8s.io/kubernetes/vendor/gopkg.in/natefinch/lumberjack%2ev2.(*Logger).millRun"),
+		goleak.IgnoreTopFunction("github.com/sanposhiho/kubernetes/vendor/gopkg.in/natefinch/lumberjack%2ev2.(*Logger).millRun"),
 		goleak.IgnoreTopFunction("gopkg.in/natefinch/lumberjack%2ev2.(*Logger).millRun"),
 	)
 

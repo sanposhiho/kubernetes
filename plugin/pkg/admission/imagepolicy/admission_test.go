@@ -31,19 +31,19 @@ import (
 
 	utiltesting "k8s.io/client-go/util/testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	"k8s.io/api/imagepolicy/v1alpha1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apiserver/pkg/admission"
 	"k8s.io/apiserver/pkg/authentication/user"
 	v1 "k8s.io/client-go/tools/clientcmd/api/v1"
-	api "k8s.io/kubernetes/pkg/apis/core"
 
 	"fmt"
 	"os"
 	"path/filepath"
 	"text/template"
 
-	_ "k8s.io/kubernetes/pkg/apis/imagepolicy/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/imagepolicy/install"
 )
 
 const defaultConfigTmplJSON = `

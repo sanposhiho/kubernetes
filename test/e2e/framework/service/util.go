@@ -20,9 +20,9 @@ import (
 	"context"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2enetwork "github.com/sanposhiho/kubernetes/test/e2e/framework/network"
 	"k8s.io/apimachinery/pkg/util/wait"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2enetwork "k8s.io/kubernetes/test/e2e/framework/network"
 )
 
 // TestReachableHTTP tests that the given host serves HTTP on the given port.

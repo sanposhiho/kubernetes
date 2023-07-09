@@ -21,12 +21,12 @@ import (
 	"testing"
 
 	"github.com/golang/mock/gomock"
+	podresourcetest "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/podresources/testing"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/types"
 	podresourcesv1 "k8s.io/kubelet/pkg/apis/podresources/v1"
 	"k8s.io/kubelet/pkg/apis/podresources/v1alpha1"
-	podresourcetest "k8s.io/kubernetes/pkg/kubelet/apis/podresources/testing"
 )
 
 func TestListPodResourcesV1alpha1(t *testing.T) {

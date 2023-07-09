@@ -23,11 +23,11 @@ import (
 	kruntime "k8s.io/apimachinery/pkg/runtime"
 	kubeletconfigv1beta1 "k8s.io/kubelet/config/v1beta1"
 
-	// TODO: Cut references to k8s.io/kubernetes, eventually there should be none from this package
+	// TODO: Cut references to github.com/sanposhiho/kubernetes, eventually there should be none from this package
+	"github.com/sanposhiho/kubernetes/pkg/cluster/ports"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/qos"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	logsapi "k8s.io/component-base/logs/api/v1"
-	"k8s.io/kubernetes/pkg/cluster/ports"
-	"k8s.io/kubernetes/pkg/kubelet/qos"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 	utilpointer "k8s.io/utils/pointer"
 )
 

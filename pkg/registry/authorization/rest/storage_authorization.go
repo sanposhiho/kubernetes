@@ -17,18 +17,18 @@ limitations under the License.
 package rest
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/authorization"
+	"github.com/sanposhiho/kubernetes/pkg/registry/authorization/localsubjectaccessreview"
+	"github.com/sanposhiho/kubernetes/pkg/registry/authorization/selfsubjectaccessreview"
+	"github.com/sanposhiho/kubernetes/pkg/registry/authorization/selfsubjectrulesreview"
+	"github.com/sanposhiho/kubernetes/pkg/registry/authorization/subjectaccessreview"
 	authorizationv1 "k8s.io/api/authorization/v1"
 	"k8s.io/apiserver/pkg/authorization/authorizer"
 	"k8s.io/apiserver/pkg/registry/generic"
 	"k8s.io/apiserver/pkg/registry/rest"
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/authorization"
-	"k8s.io/kubernetes/pkg/registry/authorization/localsubjectaccessreview"
-	"k8s.io/kubernetes/pkg/registry/authorization/selfsubjectaccessreview"
-	"k8s.io/kubernetes/pkg/registry/authorization/selfsubjectrulesreview"
-	"k8s.io/kubernetes/pkg/registry/authorization/subjectaccessreview"
 )
 
 type RESTStorageProvider struct {
@@ -42,7 +42,7 @@ func (p RESTStorageProvider) NewRESTStorage(apiResourceConfigSource serverstorag
 	}
 
 	apiGroupInfo := genericapiserver.NewDefaultAPIGroupInfo(authorization.GroupName, legacyscheme.Scheme, legacyscheme.ParameterCodec, legacyscheme.Codecs)
-	// If you add a version here, be sure to add an entry in `k8s.io/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
+	// If you add a version here, be sure to add an entry in `github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/aggregator.go with specific priorities.
 	// TODO refactor the plumbing to provide the information in the APIGroupInfo
 
 	if storageMap := p.v1Storage(apiResourceConfigSource, restOptionsGetter); len(storageMap) > 0 {

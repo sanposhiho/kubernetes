@@ -25,6 +25,8 @@ import (
 
 	jose "gopkg.in/square/go-jose.v2"
 
+	serviceaccountcontroller "github.com/sanposhiho/kubernetes/pkg/controller/serviceaccount"
+	"github.com/sanposhiho/kubernetes/pkg/serviceaccount"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apiserver/pkg/authentication/authenticator"
@@ -34,8 +36,6 @@ import (
 	v1listers "k8s.io/client-go/listers/core/v1"
 	"k8s.io/client-go/tools/cache"
 	"k8s.io/client-go/util/keyutil"
-	serviceaccountcontroller "k8s.io/kubernetes/pkg/controller/serviceaccount"
-	"k8s.io/kubernetes/pkg/serviceaccount"
 )
 
 const otherPublicKey = `-----BEGIN PUBLIC KEY-----

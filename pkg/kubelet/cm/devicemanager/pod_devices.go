@@ -21,10 +21,10 @@ import (
 
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/devicemanager/checkpoint"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	"k8s.io/apimachinery/pkg/util/sets"
 	pluginapi "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
-	"k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/checkpoint"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 type deviceAllocateInfo struct {

@@ -24,9 +24,9 @@ import (
 	kruntime "k8s.io/apimachinery/pkg/runtime"
 	kubeproxyconfigv1alpha1 "k8s.io/kube-proxy/config/v1alpha1"
 
-	"k8s.io/kubernetes/pkg/cluster/ports"
-	"k8s.io/kubernetes/pkg/kubelet/qos"
-	proxyutil "k8s.io/kubernetes/pkg/proxy/util"
+	"github.com/sanposhiho/kubernetes/pkg/cluster/ports"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/qos"
+	proxyutil "github.com/sanposhiho/kubernetes/pkg/proxy/util"
 	netutils "k8s.io/utils/net"
 	"k8s.io/utils/pointer"
 )

@@ -24,6 +24,7 @@ import (
 
 	"k8s.io/klog/v2"
 
+	rbacv1helpers "github.com/sanposhiho/kubernetes/pkg/apis/rbac/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
 	"k8s.io/apimachinery/pkg/util/sets"
@@ -31,7 +32,6 @@ import (
 	"k8s.io/apiserver/pkg/authentication/user"
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/component-helpers/auth/rbac/validation"
-	rbacv1helpers "k8s.io/kubernetes/pkg/apis/rbac/v1"
 )
 
 type AuthorizationRuleResolver interface {

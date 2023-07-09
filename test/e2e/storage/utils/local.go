@@ -27,9 +27,9 @@ import (
 	"strings"
 
 	"github.com/onsi/ginkgo/v2"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/uuid"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 // LocalVolumeType represents type of local volume, e.g. tmpfs, directory,

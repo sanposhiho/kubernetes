@@ -38,14 +38,14 @@ import (
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes/fake"
 
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/nodeaffinity"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/nodename"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/nodeports"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/noderesources"
-	"k8s.io/kubernetes/pkg/scheduler/internal/cache"
-	"k8s.io/kubernetes/pkg/scheduler/internal/queue"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/nodeaffinity"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/nodename"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/nodeports"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/noderesources"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/internal/cache"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/internal/queue"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
 )
 
 func TestNodeAllocatableChanged(t *testing.T) {

@@ -21,12 +21,12 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/garbagecollector/metaonly"
 	"k8s.io/apimachinery/pkg/api/errors"
 	"k8s.io/apimachinery/pkg/api/meta"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/types"
-	"k8s.io/kubernetes/pkg/controller/garbagecollector/metaonly"
 )
 
 // getMetadata tries getting object metadata from local cache, and sends GET request to apiserver when

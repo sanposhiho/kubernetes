@@ -25,6 +25,8 @@ import (
 	"testing"
 	"time"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	v1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
 	corev1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/api/resource"
@@ -38,8 +40,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
 	core "k8s.io/client-go/testing"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	v1 "k8s.io/kubernetes/pkg/apis/core/v1"
 )
 
 func getComputeResourceList(cpu, memory string) api.ResourceList {

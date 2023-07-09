@@ -22,15 +22,15 @@ import (
 	"testing"
 	"time"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	containertest "github.com/sanposhiho/kubernetes/pkg/kubelet/container/testing"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/component-base/metrics/testutil"
 	v1 "k8s.io/cri-api/pkg/apis/runtime/v1"
 	critest "k8s.io/cri-api/pkg/apis/testing"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	containertest "k8s.io/kubernetes/pkg/kubelet/container/testing"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
 	testingclock "k8s.io/utils/clock/testing"
 )
 

@@ -22,8 +22,8 @@ package validation
 import (
 	"fmt"
 
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
 	utilerrors "k8s.io/apimachinery/pkg/util/errors"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
 )
 
 // validateKubeletOSConfiguration validates os specific kubelet configuration and returns an error if it is invalid.

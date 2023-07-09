@@ -23,12 +23,12 @@ import (
 	"path/filepath"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/images"
+	"github.com/sanposhiho/kubernetes/test/e2e/common/node"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	"github.com/sanposhiho/kubernetes/test/e2e_node/services"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/kubelet/images"
-	"k8s.io/kubernetes/test/e2e/common/node"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	"k8s.io/kubernetes/test/e2e_node/services"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

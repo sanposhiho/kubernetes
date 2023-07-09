@@ -24,6 +24,10 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	metricsclient "github.com/sanposhiho/kubernetes/pkg/controller/podautoscaler/metrics"
+	"github.com/sanposhiho/kubernetes/pkg/controller/podautoscaler/monitor"
+	"github.com/sanposhiho/kubernetes/pkg/controller/util/selectors"
 	autoscalingv1 "k8s.io/api/autoscaling/v1"
 	autoscalingv2 "k8s.io/api/autoscaling/v2"
 	v1 "k8s.io/api/core/v1"
@@ -49,10 +53,6 @@ import (
 	"k8s.io/client-go/tools/record"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller"
-	metricsclient "k8s.io/kubernetes/pkg/controller/podautoscaler/metrics"
-	"k8s.io/kubernetes/pkg/controller/podautoscaler/monitor"
-	"k8s.io/kubernetes/pkg/controller/util/selectors"
 )
 
 var (

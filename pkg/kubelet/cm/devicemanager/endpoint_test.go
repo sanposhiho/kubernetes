@@ -26,8 +26,8 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	plugin "github.com/sanposhiho/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1"
 	pluginapi "k8s.io/kubelet/pkg/apis/deviceplugin/v1beta1"
-	plugin "k8s.io/kubernetes/pkg/kubelet/cm/devicemanager/plugin/v1beta1"
 )
 
 // monitorCallback is the function called when a device's health state changes,

@@ -17,11 +17,11 @@ limitations under the License.
 package cm
 
 import (
-	"k8s.io/api/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/memorymanager"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager"
+	v1 "k8s.io/api/core/v1"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	"k8s.io/kubernetes/pkg/kubelet/cm/cpumanager"
-	"k8s.io/kubernetes/pkg/kubelet/cm/memorymanager"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager"
 )
 
 type InternalContainerLifecycle interface {

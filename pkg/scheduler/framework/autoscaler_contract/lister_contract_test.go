@@ -21,7 +21,7 @@ limitations under the License.
 package contract
 
 import (
-	"k8s.io/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
 )
 
 var _ framework.NodeInfoLister = &nodeInfoListerContract{}

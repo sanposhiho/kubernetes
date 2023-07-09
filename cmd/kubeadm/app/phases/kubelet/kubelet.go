@@ -21,8 +21,8 @@ import (
 
 	"k8s.io/klog/v2"
 
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/initsystem"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/initsystem"
 )
 
 // TryStartKubelet attempts to bring up kubelet service

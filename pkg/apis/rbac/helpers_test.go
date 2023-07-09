@@ -21,13 +21,13 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/rbac"
+	v1 "github.com/sanposhiho/kubernetes/pkg/apis/rbac/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/rbac"
-	v1 "k8s.io/kubernetes/pkg/apis/rbac/v1"
 
 	// install RBAC types
-	_ "k8s.io/kubernetes/pkg/apis/rbac/install"
+	_ "github.com/sanposhiho/kubernetes/pkg/apis/rbac/install"
 )
 
 // TestHelpersRoundTrip confirms that the rbac.New* helper functions produce RBAC objects that match objects

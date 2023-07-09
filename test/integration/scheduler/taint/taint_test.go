@@ -24,16 +24,16 @@ import (
 	"testing"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodelifecycle"
+	"github.com/sanposhiho/kubernetes/plugin/pkg/admission/podtolerationrestriction"
+	pluginapi "github.com/sanposhiho/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction"
+	testutils "github.com/sanposhiho/kubernetes/test/integration/util"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
-	"k8s.io/kubernetes/pkg/controller/nodelifecycle"
-	"k8s.io/kubernetes/plugin/pkg/admission/podtolerationrestriction"
-	pluginapi "k8s.io/kubernetes/plugin/pkg/admission/podtolerationrestriction/apis/podtolerationrestriction"
-	testutils "k8s.io/kubernetes/test/integration/util"
 )
 
 // imported from testutils

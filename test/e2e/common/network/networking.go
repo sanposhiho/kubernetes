@@ -20,10 +20,10 @@ import (
 	"context"
 
 	"github.com/onsi/ginkgo/v2"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2enetwork "github.com/sanposhiho/kubernetes/test/e2e/framework/network"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2enetwork "k8s.io/kubernetes/test/e2e/framework/network"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

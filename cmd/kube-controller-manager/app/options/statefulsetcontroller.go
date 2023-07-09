@@ -21,7 +21,7 @@ import (
 
 	"github.com/spf13/pflag"
 
-	statefulsetconfig "k8s.io/kubernetes/pkg/controller/statefulset/config"
+	statefulsetconfig "github.com/sanposhiho/kubernetes/pkg/controller/statefulset/config"
 )
 
 // StatefulSetControllerOptions holds the StatefulSetController options.

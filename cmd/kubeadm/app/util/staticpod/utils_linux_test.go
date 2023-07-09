@@ -27,8 +27,8 @@ import (
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/utils/pointer"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/apis/kubeadm"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/apis/kubeadm"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
 )
 
 type ownerAndPermissions struct {

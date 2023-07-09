@@ -189,8 +189,8 @@ for repo in $(kube::util::list_staging_repos); do
 done
 
 if [[ ! -f go.mod ]]; then
-  kube::log::status "go.mod: initialize k8s.io/kubernetes" >&11
-  go mod init "k8s.io/kubernetes"
+  kube::log::status "go.mod: initialize github.com/sanposhiho/kubernetes" >&11
+  go mod init "github.com/sanposhiho/kubernetes"
   rm -f Godeps/Godeps.json # remove after initializing
 fi
 
@@ -232,7 +232,7 @@ for repo in $(kube::util::list_staging_repos); do
   pushd "staging/src/k8s.io/${repo}" >/dev/null 2>&1
     echo "=== propagating to ${repo}"
     # copy root go.mod, changing module name
-    sed "s#module k8s.io/kubernetes#module k8s.io/${repo}#" \
+    sed "s#module github.com/sanposhiho/kubernetes#module k8s.io/${repo}#" \
         < "${KUBE_ROOT}/go.mod" \
         > "${KUBE_ROOT}/staging/src/k8s.io/${repo}/go.mod"
     # remove `require` directives for staging components (will get re-added as needed by `go list`)
@@ -315,11 +315,11 @@ for repo in $(tsort "${TMP_DIR}/tidy_deps.txt"); do
 
     go mod tidy -v
 
-    # disallow transitive dependencies on k8s.io/kubernetes
+    # disallow transitive dependencies on github.com/sanposhiho/kubernetes
     loopback_deps=()
-    kube::util::read-array loopback_deps < <(go list all 2>/dev/null | grep k8s.io/kubernetes/ || true)
+    kube::util::read-array loopback_deps < <(go list all 2>/dev/null | grep github.com/sanposhiho/kubernetes/ || true)
     if [[ -n ${loopback_deps[*]:+"${loopback_deps[*]}"} ]]; then
-      kube::log::error "Disallowed ${repo} -> k8s.io/kubernetes dependencies exist via the following imports: $(go mod why "${loopback_deps[@]}")" >&22 2>&1
+      kube::log::error "Disallowed ${repo} -> github.com/sanposhiho/kubernetes dependencies exist via the following imports: $(go mod why "${loopback_deps[@]}")" >&22 2>&1
       exit 1
     fi
 
@@ -353,11 +353,11 @@ comm -23 \
 while read -r X; do echo "-dropreplace=${X}"; done |
 xargs -L 100 go mod edit -fmt
 
-# disallow transitive dependencies on k8s.io/kubernetes
+# disallow transitive dependencies on github.com/sanposhiho/kubernetes
 loopback_deps=()
-kube::util::read-array loopback_deps < <(go mod graph | grep ' k8s.io/kubernetes' || true)
+kube::util::read-array loopback_deps < <(go mod graph | grep ' github.com/sanposhiho/kubernetes' || true)
 if [[ -n ${loopback_deps[*]:+"${loopback_deps[*]}"} ]]; then
-  kube::log::error "Disallowed transitive k8s.io/kubernetes dependencies exist via the following imports:" >&22 2>&1
+  kube::log::error "Disallowed transitive github.com/sanposhiho/kubernetes dependencies exist via the following imports:" >&22 2>&1
   kube::log::error "${loopback_deps[@]}" >&22 2>&1
   exit 1
 fi

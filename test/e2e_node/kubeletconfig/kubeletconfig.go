@@ -29,14 +29,14 @@ import (
 	"strconv"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/cluster/ports"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	kubeletconfigscheme "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config/scheme"
+	kubeletconfigcodec "github.com/sanposhiho/kubernetes/pkg/kubelet/kubeletconfig/util/codec"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
 	"k8s.io/apimachinery/pkg/util/wait"
 	kubeletconfigv1beta1 "k8s.io/kubelet/config/v1beta1"
-	"k8s.io/kubernetes/pkg/cluster/ports"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	kubeletconfigscheme "k8s.io/kubernetes/pkg/kubelet/apis/config/scheme"
-	kubeletconfigcodec "k8s.io/kubernetes/pkg/kubelet/kubeletconfig/util/codec"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
 
 	"sigs.k8s.io/yaml"
 )

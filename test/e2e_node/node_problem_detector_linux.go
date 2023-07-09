@@ -37,10 +37,10 @@ import (
 	coreclientset "k8s.io/client-go/kubernetes/typed/core/v1"
 	admissionapi "k8s.io/pod-security-admission/api"
 
-	"k8s.io/kubernetes/pkg/kubelet/util"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	testutils "k8s.io/kubernetes/test/utils"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
 )
 
 var _ = SIGDescribe("NodeProblemDetector [NodeFeature:NodeProblemDetector] [Serial]", func() {

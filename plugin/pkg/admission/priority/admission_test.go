@@ -22,16 +22,16 @@ import (
 
 	"k8s.io/klog/v2"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/scheduling"
+	v1 "github.com/sanposhiho/kubernetes/pkg/apis/scheduling/v1"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 	schedulingv1 "k8s.io/api/scheduling/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apiserver/pkg/admission"
 	admissiontesting "k8s.io/apiserver/pkg/admission/testing"
 	"k8s.io/apiserver/pkg/authentication/user"
 	"k8s.io/client-go/informers"
-	api "k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/scheduling"
-	v1 "k8s.io/kubernetes/pkg/apis/scheduling/v1"
-	"k8s.io/kubernetes/pkg/controller"
 )
 
 func addPriorityClasses(ctrl *Plugin, priorityClasses []*scheduling.PriorityClass) error {

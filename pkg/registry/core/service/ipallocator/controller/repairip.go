@@ -22,6 +22,9 @@ import (
 	"net"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	"github.com/sanposhiho/kubernetes/pkg/registry/core/service/ipallocator"
 	v1 "k8s.io/api/core/v1"
 	networkingv1alpha1 "k8s.io/api/networking/v1alpha1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -39,9 +42,6 @@ import (
 	"k8s.io/client-go/util/retry"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	"k8s.io/kubernetes/pkg/registry/core/service/ipallocator"
 	"k8s.io/utils/clock"
 	netutils "k8s.io/utils/net"
 )

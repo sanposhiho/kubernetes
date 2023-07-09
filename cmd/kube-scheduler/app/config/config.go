@@ -19,6 +19,7 @@ package config
 import (
 	"time"
 
+	kubeschedulerconfig "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
 	apiserver "k8s.io/apiserver/pkg/server"
 	"k8s.io/client-go/dynamic/dynamicinformer"
 	"k8s.io/client-go/informers"
@@ -26,7 +27,6 @@ import (
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/events"
 	"k8s.io/client-go/tools/leaderelection"
-	kubeschedulerconfig "k8s.io/kubernetes/pkg/scheduler/apis/config"
 )
 
 // Config has all the context to run a Scheduler

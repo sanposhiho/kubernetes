@@ -18,9 +18,10 @@ package prebind
 
 import (
 	"context"
+
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
 // StatelessPreBindExample is an example of a simple plugin that has no state

@@ -19,10 +19,10 @@ package queue
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/client-go/informers"
 	"k8s.io/client-go/kubernetes/fake"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
 )
 
 // NewTestQueue creates a priority queue with an empty informer factory.

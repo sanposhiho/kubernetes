@@ -17,9 +17,9 @@ limitations under the License.
 package policy
 
 import (
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 // PodDisruptionBudgetSpec is a description of a PodDisruptionBudget.

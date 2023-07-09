@@ -22,6 +22,7 @@ import (
 	"io"
 	"sort"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/networking"
 	networkingv1 "k8s.io/api/networking/v1"
 	networkingv1beta1 "k8s.io/api/networking/v1beta1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -31,7 +32,6 @@ import (
 	"k8s.io/client-go/informers"
 	networkingv1listers "k8s.io/client-go/listers/networking/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/apis/networking"
 )
 
 const (

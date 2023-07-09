@@ -19,9 +19,9 @@ package kubelet
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	v1 "k8s.io/api/core/v1"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 // GetKubeletPods retrieves the list of pods on the kubelet.

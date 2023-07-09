@@ -30,9 +30,9 @@ import (
 	conversion "k8s.io/apimachinery/pkg/conversion"
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	intstr "k8s.io/apimachinery/pkg/util/intstr"
-	apps "k8s.io/kubernetes/pkg/apis/apps"
-	core "k8s.io/kubernetes/pkg/apis/core"
-	apiscorev1 "k8s.io/kubernetes/pkg/apis/core/v1"
+	apps "github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	core "github.com/sanposhiho/kubernetes/pkg/apis/core"
+	apiscorev1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
 )
 
 func init() {

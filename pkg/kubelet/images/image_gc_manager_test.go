@@ -27,13 +27,13 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	containertest "github.com/sanposhiho/kubernetes/pkg/kubelet/container/testing"
+	stats "github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats"
+	statstest "github.com/sanposhiho/kubernetes/pkg/kubelet/server/stats/testing"
 	oteltrace "go.opentelemetry.io/otel/trace"
 	"k8s.io/client-go/tools/record"
 	statsapi "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	"k8s.io/kubernetes/pkg/kubelet/container"
-	containertest "k8s.io/kubernetes/pkg/kubelet/container/testing"
-	stats "k8s.io/kubernetes/pkg/kubelet/server/stats"
-	statstest "k8s.io/kubernetes/pkg/kubelet/server/stats/testing"
 	testingclock "k8s.io/utils/clock/testing"
 )
 

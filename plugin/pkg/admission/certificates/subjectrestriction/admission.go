@@ -21,10 +21,10 @@ import (
 	"fmt"
 	"io"
 
+	certificatesapi "github.com/sanposhiho/kubernetes/pkg/apis/certificates"
 	certificatesv1beta1 "k8s.io/api/certificates/v1beta1"
 	"k8s.io/apiserver/pkg/admission"
 	"k8s.io/klog/v2"
-	certificatesapi "k8s.io/kubernetes/pkg/apis/certificates"
 )
 
 // PluginName is a string with the name of the plugin

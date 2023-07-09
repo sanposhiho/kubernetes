@@ -19,12 +19,12 @@ package qos
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/core"
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/helper/qos"
+	corev1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/pkg/apis/core"
-	"k8s.io/kubernetes/pkg/apis/core/helper/qos"
-	corev1 "k8s.io/kubernetes/pkg/apis/core/v1"
 )
 
 func TestGetPodQOS(t *testing.T) {

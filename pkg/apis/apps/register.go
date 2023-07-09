@@ -17,9 +17,9 @@ limitations under the License.
 package apps
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/kubernetes/pkg/apis/autoscaling"
 )
 
 var (

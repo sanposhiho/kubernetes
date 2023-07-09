@@ -19,8 +19,8 @@ package pleg
 import (
 	"time"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	"k8s.io/apimachinery/pkg/types"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 // PodLifeCycleEventType define the event type of pod life cycle events.

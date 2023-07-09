@@ -25,6 +25,12 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/controller/nodelifecycle/scheduler"
+	"github.com/sanposhiho/kubernetes/pkg/controller/testutil"
+	controllerutil "github.com/sanposhiho/kubernetes/pkg/controller/util/node"
+	"github.com/sanposhiho/kubernetes/pkg/util/node"
+	taintutils "github.com/sanposhiho/kubernetes/pkg/util/taints"
 	coordv1 "k8s.io/api/coordination/v1"
 	v1 "k8s.io/api/core/v1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
@@ -42,12 +48,6 @@ import (
 	testcore "k8s.io/client-go/testing"
 	"k8s.io/klog/v2/ktesting"
 	kubeletapis "k8s.io/kubelet/pkg/apis"
-	"k8s.io/kubernetes/pkg/controller"
-	"k8s.io/kubernetes/pkg/controller/nodelifecycle/scheduler"
-	"k8s.io/kubernetes/pkg/controller/testutil"
-	controllerutil "k8s.io/kubernetes/pkg/controller/util/node"
-	"k8s.io/kubernetes/pkg/util/node"
-	taintutils "k8s.io/kubernetes/pkg/util/taints"
 	"k8s.io/utils/pointer"
 )
 

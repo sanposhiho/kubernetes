@@ -19,7 +19,7 @@ package flexvolume
 import (
 	"testing"
 
-	"k8s.io/kubernetes/test/utils/harness"
+	"github.com/sanposhiho/kubernetes/test/utils/harness"
 )
 
 func TestDetach(tt *testing.T) {

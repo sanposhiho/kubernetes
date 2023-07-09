@@ -29,10 +29,10 @@ import (
 	"k8s.io/client-go/util/keyutil"
 	netutils "k8s.io/utils/net"
 
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	kubeconfigutil "k8s.io/kubernetes/cmd/kubeadm/app/util/kubeconfig"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/pkiutil"
-	testutil "k8s.io/kubernetes/cmd/kubeadm/test"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	kubeconfigutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/kubeconfig"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/pkiutil"
+	testutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/test"
 )
 
 func TestPKICertificateReadWriter(t *testing.T) {

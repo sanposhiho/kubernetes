@@ -45,10 +45,10 @@ import (
 	"k8s.io/klog/v2"
 	"k8s.io/kube-aggregator/pkg/apiserver"
 
-	"k8s.io/kubernetes/cmd/kube-apiserver/app"
-	"k8s.io/kubernetes/cmd/kube-apiserver/app/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/util/pkiutil"
-	testutil "k8s.io/kubernetes/test/utils"
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app"
+	"github.com/sanposhiho/kubernetes/cmd/kube-apiserver/app/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/pkiutil"
+	testutil "github.com/sanposhiho/kubernetes/test/utils"
 )
 
 // This key is for testing purposes only and is not considered secure.

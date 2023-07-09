@@ -21,15 +21,15 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	v1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	schedulerframework "github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/nodename"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/nodeports"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/plugins/tainttoleration"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	"k8s.io/kubernetes/pkg/kubelet/types"
-	schedulerframework "k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/nodename"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/nodeports"
-	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/tainttoleration"
 )
 
 var (

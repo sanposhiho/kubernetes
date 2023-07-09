@@ -21,6 +21,11 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/job"
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/api/pod"
+	"github.com/sanposhiho/kubernetes/pkg/apis/batch"
+	batchvalidation "github.com/sanposhiho/kubernetes/pkg/apis/batch/validation"
 	batchv1beta1 "k8s.io/api/batch/v1beta1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -30,11 +35,6 @@ import (
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/apiserver/pkg/registry/rest"
 	"k8s.io/apiserver/pkg/storage/names"
-	"k8s.io/kubernetes/pkg/api/job"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/api/pod"
-	"k8s.io/kubernetes/pkg/apis/batch"
-	batchvalidation "k8s.io/kubernetes/pkg/apis/batch/validation"
 	"sigs.k8s.io/structured-merge-diff/v4/fieldpath"
 )
 

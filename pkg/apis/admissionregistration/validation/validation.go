@@ -37,10 +37,10 @@ import (
 	"k8s.io/apiserver/pkg/util/webhook"
 	"k8s.io/client-go/util/jsonpath"
 
-	"k8s.io/kubernetes/pkg/apis/admissionregistration"
-	admissionregistrationv1 "k8s.io/kubernetes/pkg/apis/admissionregistration/v1"
-	admissionregistrationv1beta1 "k8s.io/kubernetes/pkg/apis/admissionregistration/v1beta1"
-	apivalidation "k8s.io/kubernetes/pkg/apis/core/validation"
+	"github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration"
+	admissionregistrationv1 "github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration/v1"
+	admissionregistrationv1beta1 "github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration/v1beta1"
+	apivalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
 )
 
 func hasWildcard(slice []string) bool {

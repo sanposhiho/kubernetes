@@ -25,9 +25,9 @@ import (
 	"testing"
 	"text/template"
 
+	tgithub.commsanposhiho/kubernetes/pkg/api/legacyscheme"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/apimachinery/pkg/runtime"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
+	"k8s.io/apimainry/pkg/runti
 )
 
 const (

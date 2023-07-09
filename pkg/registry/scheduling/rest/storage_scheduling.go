@@ -23,6 +23,10 @@ import (
 
 	"k8s.io/klog/v2"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/scheduling"
+	schedulingapiv1 "github.com/sanposhiho/kubernetes/pkg/apis/scheduling/v1"
+	priorityclassstore "github.com/sanposhiho/kubernetes/pkg/registry/scheduling/priorityclass/storage"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -32,10 +36,6 @@ import (
 	genericapiserver "k8s.io/apiserver/pkg/server"
 	serverstorage "k8s.io/apiserver/pkg/server/storage"
 	schedulingclient "k8s.io/client-go/kubernetes/typed/scheduling/v1"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/scheduling"
-	schedulingapiv1 "k8s.io/kubernetes/pkg/apis/scheduling/v1"
-	priorityclassstore "k8s.io/kubernetes/pkg/registry/scheduling/priorityclass/storage"
 )
 
 const PostStartHookName = "scheduling/bootstrap-system-priority-classes"

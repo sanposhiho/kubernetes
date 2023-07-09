@@ -17,11 +17,11 @@ limitations under the License.
 package extensions
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
+	"github.com/sanposhiho/kubernetes/pkg/apis/networking"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
-	"k8s.io/kubernetes/pkg/apis/apps"
-	"k8s.io/kubernetes/pkg/apis/autoscaling"
-	"k8s.io/kubernetes/pkg/apis/networking"
 )
 
 // GroupName is the group name use in this package

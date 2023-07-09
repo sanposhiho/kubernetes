@@ -33,10 +33,10 @@ import (
 	"k8s.io/client-go/tools/clientcmd"
 	gcecloud "k8s.io/legacy-cloud-providers/gce"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2eingress "k8s.io/kubernetes/test/e2e/framework/ingress"
-	"k8s.io/kubernetes/test/e2e/framework/providers/gce"
-	"k8s.io/kubernetes/test/e2e/network/scale"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2eingress "github.com/sanposhiho/kubernetes/test/e2e/framework/ingress"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework/providers/gce"
+	"github.com/sanposhiho/kubernetes/test/e2e/network/scale"
 	admissionapi "k8s.io/pod-security-admission/api"
 )
 

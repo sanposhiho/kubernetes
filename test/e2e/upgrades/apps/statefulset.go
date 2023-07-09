@@ -26,9 +26,9 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/version"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2estatefulset "k8s.io/kubernetes/test/e2e/framework/statefulset"
-	"k8s.io/kubernetes/test/e2e/upgrades"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2estatefulset "github.com/sanposhiho/kubernetes/test/e2e/framework/statefulset"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 )
 
 // createStatefulSetService creates a Headless Service with Name name and Selector set to match labels.

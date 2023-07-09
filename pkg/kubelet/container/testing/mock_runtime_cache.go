@@ -26,7 +26,7 @@ import (
 	time "time"
 
 	gomock "github.com/golang/mock/gomock"
-	container "k8s.io/kubernetes/pkg/kubelet/container"
+	container "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 )
 
 // MockRuntimeCache is a mock of RuntimeCache interface.

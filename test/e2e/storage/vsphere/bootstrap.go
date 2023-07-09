@@ -20,8 +20,8 @@ import (
 	"context"
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 var once sync.Once

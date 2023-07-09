@@ -20,7 +20,7 @@ limitations under the License.
 package kuberuntime
 
 import (
-	"k8s.io/kubernetes/pkg/kubelet/cm"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm"
 	"math"
 )
 

@@ -22,8 +22,8 @@ import (
 	"testing"
 	"time"
 
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 )
 
 func TestExtractFromBadDataFile(t *testing.T) {

@@ -19,10 +19,10 @@ package node
 import (
 	"context"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2ejob "k8s.io/kubernetes/test/e2e/framework/job"
-	"k8s.io/kubernetes/test/e2e/scheduling"
-	"k8s.io/kubernetes/test/e2e/upgrades"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2ejob "github.com/sanposhiho/kubernetes/test/e2e/framework/job"
+	"github.com/sanposhiho/kubernetes/test/e2e/scheduling"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 
 	"github.com/onsi/ginkgo/v2"
 )

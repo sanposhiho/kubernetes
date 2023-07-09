@@ -24,15 +24,15 @@ import (
 	"sort"
 	"strconv"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epodoutput "github.com/sanposhiho/kubernetes/test/e2e/framework/pod/output"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/kubectl/pkg/util/podutils"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epodoutput "k8s.io/kubernetes/test/e2e/framework/pod/output"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	"k8s.io/utils/pointer"
 )
 

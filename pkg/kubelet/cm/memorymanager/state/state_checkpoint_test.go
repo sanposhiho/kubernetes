@@ -23,9 +23,9 @@ import (
 
 	"github.com/stretchr/testify/assert"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager"
+	testutil "github.com/sanposhiho/kubernetes/pkg/kubelet/cm/cpumanager/state/testing"
 	v1 "k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager"
-	testutil "k8s.io/kubernetes/pkg/kubelet/cm/cpumanager/state/testing"
 )
 
 const testingCheckpoint = "memorymanager_checkpoint_test"

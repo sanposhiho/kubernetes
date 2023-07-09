@@ -20,13 +20,13 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/apis/core/helper"
+	v1helper "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/helper"
+	apivalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	"k8s.io/kubernetes/pkg/apis/core/helper"
-	v1helper "k8s.io/kubernetes/pkg/apis/core/v1/helper"
-	apivalidation "k8s.io/kubernetes/pkg/apis/core/validation"
 )
 
 const isNegativeErrorMsg string = `must be greater than or equal to 0`

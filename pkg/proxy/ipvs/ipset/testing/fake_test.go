@@ -19,8 +19,8 @@ package testing
 import (
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/proxy/ipvs/ipset"
 	"k8s.io/apimachinery/pkg/util/sets"
-	"k8s.io/kubernetes/pkg/proxy/ipvs/ipset"
 )
 
 const testVersion = "v6.19"

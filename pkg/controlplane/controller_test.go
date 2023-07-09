@@ -20,6 +20,8 @@ import (
 	"reflect"
 	"testing"
 
+	"github.com/sanposhiho/kubernetes/pkg/controlplane/reconcilers"
+	corerest "github.com/sanposhiho/kubernetes/pkg/registry/core/rest"
 	corev1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
@@ -27,8 +29,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
 	core "k8s.io/client-go/testing"
-	"k8s.io/kubernetes/pkg/controlplane/reconcilers"
-	corerest "k8s.io/kubernetes/pkg/registry/core/rest"
 	netutils "k8s.io/utils/net"
 )
 

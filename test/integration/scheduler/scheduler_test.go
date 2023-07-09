@@ -25,6 +25,10 @@ import (
 	"time"
 
 	"github.com/google/go-cmp/cmp"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler"
+	configtesting "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/testing"
+	st "github.com/sanposhiho/kubernetes/pkg/scheduler/testing"
+	testutils "github.com/sanposhiho/kubernetes/test/integration/util"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -35,10 +39,6 @@ import (
 	corelisters "k8s.io/client-go/listers/core/v1"
 	"k8s.io/client-go/tools/cache"
 	configv1 "k8s.io/kube-scheduler/config/v1"
-	"k8s.io/kubernetes/pkg/scheduler"
-	configtesting "k8s.io/kubernetes/pkg/scheduler/apis/config/testing"
-	st "k8s.io/kubernetes/pkg/scheduler/testing"
-	testutils "k8s.io/kubernetes/test/integration/util"
 	"k8s.io/utils/pointer"
 )
 

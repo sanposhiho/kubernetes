@@ -21,15 +21,15 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2epv "github.com/sanposhiho/kubernetes/test/e2e/framework/pv"
+	e2evolume "github.com/sanposhiho/kubernetes/test/e2e/framework/volume"
+	storageutils "github.com/sanposhiho/kubernetes/test/e2e/storage/utils"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/version"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2epv "k8s.io/kubernetes/test/e2e/framework/pv"
-	e2evolume "k8s.io/kubernetes/test/e2e/framework/volume"
-	storageutils "k8s.io/kubernetes/test/e2e/storage/utils"
-	"k8s.io/kubernetes/test/e2e/upgrades"
 
 	"github.com/onsi/ginkgo/v2"
 )

@@ -20,6 +20,8 @@ import (
 	"context"
 	"fmt"
 
+	dra "github.com/sanposhiho/kubernetes/pkg/kubelet/cm/dra/plugin"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	v1 "k8s.io/api/core/v1"
 	resourcev1alpha2 "k8s.io/api/resource/v1alpha2"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -28,8 +30,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/dynamic-resource-allocation/resourceclaim"
 	"k8s.io/klog/v2"
-	dra "k8s.io/kubernetes/pkg/kubelet/cm/dra/plugin"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 // draManagerStateFileName is the file name where dra manager stores its state

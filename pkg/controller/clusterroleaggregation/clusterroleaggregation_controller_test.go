@@ -33,7 +33,7 @@ import (
 	clienttesting "k8s.io/client-go/testing"
 	"k8s.io/client-go/tools/cache"
 
-	"k8s.io/kubernetes/pkg/controller"
+	"github.com/sanposhiho/kubernetes/pkg/controller"
 )
 
 func TestSyncClusterRole(t *testing.T) {

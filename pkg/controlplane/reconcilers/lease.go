@@ -31,6 +31,7 @@ import (
 
 	"k8s.io/klog/v2"
 
+	endpointsv1 "github.com/sanposhiho/kubernetes/pkg/api/v1/endpoints"
 	corev1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -40,7 +41,6 @@ import (
 	"k8s.io/apiserver/pkg/storage"
 	"k8s.io/apiserver/pkg/storage/storagebackend"
 	storagefactory "k8s.io/apiserver/pkg/storage/storagebackend/factory"
-	endpointsv1 "k8s.io/kubernetes/pkg/api/v1/endpoints"
 )
 
 // Leases is an interface which assists in managing the set of active masters

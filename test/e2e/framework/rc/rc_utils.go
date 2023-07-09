@@ -22,15 +22,15 @@ import (
 
 	"github.com/onsi/ginkgo/v2"
 
+	e2edebug "github.com/sanposhiho/kubernetes/test/e2e/framework/debug"
+	e2ekubectl "github.com/sanposhiho/kubernetes/test/e2e/framework/kubectl"
+	e2eresource "github.com/sanposhiho/kubernetes/test/e2e/framework/resource"
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	clientset "k8s.io/client-go/kubernetes"
 	scaleclient "k8s.io/client-go/scale"
-	e2edebug "k8s.io/kubernetes/test/e2e/framework/debug"
-	e2ekubectl "k8s.io/kubernetes/test/e2e/framework/kubectl"
-	e2eresource "k8s.io/kubernetes/test/e2e/framework/resource"
-	testutils "k8s.io/kubernetes/test/utils"
 	"k8s.io/utils/pointer"
 )
 

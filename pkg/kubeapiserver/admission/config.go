@@ -25,6 +25,7 @@ import (
 
 	"go.opentelemetry.io/otel/trace"
 
+	quotainstall "github.com/sanposhiho/kubernetes/pkg/quota/v1/install"
 	utilwait "k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/apiserver/pkg/admission"
 	webhookinit "k8s.io/apiserver/pkg/admission/plugin/webhook/initializer"
@@ -37,7 +38,6 @@ import (
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/restmapper"
-	quotainstall "k8s.io/kubernetes/pkg/quota/v1/install"
 )
 
 // Config holds the configuration needed to for initialize the admission plugins

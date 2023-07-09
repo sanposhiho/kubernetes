@@ -16,7 +16,7 @@ limitations under the License.
 
 // Package nodeinfomanager includes internal functions used to add/delete labels to
 // kubernetes nodes for corresponding CSI drivers
-package nodeinfomanager // import "k8s.io/kubernetes/pkg/volume/csi/nodeinfomanager"
+package nodeinfomanager // import "github.com/sanposhiho/kubernetes/pkg/volume/csi/nodeinfomanager"
 
 import (
 	"context"
@@ -29,6 +29,8 @@ import (
 
 	"time"
 
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util"
 	v1 "k8s.io/api/core/v1"
 	storagev1 "k8s.io/api/storage/v1"
 	"k8s.io/apimachinery/pkg/api/errors"
@@ -40,8 +42,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	nodeutil "k8s.io/component-helpers/node/util"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/util"
 )
 
 const (

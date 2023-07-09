@@ -18,5 +18,5 @@ package network
 
 import (
 	// synthetic import of netpol suite, until these tests are replaced entirely, so that its included properly
-	_ "k8s.io/kubernetes/test/e2e/network/netpol"
+	_ "github.com/sanposhiho/kubernetes/test/e2e/network/netpol"
 )

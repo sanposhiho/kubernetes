@@ -23,12 +23,12 @@ import (
 	"sync"
 	"testing"
 
+	draapp "github.com/sanposhiho/kubernetes/test/e2e/dra/test-driver/app"
 	resourcev1alpha2 "k8s.io/api/resource/v1alpha2"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/util/workqueue"
 	"k8s.io/klog/v2"
-	draapp "k8s.io/kubernetes/test/e2e/dra/test-driver/app"
 )
 
 // createResourceClaimsOp defines an op where resource claims are created.

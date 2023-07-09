@@ -21,10 +21,10 @@ import (
 
 	"github.com/stretchr/testify/require"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	kubecontainertest "github.com/sanposhiho/kubernetes/pkg/kubelet/container/testing"
 	v1 "k8s.io/api/core/v1"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	kubecontainertest "k8s.io/kubernetes/pkg/kubelet/container/testing"
 )
 
 func TestPodSandboxChanged(t *testing.T) {

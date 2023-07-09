@@ -21,15 +21,15 @@ import (
 	"fmt"
 	"time"
 
+	podutil "github.com/sanposhiho/kubernetes/pkg/api/v1/pod"
+	deploymentutil "github.com/sanposhiho/kubernetes/pkg/controller/deployment/util"
+	labelsutil "github.com/sanposhiho/kubernetes/pkg/util/labels"
 	apps "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/dump"
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
-	podutil "k8s.io/kubernetes/pkg/api/v1/pod"
-	deploymentutil "k8s.io/kubernetes/pkg/controller/deployment/util"
-	labelsutil "k8s.io/kubernetes/pkg/util/labels"
 )
 
 type LogfFn func(format string, args ...interface{})

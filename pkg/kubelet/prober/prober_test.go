@@ -25,15 +25,15 @@ import (
 	"strings"
 	"testing"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	containertest "github.com/sanposhiho/kubernetes/pkg/kubelet/container/testing"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/prober/results"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util/ioutils"
+	"github.com/sanposhiho/kubernetes/pkg/probe"
+	execprobe "github.com/sanposhiho/kubernetes/pkg/probe/exec"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/util/intstr"
 	"k8s.io/client-go/tools/record"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	containertest "k8s.io/kubernetes/pkg/kubelet/container/testing"
-	"k8s.io/kubernetes/pkg/kubelet/prober/results"
-	"k8s.io/kubernetes/pkg/kubelet/util/ioutils"
-	"k8s.io/kubernetes/pkg/probe"
-	execprobe "k8s.io/kubernetes/pkg/probe/exec"
 )
 
 func TestGetURLParts(t *testing.T) {

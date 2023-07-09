@@ -17,10 +17,10 @@ limitations under the License.
 package validation
 
 import (
+	authorizationapi "github.com/sanposhiho/kubernetes/pkg/apis/authorization"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/validation/field"
-	authorizationapi "k8s.io/kubernetes/pkg/apis/authorization"
 )
 
 // ValidateSubjectAccessReviewSpec validates a SubjectAccessReviewSpec and returns an

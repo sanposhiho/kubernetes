@@ -21,7 +21,7 @@ import (
 	"fmt"
 	"net"
 
-	api "k8s.io/kubernetes/pkg/apis/core"
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 )
 
 // Interface manages the allocation of IP addresses out of a range. Interface

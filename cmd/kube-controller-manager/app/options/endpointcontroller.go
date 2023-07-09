@@ -19,7 +19,7 @@ package options
 import (
 	"github.com/spf13/pflag"
 
-	endpointconfig "k8s.io/kubernetes/pkg/controller/endpoint/config"
+	endpointconfig "github.com/sanposhiho/kubernetes/pkg/controller/endpoint/config"
 )
 
 // EndpointControllerOptions holds the EndPointController options.

@@ -23,7 +23,7 @@ import (
 	"testing"
 
 	cadvisorapi "github.com/google/cadvisor/info/v1"
-	"k8s.io/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/cm/topologymanager/bitmask"
 )
 
 func TestNUMAInfo(t *testing.T) {

@@ -20,11 +20,11 @@ package pod
 import (
 	"sync"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/metrics"
+	kubetypes "github.com/sanposhiho/kubernetes/pkg/kubelet/types"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	"k8s.io/kubernetes/pkg/kubelet/metrics"
-	kubetypes "k8s.io/kubernetes/pkg/kubelet/types"
 )
 
 // Manager stores and manages access to pods, maintaining the mappings

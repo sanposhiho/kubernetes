@@ -22,13 +22,13 @@ import (
 	"github.com/pkg/errors"
 	"github.com/spf13/cobra"
 
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/options"
-	"k8s.io/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
-	cmdutil "k8s.io/kubernetes/cmd/kubeadm/app/cmd/util"
-	kubeadmconstants "k8s.io/kubernetes/cmd/kubeadm/app/constants"
-	etcdphase "k8s.io/kubernetes/cmd/kubeadm/app/phases/etcd"
-	markcontrolplanephase "k8s.io/kubernetes/cmd/kubeadm/app/phases/markcontrolplane"
-	etcdutil "k8s.io/kubernetes/cmd/kubeadm/app/util/etcd"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/options"
+	"github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/phases/workflow"
+	cmdutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/cmd/util"
+	kubeadmconstants "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/constants"
+	etcdphase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/etcd"
+	markcontrolplanephase "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/phases/markcontrolplane"
+	etcdutil "github.com/sanposhiho/kubernetes/cmd/kubeadm/app/util/etcd"
 )
 
 var controlPlaneJoinExample = cmdutil.Examples(`

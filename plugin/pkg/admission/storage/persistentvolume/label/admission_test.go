@@ -23,6 +23,7 @@ import (
 	"sort"
 	"testing"
 
+	api "github.com/sanposhiho/kubernetes/pkg/apis/core"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -31,7 +32,6 @@ import (
 	admissiontesting "k8s.io/apiserver/pkg/admission/testing"
 	cloudprovider "k8s.io/cloud-provider"
 	persistentvolume "k8s.io/component-helpers/storage/volume"
-	api "k8s.io/kubernetes/pkg/apis/core"
 )
 
 type mockVolumes struct {

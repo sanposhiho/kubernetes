@@ -31,16 +31,16 @@ import (
 	"k8s.io/klog/v2"
 	kubeletconfigv1beta1 "k8s.io/kubelet/config/v1beta1"
 
+	"github.com/sanposhiho/kubernetes/cmd/kubelet/app/options"
+	"github.com/sanposhiho/kubernetes/pkg/cluster/ports"
+	kubeletconfig "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/kubeletconfig/configfiles"
+	kubeletconfigcodec "github.com/sanposhiho/kubernetes/pkg/kubelet/kubeletconfig/util/codec"
+	utilfs "github.com/sanposhiho/kubernetes/pkg/util/filesystem"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e_node/builder"
+	"github.com/sanposhiho/kubernetes/test/e2e_node/remote"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"k8s.io/kubernetes/cmd/kubelet/app/options"
-	"k8s.io/kubernetes/pkg/cluster/ports"
-	kubeletconfig "k8s.io/kubernetes/pkg/kubelet/apis/config"
-	"k8s.io/kubernetes/pkg/kubelet/kubeletconfig/configfiles"
-	kubeletconfigcodec "k8s.io/kubernetes/pkg/kubelet/kubeletconfig/util/codec"
-	utilfs "k8s.io/kubernetes/pkg/util/filesystem"
-	"k8s.io/kubernetes/test/e2e/framework"
-	"k8s.io/kubernetes/test/e2e_node/builder"
-	"k8s.io/kubernetes/test/e2e_node/remote"
 )
 
 // TODO(random-liu): Replace this with standard kubelet launcher.

@@ -19,11 +19,11 @@ package auth
 import (
 	"context"
 
-	"k8s.io/kubernetes/test/e2e/cloud/gcp/common"
-	"k8s.io/kubernetes/test/e2e/framework"
-	"k8s.io/kubernetes/test/e2e/upgrades"
-	"k8s.io/kubernetes/test/e2e/upgrades/auth"
-	"k8s.io/kubernetes/test/utils/junit"
+	"github.com/sanposhiho/kubernetes/test/e2e/cloud/gcp/common"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades"
+	"github.com/sanposhiho/kubernetes/test/e2e/upgrades/auth"
+	"github.com/sanposhiho/kubernetes/test/utils/junit"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

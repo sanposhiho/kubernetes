@@ -27,12 +27,12 @@ import (
 	"k8s.io/klog/v2"
 	netutils "k8s.io/utils/net"
 
+	apiservice "github.com/sanposhiho/kubernetes/pkg/api/v1/service"
+	"github.com/sanposhiho/kubernetes/pkg/proxy/metrics"
+	proxyutil "github.com/sanposhiho/kubernetes/pkg/proxy/util"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/apimachinery/pkg/types"
 	"k8s.io/apimachinery/pkg/util/sets"
-	apiservice "k8s.io/kubernetes/pkg/api/v1/service"
-	"k8s.io/kubernetes/pkg/proxy/metrics"
-	proxyutil "k8s.io/kubernetes/pkg/proxy/util"
 )
 
 // BaseServicePortInfo contains base information that defines a service.

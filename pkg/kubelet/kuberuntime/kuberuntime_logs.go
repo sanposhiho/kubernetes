@@ -21,8 +21,8 @@ import (
 	"io"
 	"time"
 
-	"k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/kubelet/kuberuntime/logs"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/kuberuntime/logs"
+	v1 "k8s.io/api/core/v1"
 )
 
 // ReadLogs read the container log and redirect into stdout and stderr.

@@ -19,14 +19,14 @@ limitations under the License.
 package install
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
+	v1 "github.com/sanposhiho/kubernetes/pkg/apis/autoscaling/v1"
+	v2 "github.com/sanposhiho/kubernetes/pkg/apis/autoscaling/v2"
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling/v2beta1"
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling/v2beta2"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/autoscaling"
-	"k8s.io/kubernetes/pkg/apis/autoscaling/v1"
-	"k8s.io/kubernetes/pkg/apis/autoscaling/v2"
-	"k8s.io/kubernetes/pkg/apis/autoscaling/v2beta1"
-	"k8s.io/kubernetes/pkg/apis/autoscaling/v2beta2"
 )
 
 func init() {

@@ -26,6 +26,13 @@ import (
 	"time"
 
 	"github.com/onsi/ginkgo/v2"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2epodoutput "github.com/sanposhiho/kubernetes/test/e2e/framework/pod/output"
+	e2erc "github.com/sanposhiho/kubernetes/test/e2e/framework/rc"
+	testutils "github.com/sanposhiho/kubernetes/test/utils"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	v1 "k8s.io/api/core/v1"
 	discoveryv1 "k8s.io/api/discovery/v1"
 	policyv1 "k8s.io/api/policy/v1"
@@ -42,20 +49,13 @@ import (
 	"k8s.io/apimachinery/pkg/watch"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/tools/cache"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2epodoutput "k8s.io/kubernetes/test/e2e/framework/pod/output"
-	e2erc "k8s.io/kubernetes/test/e2e/framework/rc"
-	testutils "k8s.io/kubernetes/test/utils"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	netutils "k8s.io/utils/net"
 )
 
 // NodePortRange should match whatever the default/configured range is
 var NodePortRange = utilnet.PortRange{Base: 30000, Size: 2768}
 
-// It is copied from "k8s.io/kubernetes/pkg/registry/core/service/portallocator"
+// It is copied from "github.com/sanposhiho/kubernetes/pkg/registry/core/service/portallocator"
 var errAllocated = errors.New("provided port is already allocated")
 
 // TestJig is a test jig to help service testing.

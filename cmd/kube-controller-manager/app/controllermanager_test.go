@@ -24,7 +24,7 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	cpnames "k8s.io/cloud-provider/names"
 
-	"k8s.io/kubernetes/cmd/kube-controller-manager/names"
+	"github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/names"
 )
 
 func TestControllerNamesConsistency(t *testing.T) {

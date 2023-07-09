@@ -25,6 +25,12 @@ import (
 	"testing"
 
 	"github.com/google/go-cmp/cmp"
+	pkgauthenticationv1 "github.com/sanposhiho/kubernetes/pkg/apis/authentication/v1"
+	pkgcorev1 "github.com/sanposhiho/kubernetes/pkg/apis/core/v1"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/emptydir"
+	volumetest "github.com/sanposhiho/kubernetes/pkg/volume/testing"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util"
 	authenticationv1 "k8s.io/api/authentication/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -34,12 +40,6 @@ import (
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/client-go/kubernetes/fake"
 	clitesting "k8s.io/client-go/testing"
-	pkgauthenticationv1 "k8s.io/kubernetes/pkg/apis/authentication/v1"
-	pkgcorev1 "k8s.io/kubernetes/pkg/apis/core/v1"
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/emptydir"
-	volumetest "k8s.io/kubernetes/pkg/volume/testing"
-	"k8s.io/kubernetes/pkg/volume/util"
 	utilptr "k8s.io/utils/pointer"
 )
 

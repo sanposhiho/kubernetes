@@ -21,7 +21,7 @@ import (
 	"os"
 	"path/filepath"
 
-	utilfs "k8s.io/kubernetes/pkg/util/filesystem"
+	utilfs "github.com/sanposhiho/kubernetes/pkg/util/filesystem"
 )
 
 const (

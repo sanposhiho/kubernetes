@@ -23,17 +23,17 @@ import (
 	"runtime"
 	"sort"
 
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
+	runtimeutil "github.com/sanposhiho/kubernetes/pkg/kubelet/kuberuntime/util"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/types"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/util/format"
 	v1 "k8s.io/api/core/v1"
 	kubetypes "k8s.io/apimachinery/pkg/types"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
 	runtimeapi "k8s.io/cri-api/pkg/apis/runtime/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/features"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
-	runtimeutil "k8s.io/kubernetes/pkg/kubelet/kuberuntime/util"
-	"k8s.io/kubernetes/pkg/kubelet/types"
-	"k8s.io/kubernetes/pkg/kubelet/util"
-	"k8s.io/kubernetes/pkg/kubelet/util/format"
 	netutils "k8s.io/utils/net"
 )
 

@@ -17,11 +17,11 @@ limitations under the License.
 package internalbootstrap
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol"
+	"github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol/install"
 	flowcontrolv1beta3 "k8s.io/api/flowcontrol/v1beta3"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/apis/flowcontrol/bootstrap"
-	"k8s.io/kubernetes/pkg/apis/flowcontrol"
-	"k8s.io/kubernetes/pkg/apis/flowcontrol/install"
 )
 
 // MandatoryFlowSchemas holds the untyped renditions of the mandatory

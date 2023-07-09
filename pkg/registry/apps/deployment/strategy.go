@@ -20,6 +20,10 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/api/pod"
+	"github.com/sanposhiho/kubernetes/pkg/apis/apps"
+	appsvalidation "github.com/sanposhiho/kubernetes/pkg/apis/apps/validation"
 	appsv1beta1 "k8s.io/api/apps/v1beta1"
 	extensionsv1beta1 "k8s.io/api/extensions/v1beta1"
 	apiequality "k8s.io/apimachinery/pkg/api/equality"
@@ -31,10 +35,6 @@ import (
 	genericapirequest "k8s.io/apiserver/pkg/endpoints/request"
 	"k8s.io/apiserver/pkg/registry/rest"
 	"k8s.io/apiserver/pkg/storage/names"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/api/pod"
-	"k8s.io/kubernetes/pkg/apis/apps"
-	appsvalidation "k8s.io/kubernetes/pkg/apis/apps/validation"
 	"sigs.k8s.io/structured-merge-diff/v4/fieldpath"
 )
 

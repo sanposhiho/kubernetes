@@ -22,10 +22,10 @@ import (
 	"hash/fnv"
 	"strings"
 
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager/checksum"
+	"github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager/errors"
 	"k8s.io/apimachinery/pkg/util/dump"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager/checksum"
-	"k8s.io/kubernetes/pkg/kubelet/checkpointmanager/errors"
 )
 
 // PodDevicesEntryV1 connects pod information to devices, without topology information (k8s <= 1.19)

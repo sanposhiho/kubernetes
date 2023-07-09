@@ -23,15 +23,15 @@ import (
 	"net/http"
 	"time"
 
+	commonutils "github.com/sanposhiho/kubernetes/test/e2e/common"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2etestfiles "github.com/sanposhiho/kubernetes/test/e2e/framework/testfiles"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilyaml "k8s.io/apimachinery/pkg/util/yaml"
 	"k8s.io/client-go/kubernetes/scheme"
-	commonutils "k8s.io/kubernetes/test/e2e/common"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2etestfiles "k8s.io/kubernetes/test/e2e/framework/testfiles"
 )
 
 // PodFromManifest reads a .json/yaml file and returns the pod in it.

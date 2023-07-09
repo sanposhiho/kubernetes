@@ -25,13 +25,13 @@ import (
 
 	"github.com/spf13/pflag"
 
+	"github.com/sanposhiho/kubernetes/cmd/kube-scheduler/app"
+	kubeschedulerconfig "github.com/sanposhiho/kubernetes/cmd/kube-scheduler/app/config"
+	"github.com/sanposhiho/kubernetes/cmd/kube-scheduler/app/options"
 	"k8s.io/apimachinery/pkg/util/wait"
 	"k8s.io/client-go/kubernetes"
 	restclient "k8s.io/client-go/rest"
 	"k8s.io/component-base/configz"
-	"k8s.io/kubernetes/cmd/kube-scheduler/app"
-	kubeschedulerconfig "k8s.io/kubernetes/cmd/kube-scheduler/app/config"
-	"k8s.io/kubernetes/cmd/kube-scheduler/app/options"
 
 	"k8s.io/klog/v2"
 )

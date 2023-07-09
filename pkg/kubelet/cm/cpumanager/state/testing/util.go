@@ -16,7 +16,7 @@ limitations under the License.
 
 package testing
 
-import "k8s.io/kubernetes/pkg/kubelet/checkpointmanager"
+import "github.com/sanposhiho/kubernetes/pkg/kubelet/checkpointmanager"
 
 var _ checkpointmanager.Checkpoint = &MockCheckpoint{}
 

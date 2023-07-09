@@ -32,12 +32,12 @@ import (
 	"k8s.io/component-base/metrics"
 	"k8s.io/klog/v2"
 
-	resourcehelper "k8s.io/kubernetes/pkg/api/v1/resource"
-	"k8s.io/kubernetes/pkg/features"
-	"k8s.io/kubernetes/pkg/volume"
-	"k8s.io/kubernetes/pkg/volume/util"
-	"k8s.io/kubernetes/pkg/volume/util/operationexecutor"
-	"k8s.io/kubernetes/pkg/volume/util/types"
+	resourcehelper "github.com/sanposhiho/kubernetes/pkg/api/v1/resource"
+	"github.com/sanposhiho/kubernetes/pkg/features"
+	"github.com/sanposhiho/kubernetes/pkg/volume"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/operationexecutor"
+	"github.com/sanposhiho/kubernetes/pkg/volume/util/types"
 )
 
 // DesiredStateOfWorld defines a set of thread-safe operations for the kubelet

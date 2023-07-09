@@ -23,6 +23,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2emanifest "github.com/sanposhiho/kubernetes/test/e2e/framework/manifest"
+	e2epodoutput "github.com/sanposhiho/kubernetes/test/e2e/framework/pod/output"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -32,9 +35,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
 	"k8s.io/kubectl/pkg/util/podutils"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2emanifest "k8s.io/kubernetes/test/e2e/framework/manifest"
-	e2epodoutput "k8s.io/kubernetes/test/e2e/framework/pod/output"
 )
 
 // CreateStatefulSet creates a StatefulSet from the manifest at manifestPath in the Namespace ns using kubectl create.

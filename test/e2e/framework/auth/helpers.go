@@ -22,6 +22,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	authorizationv1 "k8s.io/api/authorization/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -29,7 +30,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/wait"
 	v1authorization "k8s.io/client-go/kubernetes/typed/authorization/v1"
 	v1rbac "k8s.io/client-go/kubernetes/typed/rbac/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
 )
 
 const (

@@ -30,8 +30,8 @@ import (
 	v10 "k8s.io/api/core/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	v1alpha1 "k8s.io/kubelet/pkg/apis/stats/v1alpha1"
-	cm "k8s.io/kubernetes/pkg/kubelet/cm"
-	volume "k8s.io/kubernetes/pkg/volume"
+	cm "github.com/sanposhiho/kubernetes/pkg/kubelet/cm"
+	volume "github.com/sanposhiho/kubernetes/pkg/volume"
 )
 
 // MockProvider is a mock of Provider interface.

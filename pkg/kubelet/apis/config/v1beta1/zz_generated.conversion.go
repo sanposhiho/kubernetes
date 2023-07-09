@@ -30,7 +30,7 @@ import (
 	runtime "k8s.io/apimachinery/pkg/runtime"
 	apiv1 "k8s.io/component-base/tracing/api/v1"
 	v1beta1 "k8s.io/kubelet/config/v1beta1"
-	config "k8s.io/kubernetes/pkg/kubelet/apis/config"
+	config "github.com/sanposhiho/kubernetes/pkg/kubelet/apis/config"
 )
 
 func init() {

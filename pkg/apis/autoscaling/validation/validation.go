@@ -18,15 +18,16 @@ package validation
 
 import (
 	"fmt"
+
+	"github.com/sanposhiho/kubernetes/pkg/apis/autoscaling"
+	corevalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/v1/validation"
+	apivalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
+	"github.com/sanposhiho/kubernetes/pkg/features"
 	apimachineryvalidation "k8s.io/apimachinery/pkg/api/validation"
 	pathvalidation "k8s.io/apimachinery/pkg/api/validation/path"
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	"k8s.io/kubernetes/pkg/apis/autoscaling"
-	corevalidation "k8s.io/kubernetes/pkg/apis/core/v1/validation"
-	apivalidation "k8s.io/kubernetes/pkg/apis/core/validation"
-	"k8s.io/kubernetes/pkg/features"
 )
 
 const (

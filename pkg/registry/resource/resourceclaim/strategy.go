@@ -20,6 +20,9 @@ import (
 	"context"
 	"errors"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/resource"
+	"github.com/sanposhiho/kubernetes/pkg/apis/resource/validation"
 	"k8s.io/apimachinery/pkg/fields"
 	"k8s.io/apimachinery/pkg/labels"
 	"k8s.io/apimachinery/pkg/runtime"
@@ -27,9 +30,6 @@ import (
 	"k8s.io/apiserver/pkg/registry/generic"
 	"k8s.io/apiserver/pkg/storage"
 	"k8s.io/apiserver/pkg/storage/names"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/resource"
-	"k8s.io/kubernetes/pkg/apis/resource/validation"
 	"sigs.k8s.io/structured-merge-diff/v4/fieldpath"
 )
 

@@ -30,8 +30,8 @@ import (
 	"fmt"
 	"strings"
 
+	kubecontainer "github.com/sanposhiho/kubernetes/pkg/kubelet/container"
 	"k8s.io/apimachinery/pkg/types"
-	kubecontainer "k8s.io/kubernetes/pkg/kubelet/container"
 )
 
 const (

@@ -26,19 +26,19 @@ import (
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2edeployment "github.com/sanposhiho/kubernetes/test/e2e/framework/deployment"
+	e2enetwork "github.com/sanposhiho/kubernetes/test/e2e/framework/network"
+	e2enode "github.com/sanposhiho/kubernetes/test/e2e/framework/node"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
+	e2eservice "github.com/sanposhiho/kubernetes/test/e2e/framework/service"
+	"github.com/sanposhiho/kubernetes/test/e2e/network/common"
+	imageutils "github.com/sanposhiho/kubernetes/test/utils/image"
 	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/util/wait"
 	clientset "k8s.io/client-go/kubernetes"
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2edeployment "k8s.io/kubernetes/test/e2e/framework/deployment"
-	e2enetwork "k8s.io/kubernetes/test/e2e/framework/network"
-	e2enode "k8s.io/kubernetes/test/e2e/framework/node"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
-	e2eservice "k8s.io/kubernetes/test/e2e/framework/service"
-	"k8s.io/kubernetes/test/e2e/network/common"
-	imageutils "k8s.io/kubernetes/test/utils/image"
 	admissionapi "k8s.io/pod-security-admission/api"
 	netutils "k8s.io/utils/net"
 )
@@ -430,7 +430,7 @@ var _ = common.SIGDescribe("[Feature:IPv6DualStack]", func() {
 	// TODO (khenidak add slice validation logic, since endpoint controller only operates
 	// on primary ClusterIP
 
-	// Service Granular Checks as in k8s.io/kubernetes/test/e2e/network/networking.go
+	// Service Granular Checks as in github.com/sanposhiho/kubernetes/test/e2e/network/networking.go
 	// but using the secondary IP, so we run the same tests for each ClusterIP family
 	ginkgo.Describe("Granular Checks: Services Secondary IP Family [LinuxOnly]", func() {
 

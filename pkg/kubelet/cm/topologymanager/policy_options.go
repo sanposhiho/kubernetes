@@ -20,9 +20,9 @@ import (
 	"fmt"
 	"strconv"
 
+	kubefeatures "github.com/sanposhiho/kubernetes/pkg/features"
 	"k8s.io/apimachinery/pkg/util/sets"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
-	kubefeatures "k8s.io/kubernetes/pkg/features"
 )
 
 const (

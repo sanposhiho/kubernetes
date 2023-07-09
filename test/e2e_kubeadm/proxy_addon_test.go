@@ -19,9 +19,9 @@ package kubeadm
 import (
 	"context"
 
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
 	authv1 "k8s.io/api/authorization/v1"
 	rbacv1 "k8s.io/api/rbac/v1"
-	"k8s.io/kubernetes/test/e2e/framework"
 	admissionapi "k8s.io/pod-security-admission/api"
 
 	"github.com/onsi/ginkgo/v2"

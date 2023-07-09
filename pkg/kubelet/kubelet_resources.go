@@ -19,10 +19,10 @@ package kubelet
 import (
 	"fmt"
 
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
 
-	"k8s.io/api/core/v1"
-	"k8s.io/kubernetes/pkg/api/v1/resource"
+	"github.com/sanposhiho/kubernetes/pkg/api/v1/resource"
 )
 
 // defaultPodLimitsForDownwardAPI copies the input pod, and optional container,

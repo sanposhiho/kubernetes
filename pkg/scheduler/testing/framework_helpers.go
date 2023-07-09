@@ -19,12 +19,12 @@ package testing
 import (
 	"context"
 
+	schedulerapi "github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config/scheme"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	kubeschedulerconfigv1 "k8s.io/kube-scheduler/config/v1"
-	schedulerapi "k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
-	"k8s.io/kubernetes/pkg/scheduler/framework/runtime"
 )
 
 var configDecoder = scheme.Codecs.UniversalDecoder()

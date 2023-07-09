@@ -29,6 +29,7 @@ import (
 
 	"github.com/spf13/cobra"
 
+	kubefeatures "github.com/sanposhiho/kubernetes/pkg/features"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
@@ -70,14 +71,13 @@ import (
 	"k8s.io/controller-manager/pkg/informerfactory"
 	"k8s.io/controller-manager/pkg/leadermigration"
 	"k8s.io/klog/v2"
-	kubefeatures "k8s.io/kubernetes/pkg/features"
 
-	"k8s.io/kubernetes/cmd/kube-controller-manager/app/config"
-	"k8s.io/kubernetes/cmd/kube-controller-manager/app/options"
-	"k8s.io/kubernetes/cmd/kube-controller-manager/names"
-	kubectrlmgrconfig "k8s.io/kubernetes/pkg/controller/apis/config"
-	serviceaccountcontroller "k8s.io/kubernetes/pkg/controller/serviceaccount"
-	"k8s.io/kubernetes/pkg/serviceaccount"
+	"github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/app/config"
+	"github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/app/options"
+	"github.com/sanposhiho/kubernetes/cmd/kube-controller-manager/names"
+	kubectrlmgrconfig "github.com/sanposhiho/kubernetes/pkg/controller/apis/config"
+	serviceaccountcontroller "github.com/sanposhiho/kubernetes/pkg/controller/serviceaccount"
+	"github.com/sanposhiho/kubernetes/pkg/serviceaccount"
 )
 
 func init() {

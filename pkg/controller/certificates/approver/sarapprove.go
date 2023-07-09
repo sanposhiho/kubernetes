@@ -22,6 +22,8 @@ import (
 	"crypto/x509"
 	"fmt"
 
+	capihelper "github.com/sanposhiho/kubernetes/pkg/apis/certificates"
+	"github.com/sanposhiho/kubernetes/pkg/controller/certificates"
 	authorization "k8s.io/api/authorization/v1"
 	capi "k8s.io/api/certificates/v1"
 	corev1 "k8s.io/api/core/v1"
@@ -29,8 +31,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	certificatesinformers "k8s.io/client-go/informers/certificates/v1"
 	clientset "k8s.io/client-go/kubernetes"
-	capihelper "k8s.io/kubernetes/pkg/apis/certificates"
-	"k8s.io/kubernetes/pkg/controller/certificates"
 )
 
 type csrRecognizer struct {

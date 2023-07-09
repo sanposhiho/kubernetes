@@ -17,8 +17,8 @@ limitations under the License.
 package noderesources
 
 import (
-	"k8s.io/kubernetes/pkg/scheduler/apis/config"
-	"k8s.io/kubernetes/pkg/scheduler/framework"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/apis/config"
+	"github.com/sanposhiho/kubernetes/pkg/scheduler/framework"
 )
 
 // mostResourceScorer favors nodes with most requested resources.

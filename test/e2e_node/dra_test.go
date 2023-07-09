@@ -34,19 +34,19 @@ import (
 	"github.com/onsi/ginkgo/v2"
 	"github.com/onsi/gomega"
 
+	dra "github.com/sanposhiho/kubernetes/pkg/kubelet/cm/dra/plugin"
 	v1 "k8s.io/api/core/v1"
 	resourcev1alpha2 "k8s.io/api/resource/v1alpha2"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
 	"k8s.io/klog/v2"
-	dra "k8s.io/kubernetes/pkg/kubelet/cm/dra/plugin"
 	admissionapi "k8s.io/pod-security-admission/api"
 
-	"k8s.io/kubernetes/test/e2e/framework"
-	e2epod "k8s.io/kubernetes/test/e2e/framework/pod"
+	"github.com/sanposhiho/kubernetes/test/e2e/framework"
+	e2epod "github.com/sanposhiho/kubernetes/test/e2e/framework/pod"
 
+	testdriver "github.com/sanposhiho/kubernetes/test/e2e/dra/test-driver/app"
 	"k8s.io/dynamic-resource-allocation/kubeletplugin"
-	testdriver "k8s.io/kubernetes/test/e2e/dra/test-driver/app"
 )
 
 const (

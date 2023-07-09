@@ -20,6 +20,9 @@ import (
 	"fmt"
 	"strings"
 
+	apivalidation "github.com/sanposhiho/kubernetes/pkg/apis/core/validation"
+	"github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol"
+	"github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol/internalbootstrap"
 	flowcontrolv1alpha1 "k8s.io/api/flowcontrol/v1alpha1"
 	flowcontrolv1beta1 "k8s.io/api/flowcontrol/v1beta1"
 	flowcontrolv1beta2 "k8s.io/api/flowcontrol/v1beta2"
@@ -29,9 +32,6 @@ import (
 	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apiserver/pkg/util/shufflesharding"
-	apivalidation "k8s.io/kubernetes/pkg/apis/core/validation"
-	"k8s.io/kubernetes/pkg/apis/flowcontrol"
-	"k8s.io/kubernetes/pkg/apis/flowcontrol/internalbootstrap"
 )
 
 // ValidateFlowSchemaName validates name for flow-schema.

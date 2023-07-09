@@ -19,14 +19,14 @@ limitations under the License.
 package install
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol"
+	flowcontrolv1alpha1 "github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol/v1alpha1"
+	flowcontrolv1beta1 "github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol/v1beta1"
+	flowcontrolv1beta2 "github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol/v1beta2"
+	flowcontrolv1beta3 "github.com/sanposhiho/kubernetes/pkg/apis/flowcontrol/v1beta3"
 	"k8s.io/apimachinery/pkg/runtime"
 	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/flowcontrol"
-	flowcontrolv1alpha1 "k8s.io/kubernetes/pkg/apis/flowcontrol/v1alpha1"
-	flowcontrolv1beta1 "k8s.io/kubernetes/pkg/apis/flowcontrol/v1beta1"
-	flowcontrolv1beta2 "k8s.io/kubernetes/pkg/apis/flowcontrol/v1beta2"
-	flowcontrolv1beta3 "k8s.io/kubernetes/pkg/apis/flowcontrol/v1beta3"
 )
 
 func init() {

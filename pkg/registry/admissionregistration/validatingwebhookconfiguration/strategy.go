@@ -20,12 +20,12 @@ import (
 	"context"
 	"reflect"
 
+	"github.com/sanposhiho/kubernetes/pkg/api/legacyscheme"
+	"github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration"
+	"github.com/sanposhiho/kubernetes/pkg/apis/admissionregistration/validation"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/util/validation/field"
 	"k8s.io/apiserver/pkg/storage/names"
-	"k8s.io/kubernetes/pkg/api/legacyscheme"
-	"k8s.io/kubernetes/pkg/apis/admissionregistration"
-	"k8s.io/kubernetes/pkg/apis/admissionregistration/validation"
 )
 
 // validatingWebhookConfigurationStrategy implements verification logic for validatingWebhookConfiguration.

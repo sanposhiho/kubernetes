@@ -17,12 +17,12 @@ limitations under the License.
 package storage
 
 import (
+	"github.com/sanposhiho/kubernetes/pkg/apis/rbac"
+	"github.com/sanposhiho/kubernetes/pkg/registry/rbac/role"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apiserver/pkg/registry/generic"
 	genericregistry "k8s.io/apiserver/pkg/registry/generic/registry"
 	"k8s.io/apiserver/pkg/registry/rest"
-	"k8s.io/kubernetes/pkg/apis/rbac"
-	"k8s.io/kubernetes/pkg/registry/rbac/role"
 )
 
 // REST implements a RESTStorage for Role

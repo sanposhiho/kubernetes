@@ -32,7 +32,7 @@ import (
 )
 
 // WaitForNamedAuthorizationUpdate checks if the given user can perform the named verb and action on the named resource.
-// Copied from k8s.io/kubernetes/test/e2e/framework/auth.
+// Copied from github.com/sanposhiho/kubernetes/test/e2e/framework/auth.
 func WaitForNamedAuthorizationUpdate(t *testing.T, ctx context.Context, c authorizationv1client.SubjectAccessReviewsGetter, user, namespace, verb, resourceName string, resource schema.GroupResource, allowed bool) {
 	t.Helper()
 

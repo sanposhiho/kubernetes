@@ -20,9 +20,9 @@ import (
 	"reflect"
 	"sync"
 
+	"github.com/sanposhiho/kubernetes/pkg/proxy/config"
 	v1 "k8s.io/api/core/v1"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/proxy/config"
 )
 
 // NodePodCIDRHandler handles the life cycle of kube-proxy based on the node PodCIDR assigned

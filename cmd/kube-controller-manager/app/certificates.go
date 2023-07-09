@@ -23,13 +23,13 @@ import (
 	"context"
 	"fmt"
 
+	"github.com/sanposhiho/kubernetes/pkg/controller/certificates/approver"
+	"github.com/sanposhiho/kubernetes/pkg/controller/certificates/cleaner"
+	"github.com/sanposhiho/kubernetes/pkg/controller/certificates/rootcacertpublisher"
+	"github.com/sanposhiho/kubernetes/pkg/controller/certificates/signer"
+	csrsigningconfig "github.com/sanposhiho/kubernetes/pkg/controller/certificates/signer/config"
 	"k8s.io/controller-manager/controller"
 	"k8s.io/klog/v2"
-	"k8s.io/kubernetes/pkg/controller/certificates/approver"
-	"k8s.io/kubernetes/pkg/controller/certificates/cleaner"
-	"k8s.io/kubernetes/pkg/controller/certificates/rootcacertpublisher"
-	"k8s.io/kubernetes/pkg/controller/certificates/signer"
-	csrsigningconfig "k8s.io/kubernetes/pkg/controller/certificates/signer/config"
 )
 
 func startCSRSigningController(ctx context.Context, controllerContext ControllerContext) (controller.Interface, bool, error) {

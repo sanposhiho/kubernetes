@@ -25,11 +25,11 @@ import (
 	"encoding/pem"
 	"testing"
 
+	certificatesapi "github.com/sanposhiho/kubernetes/pkg/apis/certificates"
 	certificatesv1beta1 "k8s.io/api/certificates/v1beta1"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apiserver/pkg/admission"
-	certificatesapi "k8s.io/kubernetes/pkg/apis/certificates"
 )
 
 func TestPlugin_Validate(t *testing.T) {
