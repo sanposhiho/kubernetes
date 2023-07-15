@@ -320,8 +320,14 @@ type QueueSortPlugin interface {
 }
 
 // EnqueueExtensions is an optional interface that plugins can implement to efficiently
-// move unschedulable Pods in internal scheduling queues. Plugins
-// that fail pod scheduling (e.g., Filter plugins) are expected to implement this interface.
+// move unschedulable Pods in internal scheduling queues.
+// Following Plugins that fail pod scheduling are expected to implement this interface.
+// - PreFilter
+// - Filter
+// - Reserve
+// - Permit
+// If a plugin implements any of them, but doesn't implement EnqueueExtensions,
+// the framework will register the default EventsToRegister, which has all events with all actions.
 type EnqueueExtensions interface {
 	Plugin
 	// EventsToRegister returns a series of possible events that may cause a Pod
@@ -329,8 +335,8 @@ type EnqueueExtensions interface {
 	// filters out events to reduce useless retry of Pod's scheduling.
 	// The events will be registered when instantiating the internal scheduling queue,
 	// and leveraged to build event handlers dynamically.
-	// Note: the returned list needs to be static (not depend on configuration parameters);
-	// otherwise it would lead to undefined behavior.
+	// Note: EventsToRegister is only called once when the scheduler is being initialized,
+	// and the returned list is supposed to be static (not depend on configuration parameters).
 	EventsToRegister() []ClusterEventWithHint
 }
 

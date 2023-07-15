@@ -307,8 +307,6 @@ func NewFramework(ctx context.Context, r Registry, profile *config.KubeScheduler
 			return nil, fmt.Errorf("initializing plugin %q: %w", name, err)
 		}
 		pluginsMap[name] = p
-
-		f.fillEnqueueExtensions(p)
 	}
 
 	// initialize plugins per individual extension points
@@ -317,6 +315,8 @@ func NewFramework(ctx context.Context, r Registry, profile *config.KubeScheduler
 			return nil, err
 		}
 	}
+
+	f.fillEnqueueExtensions(p)
 
 	// initialize multiPoint plugins to their expanded extension points
 	if len(profile.Plugins.MultiPoint.Enabled) > 0 {
