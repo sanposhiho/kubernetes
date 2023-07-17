@@ -439,3 +439,109 @@ func TestCustomResourceEnqueue(t *testing.T) {
 		t.Errorf("Expected the Pod to be attempted 2 times, but got %v", podInfo.Attempts)
 	}
 }
+
+// TestRequeueByBindCycleRejection verify Pods failed by in-tree default plugins in the binding cycle can be
+// moved properly upon their registered events.
+func TestRequeueByBindCycleRejection(t *testing.T) {
+	fakePermit := &fakePermitPlugin{}
+	registry := frameworkruntime.Registry{
+		"fakePermitPlugin": func(o runtime.Object, fh framework.Handle) (framework.Plugin, error) {
+			fakePermit = &fakePermitPlugin{frameworkHandler: fh}
+			return fakePermit, nil
+		},
+	}
+	cfg := configtesting.V1ToInternalWithDefaults(t, configv1.KubeSchedulerConfiguration{
+		Profiles: []configv1.KubeSchedulerProfile{{
+			SchedulerName: pointer.String(v1.DefaultSchedulerName),
+			Plugins: &configv1.Plugins{
+				MultiPoint: configv1.PluginSet{
+					Enabled: []configv1.Plugin{
+						{Name: "fakePermitPlugin"},
+					},
+				},
+			},
+		}}})
+
+	// Use zero backoff seconds to bypass backoffQ.
+	testCtx := testutils.InitTestSchedulerWithOptions(
+		t,
+		testutils.InitTestAPIServer(t, "core-res-enqueue", nil),
+		0,
+		scheduler.WithPodInitialBackoffSeconds(0),
+		scheduler.WithPodMaxBackoffSeconds(0),
+		scheduler.WithProfiles(cfg.Profiles...),
+		scheduler.WithFrameworkOutOfTreeRegistry(registry),
+	)
+	testutils.SyncSchedulerInformerFactory(testCtx)
+
+	go testCtx.Scheduler.Run(testCtx.Ctx)
+
+	cs, ns, ctx := testCtx.ClientSet, testCtx.NS.Name, testCtx.Ctx
+	node := st.MakeNode().Name("fake-node").Obj()
+	if _, err := cs.CoreV1().Nodes().Create(ctx, node, metav1.CreateOptions{}); err != nil {
+		t.Fatalf("Failed to create Node %q: %v", node.Name, err)
+	}
+	// create a pod.
+	pod := st.MakePod().Namespace(ns).Name("pod-1").Container(imageutils.GetPauseImageName()).Obj()
+	if _, err := cs.CoreV1().Pods(ns).Create(ctx, pod, metav1.CreateOptions{}); err != nil {
+		t.Fatalf("Failed to create Pod %q: %v", pod.Name, err)
+	}
+
+	node.Labels = map[string]string{"updated": ""}
+	if _, err := cs.CoreV1().Nodes().Update(ctx, node, metav1.UpdateOptions{}); err != nil {
+		t.Fatalf("Failed to remove taints off the node: %v", err)
+	}
+
+	// create a pod.
+	pod = st.MakePod().Namespace(ns).Name("pod-2").Container(imageutils.GetPauseImageName()).Obj()
+	if _, err := cs.CoreV1().Pods(ns).Create(ctx, pod, metav1.CreateOptions{}); err != nil {
+		t.Fatalf("Failed to create Pod %q: %v", pod.Name, err)
+	}
+
+	fakePermit.frameworkHandler.IterateOverWaitingPods(func(wp framework.WaitingPod) {
+		if wp.GetPod().Name == "pod-1" {
+			wp.Reject("fakePermitPlugin", "fakePermitPlugin rejects the Pod")
+			return
+		}
+	})
+
+	// Wait for pod-2 to be scheduled.
+	err := wait.Poll(200*time.Millisecond, wait.ForeverTestTimeout, func() (done bool, err error) {
+		fakePermit.frameworkHandler.IterateOverWaitingPods(func(wp framework.WaitingPod) {
+			if wp.GetPod().Name == "pod-2" {
+				wp.Allow("fakePermitPlugin")
+			}
+		})
+
+		return testutils.PodScheduled(cs, ns, "pod-2")()
+	})
+	if err != nil {
+		t.Fatalf("Expect pod-2 to be scheduled")
+	}
+
+	err = wait.Poll(200*time.Millisecond, wait.ForeverTestTimeout, func() (done bool, err error) {
+		pod1Found := false
+		fakePermit.frameworkHandler.IterateOverWaitingPods(func(wp framework.WaitingPod) {
+			if wp.GetPod().Name == "pod-1" {
+				pod1Found = true
+				wp.Allow("fakePermitPlugin")
+			}
+		})
+		return pod1Found, nil
+	})
+	if err != nil {
+		t.Fatal("Expect pod-1 to be scheduled again")
+	}
+}
+
+type fakePermitPlugin struct {
+	frameworkHandler framework.Handle
+}
+
+func (p *fakePermitPlugin) Name() string {
+	return "fakePermitPlugin"
+}
+
+func (p *fakePermitPlugin) Permit(ctx context.Context, state *framework.CycleState, _ *v1.Pod, _ string) (*framework.Status, time.Duration) {
+	return framework.NewStatus(framework.Wait), wait.ForeverTestTimeout
+}
