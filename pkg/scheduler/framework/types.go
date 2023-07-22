@@ -106,18 +106,27 @@ const (
 	// scheduling of the pod.
 	QueueSkip QueueingHint = iota
 
-	// QueueAfterBackoff implies that the Pod may be schedulable by the event,
-	// and worth retrying the scheduling again after backoff.
+	// QueueAfterBackoff is the hint to retry scheduling for Pods after backoff.
+	// All plugins that rejected Pods due to the scheduling failure should return it.
+	// BackoffQ is a light way of keeping throughput high by preventing pods that are "permanently unschedulable" from blocking the queue.
+	// That is the reason why we need to always let Pods honor backoff
+	// if the Pod is in unschedulable pod pool by the scheduling failure and is going to be retried.
+	//
+	// For example, when the Pod was rejected as all Nodes don't have required labels for Pod's NodeAffinity (the scheduling failure),
+	// and the event is that a Node gets required labels, then you should return QueueAfterBackoff.
 	QueueAfterBackoff
 
-	// QueueImmediately is returned only when it is highly possible that the Pod gets scheduled in the next scheduling.
-	// You should only return QueueImmediately when there is a high chance that the Pod gets scheduled in the next scheduling.
-	// Otherwise, it's detrimental to scheduling throughput.
-	// For example, when the Pod was rejected as waiting for an external resource to be provisioned, that is directly tied to the Pod,
+	// QueueImmediately is the hint to skip backoff and enqueue Pods to activeQ directly.
+	// It is returned only when the Pod was rejected by the reason other than scheduling failures.
+	// Because to wait for an external resource is not the scheduling failure, that is, just need to wait for the external component
+	// to provision resources, while the scheduler decided where the Pod can go successfully.
+	// Given BackoffQ is a light way of keeping throughput high by preventing pods that are "permanently unschedulable" from blocking the queue,
+	// such Pods don't have the obligation to experience backoff because they're not rejected by the scheduling failure.
+	//
+	// For example, when the Pod was rejected in Reserve() as waiting for an external resource to be provisioned,
 	// and the event is that the resource is provisioned, then you can return QueueImmediately.
 	// As a counterexample, when the Pod was rejected due to insufficient memory resource,
-	// and the event is that more memory on Node is available, then you should return QueueAfterBackoff instead of QueueImmediately
-	// because other Pods may be waiting for the same resources and only a few of them would schedule in the next scheduling cycle.
+	// and the event is that more memory on Node is available, then you should return QueueAfterBackoff instead of QueueImmediately.
 	QueueImmediately
 )
 
