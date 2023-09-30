@@ -41,3 +41,29 @@ const (
 	VolumeRestrictions              = "VolumeRestrictions"
 	VolumeZone                      = "VolumeZone"
 )
+
+var PluginNames = []string{
+	PrioritySort,
+	DefaultBinder,
+	DefaultPreemption,
+	DynamicResources,
+	ImageLocality,
+	InterPodAffinity,
+	NodeAffinity,
+	NodeName,
+	NodePorts,
+	NodeResourcesBalancedAllocation,
+	NodeResourcesFit,
+	NodeUnschedulable,
+	NodeVolumeLimits,
+	AzureDiskLimits,
+	CinderLimits,
+	EBSLimits,
+	GCEPDLimits,
+	PodTopologySpread,
+	SchedulingGates,
+	TaintToleration,
+	VolumeBinding,
+	VolumeRestrictions,
+	VolumeZone,
+}

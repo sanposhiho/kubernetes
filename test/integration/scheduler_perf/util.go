@@ -245,7 +245,7 @@ type labelValues struct {
 // metricsCollectorConfig is the config to be marshalled to YAML config file.
 // NOTE: The mapping here means only one filter is supported, either value in the list of `values` is able to be collected.
 type metricsCollectorConfig struct {
-	Metrics map[string]*labelValues
+	Metrics map[string][]*labelValues
 }
 
 // metricsCollector collects metrics from legacyregistry.DefaultGatherer.Gather() endpoint.
@@ -268,17 +268,15 @@ func (*metricsCollector) run(ctx context.Context) {
 
 func (pc *metricsCollector) collect() []DataItem {
 	var dataItems []DataItem
-	for metric, labelVals := range pc.Metrics {
+	for metric, labelValsSlice := range pc.Metrics {
 		// no filter is specified, aggregate all the metrics within the same metricFamily.
-		if labelVals == nil {
+		if labelValsSlice == nil {
 			dataItem := collectHistogramVec(metric, pc.labels, nil)
 			if dataItem != nil {
 				dataItems = append(dataItems, *dataItem)
 			}
 		} else {
-			// fetch the metric from metricFamily which match each of the lvMap.
-			for _, value := range labelVals.values {
-				lvMap := map[string]string{labelVals.label: value}
+			for _, lvMap := range uniqueLVCombination(labelValsSlice) {
 				dataItem := collectHistogramVec(metric, pc.labels, lvMap)
 				if dataItem != nil {
 					dataItems = append(dataItems, *dataItem)
@@ -287,6 +285,36 @@ func (pc *metricsCollector) collect() []DataItem {
 		}
 	}
 	return dataItems
+}
+
+func uniqueLVCombination(lvs []*labelValues) []map[string]string {
+	if len(lvs) == 0 {
+		return nil
+	}
+	lv := lvs[0]
+	results := []map[string]string{}
+	if len(lvs) == 1 {
+		for _, v := range lv.values {
+			base := map[string]string{
+				lv.label: v,
+			}
+			results = append(results, base)
+		}
+		return results
+	}
+
+	combo := uniqueLVCombination(lvs[1:])
+	for _, v := range lv.values {
+		// r: result(s) with this `v`.
+		r := []map[string]string{}
+		for _, possibleLV := range combo {
+			possibleLV[lv.label] = v
+			r = append(r, possibleLV)
+		}
+		results = append(results, r...)
+	}
+
+	return results
 }
 
 func collectHistogramVec(metric string, labels map[string]string, lvMap map[string]string) *DataItem {

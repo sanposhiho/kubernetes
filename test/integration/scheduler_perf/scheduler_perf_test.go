@@ -53,6 +53,7 @@ import (
 	"k8s.io/kubernetes/pkg/scheduler/apis/config"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config/scheme"
 	"k8s.io/kubernetes/pkg/scheduler/apis/config/validation"
+	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/names"
 	"k8s.io/kubernetes/pkg/scheduler/metrics"
 	"k8s.io/kubernetes/test/integration/framework"
 	testutils "k8s.io/kubernetes/test/utils"
@@ -89,21 +90,40 @@ const (
 	configFile               = "config/performance-config.yaml"
 	extensionPointsLabelName = "extension_point"
 	resultLabelName          = "result"
+	pluginLabelName          = "plugin"
+)
+
+var (
+	extensionPointLabelValues = []string{"PreEnqueue", "PreFilter", "Filter", "PreScore", "Score", "Permit", "Reserve", "Bind", "PreBind", "PostBind"}
 )
 
 var (
 	defaultMetricsCollectorConfig = metricsCollectorConfig{
-		Metrics: map[string]*labelValues{
+		Metrics: map[string][]*labelValues{
 			"scheduler_framework_extension_point_duration_seconds": {
-				label:  extensionPointsLabelName,
-				values: []string{"Filter", "Score"},
+				{
+					label:  extensionPointsLabelName,
+					values: extensionPointLabelValues,
+				},
 			},
 			"scheduler_scheduling_attempt_duration_seconds": {
-				label:  resultLabelName,
-				values: []string{metrics.ScheduledResult, metrics.UnschedulableResult, metrics.ErrorResult},
+				{
+					label:  resultLabelName,
+					values: []string{metrics.ScheduledResult, metrics.UnschedulableResult, metrics.ErrorResult},
+				},
 			},
 			"scheduler_pod_scheduling_duration_seconds":     nil,
 			"scheduler_pod_scheduling_sli_duration_seconds": nil,
+			"scheduler_plugin_execution_duration_seconds": {
+				{
+					label:  pluginLabelName,
+					values: names.PluginNames,
+				},
+				{
+					label:  extensionPointsLabelName,
+					values: extensionPointLabelValues,
+				},
+			},
 		},
 	}
 )
