@@ -93,14 +93,14 @@ const (
 	// When the scheduling queue requeues Pods, which was rejected with Unschedulable in the last scheduling,
 	// the Pod goes through backoff.
 	Unschedulable
-	// UnschedulableAndUnresolvable is used when a plugin finds a pod unschedulable and
+	// UnschedulableAndUnresolvable implies that a plugin finds a pod unschedulable and
 	// other postFilter plugins like preemption would not change anything.
 	// Plugins should return Unschedulable if it is possible that the pod can get scheduled
 	// after running other postFilter plugins.
 	// The accompanying status message should explain why the pod is unschedulable.
 	//
 	// We regard the backoff as a penalty of wasting the scheduling cycle.
-	// When the scheduling queue requeues Pods, which was rejected with Unschedulable in the last scheduling,
+	// When the scheduling queue requeues Pods, which was rejected with UnschedulableAndUnresolvable in the last scheduling,
 	// the Pod goes through backoff.
 	UnschedulableAndUnresolvable
 	// Wait is used when a Permit plugin finds a pod scheduling should wait.
@@ -436,7 +436,13 @@ type FilterPlugin interface {
 // after a pod cannot be scheduled.
 type PostFilterPlugin interface {
 	Plugin
-	// PostFilter is called by the scheduling framework.
+	// PostFilter is called by the scheduling framework 
+	// when the scheduling cycle failed at PreFilter or Filter by Unschedulable or UnschedulableAndUnresolvable. 
+	// Note that the scheduling framework runs PostFilter plugins even when PreFilter returned UnschedulableAndUnresolvable.
+	// In that case, NodeToStatusMap contains all Nodes with UnschedulableAndUnresolvable.
+	// Ignoring Nodes with UnschedulableAndUnresolvable is the responsibility of each PostFilter plugin,
+	// meaning the scheduling framework does call PostFilter even when all Nodes in NodeToStatusMap are UnschedulableAndUnresolvable.
+	//
 	// A PostFilter plugin should return one of the following statuses:
 	// - Unschedulable: the plugin gets executed successfully but the pod cannot be made schedulable.
 	// - Success: the plugin gets executed successfully and the pod can be made schedulable.
