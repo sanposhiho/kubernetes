@@ -65,7 +65,7 @@ func (pl *InterPodAffinity) EventsToRegister() []framework.ClusterEventWithHint 
 		// - Add. An unschedulable Pod may fail due to violating pod-affinity constraints,
 		// adding an assigned Pod may make it schedulable.
 		{Event: framework.ClusterEvent{Resource: framework.Pod, ActionType: framework.All}},
-		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.UpdateNodeLabel}},
+		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.UpdateNodeLabel | framework.UpdateNodeTaint}},
 	}
 }
 

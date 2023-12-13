@@ -103,7 +103,7 @@ func (pl *VolumeBinding) EventsToRegister() []framework.ClusterEventWithHint {
 		// Pods may fail to find available PVs because the node labels do not
 		// match the storage class's allowed topologies or PV's node affinity.
 		// A new or updated node may make pods schedulable.
-		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.UpdateNodeLabel}},
+		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.UpdateNodeLabel | framework.UpdateNodeTaint}},
 		// We rely on CSI node to translate in-tree PV to CSI.
 		{Event: framework.ClusterEvent{Resource: framework.CSINode, ActionType: framework.Add | framework.Update}},
 		// When CSIStorageCapacity is enabled, pods may become schedulable

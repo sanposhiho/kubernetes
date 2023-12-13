@@ -280,7 +280,7 @@ func (pl *VolumeZone) EventsToRegister() []framework.ClusterEventWithHint {
 		// Due to immutable field `storageClass.volumeBindingMode`, storageClass update events are ignored.
 		{Event: framework.ClusterEvent{Resource: framework.StorageClass, ActionType: framework.Add}},
 		// A new node or updating a node's volume zone labels may make a pod schedulable.
-		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.UpdateNodeLabel}},
+		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.UpdateNodeLabel | framework.UpdateNodeTaint}},
 		// A new pvc may make a pod schedulable.
 		// Due to fields are immutable except `spec.resources`, pvc update events are ignored.
 		{Event: framework.ClusterEvent{Resource: framework.PersistentVolumeClaim, ActionType: framework.Add}},
