@@ -31,6 +31,7 @@ import (
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/runtime/schema"
 	"k8s.io/apimachinery/pkg/types"
+	"k8s.io/apimachinery/pkg/util/sets"
 	"k8s.io/apimachinery/pkg/util/uuid"
 	"k8s.io/apimachinery/pkg/util/wait"
 	utilfeature "k8s.io/apiserver/pkg/util/feature"
@@ -194,21 +195,23 @@ func TestCoreResourceEnqueue(t *testing.T) {
 
 	cs, ns, ctx := testCtx.ClientSet, testCtx.NS.Name, testCtx.Ctx
 	// Create one Node with a taint.
-	node := st.MakeNode().Name("fake-node").Capacity(map[v1.ResourceName]string{v1.ResourceCPU: "2"}).Obj()
-	node.Spec.Taints = []v1.Taint{{Key: "foo", Effect: v1.TaintEffectNoSchedule}}
+	node := st.MakeNode().Label("node", "fake-node").Name("fake-node").Capacity(map[v1.ResourceName]string{v1.ResourceCPU: "2"}).Obj()
+	node.Spec.Taints = []v1.Taint{{Key: v1.TaintNodeNotReady, Effect: v1.TaintEffectNoSchedule}}
 	if _, err := cs.CoreV1().Nodes().Create(ctx, node, metav1.CreateOptions{}); err != nil {
 		t.Fatalf("Failed to create Node %q: %v", node.Name, err)
 	}
 
 	// Create two Pods that are both unschedulable.
-	// - Pod1 is a best-effort Pod, but doesn't have the required toleration.
-	// - Pod2 requests a large amount of CPU resource that the node cannot fit.
+	// - Pod1 and Pod2 have the same hostport that is currently available, but doesn't have the required toleration. (unschedPlugin: TaintToleration)
+	//   They cannot be scheduled on the same node due to PodAffinity.
+	// - Pod3 requests a large amount of CPU resource that the node cannot fit. (unschedPlugin: TaintToleration)
 	//   Note: Pod2 will fail the tainttoleration plugin b/c that's ordered prior to noderesources.
-	// - Pod3 has the required toleration, but requests a non-existing PVC.
-	pod1 := st.MakePod().Namespace(ns).Name("pod1").Container("image").Obj()
-	pod2 := st.MakePod().Namespace(ns).Name("pod2").Req(map[v1.ResourceName]string{v1.ResourceCPU: "4"}).Obj()
-	pod3 := st.MakePod().Namespace(ns).Name("pod3").Toleration("foo").PVC("pvc").Container("image").Obj()
-	for _, pod := range []*v1.Pod{pod1, pod2, pod3} {
+	// - Pod4 has the required toleration, but requests a large amount of CPU. (unschedPlugin: NodeResourcesFit)
+	pod1 := st.MakePod().Label("anti", "anti").Namespace(ns).Name("pod1").Priority(1000).PodAntiAffinityExists("anti", "node", st.PodAntiAffinityWithRequiredReq).Container("image").Obj()
+	pod2 := st.MakePod().Label("anti", "anti").Namespace(ns).Name("pod2").Priority(1).PodAntiAffinityExists("anti", "node", st.PodAntiAffinityWithRequiredReq).Container("image").Obj()
+	pod3 := st.MakePod().Namespace(ns).Name("pod3").Req(map[v1.ResourceName]string{v1.ResourceCPU: "4"}).Obj()
+	pod4 := st.MakePod().Namespace(ns).Name("pod4").Toleration(v1.TaintNodeNotReady).Req(map[v1.ResourceName]string{v1.ResourceCPU: "4"}).Container("image").Obj()
+	for _, pod := range []*v1.Pod{pod1, pod2, pod3, pod4} {
 		if _, err := cs.CoreV1().Pods(ns).Create(ctx, pod, metav1.CreateOptions{}); err != nil {
 			t.Fatalf("Failed to create Pod %q: %v", pod.Name, err)
 		}
@@ -217,50 +220,151 @@ func TestCoreResourceEnqueue(t *testing.T) {
 	// Wait for the three pods to be present in the scheduling queue.
 	if err := wait.PollUntilContextTimeout(ctx, time.Millisecond*200, wait.ForeverTestTimeout, false, func(ctx context.Context) (bool, error) {
 		pendingPods, _ := testCtx.Scheduler.SchedulingQueue.PendingPods()
-		return len(pendingPods) == 3, nil
+		return len(pendingPods) == 4, nil
 	}); err != nil {
 		t.Fatal(err)
 	}
 
-	// Pop the three pods out. They should be unschedulable.
-	for i := 0; i < 3; i++ {
-		podInfo := testutils.NextPodOrDie(t, testCtx)
-		fwk, ok := testCtx.Scheduler.Profiles[podInfo.Pod.Spec.SchedulerName]
-		if !ok {
-			t.Fatalf("Cannot find the profile for Pod %v", podInfo.Pod.Name)
+	t.Log("Confirmed Pods in the scheduling queue, starting to schedule them")
+
+	// Pop all pods out. They should be unschedulable.
+	scheduleDone := sets.New[string]()
+	for i := 0; i < 4; i++ {
+		scheduled := scheduleNextPod(t, testCtx, false /* all Pods are supposed to fail at scheduling */)
+		if scheduleDone.Has(scheduled) {
+			t.Fatalf("Pod %v is scheduled twice", scheduled)
 		}
-		// Schedule the Pod manually.
-		_, fitError := testCtx.Scheduler.SchedulePod(ctx, fwk, framework.NewCycleState(), podInfo.Pod)
-		if fitError == nil {
-			t.Fatalf("Expect Pod %v to fail at scheduling.", podInfo.Pod.Name)
-		}
-		testCtx.Scheduler.FailureHandler(ctx, fwk, podInfo, framework.NewStatus(framework.Unschedulable).WithError(fitError), nil, time.Now())
+
+		scheduleDone.Insert(scheduled)
 	}
 
+	t.Log("finished initial schedulings for all Pods, will remove taint from fake-node")
+
 	// Trigger a NodeTaintChange event.
-	// We expect this event to trigger moving the test Pod from unschedulablePods to activeQ.
+	// We expect this event to trigger moving Pod1/Pod2 from unschedulablePods to activeQ.
+	// Pod3 and Pod4 are not expected to be popped out.
+	// - Although the failure reason has been lifted, Pod3 still won't be moved to active due to
+	//   the node event's preCheckForNode() because Pod4 doesn't have enough CPU.
+	// - Regarding Pod4, the NodeTaintChange event is filtered out preCheckForNode() because the node doesn't have enough CPU.
 	node.Spec.Taints = nil
 	if _, err := cs.CoreV1().Nodes().Update(ctx, node, metav1.UpdateOptions{}); err != nil {
 		t.Fatalf("Failed to remove taints off the node: %v", err)
 	}
 
-	// Now we should be able to pop the Pod from activeQ again.
-	podInfo := testutils.NextPodOrDie(t, testCtx)
-	if podInfo.Attempts != 2 {
-		t.Fatalf("Expected the Pod to be attempted 2 times, but got %v", podInfo.Attempts)
-	}
-	if got := podInfo.Pod.Name; got != "pod1" {
-		t.Fatalf("Expected pod1 to be popped, but got %v", got)
+	t.Log("removed taint from fake-node, will confirm Pod1 are moved to activeQ")
+
+	// Try to schedule next Pod, which should be Pod1 because Pod1 has a higher priority than Pod2.
+	// Pod1 should be scheduled successfully.
+	scheduled := scheduleNextPod(t, testCtx, true)
+	if scheduled != "pod1" {
+		t.Fatalf("Expect Pod1 to be scheduled, but got %v", scheduled)
 	}
 
-	// Pod2 and Pod3 are not expected to be popped out.
-	// - Although the failure reason has been lifted, Pod2 still won't be moved to active due to
-	//   the node event's preCheckForNode().
-	// - Regarding Pod3, the NodeTaintChange event is irrelevant with its scheduling failure.
-	podInfo = testutils.NextPod(t, testCtx)
-	if podInfo != nil {
-		t.Fatalf("Unexpected pod %v get popped out", podInfo.Pod.Name)
+	t.Log("confirmed Pod1 is scheduled, will confirm Pod2 is moved to activeQ")
+
+	// Try to schedule next Pod, which should be Pod2.
+	// But, Pod2 should be unschedulable again because Pod1, which has the Pod anti-affinity to Pod2, is already scheduled.
+	scheduled = scheduleNextPod(t, testCtx, false)
+	if scheduled != "pod2" {
+		t.Fatalf("Expect Pod2 to be scheduled, but got %v", scheduled)
 	}
+
+	t.Log("confirmed Pod2 was moved to activeQ but the scheduling was failed, will confirm Pod3 and Pod4 are NOT moved to activeQ")
+
+	// Ensure we can pop no more Pods out at the moment.
+	if len(testCtx.Scheduler.SchedulingQueue.PodsInActiveQ()) != 0 {
+		t.Fatalf("Expect no Pods in activeQ, but %v Pods are in activeQ", len(testCtx.Scheduler.SchedulingQueue.PodsInActiveQ()))
+	}
+
+	// Current situation:
+	// - Pod1 is scheduled.
+	// - Pod2 is unschedulable and has unschedPlugin: NodePort.
+	// - Pod3 is unschedulable and had unschedPlugin: TaintToleration.
+	// - Pod4 is unschedulable and had unschedPlugin: NodeResourcesFit.
+
+	t.Log("Create fake-node2 to make all remaining Pods schedulable")
+
+	// Create another Node with a taint.
+	// This Pod can accommodate all Pods once the taint is removed.
+	node2 := st.MakeNode().Label("node", "fake-node2").Name("fake-node2").Capacity(map[v1.ResourceName]string{v1.ResourceCPU: "8"}).Obj()
+	node2.Spec.Taints = []v1.Taint{{Key: v1.TaintNodeNotReady, Effect: v1.TaintEffectNoSchedule}}
+	if _, err := cs.CoreV1().Nodes().Create(ctx, node2, metav1.CreateOptions{}); err != nil {
+		t.Fatalf("Failed to create Node %q: %v", node2.Name, err)
+	}
+
+	t.Log("fake-node2 is created, will confirm Pod4 is moved to activeQ")
+
+	// Try to schedule next Pod, which should be Pod4 because Pod4 has a toleration.
+	// As mentioned above, this scheduling should be successful.
+	scheduled = scheduleNextPod(t, testCtx, true)
+	if scheduled != "pod4" {
+		t.Fatalf("Expect Pod2 to be scheduled, but got %v", scheduled)
+	}
+
+	t.Log("confirmed Pod4 is scheduled, will confirm Pod2 and Pod3 are NOT moved to activeQ")
+
+	// Ensure we can pop no more Pods out at the moment because Pod2 and Pod3 don't have toleration.
+	if len(testCtx.Scheduler.SchedulingQueue.PodsInActiveQ()) != 0 {
+		t.Fatalf("Expect no Pods in activeQ, but %v Pods are in activeQ", len(testCtx.Scheduler.SchedulingQueue.PodsInActiveQ()))
+	}
+
+	t.Log("will remove taint from fake-node2")
+
+	// Trigger a NodeTaintChange event.
+	// Then Pod2 and Pod3 should be moved to activeQ.
+	node2.Spec.Taints = nil
+	if _, err := cs.CoreV1().Nodes().Update(ctx, node2, metav1.UpdateOptions{}); err != nil {
+		t.Fatalf("Failed to remove taints off the node2: %v", err)
+	}
+
+	t.Log("the taint is removed from fake-node2, will confirm Pod2 and Pod3 are moved to activeQ and scheduled successfully")
+
+	// Pop all pods out. They should be schedulable.
+	scheduleDone = sets.New[string]()
+	for i := 0; i < 2; i++ {
+		scheduled := scheduleNextPod(t, testCtx, true /* all Pods are supposed to succeed in scheduling */)
+		if scheduleDone.Has(scheduled) {
+			t.Fatalf("Pod %v is scheduled twice", scheduled)
+		}
+
+		scheduleDone.Insert(scheduled)
+	}
+
+	if scheduleDone.Difference(sets.New("pod2", "pod3")).Len() != 0 {
+		t.Fatalf("Expect Pod2 and Pod3 to be scheduled, but got %v", scheduleDone)
+	}
+}
+
+// scheduleNextPod pops the next Pod from the scheduling queue and schedule it manually.
+// It returns the name of the Pod that was popped.
+func scheduleNextPod(t *testing.T, testCtx *testutils.TestContext, scheduleSuccess bool) string {
+	podInfo := testutils.NextPodOrDie(t, testCtx)
+	t.Logf("Pop Pod %v out, will schedule it", podInfo.Pod.Name)
+	fwk, ok := testCtx.Scheduler.Profiles[podInfo.Pod.Spec.SchedulerName]
+	if !ok {
+		t.Fatalf("Cannot find the profile for Pod %v", podInfo.Pod.Name)
+	}
+	r, fitError := testCtx.Scheduler.SchedulePod(testCtx.Ctx, fwk, framework.NewCycleState(), podInfo.Pod)
+	if scheduleSuccess {
+		if fitError != nil {
+			t.Fatalf("Expect Pod %v to be scheduled", podInfo.Pod.Name)
+		}
+
+		// Assume this Pod to simulate this Pod goes to the binding cycle.
+		pod := podInfo.Pod.DeepCopy()
+		pod.Spec.NodeName = r.SuggestedHost
+		if err := testCtx.Scheduler.Cache.AssumePod(klog.FromContext(testCtx.Ctx), pod); err != nil {
+			t.Fatalf("Failed to assume Pod %v: %v", pod.Name, err)
+		}
+
+		return podInfo.Pod.Name
+	}
+
+	if fitError == nil {
+		t.Fatalf("Expect Pod %v to fail at scheduling, but scheduled to %s", podInfo.Pod.Name, r.SuggestedHost)
+	}
+	testCtx.Scheduler.FailureHandler(testCtx.Ctx, fwk, podInfo, framework.NewStatus(framework.Unschedulable).WithError(fitError), nil, time.Now())
+	return podInfo.Pod.Name
 }
 
 var _ framework.FilterPlugin = &fakeCRPlugin{}
