@@ -53,6 +53,7 @@ import (
 	testutils "k8s.io/kubernetes/test/integration/util"
 	imageutils "k8s.io/kubernetes/test/utils/image"
 	"k8s.io/utils/pointer"
+	"k8s.io/utils/ptr"
 )
 
 func TestSchedulingGates(t *testing.T) {
@@ -195,51 +196,20 @@ func TestCoreResourceEnqueue(t *testing.T) {
 		requeuedPods sets.Set[string]
 	}{
 		{
-			name:        "Pod without a required toleration to a node isn't requeued to activeQ",
-			initialNode: st.MakeNode().Name("fake-node").Capacity(map[v1.ResourceName]string{v1.ResourceCPU: "2"}).Taints([]v1.Taint{{Key: v1.TaintNodeNotReady, Effect: v1.TaintEffectNoSchedule}}).Obj(),
-			pods: []*v1.Pod{
-				// - Pod1 doesn't have the required toleration and will be rejected by the TaintToleration plugin.
-				//   (TaintToleration plugin is evaluated before NodeResourcesFit plugin.)
-				// - Pod2 has the required toleration, but requests a large amount of CPU - will be rejected by the NodeResourcesFit plugin.
-				st.MakePod().Name("pod1").Req(map[v1.ResourceName]string{v1.ResourceCPU: "4"}).Container("image").Obj(),
-				st.MakePod().Name("pod2").Toleration(v1.TaintNodeNotReady).Req(map[v1.ResourceName]string{v1.ResourceCPU: "4"}).Container("image").Obj(),
-			},
-			triggerFn: func(testCtx *testutils.TestContext) error {
-				// Trigger a NodeChange event by increasing CPU capacity.
-				// It makes Pod2 schedulable.
-				// Pod1 is not requeued because the Node is still unready and it doesn't have the required toleration.
-				if _, err := testCtx.ClientSet.CoreV1().Nodes().UpdateStatus(testCtx.Ctx, st.MakeNode().Name("fake-node").Capacity(map[v1.ResourceName]string{v1.ResourceCPU: "4"}).Taints([]v1.Taint{{Key: v1.TaintNodeNotReady, Effect: v1.TaintEffectNoSchedule}}).Obj(), metav1.UpdateOptions{}); err != nil {
-					return fmt.Errorf("failed to update the node: %v", err)
-				}
-				return nil
-			},
-			requeuedPods: sets.New("pod2"),
-		},
-		{
-			name:        "Pod rejected by the PodAffinity plugin is requeued when a new Node is created and turned to ready",
+			name:        "Pods with PodTopologySpread should be requeued when a Pod with matching label is scheduled",
 			initialNode: st.MakeNode().Name("fake-node").Label("node", "fake-node").Capacity(map[v1.ResourceName]string{v1.ResourceCPU: "2"}).Obj(),
-			initialPod:  st.MakePod().Label("anti", "anti").Name("pod1").PodAntiAffinityExists("anti", "node", st.PodAntiAffinityWithRequiredReq).Container("image").Obj(),
+			initialPod:  st.MakePod().Name("pod1").Label("key", "val").Container("image").Obj(),
 			pods: []*v1.Pod{
-				// - Pod2 will be rejected by the PodAffinity plugin.
-				st.MakePod().Label("anti", "anti").Name("pod2").PodAntiAffinityExists("anti", "node", st.PodAntiAffinityWithRequiredReq).Container("image").Obj(),
+				// - Pod2 will be rejected by the PodTopologySpread plugin.
+				st.MakePod().Name("pod2").Label("key", "val").SpreadConstraint(1, "node", v1.DoNotSchedule, st.MakeLabelSelector().Exists("key").Obj(), ptr.To(int32(3)), nil, nil, nil).Container("image").Obj(),
 			},
 			triggerFn: func(testCtx *testutils.TestContext) error {
-				// Trigger a NodeCreated event.
-				// Note that this Node has a un-ready taint and pod2 should be requeued ideally because unschedulable plugins registered for pod2 is PodAffinity.
-				// However, due to preCheck, it's not requeueing pod2 to activeQ.
-				// It'll be fixed by the removal of preCheck in the future.
-				// https://github.com/kubernetes/kubernetes/issues/110175
-				node := st.MakeNode().Name("fake-node2").Capacity(map[v1.ResourceName]string{v1.ResourceCPU: "2"}).Taints([]v1.Taint{{Key: v1.TaintNodeNotReady, Effect: v1.TaintEffectNoSchedule}}).Obj()
-				if _, err := testCtx.ClientSet.CoreV1().Nodes().Create(testCtx.Ctx, st.MakeNode().Name("fake-node2").Capacity(map[v1.ResourceName]string{v1.ResourceCPU: "2"}).Taints([]v1.Taint{{Key: "foo", Effect: v1.TaintEffectNoSchedule}}).Obj(), metav1.CreateOptions{}); err != nil {
-					return fmt.Errorf("failed to create a newnode: %v", err)
+				// Trigger an assigned Pod add event.
+				pod := st.MakePod().Name("pod3").Label("key", "val").Node("fake-node").Container("image").Obj()
+				if _, err := testCtx.ClientSet.CoreV1().Pods(testCtx.NS.Name).Create(testCtx.Ctx, pod, metav1.CreateOptions{}); err != nil {
+					return fmt.Errorf("failed to create Pod %q: %v", pod.Name, err)
 				}
 
-				// As a mitigation of an issue described above, all plugins subscribing Node/Add event register UpdateNodeTaint too.
-				// So, this removal of taint moves pod2 to activeQ.
-				node.Spec.Taints = nil
-				if _, err := testCtx.ClientSet.CoreV1().Nodes().Update(testCtx.Ctx, node, metav1.UpdateOptions{}); err != nil {
-					return fmt.Errorf("failed to remove taints off the node: %v", err)
-				}
 				return nil
 			},
 			requeuedPods: sets.New("pod2"),
