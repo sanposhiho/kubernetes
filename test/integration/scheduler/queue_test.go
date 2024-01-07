@@ -358,7 +358,6 @@ func scheduleNextPod(t *testing.T, testCtx *testutils.TestContext, scheduleSucce
 		t.Fatalf("Expect Pod %v to fail at scheduling, but scheduled to %s", podInfo.Pod.Name, r.SuggestedHost)
 	}
 	testCtx.Scheduler.FailureHandler(testCtx.Ctx, fwk, podInfo, framework.NewStatus(framework.Unschedulable).WithError(fitError), nil, time.Now())
-	return
 }
 
 var _ framework.FilterPlugin = &fakeCRPlugin{}
