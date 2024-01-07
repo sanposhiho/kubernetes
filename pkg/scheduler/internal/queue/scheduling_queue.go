@@ -47,6 +47,7 @@ import (
 	"k8s.io/kubernetes/pkg/features"
 	"k8s.io/kubernetes/pkg/scheduler/framework"
 	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/interpodaffinity"
+	"k8s.io/kubernetes/pkg/scheduler/framework/plugins/podtopologyspread"
 	"k8s.io/kubernetes/pkg/scheduler/internal/heap"
 	"k8s.io/kubernetes/pkg/scheduler/metrics"
 	"k8s.io/kubernetes/pkg/scheduler/util"
@@ -118,6 +119,7 @@ type SchedulingQueue interface {
 	AssignedPodAdded(logger klog.Logger, pod *v1.Pod)
 	AssignedPodUpdated(logger klog.Logger, oldPod, newPod *v1.Pod)
 	PendingPods() ([]*v1.Pod, string)
+	PodsInActiveQ() []*v1.Pod
 	// Close closes the SchedulingQueue so that the goroutine which is
 	// waiting to pop items can exit gracefully.
 	Close()
@@ -1041,7 +1043,7 @@ func (p *PriorityQueue) Delete(pod *v1.Pod) error {
 // may make pending pods with matching affinity terms schedulable.
 func (p *PriorityQueue) AssignedPodAdded(logger klog.Logger, pod *v1.Pod) {
 	p.lock.Lock()
-	p.movePodsToActiveOrBackoffQueue(logger, p.getUnschedulablePodsWithMatchingAffinityTerm(logger, pod), AssignedPodAdd, nil, pod)
+	p.movePodsToActiveOrBackoffQueue(logger, p.getUnschedulablePodsToMoveViaPodEvent(logger, pod), AssignedPodAdd, nil, pod)
 	p.lock.Unlock()
 }
 
@@ -1066,7 +1068,7 @@ func (p *PriorityQueue) AssignedPodUpdated(logger klog.Logger, oldPod, newPod *v
 	if isPodResourcesResizedDown(newPod) {
 		p.moveAllToActiveOrBackoffQueue(logger, AssignedPodUpdate, oldPod, newPod, nil)
 	} else {
-		p.movePodsToActiveOrBackoffQueue(logger, p.getUnschedulablePodsWithMatchingAffinityTerm(logger, newPod), AssignedPodUpdate, oldPod, newPod)
+		p.movePodsToActiveOrBackoffQueue(logger, p.getUnschedulablePodsToMoveViaPodEvent(logger, newPod), AssignedPodUpdate, oldPod, newPod)
 	}
 	p.lock.Unlock()
 }
@@ -1177,23 +1179,42 @@ func (p *PriorityQueue) movePodsToActiveOrBackoffQueue(logger klog.Logger, podIn
 	}
 }
 
-// getUnschedulablePodsWithMatchingAffinityTerm returns unschedulable pods which have
-// any affinity term that matches "pod".
+// getUnschedulablePodsToMoveViaPodEvent returns unschedulable pods which either of following conditions is met:
+// - have any affinity term that matches "pod".
+// - rejected by PodTopologySpread plugin.
 // NOTE: this function assumes lock has been acquired in caller.
-func (p *PriorityQueue) getUnschedulablePodsWithMatchingAffinityTerm(logger klog.Logger, pod *v1.Pod) []*framework.QueuedPodInfo {
+func (p *PriorityQueue) getUnschedulablePodsToMoveViaPodEvent(logger klog.Logger, pod *v1.Pod) []*framework.QueuedPodInfo {
 	nsLabels := interpodaffinity.GetNamespaceLabelsSnapshot(logger, pod.Namespace, p.nsLister)
 
 	var podsToMove []*framework.QueuedPodInfo
 	for _, pInfo := range p.unschedulablePods.podInfoMap {
+		if pInfo.UnschedulablePlugins.Has(podtopologyspread.Name) {
+			// This Pod may be schedulable now by this Pod event.
+			podsToMove = append(podsToMove, pInfo)
+			continue
+		}
+
 		for _, term := range pInfo.RequiredAffinityTerms {
 			if term.Matches(pod, nsLabels) {
 				podsToMove = append(podsToMove, pInfo)
 				break
 			}
 		}
-
 	}
+
 	return podsToMove
+}
+
+// PodsInActiveQ returns all the Pods in the activeQ.
+// This function is only used in tests.
+func (p *PriorityQueue) PodsInActiveQ() []*v1.Pod {
+	p.lock.RLock()
+	defer p.lock.RUnlock()
+	var result []*v1.Pod
+	for _, pInfo := range p.activeQ.List() {
+		result = append(result, pInfo.(*framework.QueuedPodInfo).Pod)
+	}
+	return result
 }
 
 var pendingPodsSummary = "activeQ:%v; backoffQ:%v; unschedulablePods:%v"
