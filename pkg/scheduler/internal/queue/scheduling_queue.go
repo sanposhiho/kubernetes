@@ -411,6 +411,26 @@ const (
 	queueImmediately
 )
 
+// isInterestedEvent returns true if the event is interested by some plugins.
+func (p *PriorityQueue) isInterestedEvent(logger klog.Logger, event framework.ClusterEvent) bool {
+	if event.IsWildCard() {
+		return true
+	}
+
+	for _, hintMap := range p.queueingHintMap {
+		for eventToMatch := range hintMap {
+			if eventToMatch.Resource == event.Resource && eventToMatch.ActionType&event.ActionType != 0 {
+				// This event is interested by some plugins.
+				return true
+			}
+		}
+	}
+
+	logger.V(6).Info("receinve an event that isn't interested by any enabled plugins", "event", event)
+
+	return false
+}
+
 // isPodWorthRequeuing calls QueueingHintFn of only plugins registered in pInfo.unschedulablePlugins and pInfo.PendingPlugins.
 //
 // If any of pInfo.PendingPlugins return Queue,
@@ -1143,6 +1163,11 @@ func (p *PriorityQueue) requeuePodViaQueueingHint(logger klog.Logger, pInfo *fra
 
 // NOTE: this function assumes lock has been acquired in caller
 func (p *PriorityQueue) movePodsToActiveOrBackoffQueue(logger klog.Logger, podInfoList []*framework.QueuedPodInfo, event framework.ClusterEvent, oldObj, newObj interface{}) {
+	if !p.isInterestedEvent(logger, event) {
+		// No plugin is interested in this event.
+		return
+	}
+
 	activated := false
 	for _, pInfo := range podInfoList {
 		schedulingHint := p.isPodWorthRequeuing(logger, pInfo, event, oldObj, newObj)
