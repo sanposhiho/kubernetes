@@ -323,7 +323,7 @@ func (pl *VolumeRestrictions) EventsToRegister() []framework.ClusterEventWithHin
 		// Due to immutable fields `spec.volumes`, pod update events are ignored.
 		{Event: framework.ClusterEvent{Resource: framework.Pod, ActionType: framework.Delete}},
 		// A new Node may make a pod schedulable.
-		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add}},
+		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.UpdateNodeTaint}},
 		// Pods may fail to schedule because the PVC it uses has not yet been created.
 		// This PVC is required to exist to check its access modes.
 		{Event: framework.ClusterEvent{Resource: framework.PersistentVolumeClaim, ActionType: framework.Add | framework.Update}},

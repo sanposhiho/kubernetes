@@ -256,7 +256,7 @@ func (f *Fit) EventsToRegister() []framework.ClusterEventWithHint {
 	}
 	return []framework.ClusterEventWithHint{
 		{Event: framework.ClusterEvent{Resource: framework.Pod, ActionType: podActionType}, QueueingHintFn: f.isSchedulableAfterPodChange},
-		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.Update}, QueueingHintFn: f.isSchedulableAfterNodeChange},
+		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.UpdateNodeAllocatable | framework.UpdateNodeTaint}, QueueingHintFn: f.isSchedulableAfterNodeChange},
 	}
 }
 

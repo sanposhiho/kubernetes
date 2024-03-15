@@ -50,7 +50,7 @@ const (
 // failed by this plugin schedulable.
 func (pl *NodeUnschedulable) EventsToRegister() []framework.ClusterEventWithHint {
 	return []framework.ClusterEventWithHint{
-		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.Update}, QueueingHintFn: pl.isSchedulableAfterNodeChange},
+		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.UpdateNodeTaint}, QueueingHintFn: pl.isSchedulableAfterNodeChange},
 	}
 }
 

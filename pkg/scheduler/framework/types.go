@@ -51,9 +51,10 @@ const (
 	// UpdateNodeXYZ is only applicable for Node events.
 	UpdateNodeAllocatable // 100
 	UpdateNodeLabel       // 1000
-	UpdateNodeTaint       // 10000
-	UpdateNodeCondition   // 100000
-	UpdateNodeAnnotation  // 1000000
+	// UpdateNodeTaint is the update in .Spec.Unschedulable or .Spec.Taints.
+	UpdateNodeTaint      // 10000
+	UpdateNodeCondition  // 100000
+	UpdateNodeAnnotation // 1000000
 
 	All ActionType = 1<<iota - 1 // 1111111
 

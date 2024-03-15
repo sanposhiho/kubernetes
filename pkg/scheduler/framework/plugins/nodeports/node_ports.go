@@ -115,13 +115,13 @@ func (pl *NodePorts) EventsToRegister() []framework.ClusterEventWithHint {
 	return []framework.ClusterEventWithHint{
 		// Due to immutable fields `spec.containers[*].ports`, pod update events are ignored.
 		{Event: framework.ClusterEvent{Resource: framework.Pod, ActionType: framework.Delete}, QueueingHintFn: pl.isSchedulableAfterPodDeleted},
-		// TODO(#110175): Ideally, it's supposed to register only NodeCreated, because NodeUpdated event never means to have any free ports for the Pod.
+		// TODO(#110175): Ideally, it's supposed to register only NodeCreated, because UpdateNodeTaint event never means to have any free ports for the Pod.
 		// But, we may miss NodeCreated event due to preCheck.
 		// See: https://github.com/kubernetes/kubernetes/issues/109437
-		// And, we can remove NodeUpdated event once https://github.com/kubernetes/kubernetes/issues/110175 is solved.
+		// And, we can remove UpdateNodeTaint event once https://github.com/kubernetes/kubernetes/issues/110175 is solved.
 		// We don't need the QueueingHintFn here because the scheduling of Pods will be always retried with backoff when this Event happens.
 		// (the same as Queue)
-		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.Update}},
+		{Event: framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add | framework.UpdateNodeTaint}},
 	}
 }
 
