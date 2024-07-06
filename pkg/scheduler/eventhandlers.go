@@ -121,6 +121,8 @@ func (sched *Scheduler) deleteNodeFromCache(obj interface{}) {
 	if err := sched.Cache.RemoveNode(logger, node); err != nil {
 		logger.Error(err, "Scheduler cache RemoveNode failed")
 	}
+
+	sched.SchedulingQueue.MoveAllToActiveOrBackoffQueue(logger, queue.NodeDelete, nil, node, nil)
 }
 
 func (sched *Scheduler) addPodToSchedulingQueue(obj interface{}) {

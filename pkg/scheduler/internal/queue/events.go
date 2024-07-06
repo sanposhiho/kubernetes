@@ -40,6 +40,8 @@ var (
 	AssignedPodAdd = framework.ClusterEvent{Resource: framework.Pod, ActionType: framework.Add, Label: "AssignedPodAdd"}
 	// NodeAdd is the event when a new node is added to the cluster.
 	NodeAdd = framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Add, Label: "NodeAdd"}
+	// NodeDelete is the event when a node is deleted from the cluster.
+	NodeDelete = framework.ClusterEvent{Resource: framework.Node, ActionType: framework.Delete, Label: "NodeDelete"}
 	// AssignedPodUpdate is the event when a pod is updated that causes pods with matching affinity
 	// terms to be more schedulable.
 	AssignedPodUpdate = framework.ClusterEvent{Resource: framework.Pod, ActionType: framework.Update, Label: "AssignedPodUpdate"}
