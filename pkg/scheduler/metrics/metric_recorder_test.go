@@ -112,8 +112,8 @@ func TestInFlightEventAsync(t *testing.T) {
 	r := &MetricAsyncRecorder{
 		aggregatedInflightEventMetric:              map[gaugeVecMetricKey]int{},
 		aggregatedInflightEventMetricLastFlushTime: time.Now(),
-		aggregatedInflightEventMetricBufferCh:      make(chan *gaugeVecMetric, 100),
-		interval:                                   time.Hour,
+		bufferCh: make(chan any, 100),
+		interval: time.Hour,
 	}
 
 	podAddLabel := "Pod/Add"
@@ -139,8 +139,12 @@ func TestInFlightEventAsync(t *testing.T) {
 	got := []gaugeVecMetric{}
 	for {
 		select {
-		case m := <-r.aggregatedInflightEventMetricBufferCh:
-			got = append(got, *m)
+		case m := <-r.bufferCh:
+			metric, ok := m.(*gaugeVecMetric)
+			if !ok {
+				t.Fatalf("unexpected metric is recorded in the buffer channel: %v", m)
+			}
+			got = append(got, *metric)
 			continue
 		default:
 		}

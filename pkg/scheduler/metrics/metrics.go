@@ -94,7 +94,6 @@ var (
 	PreemptionVictims          *metrics.Histogram
 	PreemptionAttempts         *metrics.Counter
 	pendingPods                *metrics.GaugeVec
-	InFlightEvents             *metrics.GaugeVec
 	Goroutines                 *metrics.GaugeVec
 
 	// PodSchedulingDuration is deprecated as of Kubernetes v1.28, and will be removed
@@ -104,15 +103,18 @@ var (
 	PodSchedulingAttempts           *metrics.Histogram
 	FrameworkExtensionPointDuration *metrics.HistogramVec
 	PluginExecutionDuration         *metrics.HistogramVec
+	SchedulerQueueIncomingPods      *metrics.CounterVec
+	PermitWaitDuration              *metrics.HistogramVec
+	CacheSize                       *metrics.GaugeVec
+	unschedulableReasons            *metrics.GaugeVec
+	PluginEvaluationTotal           *metrics.CounterVec
 
-	// This is only available when the QHint feature gate is enabled.
+	// The following metrics are only available when the QHint feature gate is enabled.
 	queueingHintExecutionDuration *metrics.HistogramVec
-	SchedulerQueueIncomingPods    *metrics.CounterVec
-	PermitWaitDuration            *metrics.HistogramVec
-	CacheSize                     *metrics.GaugeVec
-	unschedulableReasons          *metrics.GaugeVec
-	PluginEvaluationTotal         *metrics.CounterVec
-	metricsList                   []metrics.Registerable
+	queueingHintEvaluationTotal   *metrics.CounterVec
+	InFlightEvents                *metrics.GaugeVec
+
+	metricsList []metrics.Registerable
 )
 
 var registerMetrics sync.Once
@@ -125,6 +127,7 @@ func Register() {
 		RegisterMetrics(metricsList...)
 		if utilfeature.DefaultFeatureGate.Enabled(features.SchedulerQueueingHints) {
 			RegisterMetrics(queueingHintExecutionDuration)
+			RegisterMetrics(queueingHintEvaluationTotal)
 			RegisterMetrics(InFlightEvents)
 		}
 		volumebindingmetrics.RegisterVolumeSchedulingMetrics()
@@ -274,6 +277,14 @@ func InitMetrics() {
 			StabilityLevel: metrics.ALPHA,
 		},
 		[]string{"plugin", "event", "hint"})
+
+	queueingHintEvaluationTotal = metrics.NewCounterVec(
+		&metrics.CounterOpts{
+			Subsystem:      SchedulerSubsystem,
+			Name:           "queueing_hint_evaluation_total",
+			Help:           "Number of queueing hint execution by each plugin",
+			StabilityLevel: metrics.ALPHA,
+		}, []string{"plugin", "event", "hint"})
 
 	SchedulerQueueIncomingPods = metrics.NewCounterVec(
 		&metrics.CounterOpts{

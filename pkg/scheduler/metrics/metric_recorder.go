@@ -88,6 +88,12 @@ type histogramVecMetric struct {
 	value       float64
 }
 
+type counterVecMetric struct {
+	metric      *metrics.CounterVec
+	labelValues []string
+	valueToAdd  float64
+}
+
 type gaugeVecMetric struct {
 	metric      *metrics.GaugeVec
 	labelValues []string
@@ -102,7 +108,7 @@ type gaugeVecMetricKey struct {
 // MetricAsyncRecorder records metric in a separate goroutine to avoid overhead in the critical path.
 type MetricAsyncRecorder struct {
 	// bufferCh is a channel that serves as a metrics buffer before the metricsRecorder goroutine reports it.
-	bufferCh chan *histogramVecMetric
+	bufferCh chan any // *histogramVecMetric, *counterVecMetric, or *gaugeVecMetric
 	// if bufferSize is reached, incoming metrics will be discarded.
 	bufferSize int
 	// how often the recorder runs to flush the metrics.
@@ -114,7 +120,6 @@ type MetricAsyncRecorder struct {
 	// Note that we don't lock the map deliberately because we assume the queue takes lock before updating the in-flight events.
 	aggregatedInflightEventMetric              map[gaugeVecMetricKey]int
 	aggregatedInflightEventMetricLastFlushTime time.Time
-	aggregatedInflightEventMetricBufferCh      chan *gaugeVecMetric
 
 	// stopCh is used to stop the goroutine which periodically flushes metrics.
 	stopCh <-chan struct{}
@@ -125,14 +130,13 @@ type MetricAsyncRecorder struct {
 
 func NewMetricsAsyncRecorder(bufferSize int, interval time.Duration, stopCh <-chan struct{}) *MetricAsyncRecorder {
 	recorder := &MetricAsyncRecorder{
-		bufferCh:                      make(chan *histogramVecMetric, bufferSize),
+		bufferCh:                      make(chan any, bufferSize),
 		bufferSize:                    bufferSize,
 		interval:                      interval,
 		stopCh:                        stopCh,
 		aggregatedInflightEventMetric: make(map[gaugeVecMetricKey]int),
 		aggregatedInflightEventMetricLastFlushTime: time.Now(),
-		aggregatedInflightEventMetricBufferCh:      make(chan *gaugeVecMetric, bufferSize),
-		IsStoppedCh:                                make(chan struct{}),
+		IsStoppedCh: make(chan struct{}),
 	}
 	go recorder.run()
 	return recorder
@@ -141,13 +145,14 @@ func NewMetricsAsyncRecorder(bufferSize int, interval time.Duration, stopCh <-ch
 // ObservePluginDurationAsync observes the plugin_execution_duration_seconds metric.
 // The metric will be flushed to Prometheus asynchronously.
 func (r *MetricAsyncRecorder) ObservePluginDurationAsync(extensionPoint, pluginName, status string, value float64) {
-	r.observeMetricAsync(PluginExecutionDuration, value, pluginName, extensionPoint, status)
+	r.observeHistogramMetricAsync(PluginExecutionDuration, value, pluginName, extensionPoint, status)
 }
 
-// ObserveQueueingHintDurationAsync observes the queueing_hint_execution_duration_seconds metric.
+// ObserveQueueingHintExecution observes the queueing_hint_execution_duration_seconds metric and the queueing_hint_evaluation_total metric.
 // The metric will be flushed to Prometheus asynchronously.
-func (r *MetricAsyncRecorder) ObserveQueueingHintDurationAsync(pluginName, event, hint string, value float64) {
-	r.observeMetricAsync(queueingHintExecutionDuration, value, pluginName, event, hint)
+func (r *MetricAsyncRecorder) ObserveQueueingHintExecution(pluginName, event, hint string, value float64) {
+	r.observeHistogramMetricAsync(queueingHintExecutionDuration, value, pluginName, event, hint)
+	r.addCounterMetricAsync(queueingHintEvaluationTotal, 1, pluginName, event, hint)
 }
 
 // ObserveInFlightEventsAsync observes the in_flight_events metric.
@@ -168,7 +173,7 @@ func (r *MetricAsyncRecorder) ObserveInFlightEventsAsync(eventLabel string, valu
 				valueToAdd:  float64(value),
 			}
 			select {
-			case r.aggregatedInflightEventMetricBufferCh <- newMetric:
+			case r.bufferCh <- newMetric:
 			default:
 			}
 		}
@@ -178,11 +183,23 @@ func (r *MetricAsyncRecorder) ObserveInFlightEventsAsync(eventLabel string, valu
 	}
 }
 
-func (r *MetricAsyncRecorder) observeMetricAsync(m *metrics.HistogramVec, value float64, labelsValues ...string) {
+func (r *MetricAsyncRecorder) observeHistogramMetricAsync(m *metrics.HistogramVec, value float64, labelsValues ...string) {
 	newMetric := &histogramVecMetric{
 		metric:      m,
 		labelValues: labelsValues,
 		value:       value,
+	}
+	select {
+	case r.bufferCh <- newMetric:
+	default:
+	}
+}
+
+func (r *MetricAsyncRecorder) addCounterMetricAsync(m *metrics.CounterVec, valueToAdd float64, labelsValues ...string) {
+	newMetric := &counterVecMetric{
+		metric:      m,
+		labelValues: labelsValues,
+		valueToAdd:  valueToAdd,
 	}
 	select {
 	case r.bufferCh <- newMetric:
@@ -209,14 +226,14 @@ func (r *MetricAsyncRecorder) FlushMetrics() {
 	for i := 0; i < r.bufferSize; i++ {
 		select {
 		case m := <-r.bufferCh:
-			m.metric.WithLabelValues(m.labelValues...).Observe(m.value)
-		default:
-			// no more value
-		}
-
-		select {
-		case m := <-r.aggregatedInflightEventMetricBufferCh:
-			m.metric.WithLabelValues(m.labelValues...).Add(m.valueToAdd)
+			switch received := m.(type) {
+			case *histogramVecMetric:
+				received.metric.WithLabelValues(received.labelValues...).Observe(received.value)
+			case *gaugeVecMetric:
+				received.metric.WithLabelValues(received.labelValues...).Add(received.valueToAdd)
+			case *counterVecMetric:
+				received.metric.WithLabelValues(received.labelValues...).Add(received.valueToAdd)
+			}
 		default:
 			// no more value
 		}

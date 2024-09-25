@@ -129,6 +129,7 @@ type schedulerOptions struct {
 	frameworkCapturer          FrameworkCapturer
 	parallelism                int32
 	applyDefaultProfile        bool
+	metricFlushingInterval     time.Duration
 }
 
 // Option configures a Scheduler
@@ -209,6 +210,13 @@ func WithPodInitialBackoffSeconds(podInitialBackoffSeconds int64) Option {
 func WithPodMaxBackoffSeconds(podMaxBackoffSeconds int64) Option {
 	return func(o *schedulerOptions) {
 		o.podMaxBackoffSeconds = podMaxBackoffSeconds
+	}
+}
+
+// WithMetricFlushingInterval sets podMaxBackoffSeconds for Scheduler, the default value is 1 second
+func WithMetricFlushingInterval(interval time.Duration) Option {
+	return func(o *schedulerOptions) {
+		o.metricFlushingInterval = interval
 	}
 }
 

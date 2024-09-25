@@ -22,6 +22,7 @@ import (
 	"testing"
 	"time"
 
+	dto "github.com/prometheus/client_model/go"
 	v1 "k8s.io/api/core/v1"
 	apiextensionsv1 "k8s.io/apiextensions-apiserver/pkg/apis/apiextensions/v1"
 	apiextensionsclient "k8s.io/apiextensions-apiserver/pkg/client/clientset/clientset"
@@ -38,6 +39,8 @@ import (
 	"k8s.io/client-go/dynamic"
 	"k8s.io/client-go/kubernetes"
 	featuregatetesting "k8s.io/component-base/featuregate/testing"
+	"k8s.io/component-base/metrics/legacyregistry"
+	"k8s.io/component-base/metrics/testutil"
 	"k8s.io/klog/v2"
 	configv1 "k8s.io/kube-scheduler/config/v1"
 	apiservertesting "k8s.io/kubernetes/cmd/kube-apiserver/app/testing"
@@ -183,6 +186,11 @@ func TestSchedulingGates(t *testing.T) {
 	}
 }
 
+type qhint struct {
+	pluginName string
+	event      framework.ClusterEvent
+}
+
 // TestCoreResourceEnqueue verify Pods failed by in-tree default plugins can be
 // moved properly upon their registered events.
 func TestCoreResourceEnqueue(t *testing.T) {
@@ -199,6 +207,9 @@ func TestCoreResourceEnqueue(t *testing.T) {
 		pods []*v1.Pod
 		// triggerFn is the function that triggers the event to move Pods.
 		triggerFn func(testCtx *testutils.TestContext) error
+		// expectedQhints is a map, keyed with QHint that are supposed to get triggered by triggerFn
+		// and valued with the number of expected QHint execution.
+		expectedQHints map[qhint]float64
 		// wantRequeuedPods is the map of Pods that are expected to be requeued after triggerFn.
 		wantRequeuedPods sets.Set[string]
 		// enableSchedulingQueueHint indicates which feature gate value(s) the test case should run with.
@@ -873,9 +884,32 @@ func TestCoreResourceEnqueue(t *testing.T) {
 
 				t.Log("finished initial schedulings for all Pods, will trigger triggerFn")
 
+				legacyregistry.Reset()
+
 				err := tt.triggerFn(testCtx)
 				if err != nil {
 					t.Fatalf("Failed to trigger the event: %v", err)
+				}
+
+				t.Log("triggered tt.triggerFn, will wait for QHints to be triggered")
+				if err := wait.PollUntilContextTimeout(ctx, time.Millisecond*200, wait.ForeverTestTimeout, false, func(ctx context.Context) (bool, error) {
+					for q, expected := range tt.expectedQHints {
+						actual, err := getQHintEvaluationCount(t, q)
+						if err != nil {
+							return false, err
+						}
+
+						switch {
+						case expected > actual:
+							return false, nil
+						case expected < actual:
+							return false, fmt.Errorf("QHint %#v is executed more than expected. expected: %v, actual: %v", q, expected, actual)
+						}
+					}
+
+					return true, nil
+				}); err != nil {
+					t.Fatalf("Expect QHints %#v to be triggered, but haven't", tt.expectedQHints)
 				}
 
 				t.Log("triggered tt.triggerFn, will check if tt.requeuedPods are requeued")
@@ -895,6 +929,40 @@ func TestCoreResourceEnqueue(t *testing.T) {
 			})
 		}
 	}
+}
+
+func getQHintEvaluationCount(t *testing.T, q qhint) (float64, error) {
+	t.Helper()
+
+	m, err := legacyregistry.DefaultGatherer.Gather()
+	if err != nil {
+		t.Fatalf("failed to gather metrics: %v", err)
+	}
+	var metricFamily *dto.MetricFamily
+	for _, mFamily := range m {
+		if mFamily.GetName() == "scheduler_queueing_hint_evaluation_total" {
+			metricFamily = mFamily
+			break
+		}
+	}
+
+	if metricFamily == nil {
+		return 0, fmt.Errorf("metric scheduler_queueing_hint_evaluation_total not found for %#v", q)
+	}
+
+	if len(metricFamily.GetMetric()) == 0 {
+		return 0, fmt.Errorf("metric scheduler_queueing_hint_evaluation_total for %#v is empty", q)
+	}
+
+	for _, metric := range metricFamily.GetMetric() {
+		if testutil.LabelsMatch(metric, map[string]string{}) {
+			if c := metric.GetCounter(); c != nil {
+				return c.GetValue(), nil
+			}
+		}
+	}
+
+	return 0, fmt.Errorf("scheduler_queueing_hint_evaluation_total entry not found for %#v", q)
 }
 
 var _ framework.FilterPlugin = &fakeCRPlugin{}
