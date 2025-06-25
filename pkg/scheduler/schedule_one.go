@@ -279,6 +279,21 @@ func (sched *Scheduler) bindingCycle(
 
 	assumedPod := assumedPodInfo.Pod
 
+	status := fwk.RunPreBindPreFlightPlugins(ctx, state, assumedPod, scheduleResult.SuggestedHost)
+	if status.Code() == framework.Error {
+		return status
+	}
+	if status.IsSuccess() || fwk.WillWaitOnPermit(ctx, assumedPod) {
+		// Add NominatedNodeName to tell the external components (e.g., the cluster autoscaler) that the pod is about to be bound to the node.
+		// We only do this when any of WaitOnPermit or PreBind will work because otherwise the pod will be soon bound anyway.
+		if err := updatePod(ctx, sched.client, assumedPod, nil, &framework.NominatingInfo{
+			NominatedNodeName: scheduleResult.SuggestedHost,
+			NominatingMode:    framework.ModeOverride,
+		}); err != nil {
+			return framework.AsStatus(fmt.Errorf("failed to update the nominated node name in the binding cycle: %w", err))
+		}
+	}
+
 	// Run "permit" plugins.
 	if status := fwk.WaitOnPermit(ctx, assumedPod); !status.IsSuccess() {
 		if status.IsRejected() {
@@ -1110,6 +1125,7 @@ func truncateMessage(message string) string {
 	return message[:max-len(suffix)] + suffix
 }
 
+// updatePod updates the condition and nominated node name.
 func updatePod(ctx context.Context, client clientset.Interface, pod *v1.Pod, condition *v1.PodCondition, nominatingInfo *framework.NominatingInfo) error {
 	logger := klog.FromContext(ctx)
 	logger.V(3).Info("Updating pod condition", "pod", klog.KObj(pod), "conditionType", condition.Type, "conditionStatus", condition.Status, "conditionReason", condition.Reason)
@@ -1117,7 +1133,7 @@ func updatePod(ctx context.Context, client clientset.Interface, pod *v1.Pod, con
 	// NominatedNodeName is updated only if we are trying to set it, and the value is
 	// different from the existing one.
 	nnnNeedsUpdate := nominatingInfo.Mode() == framework.ModeOverride && pod.Status.NominatedNodeName != nominatingInfo.NominatedNodeName
-	if !podutil.UpdatePodCondition(podStatusCopy, condition) && !nnnNeedsUpdate {
+	if (condition == nil || !podutil.UpdatePodCondition(podStatusCopy, condition)) && !nnnNeedsUpdate {
 		return nil
 	}
 	if nnnNeedsUpdate {
