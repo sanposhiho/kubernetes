@@ -477,6 +477,18 @@ func (ev *Evaluator) prepareCandidate(ctx context.Context, c Candidate, pod *v1.
 func (ev *Evaluator) prepareCandidateAsync(c Candidate, pod *v1.Pod, pluginName string) {
 	metrics.PreemptionVictims.Observe(float64(len(c.Victims().Pods)))
 
+	victimPods := make([]*v1.Pod, 0, len(c.Victims().Pods))
+	for _, victim := range c.Victims().Pods {
+		if victim.DeletionTimestamp != nil {
+			// If the victim Pod is already being deleted, we don't have to make another deletion api call.
+			continue
+		}
+		victimPods = append(victimPods, victim)
+	}
+	if len(victimPods) == 0 {
+		return
+	}
+
 	// Intentionally create a new context, not using a ctx from the scheduling cycle, to create ctx,
 	// because this process could continue even after this scheduling cycle finishes.
 	ctx, cancel := context.WithCancel(context.Background())
